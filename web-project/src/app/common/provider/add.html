@@ -1,0 +1,57 @@
+<div class="section">
+  <form method="post" action="/api/provider/add">
+  <table>
+    <tbody>
+      <tr>
+        <td colspan="2" class="title">
+          账户信息
+        </td>
+      </tr>
+      <tr provider-textfield label="用户名" validate="duplicate" key="username"></tr>
+      <tr password></tr>
+      <tr>
+        <td colspan="2" class="title">
+          公司信息
+        </td>
+      </tr>
+      <tr provider-textfield label="品牌名称" key="nickname"></tr>
+      <tr provider-textfield label="公司名称" key="companyname"></tr>
+      <tr provider-multi-choice type="经营范围"></tr>
+      <tr provider-address></tr> 
+      <tr provider-textfield label="邮编" key="zipcode"></tr>
+      <tr provider-menu type="成立时间"></tr>
+      <tr provider-menu type="公司规模"></tr>
+      <tr provider-textfield label="注册资金" key="capital"></tr>
+       <tr>
+        <td colspan="2" class="title">
+          资质信息
+        </td>
+      </tr>
+      <tr provider-textfield label="营业执照号" duration="证件有效期" upload="pdf" key="license"></tr>
+      <tr provider-textfield label="税务登记号" upload="pdf" key="taxnumber"></tr>
+      <tr>
+        <td colspan="2" class="title">
+          合作信息
+        </td>
+      </tr>
+      <tr provider-multi-choice type="合作类型"></tr>
+      <tr provider-textfield label="主营业务" key="mainBusiness"></tr>
+      <tr provider-textfield label="主要口岸" key="mainDestination"></tr>
+      <tr provider-textfield label="供应合同" duration="合同有效期" upload="pdf" key="contract"></tr>
+      <tr return-policy></return-policy>
+      <tr>
+        <td colspan="2" class="title">
+          联系信息
+        </td>
+      </tr>
+      <tr provider-textfield label="姓名" key="contactname"></tr>
+      <tr provider-menu type="性别"></tr>
+      <tr provider-textfield label="座机" key="homephone"></tr>
+      <tr provider-textfield label="传真" key="fax"></tr>
+      <tr provider-textfield label="手机" key="cellphone"></tr>
+      <tr provider-textfield label="QQ号" key="qqnumber"></tr>
+      <tr provider-textfield label="微信号" key="wechat"></tr>
+    </tbody>
+  </table>
+  <input type="submit" VALUE="确认" NAME="submit">
+</div>

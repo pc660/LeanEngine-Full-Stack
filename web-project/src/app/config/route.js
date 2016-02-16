@@ -15,6 +15,16 @@ export default ($stateProvider, $urlRouterProvider, $locationProvider) => {
       url: '/',
       templateUrl: 'app/auth/home/home.html',
       controller: 'homeCtrl'
+    })
+    .state('home.add-provider', {
+      url: '/add-provider',
+      templateUrl: 'app/common/provider/add.html',
+      controller: 'addProviderCtrl',
+    })
+    .state('home.add-product', {
+      url: '/add-product',
+      templateUrl: 'app/common/product/add.html',
+      controller: 'addProductCtrl',
     });
 
   $urlRouterProvider.otherwise('/');

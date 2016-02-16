@@ -5,15 +5,19 @@
  * @author wangxiao
  */
 
+
 'use strict';
 
 const domain = require('domain');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const AV = require('leanengine');
 const app = express();
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
 
 // babel 编译
 require('babel-core/register');
@@ -36,8 +40,11 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
-
+app.use(session({ secret: 'anything' }));
+app.use(passport.initialize());
+app.use(passport.session());
 // 未处理异常捕获 middleware
+require('./passport')(passport); 
 app.use((req, res, next) => {
   let d = domain.create();
   d.add(req);
@@ -52,6 +59,7 @@ app.use((req, res, next) => {
   });
   d.run(next);
 });
+
 
 // 跨域支持
 app.all('/api/*', (req, res, next) => {
@@ -76,3 +84,4 @@ app.use((req, res, next) => {
 });
 
 module.exports = app;
+

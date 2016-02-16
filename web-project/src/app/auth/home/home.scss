@@ -22,3 +22,22 @@
     }
   }
 }
+
+
+//borders around the dropdown...
+.datepicker.dropdown-menu {
+  button {
+    outline: none;
+    border: 0px;
+  }
+}
+
+.datepicker th {
+  line-height: 30px;
+  height: 30px;
+  padding: 0 0 0 0;
+}
+
+.datepicker td {
+  padding: 0 0 0 0;
+}

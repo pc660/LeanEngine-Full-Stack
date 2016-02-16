@@ -1,12 +1,35 @@
 <div class="auth-home-module">
-<!-- block -->
   <div class="block1">
-    <div class="logo">LeanEngine</div>
+    <div class="logo" ng-click="goHome();">LeanEngine</div>
     <div class="btns">
       <md-button class="registerBtn lc-btn">{{i18n.auth.register}}</md-button>
       <md-button class="loginBtn lc-btn md-raised light">{{i18n.auth.login}}</md-button>
+      <md-button ng-click="register();">register test</md-button>
+      <md-button ng-click="login();">login test</md-button>
+      <md-button ng-click="set();">set cred test</md-button>
+      <md-button ng-click="clear();">clear test</md-button>
     </div>
   </div>
-<!-- block end -->
-
 </div>
+
+<!--
+<nav class="navbar navbar-default" role="navigation" bs-navbar>
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#">Brand</a>
+  </div>
+  <ul class="nav navbar-nav">
+    <li data-match-route="/$"><a href="#/">Home</a></li>
+    <li data-match-route="/page-one"><a href="#/page-one">Page One</a></li>
+    <li data-match-route="/page-two.*"><a href="#/page-two/sub-a">Page Two</a></li>
+  </ul>
+  </nav>-->
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" ui-sref="#">AngularUI Router</a>
+    </div>
+    <ul class="nav navbar-nav">
+        <li><a ui-sref=".add-provider">添加供应商</a></li>
+        <li><a ui-sref=".add-product">发布产品</a></li>
+    </ul>
+</nav>
+<div ui-view></div>

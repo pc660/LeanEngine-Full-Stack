@@ -1,0 +1,29 @@
+  <td>
+    地址:
+  </td>
+  <td layout="row">
+      <div>
+        省份:   
+      </div>
+      <md-input-container class="margin">
+        <md-select ng-change="onProvinceChange();" name="province" ng-model="province" aria-label="province-select">
+          <md-option ng-selected="$first" ng-value="province" ng-repeat="province in provinces">
+            {{province}}
+          </md-option>
+        </md-select>
+        </md-input-container>
+      <div class="margin">
+        城市:    
+      </div>
+      <md-input-container class="margin">
+        <md-select ng-change="onCityChange();" name="city" ng-model="city" aria-label="city-select">
+          <md-option ng-selected="$first" ng-value="city" ng-repeat="city in cities">
+            {{city}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <div class="margin">
+        地址:
+      </div>
+      <input class="margin" name="address" type="text">
+  </td>

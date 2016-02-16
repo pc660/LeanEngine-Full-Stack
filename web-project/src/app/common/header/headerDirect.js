@@ -5,7 +5,7 @@
 * @author wangxiao
 */
 
-export default (authSer, commonSer, $rootScope, $state) => {
+export default (commonSer, $rootScope, $state) => {
   'ngInject';
   return {
     restrict: 'E',
@@ -13,7 +13,6 @@ export default (authSer, commonSer, $rootScope, $state) => {
     scope: true,
     replace: true,
     link: ($scope) => {
-
     }
   };
 };

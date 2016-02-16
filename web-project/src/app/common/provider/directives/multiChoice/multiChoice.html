@@ -1,0 +1,9 @@
+  <td>
+    {{name}}: 
+  </td>
+  <td>
+    <md-checkbox class="inline" ng-model="isChecked" ng-repeat="option in options" 
+      aria-label="{{option.name}}" ng-true-value="true" name="{{option.name}}" ng-change="onChange();"> 
+    {{ option.value }}
+    </md-checkbox>
+  </td>

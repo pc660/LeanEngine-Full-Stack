@@ -17,11 +17,30 @@ import helloSer from './auth/helloSer';
 // directive
 import headerDirect from './common/header/headerDirect';
 
+// provider directive
+import providerTextfield from './common/provider/directives/textField/textFieldDirect';
+import providerMultiChoice from './common/provider/directives/multiChoice/multiChoiceDirect';
+import providerAddress from './common/provider/directives/address/addressDirect';
+import providerMenu from './common/provider/directives/menu/menuDirect';
+import uploadButton from './common/provider/directives/upload/uploadDirect';
+import returnPolicy from './common/provider/directives/returnPolicy/returnPolicyDirect';
+import password from './common/provider/directives/password/passwordDirect';
+
+// product directive
+import providerSideBar from './common/product/directives/providerSideBar/providerSideBarDirect'; 
+
 // controller
 import homeCtrl from './auth/home/homeCtrl';
+import addProviderCtrl from './common/provider/addProviderCtrl';
+import addProductCtrl from './common/product/addProductCtrl';
+
+
+// factory
+import authFac from './common/authFac';
 
 angular.module('webProject',
-  ['ngAnimate', 'ngCookies', 'ngSanitize', 'ui.router', 'ngMaterial'])
+  ['ngAnimate', 'ngCookies', 'ngSanitize', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
+    'ngFileUpload'])
 
   // 配置全局常量
   .constant('lcConfig', config)
@@ -30,7 +49,6 @@ angular.module('webProject',
   // 基础配置
   .config(httpConfig)
   .config(routerConfig)
-
   // 自动执行
   .run(i18nConfig)
 
@@ -40,7 +58,22 @@ angular.module('webProject',
 
   // directive 初始化
   .directive('lcHeader', headerDirect)
+  .directive('providerTextfield', providerTextfield)
+  .directive('providerMultiChoice', providerMultiChoice)
+  .directive('providerAddress', providerAddress)
+  .directive('providerMenu', providerMenu)
+  .directive('uploadButton', uploadButton)
+  .directive('returnPolicy', returnPolicy)
+  .directive('password', password)
+  // product directive 初始化
+  .directive('providerSideBar', providerSideBar)
 
   // controller 初始化
-  .controller('homeCtrl', homeCtrl);
+  .controller('homeCtrl', homeCtrl)
+  .controller('addProviderCtrl', addProviderCtrl)
+  .controller('addProductCtrl', addProductCtrl)
+
+
+  // factory
+  .factory('authFac', authFac);
 
