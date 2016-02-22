@@ -1,13 +1,13 @@
-export default ($scope, $window, $uibModalInstance, items) => {
+export default ($scope, $window, $uibModalInstance, provider) => {
   'ngInject';
 
-  $scope.items = items;
+  $scope.contact = provider.contact;
 
-  $scope.ok = function () {
-    $uibModalInstance.close($scope.selected.item);
+  $scope.close = function () {
+    $uibModalInstance.dismiss('cancel'); 
   };
 
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
+  $scope.showDetail = function () {
+  
   }; 
 };

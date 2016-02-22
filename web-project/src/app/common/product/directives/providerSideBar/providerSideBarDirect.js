@@ -22,25 +22,38 @@ export default ($rootScope, $state, $window, providerFac, $uibModal) => {
       $window.alert('fail');
      };
 
-      scope.items = ['item1', 'item2', 'item3'];
-      scope.openContact = function (index) {
-        var modalInstance = $uibModal.open({
-          animation: true,
-          templateUrl: 'app/common/product/directives/providerSideBar/contact/myModalContent.html',
-          controller: 'modalCtrl',
-          resolve: {
-            items: function () {
-              return scope.items;
-            }
-          }
-        });
-
-        modalInstance.result.then(function (selectedItem) {
-          scope.selected = selectedItem;
-        }, function () {
-          $window.alert('Modal dismissed at: ' + new Date());
-        });
+    scope.openContact = function (index) {
+      // TODO: add translate message here.
+      var translate = {
+        "contactname": "联系人姓名",
+        "qqnumber": "QQ号码",
       };
+      
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'app/common/product/directives/providerSideBar/contact/myModalContent.html',
+        controller: 'modalCtrl',
+        resolve: {
+          provider: function () {
+            var contact = scope.providers[index].contact;
+            var contactInfo = [];
+            Object.keys(contact).forEach(function(key) {
+              if (key in translate) {
+                contactInfo.push({key: translate[key], value: contact[key]}); 
+              }
+            });
+
+            return {id: scope.providers[index].id, contact: contactInfo};
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        scope.selected = selectedItem;
+      }, function () {
+        // TODO: maybe add some handler when modal returns.
+      });
+    };
 
     }
   };

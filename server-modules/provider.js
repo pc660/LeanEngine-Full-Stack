@@ -137,10 +137,12 @@ provider.get = (req, res) => {
       var object = results[i];
       var associatedUser = object.get('user');
       var fetchedProvider = {};
+      fetchedProvider.contact = {};
       fetchedProvider.name = object.get('nickname');
       // TODO: return all the contact information here.
-      fetchedProvider.contactname = object.get('contactname');
-      fetchedProvider.qqnumber = object.get('qqnumber'); 
+      fetchedProvider.contact.contactname = object.get('contactname');
+      fetchedProvider.contact.qqnumber = object.get('qqnumber'); 
+      fetchedProvider.id = object.get('objectId');
       providerList.push(fetchedProvider);
     }
     tool.l(fetchedProvider)
