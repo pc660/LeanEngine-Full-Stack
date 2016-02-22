@@ -2,6 +2,7 @@ export default ($rootScope, $http, $state, lcConfig, $window, md5, Upload) => {
   'ngInject';
   
   var service = {};
+  
 
   service.getProviderFromType = getProviderFromType;
 

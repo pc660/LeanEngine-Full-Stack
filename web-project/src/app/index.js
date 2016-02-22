@@ -39,6 +39,7 @@ import modalCtrl from './common/product/directives/providerSideBar/contact/modal
 import authFac from './common/authFac';
 import fileFac from './common/fileFac';
 import providerFac from './common/providerFac';
+import productFac from './common/productFac';
 
 angular.module('webProject',
   ['ngAnimate', 'ngCookies', 'ngSanitize', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
@@ -78,4 +79,5 @@ angular.module('webProject',
   // factory
   .factory('authFac', authFac)
   .factory('fileFac', fileFac)
-  .factory('providerFac', providerFac);
+  .factory('providerFac', providerFac)
+  .factory('productFac', productFac);

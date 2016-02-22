@@ -24,7 +24,7 @@ md-component-id="provider-side-bar">
     <table>
     <tr ng-repeat="provider in providers">
       <td>
-        <md-button ng-click="getProvider()" class="md-primary">
+        <md-button ng-click="pickProvider($index)" class="md-primary">
           {{ provider.name }}
         </md-button>
       </td>
