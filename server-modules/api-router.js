@@ -15,26 +15,32 @@ const passport = require('passport');
 const hello = require('./hello');
 const auth = require('./auth');
 const provider = require('./provider');
-/
+
 // 一个 API 路由下的 hello 接口，访问 /api/hello
 const tool = require('./tool');
+const multiparty = require('connect-multiparty');
+var multipartyMiddleware = multiparty();
+
 router.get('/hello', hello.hello);
 
 //router.post('/auth/authenticate', auth.authenticate);
 router.get('/auth/test', isLoggedIn, auth.test);
 router.post('/auth/register', auth.register);
 
-router.post('/auth/authenticate', provider.add);
+router.post('/provider/add', provider.add);
+router.post('/provider/uploadfile', multipartyMiddleware, provider.uploadfile);
+router.post('/provider/get',  provider.get);
 
-router.post('/provider/add',
+
+
+
+router.post('/auth/authenticate',
   passport.authenticate('', { failureRedirect: '/hello' }),
    function(req, res) {
     res.send({
       code: 200,
     });
    });
-
-
 
 function isLoggedIn(req, res, next) {
     // if user is authenticated in the session, carry on 

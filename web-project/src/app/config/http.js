@@ -5,7 +5,7 @@
 * @author wangxiao
 */
 
-export default ($httpProvider, lcConfig) => {
+export default ($httpProvider, lcConfig, $sceDelegateProvider) => {
   'ngInject';
 
   const httpTimeout = lcConfig.httpTimeout;
@@ -16,6 +16,13 @@ export default ($httpProvider, lcConfig) => {
   $httpProvider.defaults.headers.delete = {
     'Content-Type': 'application/json;charset=utf-8'
   };
+
+  $sceDelegateProvider.resourceUrlWhitelist([
+    // Allow same origin resource loads.
+    'self',
+    'http://localhost:3000/**'
+  ]);
+
 
   // 全局 $http 请求配置。
   $httpProvider.interceptors.push([() => {

@@ -5,7 +5,7 @@
 * @author wangxiao
 */
 
-export default ($http, $state, lcConfig, $window) => {
+export default ($http, $state, lcConfig, $window, Upload) => {
   'ngInject';
   return {
     goHome: () => {

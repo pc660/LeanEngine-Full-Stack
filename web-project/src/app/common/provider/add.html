@@ -1,5 +1,5 @@
 <div class="section">
-  <form method="post" action="/api/provider/add">
+  <form id="form" ng-submit="test1()" method="post" action="{{addUrl}}">
   <table>
     <tbody>
       <tr>
@@ -53,5 +53,8 @@
       <tr provider-textfield label="微信号" key="wechat"></tr>
     </tbody>
   </table>
-  <input type="submit" VALUE="确认" NAME="submit">
+  <input id="submit" type="button" VALUE="确认" ng-click="test();">
+  <input id="submittest" type="submit" VALUE="确认" style="display: None" >
+
+
 </div>

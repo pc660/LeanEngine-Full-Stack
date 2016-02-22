@@ -21,7 +21,7 @@ export default ($rootScope, $state, $window) => {
       } else if (attr.type === "合作类型") {
         scope.name = attr.type;
         scope.options = [
-          {name: 'domestieOperaotr', value: "地接社"},
+          {name: 'domestieOperator', value: "地接社"},
           {name: 'domestieWholesaler', value: "出发地(组团社)"},
           {name: 'airticket', value: "机票"},
           {name: 'motorcade', value: "车队"},

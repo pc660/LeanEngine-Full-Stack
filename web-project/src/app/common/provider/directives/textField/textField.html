@@ -23,5 +23,11 @@
           bs-datepicker
           name={{key}}End>
       </div>
-      <md-button ng-show="show" class="md-raised md-primary" ngf-select="upload($file)">上传文件</md-button>
+      <md-button ng-show="show" class="md-raised md-primary"
+        ngf-select="uploadFile($file);">上传文件</md-button>
+        <div ng-show="show" class="inline input-field" >
+          {{filename}}
+          <input type="hidden" name="{{key}}-filename" value={{filename}}>
+        </div>  
+    </div>      
   </td>

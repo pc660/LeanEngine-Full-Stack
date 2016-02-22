@@ -3,23 +3,37 @@ md-component-id="provider-side-bar">
   <md-toolbar class="md-theme-indigo">
     <h1 class="md-toolbar-tools">Sidenav Left</h1>
   </md-toolbar>
-  <md-content layout-padding>
-    <md-button ng-click="close()" class="md-primary">
-      车队
-    </md-button>
-  </md-content>
-   <md-content layout-padding>
-    <md-button ng-click="close()" class="md-primary">
-      餐饮
-    </md-button>
-  </md-content>
-  <md-content layout-padding>
-    <md-button ng-click="close()" class="md-primary">
-      地接社
-    </md-button>
-  </md-content>
-    
-   
-    
-  
+  <div ng-show="isMenu">
+    <md-content layout-padding>
+      <md-button ng-click="getProviderList('motorcade')" class="md-primary">
+        车队
+      </md-button>
+    </md-content>
+     <md-content layout-padding>
+      <md-button ng-click="getProviderList('airticket')" class="md-primary">
+        机票
+      </md-button>
+    </md-content>
+    <md-content layout-padding>
+      <md-button ng-click="getProviderList('domestieOperator')" class="md-primary">
+        地接社
+      </md-button>
+    </md-content>
+  </div>
+  <div ng-show="isSecondMenu"> 
+    <table>
+    <tr ng-repeat="provider in providers">
+      <td>
+        <md-button ng-click="getProvider()" class="md-primary">
+          {{ provider.name }}
+        </md-button>
+      </td>
+      <td>
+        <md-button ng-click="openContact($index)" class="md-primary">
+          联系信息
+       </md-button>
+      </td>
+    </tr>   
+  </table>
+  </div>
 </md-sidenav>

@@ -33,15 +33,16 @@ import providerSideBar from './common/product/directives/providerSideBar/provide
 import homeCtrl from './auth/home/homeCtrl';
 import addProviderCtrl from './common/provider/addProviderCtrl';
 import addProductCtrl from './common/product/addProductCtrl';
-
+import modalCtrl from './common/product/directives/providerSideBar/contact/modalCtrl.js';
 
 // factory
 import authFac from './common/authFac';
+import fileFac from './common/fileFac';
+import providerFac from './common/providerFac';
 
 angular.module('webProject',
   ['ngAnimate', 'ngCookies', 'ngSanitize', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
-    'ngFileUpload'])
-
+    'ngFileUpload', 'angular-md5', 'ui.bootstrap'])
   // 配置全局常量
   .constant('lcConfig', config)
   .constant('moment', window.moment)
@@ -72,8 +73,9 @@ angular.module('webProject',
   .controller('homeCtrl', homeCtrl)
   .controller('addProviderCtrl', addProviderCtrl)
   .controller('addProductCtrl', addProductCtrl)
-
+  .controller('modalCtrl', modalCtrl)
 
   // factory
-  .factory('authFac', authFac);
-
+  .factory('authFac', authFac)
+  .factory('fileFac', fileFac)
+  .factory('providerFac', providerFac);

@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "dependencies": {
     "ng-file-upload-shim": "latest",
+    "angular-bootstrap": "latest",
     "angular-strap": "latest",
     "angular": "~1.5.0",
+    "angular-md5": "latest",
     "angular-animate": "~1.4.0",
     "angular-cookies": "~1.4.0",
     "angular-material": "~0.11.1",

@@ -11,7 +11,7 @@ export default ($rootScope, $state, $window) => {
         if (scope.password !== scope.password2) {
           verifiedTag.addClass("fail");
           verifiedTag.html("两次密码不一致!");
-        } else {
+        } else if (scope.password){
           verifiedTag.addClass("success");
           verifiedTag.html("密码验证成功!");
         }
