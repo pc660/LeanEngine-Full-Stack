@@ -1,9 +1,10 @@
-export default ($scope, $document, $timeout, lcConfig, $window, fileFac) => {
+export default ($log, $scope, $document, $timeout, lcConfig, $window, providerFac) => {
   'ngInject';
    var url = lcConfig.apiHost + "/api/provider/add";
    $scope.addUrl = url;
    $scope.uploadFiles = false;
    $scope.validate = true;
+   $scope.isEditing = true;
    var submit = $document.find('#submittest');
    var validate = true;
 
@@ -12,10 +13,12 @@ export default ($scope, $document, $timeout, lcConfig, $window, fileFac) => {
    // upload each file when user click the upload button. The logic needs to be
    // handled in textField directive. But we need to figure out a smart way to 
    // assoicate the file with the provider.
-   function callback() {
-      submit.trigger('click'); 
-   }
-   $scope.test = () => {
-        fileFac.uploadAllFiles(callback);
+   $scope.upload = () => {
+        $log.log("addProviderCtrl.upload");
+        providerFac.uploadProviderFiles()
+        .then(function(response) {
+          submit.trigger('click');
+        }, function(error) {
+       });
    };
 };

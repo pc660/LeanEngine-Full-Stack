@@ -1,4 +1,4 @@
-export default ($rootScope, $window, $state, fileFac) => {
+export default ($rootScope, $window, $state, fileFac, providerFac) => {
   'ngInject';
   return {
     restrict: 'A',
@@ -15,18 +15,23 @@ export default ($rootScope, $window, $state, fileFac) => {
       label: '@',
       upload: '@',
       duration: '@',
+      isEditing: '@',
     },
     link: function(scope, element, attr) {
+      scope.isEditing = scope.$parent.isEditing;
+      scope.maximumColumn = 100;
       if (attr.upload) {
         scope.show = !scope.show;
         
         scope.uploadFile = (file) => {
           scope.filename = file.name;
           var filename = fileFac.hash(scope.filename);
-          fileFac.saveFile(filename, file);
+          providerFac.files[filename] = file;
+          // upate the name of the file.
+          scope.hashname = filename;
         };
       }
-
+      
       // Settings for datepicker.
       if (attr.duration) {
         scope.durationShow = !scope.durationShow;

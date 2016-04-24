@@ -14,8 +14,21 @@ let config = {
   apiHost: 'http://localhost:3000',
 
   // 运行环境的 host
-  host: 'http://localhost:9000'
+  host: 'http://localhost:9000',
+
+  userLevel: {
+    UNKNOWN: -1,
+    ADMIN: 0,
+    SALE: 1,
+  },
+  
+  CUSTOMER_STATE: {
+    UNPAID: 0,
+    PAID: 1,
+  }
 };
+
+
 
 // 判断是否为开发环境
 const host = window.location.host;

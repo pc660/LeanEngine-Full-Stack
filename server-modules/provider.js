@@ -5,6 +5,8 @@ const tool = require('./tool');
 const fs = require('fs');
 let provider = {};
 
+var LIMIT = 50;
+
 provider.add = (req, res) => {
   tool.l('provider.add');
   // TODO: now we use a fake data to create a provider.
@@ -107,12 +109,52 @@ provider.addProvider = (req, res, user) => {
   providerAV.set("businessScope", returnBusinessScope(body, providerAV));
   providerAV.set('servingType', returnServingType(body, providerAV));
   providerAV.set('user', user);
-  providerAV.save().then(function() {
+ 
+  // Find the files.
+  var File = AV.Object.extend('_File');
+  var query = new AV.Query(File);
+  tool.l(body.licenseFilename); 
+  query.equalTo("name", body.licenseFilename);
+  query.first().then(function(result) {
+    if (result !== undefined) {
+      var file = AV.File.createWithoutData(result.getObjectId());
+      providerAV.set("licenseFile", file);
+    }
+    providerAV.save().then(function() {
       tool.l("success");
       res.send();  
     }, function(error) {
-    // 失败
+      tool.l(error);
+      // 失败
     });
+  }, function(response) {
+  });  
+};
+
+/**
+ * @method: POST
+ * @params: providerId
+ * */
+provider.getReturnPolicy = (req, res) => {
+  tool.l('provider.getReturnPolicy');
+  var id = req.body.providerId;
+  var query = new AV.Query('Provider');
+  query.equalTo('objectId', id);
+  // 显示加返政策.
+  query.select(
+    'returnTotalPeople',
+    'returnTotalRevenue',
+    'returnMoneyEachPeople',
+    'returnMoneyRevenue',
+    'paidPeople',
+    'paidRevenue');
+  query.find().then(function(results) {
+    tool.l(results[0]);
+    if (results.length > 0) {
+      res.send(results[0]);
+    } 
+  }, function(error) {
+  })
 };
 
 // get the provvider according to the query in req.
@@ -123,34 +165,28 @@ provider.get = (req, res) => {
   tool.l(body);
   var queryParameters = JSON.parse(body.query);
   var query = new AV.Query('Provider');
-  query.equalTo('license', '123');  
+  query.limit(LIMIT);
+  if (queryParameters.index) {
+    var index = parseInt(queryParameters.index);
+    query.skip(index * LIMIT);
+  }
   // TODO: uncomment this, right now we comment this for testing.
   // for (var key in queryParameters) {
   //   query.equalTo(key, queryParameters[key]);
   // }
-  query.find().then(function(results) {
-    tool.l('Successfully retrieved ' + results.length + ' posts.');
-    // 处理返回的结果数据
-    // Extract user contact information.
-    var providerList = [];
-    for (var i = 0; i < results.length; i++) {
-      var object = results[i];
-      var associatedUser = object.get('user');
-      var fetchedProvider = {};
-      fetchedProvider.contact = {};
-      fetchedProvider.name = object.get('nickname');
-      // TODO: return all the contact information here.
-      fetchedProvider.contact.contactname = object.get('contactname');
-      fetchedProvider.contact.qqnumber = object.get('qqnumber'); 
-      fetchedProvider.id = object.get('objectId');
-      providerList.push(fetchedProvider);
-    }
-    tool.l(fetchedProvider)
-    res.send(providerList);
+  query.count().then(function(count) {
+    query.find().then(function(results) {
+      tool.l('Successfully retrieved ' + results.length + ' posts.');
+      // 处理返回的结果数据
+      // Extract user contact information.
+      res.send({"count": count, "providers": results});
+    }, function(error) {
+      tool.l('Error: ' + error.code + ' ' + error.message);
+    }); 
   }, function(error) {
-    tool.l('Error: ' + error.code + ' ' + error.message);
-  }); 
-
+    // TODO: handle error.
+  });
+  
 };
 
 
@@ -177,4 +213,30 @@ provider.uploadfile = (req, res) => {
   res.send();
 };
 
+provider.search = (req, res) => {
+  tool.l('provider.search');
+  tool.l(req.body.query);
+  var query = JSON.parse(req.body.query);
+  var keyword = query.keyword;
+  var mainQuery = new AV.Query('Provider');
+  if (query.keyword) {
+    var nicknameQuery = new AV.Query('Provider');
+    nicknameQuery.contains('nickname', keyword);
+    var capitalQuery = new AV.Query('Provider');
+    capitalQuery.contains("capital", keyword);
+    mainQuery = AV.Query.or(nicknameQuery, capitalQuery);
+  }
+  if (query.mainDestination) {
+    mainQuery.contains('mainDestination', query.mainDestination);
+  }
+  if (query.servingType) {
+    mainQuery.equalTo(query.servingType, true);
+  }
+  mainQuery.find()
+  .then(function(results) {
+    res.send(results);
+  }, function(error) {
+    // TODO: handle error.
+  });
+};
 module.exports = provider;

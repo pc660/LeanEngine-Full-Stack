@@ -1,7 +1,12 @@
 <md-sidenav class="md-sidenav-left md-whiteframe-z2"
 md-component-id="provider-side-bar">
-  <md-toolbar class="md-theme-indigo">
+  <md-toolbar class="md-theme-indigo search">
     <h1 class="md-toolbar-tools">Sidenav Left</h1>
+    <div>
+      <input class="inline box" type="text" ng-blur="search();" >
+      <md-button class="inline md-raised" style="color: black">搜索</md-button>  
+    </div>    
+    <md-button class="md-raised" style="color: black" ng-click="advanceSearch();">高级搜索</md-button>  
   </md-toolbar>
   <div ng-show="isMenu">
     <md-content layout-padding>

@@ -13,15 +13,25 @@ pub.authenticate = (req, res) => {
   passport.authenticate('local');
 };
 
+pub.logout = (req, res) => {
+  tool.l("pub.logout");
+  // Clear cookie.
+  res.clearCookie("user");
+  req.logout();
+  res.redirect("/login");
+};
+
 pub.test = (req, res) => {
   tool.l("testing this");
 }
 
 pub.register = (req, res) => {
   tool.l('auth.register');
+  tool.l(req.body);
   var username = req.body.username;
   var password = req.body.password;
   var user = new AV.User();
+  tool.l(req.body.password);
   user.set('username', username);
   user.set('password', password);
   user.signUp().then(function(user) {
@@ -31,7 +41,6 @@ pub.register = (req, res) => {
     });
     }, function(error) {
       tool.l('error')
-      tool.l(error.code);
       res.send({
         code: error.code,
         message: error.message      

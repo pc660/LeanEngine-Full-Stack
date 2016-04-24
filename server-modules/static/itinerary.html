@@ -1,0 +1,143 @@
+<style>
+  .wrapper {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    margin-top: 10px;
+}
+
+.title {
+    background-color: yellow;
+    padding-left: 5px;
+}
+
+.content {
+    white-space:normal;
+    padding-left: 5px;
+}
+
+.subtitle .col {
+	display: inline;
+}
+
+.subtitle {
+	padding-left:5px;
+	background-color:rgba(31, 30, 30, 0.19);
+	font-weight: bold;
+	font-size:80%;
+}
+
+.detail .col{
+	display: inline-block;
+	width: 20%;
+	
+}
+
+.detail {
+	margin-top: 10px;
+}
+
+.main {
+	margin-top:5px;
+}
+
+#margin-top-content{
+	margin-top:5px;
+}
+
+.info{
+	display:inline-block;
+	font-weight: bold;
+	font-size:80%;
+	
+}
+
+#second-info{
+	padding-left: 150px;
+}
+
+.mid-title{
+	background-color: rgba(5, 56, 127, 0.59);
+	font-color:white;
+}
+</style>
+
+<div class="wrapper">
+	<div class="mid-title">海锦江旅游有限公司 | 旅游线路行程单</div>
+	<div class="content">
+		<div>线路名称：</div>
+		<div class=col>团号：</div>
+		<div class=col>出团日期：</div>
+		<div>行程天数</div>
+	</div>
+</div>
+
+<div class="wrapper">
+  <div class="title">价格列表</div>
+  <div class="content"><div class="has-border">团费(基本价): ¥{{ saleprice }}</div></div>
+</div>
+
+<div class="wrapper">
+	<div class="title">线路特色</div>
+	<div class="content" id="margin-top-content">特色内容</div>
+</div>
+
+<div class="wrapper">
+	<div class="title">出团线路行程</div>
+	<div class="subtitle">
+		<div class="col">第一天</div>
+		<div class="col"> 上海—昆明</div>
+	</div>
+	<div class="content">
+		<div class="main">主要内容</div>
+		<div class="detail">
+		 <div calss="no-col">交通情况</div>
+		 <div class="no-col">用餐情况</div>
+		 <div class="no-col">住宿情况</div>
+		 <div class="col">出发时间</div>
+		 <div class="col">抵达时间</div>
+		 <div class="col">过夜天数</div>
+		 <div class="col">班次／航班号</div>
+		</div>
+	</div>
+</div>
+
+<div class="wrapper">
+     <div class="title">出团行程备注</div>
+     <div class="subtitle">服务标准</div>
+     <div class="content">
+		  <div class="main">备注内容</div>
+	  </div>
+	  <div class="subtitle">友情提示</div>
+	  <div class="content">
+		  <div class="main">提示内容</div>
+	  </div>
+	  <div class="subtitle">价格包含</div>
+	  <div class="content">
+		  <div class="main">包含内容</div>
+	  </div>
+	  <div class="subtitle">价格不含</div>
+	  <div class="content">
+		  <div class="main">不含内容</div>
+	  </div>
+	  <div class="subtitle">团队备注</div>
+	  <div class="content">
+		  <div class="main">备注内容</div>
+	  </div>
+</div>
+
+<div class="wrapper">
+	<div class="title">中山公园龙之梦营业部联系信息：</div>
+	<div class="content">
+		<div class="info">
+			<p>联系人：王秀云</p>
+			<p>MSN:</p>
+			<p>电话：64221302</p>
+		</div>
+		<div class="info" id="second-info">
+			<p>手机：15921451366</p>
+			<p>QQ:799391311</p>
+			<p>传真:64031932</p>
+		</div>
+	</div>
+</div>

@@ -5,6 +5,22 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
     templateUrl: 'app/common/product/directives/providerSideBar/providerSideBar.html',
     replace: true,
     link: function(scope, element, attr) {
+      /*
+      * Initilize for search box.
+      * */
+      scope.doSearch = (searchString) => {
+        var query = JSON.stringify(
+          {"mainBusiness": searchString, "type": "contain"});
+        providerFac.getProvider(query)
+          .then(function(results) {
+            scope.providers = results;
+            scope.isMenu = false;
+            scope.isSecondMenu = true;
+          }, function(error) {
+            // TODO: handle error.
+          });
+      };
+      
       // Initalize.
       scope.initializeSidebar = () => {
         scope.isMenu = true;
@@ -14,25 +30,54 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
       };
      
       scope.initializeSidebar(); 
-     
+    
+      /**
+      * 搜索供应商根据关键词，关键词为供应商名词.
+      * */
+      scope.searchFromKeyword = (keyword) => {
+        var query = JSON.stringify({"keyword": keyword});
+        providerFac.getProvider(query)
+          .then(function(results) {
+            scope.providers = results;
+            scope.isMenu = false;
+            scope.isSecondMenu = true;
+          }, function(error) {
+            // TODO: handle error.
+          });
+      };
+
+      scope.advanceSearch = () => {
+        var modalInstance = $uibModal.open({
+          animation: true,
+          templateUrl: 'app/common/product/directives/providerSideBar/search/advanceProviderSearch.html',
+          controller: 'providerSearchCtrl',
+        });
+
+        modalInstance.result.then(function (results) {
+          scope.providers = results;
+          scope.isMenu = false;
+          scope.isSecondMenu = true; 
+        }, function () {
+        });
+      
+      };
+    
+
       scope.getProviderList = (servingType) => {
         // TODO: finish the translation.
         var translate = {
           'motorcade': '车队',
-        }
-        
-        providerFac.getProviderFromType(servingType, scope.success, scope.fail);
+        };
+        var query = {servingType: true};
+        providerFac.getProvider(query)
+        .then(function(results) {
+          scope.isMenu = false;
+          scope.isSecondMenu = true;
+          scope.providers = results;
+        }, function(error) {
+          // TODO: error.
+        });
         scope.servingType = translate[servingType]; 
-      };
-     
-      scope.success = (response) => {
-        scope.providers = response;
-        scope.isMenu = false;
-        scope.isSecondMenu = true;
-      };
-     
-      scope.fail = (response) => {
-        $window.alert('fail');
       };
 
       scope.pickProvider = (index) => {
@@ -60,7 +105,12 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
           controller: 'modalCtrl',
           resolve: {
             provider: function () {
-              var contact = scope.providers[index].contact;
+              // Construct the contact.
+              var contact = {};
+              for (var key in translate) {
+                contact[key] = scope.providers[index][key];
+              } 
+              
               var contactInfo = [];
               Object.keys(contact).forEach(function(key) {
                 if (key in translate) {

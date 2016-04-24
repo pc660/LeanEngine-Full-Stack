@@ -1,0 +1,49 @@
+<div class="modal-header">
+  <h3 class="modal-title">高级搜索</h3>
+</div>
+<div class="modal-body">
+  <ul>
+    <li>
+      <strong>关键词</strong>
+      <input type="text" ng-model="keyword">
+    </li>
+    <li>
+      <strong>出发日期</strong>
+      <a ng-class="{active: startLimit}" ng-click="setStartLimit();">不限</a>  
+     <input type="text"  
+            class="inline"
+            data-date-format="yyyy-MM-dd"
+            ng-blur="setStartBlur();"
+            ng-model="startDate" 
+            autoclose=true
+            bs-datepicker>
+     <div class="inline">-</div>
+     <input type="text"  
+            class="inline"
+            data-date-format="yyyy-MM-dd"
+            ng-blur="setStartBlur();"
+            ng-model="$parent.endDate"
+            autoclose=true 
+            bs-datepicker>
+    </li>
+    <li>
+      <strong>价格范围</strong>
+      <a ng-class="{active: priceLimit}" ng-click="setPriceLimit();">不限</a>  
+      <input type="number" class="inline" ng-model="priceMin" ng-blur="setPriceBlur();">
+      <div class="inline">-</div> 
+      <input type="number" class="inline" ng-model="priceMax" ng-blur="setPriceBlur();">
+    </li>
+    <li>
+      <strong>天数</strong>
+      <label class="inline" ng-repeat="day in days">
+        <input type="radio" class="checkbox" value="{{ day.value }}"
+        ng-click="setDay($index);"  name="days">
+        <p class="text">{{ day.string }}</p>
+      </label>  
+    </li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <md-button class="md-raised" ng-click="close()">返回</md-button>
+  <md-button class="md-raised md-primary" ng-click="search()">搜索</md-button>
+ </div>

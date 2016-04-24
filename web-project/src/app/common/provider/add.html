@@ -1,14 +1,14 @@
 <div class="section">
-  <form id="form" ng-submit="test1()" method="post" action="{{addUrl}}">
+  <form id="form" method="post" action="{{addUrl}}">
   <table>
     <tbody>
-      <tr>
+      <tr ng-if="isEditing">
         <td colspan="2" class="title">
           账户信息
         </td>
       </tr>
       <tr provider-textfield label="用户名" validate="duplicate" key="username"></tr>
-      <tr password></tr>
+      <tr ng-if="isEditing" password></tr>
       <tr>
         <td colspan="2" class="title">
           公司信息
@@ -53,7 +53,7 @@
       <tr provider-textfield label="微信号" key="wechat"></tr>
     </tbody>
   </table>
-  <input id="submit" type="button" VALUE="确认" ng-click="test();">
+  <input id="submit" type="button" VALUE="确认" ng-click="upload();">
   <input id="submittest" type="submit" VALUE="确认" style="display: None" >
 
 

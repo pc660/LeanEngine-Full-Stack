@@ -7,6 +7,8 @@
   },
   "license": "MIT",
   "dependencies": {
+    "html-pdf": "latest",
+    "swig": "latest",
     "connect-multiparty": "latest",
     "mongoose" : "~3.8.1",  
     "express-session": "1.4.0",

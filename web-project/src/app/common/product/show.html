@@ -1,0 +1,26 @@
+<table>
+  <tr>
+    <th>产品编号</th>
+    <th>产品名称</th>
+    <th>负责人</th>
+    <th>联系电话</th>
+    <th>产品目的地</th>
+    <th>报名人数</th>
+    <th>参加总数</th>
+    <th>详情</th>
+  </tr>
+  <tr ng-repeat="product in products">
+    <td>{{ product.objectId }}</td>
+    <td>{{ product.productname }}</td>
+    <td>{{ product.phone }}</td>
+    <td>{{ product.people }}</td>
+    <td>{{ product.destination }}</td>
+    <td>{{ product.signinpeople }}</td>
+    <td>{{ product.people  }}</td>
+    <td>
+      <a target="_blank" 
+        ui-sref="home.show-product-detail({productId: '{{product.objectId}}' })"
+        ui-sref-opts="{ absolute: true }">显示详情</a>
+    </td>
+  </tr>
+</table>

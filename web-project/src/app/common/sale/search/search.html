@@ -1,0 +1,37 @@
+<input placeholder="keywords" style="width: 60%;" type="text" ng-blur="openSearchBox();">
+<md-button class="md-raised md-primary">搜索</md-button>
+<div><a href="#" ng-click="openFilter();">高级搜索</a></div>
+
+<h3>搜索结果</h3>
+<table>
+  <tr>
+    <th>产品编号</th>
+    <th>产品名称</th>
+    <th>负责人</th>
+    <th>联系电话</th>
+    <th>产品目的地</th>
+    <th>报名人数</th>
+    <th>总人数</th>
+    <th>查看行程单</th>
+    <th>报名</th>
+  </tr>
+  <tr ng-repeat="product in products">
+    <td>{{ product.objectId }}</td>
+    <td>{{ product.productname }}</td>
+    <td>{{ product.phone }}</td>
+    <td>{{ product.people }}</td>
+    <td>{{ product.destination }}</td>
+    <td>{{ product.signinpeople }}</td>
+    <td>{{ product.people }}</td>
+    <td>
+      <md-button class="md-raised md-primary"
+      ng-click="showItinerary(product.objectId);">显示行程单</md-button>
+    </td>
+    <td>
+      <md-button class="md-raised md-primary" ng-click="signin($index);">报名</md-button>
+    </td>
+  </tr>
+</table>
+ <md-select aria-label="state" ng-model="someModel">
+       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{opt }}</md-option>
+      </md-select>

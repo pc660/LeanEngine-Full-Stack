@@ -2,32 +2,109 @@
 <provider-side-bar></provider-side-bar>
 <md-content flex layout-padding>
     <div>
-      TODO: 产品基本信息
-    </div>
-    <div layout="column" layout-fill layout-align="top center">
-      <div>
-        <md-button ng-click="toggleLeft()"
+    <div>
+      <form ng-submit="submitProduct()" method="post" action="{{ addUrl }}">
+      <table>
+      <tr>
+        <td colspan="99" class="title">
+          产品基本信息
+        </td>
+      </tr>
+      <!--Only id if in non editing mode-->
+      <tr ng-if="!isEditing" product-textfield label="产品编号" key="objectId">
+      <tr product-textfield label="产品名称" key="productname">
+      <!--使用select box instead of this.-->
+      <tr product-textfield label="出发地" key="start">
+      <tr product-textfield label="目的地" key="destination">
+      <tr product-textfield label="负责人" key="user">
+      <tr product-textfield label="联系电话" key="phone">
+      <tr product-textfield label="预计人数" key="people">
+      <tr ng-if="!isEditing" product-textfield label="报名人数" key="signinpeople">
+      <tr>
+        <td>"备注"</td>
+        <td colspan="99">
+          <textarea ng-model="comments" name="comments" msd-elastic style="width: 600px;"></textarea>
+        </td>
+      </tr>  
+      <tr>    
+        <tr ng-if="isEditing">
+        <td colspan="99">
+          <md-button type="button" ng-click="toggleLeft()"
           class="md-primary">
           添加供应商  
-        </md-button>
-      </div>
-    </div>
-    <div>
-    <table>
+          </md-button>
+       </td>
+      </tr>
       <tr>
         <th>服务类型</th>
         <th>供应商名称</th>
         <th>联系信息</th>
         <th>价格</th>
+        <th>加返政策</th>
+        <th colspan="99">详情</th>
       </tr>
-      <tr ng-repeat="provider in pickedProviders">
-        <td>{{ provider.servingType }}</td>
-        <td>{{ provider.name }}</td>
-        <td>{{ provider.contact.contactname }}</td>
-        <td><input type="text"></td>
+      <tr ng-repeat="pickedProvider in pickedProviders">
+        <td>{{ pickedProvider.servingType }}</td>
+        <td>{{ pickedProvider.name }}</td>
+        <td>{{ pickedProvider.contact.contactname }}</td>
+        <td>
+          <input ng-if="isEditing" type="text" name="{{pickedProvider}}" ng-model="pickedProvider.price" ng-blur="updatePrice()">
+          <div ng-if="!isEditing">{{ pickedProvider.price }}</div>
+        </td>
+        <td>{{ pickedProvider.returnPolicy }}</td>
+        <td><a target="_blank"
+            ui-sref-opts="{ absolute: true }" 
+            ui-sref="home.show-provider-detail({providerId:
+            '{{pickedProvider.id}}' })">查看详情</a></td>
+      </tr>
+      <tr>
+        <td>成本价格</td>
+        <td colspan="99">{{price}}</td>
+      </tr>
+      <tr product-textfield label="销售价格" key="saleprice"
+        value="{{product.saleprice}}">
+      </tr>
+      <tr product-textfield label="同行价格" key="competitorprice"
+        value="{{product.competitorprice}}">
+      </tr>
+      <tr>
+        <td colspan="99" class="title">
+          产品行程
+        </td>
+      </tr>
+      <tr>    
+        <tr ng-if="isEditing">
+        <td colspan="99">
+          <md-button type="button" ng-click="addItinerary()"
+          class="md-primary">
+          添加行程 
+          </md-button>
+       </td>
+      </tr>
+      <tr>
+        <th>日期</th>
+        <th>行程</th>
+        <th>用餐</th>
+        <th>住宿</th>
+        <th>出发时间</th>
+        <th style="width:350px;">行程</th>
+        <th></th>
+      </tr>
+      <tr ng-repeat="detail in itinerary">
+        <td>{{detail.date}}</td>
+        <td>{{detail.start}} - {{detail.end}}</td>
+        <td>{{detail.cafe}}</td>
+        <td>{{detail.hotel}}</td>
+        <td>{{detail.startTime}}</td>
+        <td>{{detail.detail}}</td>
+        <td><a ng-click="editItinerary($index);">点击编辑</a></td>
       </tr>
     </table>
+    <input ng-if="isEditing" type="submit" value="发布产品">
+    <input type="hidden" name="costprice" value="{{ price }}">
+    <input type="hidden" name="providers" value="{{ providerList }}">  
+    <input type="hidden" name="itinerary" value="{{ itineraryList }}">  
+    </form>
   </div>
 </md-content>
-  
 </section>

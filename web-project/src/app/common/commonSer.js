@@ -8,6 +8,10 @@
 export default ($http, $state, lcConfig, $window, Upload) => {
   'ngInject';
   return {
+    goAddProvider: () => {
+      $state.go('home');
+    },
+    
     goHome: () => {
       $window.alert("going home");
       $state.go('home');

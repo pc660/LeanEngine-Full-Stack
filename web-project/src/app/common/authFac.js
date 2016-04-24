@@ -7,64 +7,53 @@ export default (
   $state,
   lcConfig,
   $window,
-  $cookieStore,
+  $log,
+  $cookies,
   $base64) => {
   'ngInject';
   
   var service = {};
+  service.isLoggedin = isLoggedin;
+  service.getUserLevel = getUserLevel;
   service.login = login;
   service.register = register;
-  service.setCredentials = setCredentials;
-  service.clearCredentials = clearCredentials;
-
+  service.logout = logout;
+  service.cookie = null; 
   return service;
+ 
+  function getUserLevel() {
+    if (!isLoggedin()) {
+      return lcConfig.userLevel.UNKNOWN;
+    }
 
-  function login(username, password, successCall, errorCall) {
-    $http.post('/api/auth/authenticate', { username: username, password: password })
-    .then(function success(response) {
-        if (response.code === 200) {
-          successCall(response);
-        } else {
-          errorCall(response);
-        }
-      }, function error(response) {
-        errorCall(response);
-      });
-
+    var level = service.cookie.level;
+    if (level === undefined) {
+      return lcConfig.userLevel.UNKNOWN; 
+    }
+    return level;
   }
 
-  function register(username, password, successCall, errorCall) {
-    $http.post('/api/auth/register', { username: username, password: password})
-      .then(function success(response) {
-        if (response.code === "200") {
-          successCall(response);
-        } else {
-          errorCall(response);
-        }
-      }, function error(response) {
-        errorCall(response);
-      });
+  function isLoggedin() {
+    var cookie = $cookies.get('user');
+    if (cookie === undefined) {
+      $log.log("no cookie");
+      return false;
+    }
+    service.cookie = JSON.parse(cookie);
+    return true;
   }
 
-  function setCredentials(username, password) {
-    $http.get('/api/auth/test');
-    /*
-    var authData = $base64.encode(username + ":" + password);
-    // Store username and password in global.
-    $rootScope.globals = {
-      currentUser: {
-        username: username,
-        authData: authData
-      }
-    };
-    $http.defaults.headers.common.Authorization = 'Basic ' + authData;
-    $cookieStore.put('globals', $rootScope.globals);*/
-   
+  function login(username, password) {
+    return $http.post('/api/auth/authenticate',
+                      { username: username, password: password });
   }
 
-  function clearCredentials() {
-    delete $rootScope.globals.currentUser;
-    $cookieStore.remove('globals');
-    $http.defaults.headers.common.Authorization = 'Basic';
+  function register(username, password) {
+    return $http.post('/api/auth/register',
+                      { username: username, password: password});
+  }
+
+  function logout() {
+    return $http.post('/api/auth/logout');
   }
 };

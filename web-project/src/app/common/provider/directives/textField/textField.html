@@ -1,9 +1,10 @@
   <td>
     {{label}}: 
   </td>
-  <td>
-      <input class="input-field" type="text" name="{{key}}">
-      <div class="inline input-field" ng-show="durationShow">
+  <td colspan="{{ maximumColumn }}">
+      <input ng-if="isEditing" class="input-field" type="text" name="{{key}}">
+      <div ng-if="!isEditing" class="input-field">{{ value }}</div>
+      <div class="inline input-field" ng-if="durationShow">
         <div class="inline">
           {{duration}}
         </div>
@@ -23,11 +24,11 @@
           bs-datepicker
           name={{key}}End>
       </div>
-      <md-button ng-show="show" class="md-raised md-primary"
+      <md-button ng-if="show" class="md-raised md-primary"
         ngf-select="uploadFile($file);">上传文件</md-button>
         <div ng-show="show" class="inline input-field" >
           {{filename}}
-          <input type="hidden" name="{{key}}-filename" value={{filename}}>
+          <input type="hidden" name="{{key}}Filename" value={{hashname}}>
         </div>  
     </div>      
   </td>

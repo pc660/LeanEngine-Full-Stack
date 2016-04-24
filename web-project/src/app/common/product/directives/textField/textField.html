@@ -1,0 +1,7 @@
+<td>
+  {{ label }}:
+</td>
+<td colspan="{{ maximumColumn }}">
+   <input ng-if="isEditing"class="input-field" type="text" name="{{key}}">
+   <div ng-if="!isEditing">{{ value }}</div>
+</td>

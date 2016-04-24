@@ -1,0 +1,29 @@
+<table>
+  <tr>
+    <th>供应商编号</th>
+    <th>品牌名称</th>
+    <th>公司名称</th>
+    <th>合作类型</th>
+    <th>营业执照</th>
+    <th>主营业务</th>
+    <th>联系人姓名</th>
+    <th>联系人电话</th>
+    <th>详情</th>
+  </tr>
+  <tr ng-repeat="provider in providers">
+    <td>{{ provider.objectId }}</td>
+    <td>{{ provider.nickname }}</td>
+    <td>{{ product.companyname }}</td>
+    <td>{{ product.servingType }}</td>
+    <td><a href="#"> 点击下载</a></td>
+    <td>{{ product.mainBusiness }}</td>
+    <td>{{ product.contactname }}</td>
+    <td>{{ product.cellphone  }}</td>
+    <td>
+      <a target="_blank" 
+        ui-sref="home.show-provider-detail({providerId: '{{provider.objectId}}' })"
+        ui-sref-opts="{ absolute: true }">显示详情</a>
+    </td>
+  </tr>
+</table>
+<page-control></page-control>

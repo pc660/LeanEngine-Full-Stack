@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h3 class="modal-title">高级搜索</h3>
+</div>
+<div class="modal-body">
+  <ul>
+    <li>
+      <p>供应商名称</p>
+      <input type="text" ng-model="keyword">
+    </li>
+    <li>
+      <p>服务地区</p>
+      <input type="text" ng-model="mainDestination">
+    </li>
+    <li>
+      <p>服务类型</p>
+      <md-select ng-model="servingType" placeholder="选择服务类型">
+        <md-option ng-value="type.key" ng-repeat="type in types">{{type.value}}</md-option>
+      </md-select> 
+    </li>
+  </ul>  
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" type="button" ng-click="close()">返回</button>
+  <button class="btn btn-warning" type="button" ng-click="search()">搜索</button>
+</div>

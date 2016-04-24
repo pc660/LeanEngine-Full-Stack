@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h3 class="modal-title">{{ name }}报名表</h3>
+</div>
+<div class="modal-body">
+  <ul>
+    <li>
+      <strong>姓名</strong>
+      <input type="text" ng-model="username">
+    </li>
+    <li>
+      <strong>身份证</strong>
+      <input type="text" ng-model="identifier">
+    </li>
+    <li>
+      <strong>联系电话</strong>
+      <input type="text" ng-model="phone">
+    </li>
+    <li>
+      <strong>状态</strong>
+      <md-select placeholder="付款状态" ng-model="state" class="menu">
+        <md-option ng-value="opt.state" ng-repeat="opt in options">{{ opt.value }}</md-option>
+      </md-select>
+    </li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <md-button class="md-raised" ng-click="close()">返回</md-button>
+  <md-button class="md-raised md-primary" ng-click="signin()">确认</md-button>
+ </div>

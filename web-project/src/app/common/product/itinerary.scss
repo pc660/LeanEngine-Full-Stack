@@ -1,0 +1,65 @@
+.wrapper {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    margin-top: 10px;
+}
+
+.title {
+    background-color: yellow;
+    padding-left: 5px;
+}
+
+.content {
+    white-space:normal;
+    padding-left: 5px;
+    font-size: 20px;
+}
+
+.subtitle .col {
+	display: inline;
+  font-size: 15px;
+}
+
+.subtitle {
+	padding-left:5px;
+	background-color:rgba(31, 30, 30, 0.19);
+	font-weight: bold;
+	font-size:80%;
+}
+
+.detail .col{
+	display: inline-block;
+	width: 20%;
+	
+}
+
+.detail {
+	margin-top: 10px;
+}
+
+.main {
+	margin-top:5px;
+}
+
+#margin-top-content{
+	margin-top:5px;
+}
+
+.info{
+	display:inline-block;
+	font-weight: bold;
+	font-size:80%;
+	
+}
+
+#second-info{
+	padding-left: 150px;
+}
+
+.mid-title{
+	background-color: rgba(5, 56, 127, 0.59);
+	font-color: white;
+  font-size: 30px;
+}
+

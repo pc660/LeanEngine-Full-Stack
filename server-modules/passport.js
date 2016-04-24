@@ -18,7 +18,7 @@ module.exports = function(passport) {
   passport.use("login", new localStrategy(
   function(username, password, cb) {
     console.log("running passport");
-    AV.User.logIn('test', 'test').then(function(user) {
+    AV.User.logIn(username, password).then(function(user) {
       return cb(null, user);
     }, function() {
       // 失败了

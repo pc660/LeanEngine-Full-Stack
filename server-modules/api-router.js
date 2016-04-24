@@ -15,6 +15,9 @@ const passport = require('passport');
 const hello = require('./hello');
 const auth = require('./auth');
 const provider = require('./provider');
+const product = require('./product');
+const itinerary = require('./itinerary');
+const customer = require('./customer');
 
 // 一个 API 路由下的 hello 接口，访问 /api/hello
 const tool = require('./tool');
@@ -26,21 +29,41 @@ router.get('/hello', hello.hello);
 //router.post('/auth/authenticate', auth.authenticate);
 router.get('/auth/test', isLoggedIn, auth.test);
 router.post('/auth/register', auth.register);
-
+router.post('/auth/logout', auth.logout);
 router.post('/provider/add', provider.add);
 router.post('/provider/uploadfile', multipartyMiddleware, provider.uploadfile);
 router.post('/provider/get',  provider.get);
+router.post('/provider/get-policy',  provider.getReturnPolicy);
+router.post('/provider/search',  provider.search);
 
+
+//route product
+router.post('/product/add', product.add);
+router.post('/product/search', product.search);
+router.post('/product/signin', product.signin);
+
+router.get('/product/getAll', product.getAll);
+router.post('/product/get', product.get);
+router.post('/itinerary/download', itinerary.download);
+router.post('/customer/search', customer.search);
 
 
 
 router.post('/auth/authenticate',
-  passport.authenticate('', { failureRedirect: '/hello' }),
+  passport.authenticate('login', { failWithError: true }),
    function(req, res) {
-    res.send({
-      code: 200,
+    tool.l("login success");
+    var user = {};
+    user['id'] = req.user.id;
+    user['level'] = req.user.get("level");
+    res.cookie('user', JSON.stringify(user), {httpOnly: false});
+    res.sendStatus(200);
+  }, function(err, req, res, next) {
+    tool.l("login failed");
+    res.status(401).send({
+      message: 'login failed'
     });
-   });
+  });
 
 function isLoggedIn(req, res, next) {
     // if user is authenticated in the session, carry on 
