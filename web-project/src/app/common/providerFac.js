@@ -11,7 +11,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   service.uploadProviderFiles = uploadProviderFiles;
   service.files = {};
   return service;
-
+  
   /**
   * @param providerId.
   * @return promise.
@@ -62,6 +62,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   * */
   function uploadProviderFiles() {
     $log.log("providerFac.uploadProviderFiles");
+    $log.log(service.files);
     return Upload.upload({
       url: '/api/provider/uploadfile',
       files: service.files

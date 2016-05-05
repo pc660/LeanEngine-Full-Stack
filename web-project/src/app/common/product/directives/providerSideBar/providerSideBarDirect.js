@@ -1,10 +1,14 @@
-export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal, productFac) => {
+export default ($log, $rootScope, $mdSidenav, $state, $window, providerFac, $uibModal, productFac) => {
   'ngInject';
   return {
     restrict: 'E',
     templateUrl: 'app/common/product/directives/providerSideBar/providerSideBar.html',
     replace: true,
     link: function(scope, element, attr) {
+      
+      scope.$on("sidebarOpen", function() {
+        scope.initializeSidebar();
+      });
       /*
       * Initilize for search box.
       * */
@@ -28,8 +32,6 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
         scope.providers = [];
         scope.servingType = "";
       };
-     
-      scope.initializeSidebar(); 
     
       /**
       * 搜索供应商根据关键词，关键词为供应商名词.
@@ -59,21 +61,25 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
           scope.isSecondMenu = true; 
         }, function () {
         });
-      
       };
     
-
       scope.getProviderList = (servingType) => {
         // TODO: finish the translation.
         var translate = {
           'motorcade': '车队',
+          'domestieOperator': "地接社",
         };
-        var query = {servingType: true};
+        
+        var query = {};
+        query[servingType] = true;
+        $log.log(query);
         providerFac.getProvider(query)
         .then(function(results) {
           scope.isMenu = false;
           scope.isSecondMenu = true;
-          scope.providers = results;
+          if (results.count > 0) {
+            scope.providers = results.providers;
+          }
         }, function(error) {
           // TODO: error.
         });
@@ -84,11 +90,13 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
         // Add provider to the providerFac.
         var provider = scope.providers[index];
         provider.servingType = scope.servingType;
+        provider.returnPolicy = providerFac.util.getReturnPolicy(provider);
         $mdSidenav('provider-side-bar').close()
           .then(function() {
             //scope.$parent.providers = productFac.providers;
             scope.pickedProviders.push(provider);
             scope.initializeSidebar();
+            scope.$broadcast("addProvider");
           });
       };
 
@@ -125,8 +133,6 @@ export default ($rootScope, $mdSidenav, $state, $window, providerFac, $uibModal,
         modalInstance.result.then(function (selectedItem) {
           scope.selected = selectedItem;
         }, function () {
-          // 初始化navbar
-          scope.initialize();
         });
       };
     }

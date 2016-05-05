@@ -10,6 +10,7 @@ import httpConfig from './config/http';
 import routerConfig from './config/route';
 import i18nConfig from './i18n/config';
 import authConfig from './config/auth';
+import cityData from './config/city';
 
 // service
 import commonSer from './common/commonSer';
@@ -68,6 +69,8 @@ angular.module('webProject',
   // 配置全局常量
   .constant('lcConfig', config)
   .constant('moment', window.moment)
+  .constant('cityData', cityData)
+
 
   // 基础配置
   .config(httpConfig)
@@ -110,6 +113,8 @@ angular.module('webProject',
   .controller('signinCtrl', signinCtrl)
   .controller('showCustomerCtrl', showCustomerCtrl)
   .controller('providerSearchCtrl', providerSearchCtrl)
+  .controller('showProviderDetailCtrl', showProviderDetailCtrl)
+
 
   // factory
   .factory('authFac', authFac)

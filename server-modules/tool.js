@@ -22,4 +22,26 @@ pub.fail = (res, err) => {
   });
 };
 
+/**
+* Sanitize a string with format ? type: value ?
+* @param a string with format: ? type: value ?
+* @return value.
+* */
+pub.sanitize = (string) => {
+  if (string === undefined) {
+    return "";
+  }
+  var index = string.indexOf(":");
+  if (index < 0) {
+    return "";
+  }
+
+  var substr = string.substring(index);
+  var lastIndex = substr.length - 1;
+  if (substr[lastIndex] != "?") {
+    return "";
+  }
+  return substr.substring(1, lastIndex).trim();
+};
+
 module.exports = pub;

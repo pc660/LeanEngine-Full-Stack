@@ -33,7 +33,7 @@ provider.add = (req, res) => {
 
 function returnServingType(body, provider) {
   var servingTypeList = [
-    'domestieOperaotr',
+    'domestieOperator',
     'domestieWholesaler',
     'airticket',
     'motorcade',
@@ -79,6 +79,7 @@ provider.addProvider = (req, res, user) => {
   var body = req.body;
   tool.l(body);
   var providerAV = AV.Object.new('Provider');
+  
   providerAV.set('contactname', body.contactname);
   providerAV.set('sex', body.sex);
   providerAV.set('homehone', body.homephone);
@@ -87,8 +88,21 @@ provider.addProvider = (req, res, user) => {
   providerAV.set('qqnumber', body.qqnumber);
   providerAV.set('wechat', body.wechat);
 
+  // Set 经营范围.
+  providerAV.set('arrival', body.arrival);
+  providerAV.set('departure', body.departure);
+  providerAV.set('dominal', body.dominal);
+  providerAV.set('ticketDelegate', body.ticketDelegate);
+  providerAV.set('bookhotel', body.bookhotel);
+  
+  // 设置地址
+  providerAV.set('province', body.province);
+  providerAV.set('city', body.city);
+  providerAV.set('county', body.county);
+  providerAV.set('address', body.address);
+  
   providerAV.set('nickname', body.nickname);
-  providerAV.set('compandyname', body.companyname);
+  providerAV.set('companyname', body.companyname);
   providerAV.set('zipcode', body.zipcode);
   providerAV.set('foundTime', body.foundTime);
   providerAV.set('companySize', body.companySize);
@@ -166,14 +180,15 @@ provider.get = (req, res) => {
   var queryParameters = JSON.parse(body.query);
   var query = new AV.Query('Provider');
   query.limit(LIMIT);
-  if (queryParameters.index) {
+  if (queryParameters.index !== undefined) {
     var index = parseInt(queryParameters.index);
     query.skip(index * LIMIT);
+    delete queryParameters.index;
   }
-  // TODO: uncomment this, right now we comment this for testing.
-  // for (var key in queryParameters) {
-  //   query.equalTo(key, queryParameters[key]);
-  // }
+  for (var key in queryParameters) {
+    tool.l(key);
+    query.equalTo(key, queryParameters[key]);
+  }
   query.count().then(function(count) {
     query.find().then(function(results) {
       tool.l('Successfully retrieved ' + results.length + ' posts.');
@@ -193,6 +208,7 @@ provider.get = (req, res) => {
 provider.uploadfile = (req, res) => {
   tool.l("uploadfile");
   var files = req.files.file;
+
   for (var filename in files) {
     var file = files[filename];
     var path = file.path;
@@ -203,6 +219,7 @@ provider.uploadfile = (req, res) => {
       var avFile = new AV.File(filename, data);
       avFile.save().then(function(obj) {
         tool.l("success");
+        res.send();
       }, function(err) {
       });
       // TODO: Fix the http response logic. 
@@ -210,7 +227,7 @@ provider.uploadfile = (req, res) => {
       // This is too fragile and not acceptable.
     });
   }
-  res.send();
+
 };
 
 provider.search = (req, res) => {

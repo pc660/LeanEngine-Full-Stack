@@ -10,8 +10,8 @@ export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, l
       var providers = results.providers;
       if (results.providers.length > 0) {
         $scope.providers = providers;
+        $log.log($scope.providers);
       }
-     
       // Check number.
       var length = parseInt(results.count / PER_PAGE + 1);
       $scope.pages = new Array(length);

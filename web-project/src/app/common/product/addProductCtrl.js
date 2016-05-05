@@ -1,4 +1,4 @@
-export default ($scope, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac) => {
+export default ($log, $scope, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac) => {
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
@@ -9,8 +9,13 @@ export default ($scope, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, 
   // test
   $scope.isEditing = true;
   $scope.itinerary = [];
+  $scope.$on("addProvider", function() {
+    $log.log($scope.pickedProviders);
+  });
   function buildToggler(navID) {
       return function() {
+        $log.log("open sidebar");
+        $scope.$broadcast("sidebarOpen");
         $mdSidenav(navID)
           .toggle()
           .then(function () {

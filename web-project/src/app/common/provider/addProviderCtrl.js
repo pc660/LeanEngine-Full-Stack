@@ -21,4 +21,16 @@ export default ($log, $scope, $document, $timeout, lcConfig, $window, providerFa
         }, function(error) {
        });
    };
+
+  $scope.foundTimeOptions = [
+    "1年以下",
+    "1-5年",
+    "5-8年",
+    "8年以上",
+  ];
+
+  $scope.sexOptions = [
+    "男",
+    "女",
+  ];
 };

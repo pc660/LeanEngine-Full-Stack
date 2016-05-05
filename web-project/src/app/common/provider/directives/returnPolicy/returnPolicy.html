@@ -5,24 +5,28 @@
   <div class="block">
     <div class="inline">
       全年总人数:
-      <input type="text" name="returnTotalPeople">
+      <input type="text" ng-disabled="!isEditing" name="returnTotalPeople"
+      ng-value="provider.returnTotalPeople">
       (人) 
     </div>
     <div class="inline">
       加返
-      <input type="text" name="returnMoneyEachPeople">
+      <input type="text" ng-disabled="!isEditing" name="returnMoneyEachPeople"
+      ng-value="provider.returnMoneyEachPeople">
       (元/人)
       </div>
     </div>
   <div class="block">
     <div class="inline">
     全年销售额:
-    <input type="number" name="returnTotalRevenue">
+    <input type="number" ng-disabled="!isEditing"  name="returnTotalRevenue"
+    ng-value="provider.returnTotalRevenue">
     (元)
     </div>
     <div class="inline">
        加返
-      <input type="number" name="returnMoneyRevenue">
+      <input type="number" ng-disabled="!isEditing" name="returnMoneyRevenue"
+      ng-value="provider.returnMoneyRevenue">
       (元)
     </div>
   </div>

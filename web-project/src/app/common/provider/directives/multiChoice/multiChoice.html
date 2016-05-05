@@ -2,21 +2,8 @@
     {{name}}: 
   </td>
   <td>
-    <!--<md-checkbox class="inline" ng-model="isChecked" ng-repeat="option in options" 
-      aria-label="{{option.name}}" ng-true-value="true" name="{{option.name}}" ng-change="onChange();"> 
-    {{ option.value }}
-    </md-checkbox>-->
   <label class="checkbox-inline" ng-repeat="option in options">
-    <!--
-    <checkbox
-    ng-model="checkboxModel"
-    name="{{option.name}}"              
-    ng-true-value="1"      
-    ng-false-value="0"  
-    ng-change="onChange()"       
-    ></checkbox>
-    {{ option.value }}-->
-    <input type="checkbox" class="checkbox" name="{{ option.name }}">
+    <input type="checkbox" ng-model="option.state" ng-checked="{{ option.state }}" ng-disabled="!isEditing" class="checkbox" name="{{ option.name }}">
     <p class="text">  {{ option.value }}</p>
    </label>
   </td>

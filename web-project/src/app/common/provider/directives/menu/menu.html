@@ -2,12 +2,13 @@
   {{label}}
 </td>
 <td>
-  <md-input-container class="menu">
-    <md-select name="{{name}}" ng-change="onValueChange();" ng-model="select" aria-label="select">
-      <md-option ng-selected="$first" ng-value="option" ng-repeat="option in options">
+    <md-select ng-if="isEditing" ng-change="onValueChange();"
+    ng-model="selectValue" aria-label="select">
+    <md-option ng-selected="$first" ng-value="option" ng-repeat="option in options">
         {{option}}
       </md-option>
     </md-select>
-  </md-input-container>
+   <p ng-if="!isEditing">{{ value }}</p>
+   <input name="{{ name }}" type="hidden" value="{{ value }}">
 </td>
 

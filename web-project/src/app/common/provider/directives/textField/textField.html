@@ -2,29 +2,33 @@
     {{label}}: 
   </td>
   <td colspan="{{ maximumColumn }}">
-      <input ng-if="isEditing" class="input-field" type="text" name="{{key}}">
-      <div ng-if="!isEditing" class="input-field">{{ value }}</div>
+      <input ng-disabled="!isEditing" class="input-field" type="text" name="{{key}}"
+      ng-value="value">
       <div class="inline input-field" ng-if="durationShow">
         <div class="inline">
           {{duration}}
         </div>
-        <input type="text"  
+        <input ng-disabled="!isEditing" type="text"  
           class="inline input-field"
           ng-model="fromDate" 
           placeholder="开始时间"
           bs-datepicker
+          date-format='mediumDate'
           name={{key}}Start>
         <div class="inline input-field">
           -
         </div>
-        <input type="text"  
+        <input 
+          ng-disabled="!isEditing"
+          type="text"  
           class="inline input-field"
           ng-model="endDate" 
+          date-format="mediumDate"
           placeholder="结束时间"
           bs-datepicker
           name={{key}}End>
       </div>
-      <md-button ng-if="show" class="md-raised md-primary"
+      <md-button ng-if="show && isEditing" class="md-raised md-primary"
         ngf-select="uploadFile($file);">上传文件</md-button>
         <div ng-show="show" class="inline input-field" >
           {{filename}}

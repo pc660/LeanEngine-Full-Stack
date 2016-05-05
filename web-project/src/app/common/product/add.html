@@ -45,8 +45,8 @@
       </tr>
       <tr ng-repeat="pickedProvider in pickedProviders">
         <td>{{ pickedProvider.servingType }}</td>
-        <td>{{ pickedProvider.name }}</td>
-        <td>{{ pickedProvider.contact.contactname }}</td>
+        <td>{{ pickedProvider.nickname }}</td>
+        <td>{{ pickedProvider.contactname }}</td>
         <td>
           <input ng-if="isEditing" type="text" name="{{pickedProvider}}" ng-model="pickedProvider.price" ng-blur="updatePrice()">
           <div ng-if="!isEditing">{{ pickedProvider.price }}</div>
@@ -55,7 +55,7 @@
         <td><a target="_blank"
             ui-sref-opts="{ absolute: true }" 
             ui-sref="home.show-provider-detail({providerId:
-            '{{pickedProvider.id}}' })">查看详情</a></td>
+            '{{pickedProvider.objectId}}' })">查看详情</a></td>
       </tr>
       <tr>
         <td>成本价格</td>

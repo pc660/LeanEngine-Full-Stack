@@ -1,4 +1,4 @@
-export default ($rootScope, $state, $window) => {
+export default ($rootScope, $log, $state, $window) => {
   'ngInject';
   return {
     restrict: 'A',
@@ -9,6 +9,19 @@ export default ($rootScope, $state, $window) => {
     },
     link: function(scope, element, attr) {
       // TODO: maybe use global variable to store these configurations.
+      scope.options = [];
+      scope.isEditing = scope.$parent.isEditing;
+      scope.$on('providerUpdate', function(){
+        for (var i = 0; i < scope.options.length; i++) {
+          var option = scope.options[i];
+          if (scope.$parent.provider[option.name]) {
+            $log.log("being true");
+            $log.log(scope.options[i]);
+            scope.options[i].state = true; 
+          }    
+        }
+      });
+      
       if (attr.type === "经营范围") {
         scope.name = attr.type;
         scope.options = [

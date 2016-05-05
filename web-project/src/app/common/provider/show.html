@@ -3,7 +3,6 @@
     <th>供应商编号</th>
     <th>品牌名称</th>
     <th>公司名称</th>
-    <th>合作类型</th>
     <th>营业执照</th>
     <th>主营业务</th>
     <th>联系人姓名</th>
@@ -13,12 +12,11 @@
   <tr ng-repeat="provider in providers">
     <td>{{ provider.objectId }}</td>
     <td>{{ provider.nickname }}</td>
-    <td>{{ product.companyname }}</td>
-    <td>{{ product.servingType }}</td>
-    <td><a href="#"> 点击下载</a></td>
-    <td>{{ product.mainBusiness }}</td>
-    <td>{{ product.contactname }}</td>
-    <td>{{ product.cellphone  }}</td>
+    <td>{{ provider.companyname }}</td>
+    <td><a ng-if="provider.licenseFile.url" download=".pdf" href="{{ provider.licenseFile.url }}"> 点击下载</a></td>
+    <td>{{ provider.mainBusiness }}</td>
+    <td>{{ provider.contactname }}</td>
+    <td>{{ provider.cellphone  }}</td>
     <td>
       <a target="_blank" 
         ui-sref="home.show-provider-detail({providerId: '{{provider.objectId}}' })"
