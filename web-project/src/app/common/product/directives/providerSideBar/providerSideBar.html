@@ -1,44 +1,27 @@
-<md-sidenav class="md-sidenav-left md-whiteframe-z2"
-md-component-id="provider-side-bar">
+<md-sidenav class="md-sidenav-left"
+  md-component-id="provider-side-bar"
+  md-whiteframe="4">
   <md-toolbar class="md-theme-indigo search">
-    <h1 class="md-toolbar-tools">Sidenav Left</h1>
-    <div>
-      <input class="inline box" type="text" ng-blur="search();" >
-      <md-button class="inline md-raised" style="color: black">搜索</md-button>  
-    </div>    
-    <md-button class="md-raised" style="color: black" ng-click="advanceSearch();">高级搜索</md-button>  
+    <h1 class="md-toolbar-tools">选择供应商</h1>
+
   </md-toolbar>
-  <div ng-show="isMenu">
-    <md-content layout-padding>
-      <md-button ng-click="getProviderList('motorcade')" class="md-primary">
-        车队
-      </md-button>
-    </md-content>
-     <md-content layout-padding>
-      <md-button ng-click="getProviderList('airticket')" class="md-primary">
-        机票
-      </md-button>
-    </md-content>
-    <md-content layout-padding>
-      <md-button ng-click="getProviderList('domestieOperator')" class="md-primary">
-        地接社
+     <div ng-if="providers.length > 0" angucomplete-alt id="ex1"
+              placeholder="搜索供应商"
+              pause="100"
+              selected-object="selectProvider"
+              local-data="providers"
+              local-search="searchProvider"
+              title-field="nickname,companyname"
+              auto-match=true
+              minlength="1"
+              input-class="form-control form-control-small">
+    </div>
+  <div>
+    <md-content layout-padding ng-repeat="provider in filterProviders">
+      <md-button ng-click="pickProvider($index)" class="md-primary">
+        {{ provider.nickname }} ({{ provider.companyname}})
       </md-button>
     </md-content>
   </div>
-  <div ng-show="isSecondMenu"> 
-    <table>
-    <tr ng-repeat="provider in providers">
-      <td>
-        <md-button ng-click="pickProvider($index)" class="md-primary">
-          {{ provider.nickname }}
-        </md-button>
-      </td>
-      <td>
-        <md-button ng-click="openContact($index)" class="md-primary">
-          联系信息
-       </md-button>
-      </td>
-    </tr>   
-  </table>
   </div>
 </md-sidenav>

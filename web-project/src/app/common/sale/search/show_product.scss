@@ -1,0 +1,155 @@
+.product-top {
+  .title-block {
+    padding: 15px;
+    position: relative;
+    .product-title {
+      .product-tag {
+        line-height: 20px;
+        font-size: 14px;
+        background: url(http://r.lvyouquan.cn/static/lyq/ndetail/images/prd-sprite.png) 0 0 no-repeat;
+        vertical-align: middle;
+        width: 64px;
+        height: 24px;
+        display: inline-block;
+      }
+      h1 {
+        font-size: 20px;
+        display: inline;
+      }
+    }
+    .product-metadata {
+      color: #f60;
+    }
+  }
+}
+
+.product-center {
+  .left {
+    width: 450px;
+    padding: 15px;
+  }
+  .right {
+    padding: 15px;
+    .detail-info {
+      .detail-item {
+        .detail-key {
+          width: 200px;
+        }
+      }
+    }
+    .detail-reserve {
+      padding: 10px;
+      background: #fffce0;
+      .reserve-info {
+        strong {
+          color: #f60;
+        }
+        margin-bottom: 10px;
+      }
+      .reserve-time {
+        margin-top: 10px;
+        .timebox {
+          display: inline-block;
+          background: white;
+          border: 1px solid;
+          padding: 3px;
+          span {
+            color: #ff1a1a;
+          }
+        }
+      }
+      .center {
+        margin-top: 10px;
+      }
+    }
+    .button-list {
+      .icon {
+        display: inline-block;
+        position: relative;
+        .fa-print {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+        }
+        a {
+          width: 80px;
+          border: 1px solid #DDDDDD;
+          border-radius: 3px;
+          padding: 0 6px 0 20px;
+          margin: 5px 5px 0 0;
+          height: 24px;
+        }
+        .fa-file-pdf-o {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+        }
+      }
+    }
+  }
+  calendar-md {
+    .container {
+      position: relative;
+      .cal-price {
+        font-size: 12px;
+        position: absolute;
+        top: 25px;
+        left: 5px;
+        color: #f60;
+        z-index: 999;
+      }
+    }
+  }
+}
+
+.product-information {
+  .itinerary {
+    .dayitem {
+      padding-left: 20px;
+      padding-top: 20px;
+      font-size: 14px;
+      .d {
+        color: #fe7f1c;
+      }
+    }
+    .cyitem {
+      padding-left: 20px;
+      padding-top: 20px;
+      p {
+        display: block;
+      }
+    }
+    .detail {
+      padding-left: 20px;
+      padding-bottom: 20px;
+    }
+  }
+  .tab-item {
+    .fyitem-wrapper {
+      .fyitem {
+        border: 1px solid #b4dbf2;
+        margin: 15px 0 0 10px;
+        padding: 3px 8px;
+        color: #5cb8ed;
+        float: left;
+      }
+      &:after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: " ";
+        clear: both;
+        height: 0;
+      }
+    }
+    .detail {
+      padding-top: 20px;
+      padding-left: 35px;
+      padding-bottom: 20px;
+    }
+  }
+  .visa-info {
+    padding: 20px;
+  }
+}
+

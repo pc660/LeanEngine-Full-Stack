@@ -1,26 +1,58 @@
-<table>
-  <tr>
-    <th>产品编号</th>
-    <th>产品名称</th>
-    <th>负责人</th>
-    <th>联系电话</th>
-    <th>产品目的地</th>
-    <th>报名人数</th>
-    <th>参加总数</th>
-    <th>详情</th>
-  </tr>
-  <tr ng-repeat="product in products">
-    <td>{{ product.objectId }}</td>
-    <td>{{ product.productname }}</td>
-    <td>{{ product.phone }}</td>
-    <td>{{ product.people }}</td>
-    <td>{{ product.destination }}</td>
-    <td>{{ product.signinpeople }}</td>
-    <td>{{ product.people  }}</td>
-    <td>
-      <a target="_blank" 
-        ui-sref="home.show-product-detail({productId: '{{product.objectId}}' })"
-        ui-sref-opts="{ absolute: true }">显示详情</a>
-    </td>
-  </tr>
-</table>
+<section layout="row" flex>
+  <div>
+    <md-sidenav
+      class="md-sidenav-left shadow"
+      md-component-id="showProduct"
+      md-is-locked-open="true"
+      md-disable-backdrop
+      md-whiteframe="4">
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">产品管理</h1>
+      </md-toolbar>
+      <div class="sidebar-button">
+        <md-button ng-click="showVerified()" class="md-primary">
+          出售中的产品 <span ng-if="verified">({{ verified }})</span>
+        </md-button>
+        <md-button ng-click="showUnverified()" class="md-primary">
+          待审核产品 <span ng-if="unverified">({{ unverified }})</span>
+        </md-button>
+        <md-button ng-click="showUnposted()" class="md-primary">
+          已下架产品 <span ng-if="unposted">({{ unposted }})</span>
+        </md-button>
+      </div>
+    </md-sidenav>
+  </div>
+  <md-content flex layout-padding>
+    <table>
+      <tr>
+        <th>产品编号</th>
+        <th>产品名称</th>
+        <th>最近出发班期价格</th>
+        <th>负责人</th>
+        <th>详情</th>
+        <th>状态</th>
+      </tr>
+      <tr ng-repeat="product in products">
+        <td>{{ product.objectId }}</td>
+        <td>{{ product.productName }}</td>
+        <td>
+          <div>日期: {{ product.latestDate }}</div>
+          <div>门市价(成人): {{ product.latestAdultCompanySalePrice }}</div>
+          <div>同行价(成人): {{ product.latestAdultCompanyCompetitorPrice }}</div>
+          <div>结算价(成人): {{ product.latestAdultCompanyPrice }}</div>
+        </td>
+        <td>{{ product.responsible.contactname }}</td>
+        <td>
+          <a target="_blank"
+             ui-sref="home.show-product-detail({productId: '{{product.objectId}}' })"
+             ui-sref-opts="{ absolute: true }">显示详情</a>
+        </td>
+        <td>
+          <p ng-if="product.status == 1">下架</p>
+          <p ng-if="product.status == 2">未审核</p>
+          <p ng-if="product.status == 3">已审核</p>
+        </td>
+      </tr>
+    </table>
+  </md-content>
+</section>

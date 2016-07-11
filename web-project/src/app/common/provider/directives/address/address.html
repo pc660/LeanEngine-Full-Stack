@@ -1,55 +1,45 @@
-  <td>
-    地址:
-  </td>
-  <td layout="row">
-    <div>
-        省份:   
-      </div>
-      <md-input-container>
+<div class="address" layout="row" ayout-align='start center'>
+  <div layout="row"  layout-align='start center'>
+    <div>省份:</div>
+    <md-input-container>
       <md-select class="margin" ng-if="isEditing"
-        ng-change="onProvinceChange();"
-        ng-model="$parent.$parent.selectedProvince"
-        aria-label="province-select">
-          <md-option ng-selected="$first" ng-value="province" ng-repeat="province in
-          provinces">
-            {{province.name}}
-          </md-option>
-      </md-select> 
-      </md-input-container>
-      <p ng-if="!isEditing">{{ province }}</p>
-      <div class="margin">
-        城市:    
-      </div>
-      <md-input-container>
-        <md-select class="margin" ng-if="isEditing" ng-change="onCityChange();"
-        ng-model="$parent.$parent.$parent.selectedCity" aria-label="city-select">
-          <md-option ng-selected="$first" ng-value="city" ng-repeat="city in cities">
-            {{city.name}}
-          </md-option>
-          </md-select>
-        </md-input-container>
-        <p ng-if="!isEditing">{{ city }}</p>
-      <div class="margin">
-        区县:    
-      </div>
-      <md-input-container>
-        <md-select class="margin" ng-if="isEditing" ng-change="onCountyChange();"
-        ng-model="$parent.$parent.$parent.selectedCounty" aria-label="county-select">
-          <md-option ng-selected="$first" ng-value="county" ng-repeat="county in
-          counties">
-            {{county.name}}
-          </md-option>
-          </md-select>
-        </md-input-container>
-        <p ng-if="!isEditing">{{ province }}</p>
-        
-        
-        
-     <div class="margin">
-        地址:
-      </div>
-      <input class="margin" ng-disabled="!isEditing" name="address" type="text">
-      <input type="hidden" name="province" value="{{ province }}">
-      <input type="hidden" name="city" value="{{ city }}">
-      <input type="hidden" name="county" value="{{ county }}">
-  </td>
+                 ng-model="$parent.province">
+        <md-option ng-selected="$first" ng-value="province" ng-repeat="province in provinces">
+          {{province.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    <p ng-if="!isEditing">{{ province }}</p>
+  </div>
+  <div layout-align='start center' layout="row">
+    <div>城市:</div>
+    <md-input-container>
+      <md-select class="margin" ng-if="isEditing"
+                 ng-model="$parent.city">
+        <md-option ng-selected="$first" ng-value="city" ng-repeat="city in cities">
+          {{city.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    <p ng-if="!isEditing">{{ city }}</p>
+  </div>
+  <div layout-align='start center' layout="row" ng-if="showCounty">
+    <div>区县:</div>
+    <md-input-container>
+      <md-select class="margin" ng-if="isEditing"
+                 ng-model="$parent.county">
+        <md-option ng-selected="$first" ng-value="county" ng-repeat="county in counties">
+          {{county.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    <p ng-if="!isEditing">{{ county }}</p>
+  </div>
+  <div layout="row" layout-align='start center' ng-if="showCounty">
+    <div class="margin">地址:</div>
+    <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" name="address" type="text" ng-model="detail">
+    <div ng-if="!isEditing">
+      {{ detail }}
+    </div>
+  </div>
+</div>

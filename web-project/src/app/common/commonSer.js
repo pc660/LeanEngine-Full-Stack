@@ -11,7 +11,7 @@ export default ($http, $state, lcConfig, $window, Upload) => {
     goAddProvider: () => {
       $state.go('home');
     },
-    
+
     goHome: () => {
       $window.alert("going home");
       $state.go('home');
@@ -19,6 +19,8 @@ export default ($http, $state, lcConfig, $window, Upload) => {
     redirect: (url) => {
       $window.location.href = url;
     }
+
+
   };
 };
 

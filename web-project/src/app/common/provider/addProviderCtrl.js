@@ -1,36 +1,27 @@
-export default ($log, $scope, $document, $timeout, lcConfig, $window, providerFac) => {
+export default ($log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
   'ngInject';
-   var url = lcConfig.apiHost + "/api/provider/add";
-   $scope.addUrl = url;
-   $scope.uploadFiles = false;
-   $scope.validate = true;
-   $scope.isEditing = true;
-   var submit = $document.find('#submittest');
-   var validate = true;
+    var url = lcConfig.apiHost + "/api/provider/add";
+    $scope.addUrl = url;
+    $scope.isEditing = true;
 
-   // TODO: Need to understand why angularjs can't submit the form manually.
-   // TODO: First: Don't upload all the files at the end. A better way is to
-   // upload each file when user click the upload button. The logic needs to be
-   // handled in textField directive. But we need to figure out a smart way to 
-   // assoicate the file with the provider.
-   $scope.upload = () => {
-        $log.log("addProviderCtrl.upload");
-        providerFac.uploadProviderFiles()
-        .then(function(response) {
-          submit.trigger('click');
-        }, function(error) {
-       });
-   };
+    $scope.upload = (file) => {
+      if (!file) {
+        return;
+      }
+      $scope.filename = file.name;
+      $scope.provider.licenseFilename = fileFac.hash(file.name);
+      providerFac.uploadProviderFiles(file, $scope.provider.licenseFilename).then(function() {
+        $log.log("upload success");
+      }, function(error) {
 
-  $scope.foundTimeOptions = [
-    "1年以下",
-    "1-5年",
-    "5-8年",
-    "8年以上",
-  ];
+      });
+    };
 
-  $scope.sexOptions = [
-    "男",
-    "女",
-  ];
+    $scope.submit = () => {
+      $log.log($scope.provider);
+      providerFac.upload($scope.provider).then(function(result) {
+      }, function(error) {
+
+      });
+    };
 };

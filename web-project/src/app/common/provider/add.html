@@ -1,81 +1,215 @@
 <div class="section">
-  <form id="form" method="post" action="{{addUrl}}">
-  <table>
-    <tbody>
-      <tr ng-if="isEditing">
-        <td colspan="2" class="title">
-          账户信息
-        </td>
-      </tr>
-      <tr ng-if="isEditing" provider-textfield label="用户名" validate="duplicate" key="username"></tr>
-      <tr ng-if="isEditing" password></tr>
-      <tr>
-        <td colspan="2" class="title">
-          公司信息
-        </td>
-      </tr>
-      <tr provider-textfield label="品牌名称" key="nickname"></tr>
-      <tr provider-textfield label="公司名称" key="companyname"></tr>
-      <tr provider-multi-choice type="经营范围"></tr>
-      <tr provider-address></tr> 
-      <tr provider-textfield label="邮编" key="zipcode"></tr>
-      <tr>
-      <td>
-        成立时间
-      </td>
-      <td>
-        <select class="menu" ng-init="foundTime = foundTimeOptions[0]"
-          ng-if="isEditing" name="foundTime" 
-          ng-model="foundTime" ng-options="option for option in foundTimeOptions
-          track by option">
-        </select>
-        <p ng-if="!isEditing">{{provider.foundTime}}</p>
-      </td>
-      </tr>
-      <tr provider-textfield label="注册资金" key="capital"></tr>
-       <tr>
-        <td colspan="2" class="title">
-          资质信息
-        </td>
-      </tr>
-      <tr provider-textfield label="营业执照号" duration="证件有效期" upload="pdf" key="license"></tr>
-      <tr>
-        <td colspan="2" class="title">
-          合作信息
-        </td>
-      </tr>
-      <tr provider-multi-choice type="合作类型"></tr>
-      <tr provider-textfield label="主营业务" key="mainBusiness"></tr>
-      <tr provider-textfield label="主要口岸" key="mainDestination"></tr>
-      <tr return-policy></tr>
-      <tr>
-        <td colspan="2" class="title">
-          联系信息
-        </td>
-      </tr>
-      <tr provider-textfield label="姓名" key="contactname"></tr>
-      <tr>
-      <td>
-        性别
-      </td>
-      <td>
-        <select ng-if="isEditing" name="sex" class="menu" ng-init="sex = sexOptions[0]" 
-          ng-model="sex" ng-options="option for option in sexOptions track by
-          option">
-        </select>
-        <p ng-if="!isEditing">{{ provider.sex }}</p>
-      </td>
-      </tr>
-      
-      <tr provider-textfield label="座机" key="homephone"></tr>
-      <tr provider-textfield label="传真" key="fax"></tr>
-      <tr provider-textfield label="手机" key="cellphone"></tr>
-      <tr provider-textfield label="QQ号" key="qqnumber"></tr>
-      <tr provider-textfield label="微信号" key="wechat"></tr>
-    </tbody>
-  </table>
-  <input id="submit" type="button" VALUE="确认" ng-click="upload();">
-  <input id="submittest" type="submit" VALUE="确认" style="display: None" >
-
-
+   <md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="基本信息">
+        <table>
+           <tbody>
+           <tr ng-if="isEditing">
+             <td colspan="2" class="title">
+               注册用户
+             </td>
+           </tr>
+           <tr ng-if="isEditing">
+             <td>
+               用户名
+             </td>
+             <td>
+               <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.username"></text-field>
+             </td>
+           </tr>
+           <tr ng-if="isEditing">
+             <td>
+               密码
+             </td>
+             <td>
+               <password ng-model="provider.password"></password>
+             </td>
+           </tr>
+            <tr>
+              <td colspan="2" class="title">
+                公司信息
+              </td>
+            </tr>
+            <tr>
+              <td>
+                品牌名称
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.nickname"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.nickname }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                公司名称
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.companyname"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.companyname }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>地址</td>
+              <td>
+                <address show-county=true is-editing="isEditing" ng-model="provider.address"></address>
+              </td>
+            </tr>
+            <!--<tr provider-address></tr>-->
+            <tr>
+              <td>营业执照</td>
+              <td>
+                <div ng-if="isEditing">
+                  <md-button class="md-raised md-primary" ngf-select="upload($file)">上传文件</md-button>
+                  <p ng-if="filename">
+                    {{ filename }}
+                  </p>
+                </div>
+                <div ng-if="!isEditing">
+                  <a href="#">显示证书</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="title">
+                联系信息
+              </td>
+            </tr>
+            <tr>
+              <td>
+                姓名
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.contactname"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.contactname }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                座机
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.homephone"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.homephone }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                手机
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.cellphone"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.cellphone }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                QQ号
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.qqnumber"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.qqnumber }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                微信号
+              </td>
+              <td>
+                <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.wechat"></text-field>
+                <div ng-if="!isEditing">
+                  {{ provider.wechat }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </md-tab>
+      <md-tab label="业务资料">
+        <table>
+          <tbody>
+            <tr>
+              <td colspan="2" class="title">
+                主营业务
+              </td>
+            </tr>
+            <tr>
+              <td>
+                主营目的地
+              </td>
+              <td>
+                <multi-choice is-editing="isEditing" type="主营目的地" ng-model="provider.destination"></multi-choice>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                主营口岸
+              </td>
+              <td>
+                <multi-choice is-editing="isEditing" type="主营口岸" ng-model="provider.start" other="true"></multi-choice>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="title">
+                业务资源
+              </td>
+            </tr>
+            <tr>
+              <td>
+                航班资源
+              </td>
+              <td>
+                <textarea ng-disabled="!isEditing" class="msd-elastic" ng-model="provider.flightResource"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                收客情况
+              </td>
+              <td>
+                <textarea ng-disabled="!isEditing" class="msd-elastic" ng-model="provider.customerResource"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                产品优势
+              </td>
+              <td>
+                <textarea ng-disabled="!isEditing" class="msd-elastic" ng-model="provider.productResource"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="title">
+                合作支持
+              </td>
+            </tr>
+            <tr>
+              <td>
+                加返政策
+              </td>
+              <td>
+                <return-policy is-editing='isEditing' ng-model="provider.returnPolicy"></return-policy>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="submit">
+          <md-button class="md-raised md-primary" ng-click="submit();">
+            提交
+          </md-button>
+        </div>
+      </md-tab>
+    </md-tabs>
+  </md-content>
 </div>

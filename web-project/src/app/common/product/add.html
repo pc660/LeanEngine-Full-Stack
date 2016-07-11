@@ -1,110 +1,315 @@
 <section layout="row" flex>
-<provider-side-bar></provider-side-bar>
+<provider-side-bar ng-if="isEditing"></provider-side-bar>
 <md-content flex layout-padding>
-    <div>
-    <div>
-      <form ng-submit="submitProduct()" method="post" action="{{ addUrl }}">
-      <table>
-      <tr>
-        <td colspan="99" class="title">
-          产品基本信息
-        </td>
-      </tr>
-      <!--Only id if in non editing mode-->
-      <tr ng-if="!isEditing" product-textfield label="产品编号" key="objectId">
-      <tr product-textfield label="产品名称" key="productname">
-      <!--使用select box instead of this.-->
-      <tr product-textfield label="出发地" key="start">
-      <tr product-textfield label="目的地" key="destination">
-      <tr product-textfield label="负责人" key="user">
-      <tr product-textfield label="联系电话" key="phone">
-      <tr product-textfield label="预计人数" key="people">
-      <tr ng-if="!isEditing" product-textfield label="报名人数" key="signinpeople">
-      <tr>
-        <td>"备注"</td>
-        <td colspan="99">
-          <textarea ng-model="comments" name="comments" msd-elastic style="width: 600px;"></textarea>
-        </td>
-      </tr>  
-      <tr>    
-        <tr ng-if="isEditing">
-        <td colspan="99">
-          <md-button type="button" ng-click="toggleLeft()"
-          class="md-primary">
-          添加供应商  
-          </md-button>
-       </td>
-      </tr>
-      <tr>
-        <th>服务类型</th>
-        <th>供应商名称</th>
-        <th>联系信息</th>
-        <th>价格</th>
-        <th>加返政策</th>
-        <th colspan="99">详情</th>
-      </tr>
-      <tr ng-repeat="pickedProvider in pickedProviders">
-        <td>{{ pickedProvider.servingType }}</td>
-        <td>{{ pickedProvider.nickname }}</td>
-        <td>{{ pickedProvider.contactname }}</td>
-        <td>
-          <input ng-if="isEditing" type="text" name="{{pickedProvider}}" ng-model="pickedProvider.price" ng-blur="updatePrice()">
-          <div ng-if="!isEditing">{{ pickedProvider.price }}</div>
-        </td>
-        <td>{{ pickedProvider.returnPolicy }}</td>
-        <td><a target="_blank"
-            ui-sref-opts="{ absolute: true }" 
-            ui-sref="home.show-provider-detail({providerId:
-            '{{pickedProvider.objectId}}' })">查看详情</a></td>
-      </tr>
-      <tr>
-        <td>成本价格</td>
-        <td colspan="99">{{price}}</td>
-      </tr>
-      <tr product-textfield label="销售价格" key="saleprice"
-        value="{{product.saleprice}}">
-      </tr>
-      <tr product-textfield label="同行价格" key="competitorprice"
-        value="{{product.competitorprice}}">
-      </tr>
-      <tr>
-        <td colspan="99" class="title">
-          产品行程
-        </td>
-      </tr>
-      <tr>    
-        <tr ng-if="isEditing">
-        <td colspan="99">
-          <md-button type="button" ng-click="addItinerary()"
-          class="md-primary">
-          添加行程 
-          </md-button>
-       </td>
-      </tr>
-      <tr>
-        <th>日期</th>
-        <th>行程</th>
-        <th>用餐</th>
-        <th>住宿</th>
-        <th>出发时间</th>
-        <th style="width:350px;">行程</th>
-        <th></th>
-      </tr>
-      <tr ng-repeat="detail in itinerary">
-        <td>{{detail.date}}</td>
-        <td>{{detail.start}} - {{detail.end}}</td>
-        <td>{{detail.cafe}}</td>
-        <td>{{detail.hotel}}</td>
-        <td>{{detail.startTime}}</td>
-        <td>{{detail.detail}}</td>
-        <td><a ng-click="editItinerary($index);">点击编辑</a></td>
-      </tr>
-    </table>
-    <input ng-if="isEditing" type="submit" value="发布产品">
+    <div class="product">
+      <md-tabs md-dynamic-height  md-border-bottom>
+        <md-tab class="tab-button" label="选择供应商">
+          <table>
+            <tr>
+              <td colspan="99" class="title">
+                供应商基本信息
+              </td>
+            </tr>
+            <tr ng-if="isEditing">
+              <td>
+                <md-button type="button" ng-click="toggleLeft()"
+                           class="md-primary">
+                  选择供应商
+                </md-button>
+              </td>
+            </tr>
+            <tr ng-if="product.pickedProvider">
+              <td>供应商</td>
+              <td>{{ product.pickedProvider.companyname }} ({{ product.pickedProvider.nickname }})</td>
+            </tr>
+            <tr>
+              <td>商户联系人</td>
+              <td ng-if="product.pickedProvider">
+                <md-input-container ng-if="isEditing">
+                  <md-select
+                    ng-change="pickContact();"
+                    ng-model="product.contact">
+                    <md-option
+                      ng-selected="$first"
+                      ng-value="contact"
+                      ng-repeat="contact in product.pickedProvider.contactList">
+                      {{contact.contactname}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-button class="md-raised md-primary addcontact" ng-click="addContact();">添加商户联系人</md-button>
+                <p ng-if="!isEditing">{{ product.contact.contactname }}</p>
+              </td>
+            </tr>
+            <tr ng-if="product.contact">
+              <td>手机</td>
+              <td>
+                <div>
+                  {{ product.contact.cellphone }}
+                </div>
+              </td>
+            </tr>
+            <tr ng-if="product.contact">
+              <td>座机</td>
+              <td>
+                <div>
+                  {{ product.contact.homephone }}
+                </div>
+              </td>
+            </tr>
+            <tr ng-if="product.contact">
+              <td>QQ号码</td>
+              <td>
+                <div>
+                  {{ product.contact.qqnumber }}
+                </div>
+              </td>
+            </tr>
+            <tr ng-if="product.contact">
+              <td>微信</td>
+              <td>
+                <div>
+                  {{ product.contact.wechat }}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </md-tab>
+        <md-tab class="tab-button" label="基本信息">
+          <table>
+            <tr>
+              <td colspan="99" class="title">
+                产品基本信息
+              </td>
+            </tr>
+            <!--Only id if in non editing mode-->
+            <tr ng-if="!isEditing">
+              <td>产品编号</td>
+              <td>
+                <p>{{ product.objectId }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>线路名称</td>
+              <td>
+                <input ng-if="isEditing" type="text" ng-model="product.fullName">
+                <div ng-if="!isEditing">
+                  <span ng-repeat="prefix in product.prefixArray">
+                    <span>[</span>
+                    <span>{{ prefix }}</span>
+                    <span>]</span>
+                  </span>
+                  <span ng-if="!isEditing">{{product.fullName}}</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>供应商产品名称</td>
+              <td>
+                <input ng-if="isEditing" type="text" ng-model="product.productName">
+                <p ng-if="!isEditing">{{ product.productName }}</p>
+              </td>
+            </tr>
+            <tr ng-if="isEditing">
+              <td>线路名称前缀</td>
+              <td>
+                <multi-choice is-editing="isEditing" type="线路前缀" ng-model="product.prefix"></multi-choice>
+              </td>
+            </tr>
+            <tr>
+              <td>酒店标准</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-if="isEditing" ng-model="product.hotelStandard">
+                    <md-option ng-selected="$first" ng-value="hotel" ng-repeat="hotel in hotels">
+                      {{hotel}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.hotelStandard }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>交通方式</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-if="isEditing" ng-model="product.transportStandard">
+                    <md-option ng-selected="$first" ng-value="transport" ng-repeat="transport in transports">
+                      {{transport}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.transportStandard }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>产品负责人</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.responsible">
+                    <md-option ng-selected="$first" ng-value="response.objectId" ng-repeat="response in responses track by $index">
+                      {{response.contactname}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.responsible.contactname }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>行程天数</td>
+              <td>
+                <counter ng-if="isEditing" ng-model="product.duration"></counter>
+              <p ng-if="!isEditing">{{ product.duration }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>酒店入住天数</td>
+              <td>
+                <counter ng-if="isEditing" ng-model="product.hotelDuration"></counter>
+                <p ng-if="!isEditing">{{ product.hotelDuration }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>报名截止</td>
+              <td>
+                <div>
+                  <span>出团前</span>
+                  <counter ng-if="isEditing" ng-if="isEditing" ng-model="product.stopDay"></counter>
+                  <p ng-if="!isEditing">{{ product.stopDay }}</p>
+                  <span>天</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>出发地</td>
+              <td>
+                <address is-editing="isEditing" show-county="false" ng-model="product.start"></address>
+              </td>
+            </tr>
+            <tr>
+              <td>类型</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.type">
+                    <md-option ng-selected="$first" ng-value="type" ng-repeat="type in types">
+                      {{type}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.type }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>大区</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.area">
+                    <md-option ng-selected="$first" ng-value="area" ng-repeat="area in areas">
+                      {{area}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.area }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>平台联系人</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.platformcontact">
+                    <md-option ng-selected="$first" ng-value="response.objectId" ng-repeat="response in responses track by $index">
+                      {{response.contactname}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.platformcontact.contactname }}</p>
+              </td>
+            </tr>
+          </table>
+        </md-tab>
+        <md-tab class="tab-button" label="行程信息">
+          <div ng-repeat="i in getDuration() track by $index" class="itinery">
+            <div class="item">
+              <label>第{{ $index + 1 }}天:</label>
+              <input type="text" ng-model="product.itinerary[$index].title">
+              <span>请填写行程信息如: 上海-北京</span>
+            </div>
+            <div class="item">
+              <label>参考航班/列车班次</label>
+              <input type="text" ng-model="product.itinerary[$index].flight">
+            </div>
+            <div class="item">
+              <label>住宿信息</label>
+              <input type="text" ng-model="product.itinerary[$index].hotelDetail">
+              <span>或同级</span>
+              <md-input-container>
+                <md-select ng-model="product.itinerary[$index].hotel">
+                  <md-option ng-selected="$first" ng-value="hotel" ng-repeat="hotel in hotels">
+                    {{hotel}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+            <div class="item">
+              <label>餐饮信息</label>
+              <input type="text" ng-model="product.itinerary[$index].food">
+            </div>
+            <div class="item">
+              <label>详细描述: </label>
+              <div class="editor ueditor" config="ueconfig" ng-model="product.itinerary[$index].detail"></div>
+            </div>
+            <hr>
+          </div>
+        </md-tab>
+        <md-tab class="tab-button" label="其他信息">
+          <div class="extra-item">
+            <label>线路特色</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.description"></div>
+          </div>
+          <div class="extra-item">
+            <label>费用包含</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.priceInclude"></div>
+          </div>
+          <div class="extra-item">
+            <label>费用不含</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.priceExclude"></div>
+          </div>
+          <div class="extra-item">
+            <label>自费项目</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.selfPaid"></div>
+          </div>
+          <div class="extra-item">
+            <label>预定须知</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.reserveInfo"></div>
+          </div>
+          <div class="extra-item">
+            <label>收客限制</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.restriction"></div>
+          </div>
+          <div class="extra-item">
+            <label>签证信息</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.visaInfo"></div>
+          </div>
+          <div class="extra-item">
+            <label>材料截止时间</label>
+            <input type="number" ng-model="product.materialDeadline">
+            天
+          </div>
+        </md-tab>
+      <md-tab class="tab-button" label="团期报价">
+        <calendar is-editing="isEditing" ng-model="product.price" class="price-calendar" data="团期报价"></calendar>
+        <div class="submit">
+          <md-button ng-if="isEditing" ng-click="submitProduct();" class="md-raised md-primary">发布产品</md-button>
+        </div>
+      </md-tab>
+      <md-tab class="tab-button" ng-if="!isEditing" label="库存管理">
+        <calendar class="inventory-calendar" ng-model="product.storage" data="库存管理"></calendar>
+      </md-tab>
+    </md-tabs>
     <input type="hidden" name="costprice" value="{{ price }}">
-    <input type="hidden" name="providers" value="{{ providerList }}">  
-    <input type="hidden" name="itinerary" value="{{ itineraryList }}">  
-    </form>
+    <input type="hidden" name="providers" value="{{ providerList }}">
+    <input type="hidden" name="itinerary" value="{{ itineraryList }}">
   </div>
 </md-content>
 </section>
+

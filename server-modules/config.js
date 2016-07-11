@@ -24,7 +24,20 @@ let config = {
     // 以下两个是在 LeanCloud 中配置的 host，xxx 替换为自己的域名
     'http://stg-xxx.leanapp.cn',
     'http://xxx.leanapp.cn'
-  ]
+  ],
+
+  // 产品情况
+  productStatus: {
+    UNPOSTED: 1,
+    UNVERIFIED: 2,
+    VERIFIED: 3,
+  },
+
+  orderStatus: {
+    UNPAID: 1,
+    PAID: 2,
+    FINISHED: 3,
+  }
 };
 
 // 判断环境

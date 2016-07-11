@@ -5,33 +5,15 @@
 * @author wangxiao
 */
 
-export default ($scope, $window, commonSer, helloSer, authFac) => {
+export default ($log, $state, $scope, $window, commonSer, helloSer, productFac) => {
   'ngInject';
+  /*productFac.hasUnfinished().then(function(result) {
+    var count = result.count;
+    if (count > 0) {
+      $scope.unfinished = true;
 
-  function loginSuccess(response) {$window.alert(response);}
-
-  function loginFail(response) {$window.alert("fail");}
-
-  $scope.goHome = () => {
-    commonSer.goHome();
-  };
-
-  $scope.register = () => {
-    authFac.register("admin", "admin", loginSuccess, loginFail);
-  };
-
-  $scope.login = () => {
-    authFac.login("admin", "admin", loginSuccess, loginFail);
-  };
-
-  $scope.set = () => {
-    authFac.setCredentials("admin", "admin");
-  };
-
-  $scope.clear = () => {
-    authFac.clearCredentials();
-  };
-  //helloSer.getData().then((data) => {
-  //  console.log(data);
-  //});
+    }
+  }, function(error) {
+    $state.go("login");
+  });*/
 };

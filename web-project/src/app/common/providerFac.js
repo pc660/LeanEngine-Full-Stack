@@ -1,23 +1,26 @@
 export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload) => {
   'ngInject';
-  
+
   var service = {};
 
   service.getProvider = getProvider;
   service.getReturnPolicyDetail = getReturnPolicyDetail;
-  service.search = search; 
+  service.search = search;
   service.util = {};
   service.util.getReturnPolicy = getReturnPolicy;
   service.uploadProviderFiles = uploadProviderFiles;
+  service.upload = upload;
   service.files = {};
+  service.getContactList = getContactList;
+  service.getMyProvider = getMyProvider;
   return service;
-  
+
   /**
   * @param providerId.
   * @return promise.
   * */
   function getReturnPolicyDetail(providerId) {
-    return $http.post('/api/provider/get-policy', {providerId: providerId}); 
+    return $http.post('/api/provider/get-policy', {providerId: providerId});
   }
 
   /**
@@ -27,7 +30,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   function getProvider(query) {
     return $http.post('/api/provider/get', {query: JSON.stringify(query)});
   }
- 
+
   /**
    * @param: AV.Object('Provider') only contains Return policy information.
    * @return: A message that could be used to describe the current return policy
@@ -57,23 +60,38 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   }
 
   /**
-  * @param: {filename: file} a dictionary of files of which key is the filename
-  * and the value is the file content. 
+   * @param file. The file you want to upload.
+   * @param filename, the filename that you want to assign this file to.
+   *
   * */
-  function uploadProviderFiles() {
-    $log.log("providerFac.uploadProviderFiles");
-    $log.log(service.files);
+  function uploadProviderFiles(file, filename) {
     return Upload.upload({
       url: '/api/provider/uploadfile',
-      files: service.files
+      data: {file: file, filename: filename},
     });
+  }
+
+  function upload(provider) {
+    // First upload the file.
+    $log.log("provider");
+    $log.log(provider);
+    return $http.post('/api/provider/add', {provider: provider});
   }
 
   /**
   * @param: query. A json object of query that contains keyword of the provider.
-  * 
+   * @params: include. A list of included attributions. If empty, then all.
+  *
   * */
-  function search(query) {
-     return $http.post('/api/provider/search', {query: JSON.stringify(query)}); 
+  function search(query, select) {
+     return $http.post('/api/provider/search', {query: query, select: select});
+  }
+
+  function getMyProvider() {
+    return $http.post('/api/provider/search', {query: {self: true}});
+  }
+
+  function getContactList(providerId) {
+    return $http.post('/api/user/getContactList', {providerId: providerId});
   }
 };

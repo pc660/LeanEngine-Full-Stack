@@ -1,143 +1,141 @@
 <style>
-  .wrapper {
-    border-style: solid;
-    border-color: black;
-    border-width: 1px;
-    margin-top: 10px;
-}
-
-.title {
-    background-color: yellow;
-    padding-left: 5px;
-}
-
-.content {
-    white-space:normal;
-    padding-left: 5px;
-}
-
-.subtitle .col {
-	display: inline;
-}
-
-.subtitle {
-	padding-left:5px;
-	background-color:rgba(31, 30, 30, 0.19);
-	font-weight: bold;
-	font-size:80%;
-}
-
-.detail .col{
-	display: inline-block;
-	width: 20%;
-	
-}
-
-.detail {
-	margin-top: 10px;
-}
-
-.main {
-	margin-top:5px;
-}
-
-#margin-top-content{
-	margin-top:5px;
-}
-
-.info{
-	display:inline-block;
-	font-weight: bold;
-	font-size:80%;
-	
-}
-
-#second-info{
-	padding-left: 150px;
-}
-
-.mid-title{
-	background-color: rgba(5, 56, 127, 0.59);
-	font-color:white;
-}
+	.printdoc {
+		margin: 10px auto;
+		width: 100%;
+		font-size: 14px;
+		border: 1px solid #ccc;
+		padding: 15px;
+	}
+	.table {
+		font-size: 14px;
+		box-shadow: none;
+	}
+	.tjly {
+		padding: 15px;
+		background: #efefef;
+		line-height: 24px;
+	}
+	.doch3 {
+		border-bottom: 2px solid #77cccc;
+		font-size: 18px;
+		padding: 3px 0;
+		line-height: 30px;
+		font-weight: bold;
+		color: #333;
+	}
+	.doccon {
+		padding: 10px;
+	}
+	.dayitem {
+		margin-bottom: 10px;
+	}
 </style>
 
-<div class="wrapper">
-	<div class="mid-title">海锦江旅游有限公司 | 旅游线路行程单</div>
-	<div class="content">
-		<div>线路名称：</div>
-		<div class=col>团号：</div>
-		<div class=col>出团日期：</div>
-		<div>行程天数</div>
+<div class="printdoc">
+	<h1>
+		{% for prefix in product.prefix %}
+			<span>【{{ prefix }}】</span>
+		{% endfor %}
+		{{ product.title }}</h1>
+	<div style="width: 100%; text-align: center">
+		<span style="color: Red;">此行程仅供参考，详情以下单时为准</span>
 	</div>
-</div>
-
-<div class="wrapper">
-  <div class="title">价格列表</div>
-  <div class="content"><div class="has-border">团费(基本价): ¥{{ saleprice }}</div></div>
-</div>
-
-<div class="wrapper">
-	<div class="title">线路特色</div>
-	<div class="content" id="margin-top-content">特色内容</div>
-</div>
-
-<div class="wrapper">
-	<div class="title">出团线路行程</div>
-	<div class="subtitle">
-		<div class="col">第一天</div>
-		<div class="col"> 上海—昆明</div>
+	<table class="table" style="width: 100%;">
+		<tbody>
+		<tr>
+			<td>旅行社：未填写</td>
+			<td>联系人：未填写</td>
+			<td>联系电话：未填写</td>
+		</tr>
+		</tbody>
+	</table>
+	<div style="border-top: 2px solid #77cccc; margin: 10px 0; padding-top: 10px;">
+		<dl class="tjly">
+			{{ product.description }}
+		</dl>
 	</div>
-	<div class="content">
-		<div class="main">主要内容</div>
-		<div class="detail">
-		 <div calss="no-col">交通情况</div>
-		 <div class="no-col">用餐情况</div>
-		 <div class="no-col">住宿情况</div>
-		 <div class="col">出发时间</div>
-		 <div class="col">抵达时间</div>
-		 <div class="col">过夜天数</div>
-		 <div class="col">班次／航班号</div>
+	<h3 class="doch3">价格班期</h3>
+	<div class="doccon">
+		<table class="dayitem" style="box-shadow: none">
+			<tbody>
+			<tr>
+				<th style="font-weight: bold; font-size: 14px">出团班期</th>
+				<th style="font-weight: bold; font-size: 14px">班期价格</th>
+				<th style="font-weight: bold; font-size: 14px">回团班期</th>
+			</tr>
+			{% for price in product.priceArray %}
+				<tr>
+					<td>{{ price.startDate }}</td>
+					<td>成人￥{{ price.adultCompanySalePrice }};儿童￥{{ price.childCompanySalePrice }}</td>
+					<td>{{ price.endDate }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<h3 class="doch3">行程介绍</h3>
+	<div class="doccon">
+		{% for itinerary in product.itinerary %}
+			<div class="dayitem">
+				<h4 class="daytime">第&nbsp;<span> {{ itinerary.index }}</span>&nbsp;天   </h4>
+					{{ itinerary.detail }}
+				<div class="daycon">
+				</div>
+				<div>
+					<strong>餐饮: </strong>
+					<span> {{ itinerary.food }} </span>
+					<br>
+					<strong>住宿：</strong>
+					<span> {{ itinerary.hotel }} </span>
+					<br>
+					<strong>参考航班：</strong>
+					<span> {{ itinerary.flight }} </span>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<h3 class="doch3">费用说明</h3>
+	<div class="doccon">
+		<div class="dayitem">
+			<h4 class="daytime">费用包含：</h4>
+			<div class="daycon">
+				{{ product.priceInclude }}
+			</div>
+			<h4 class="daytime">费用不包含：</h4>
+			<div class="daycon">
+				{{ product.priceExclude }}
+			</div>
+			<h4 class="daytime">自费项目：</h4>
+			<div class="daycon">
+				{{ product.selfPaid }}
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="wrapper">
-     <div class="title">出团行程备注</div>
-     <div class="subtitle">服务标准</div>
-     <div class="content">
-		  <div class="main">备注内容</div>
-	  </div>
-	  <div class="subtitle">友情提示</div>
-	  <div class="content">
-		  <div class="main">提示内容</div>
-	  </div>
-	  <div class="subtitle">价格包含</div>
-	  <div class="content">
-		  <div class="main">包含内容</div>
-	  </div>
-	  <div class="subtitle">价格不含</div>
-	  <div class="content">
-		  <div class="main">不含内容</div>
-	  </div>
-	  <div class="subtitle">团队备注</div>
-	  <div class="content">
-		  <div class="main">备注内容</div>
-	  </div>
-</div>
-
-<div class="wrapper">
-	<div class="title">中山公园龙之梦营业部联系信息：</div>
-	<div class="content">
-		<div class="info">
-			<p>联系人：王秀云</p>
-			<p>MSN:</p>
-			<p>电话：64221302</p>
+	<h3 class="doch3">签证信息</h3>
+	<div class="doccon">
+		<div class="dayitem">
+			<div class="daycon">
+				{{ product.visaInfo }}
+			</div>
 		</div>
-		<div class="info" id="second-info">
-			<p>手机：15921451366</p>
-			<p>QQ:799391311</p>
-			<p>传真:64031932</p>
+	</div>
+
+	<h3 class="doch3">预订须知</h3>
+	<div class="doccon">
+		<div class="dayitem">
+			<div class="daycon">
+				{{ product.reserveInfo }}
+			</div>
+		</div>
+	</div>
+
+	<h3 class="doch3">收客限制</h3>
+	<div class="doccon">
+		<div class="dayitem">
+			<div class="daycon">
+				{{ product.restriction }}
+			</div>
 		</div>
 	</div>
 </div>

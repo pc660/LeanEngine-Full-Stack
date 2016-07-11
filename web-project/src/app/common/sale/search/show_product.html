@@ -1,0 +1,179 @@
+<section class="product-top">
+  <div class="title-block">
+    <div class="product-title">
+      <span class="product-tag">{{ product.area }}</span>
+      <h1>
+        <span ng-repeat="prefix in product.prefixArray">
+           <span>[</span>
+           <span>{{ prefix }}</span>
+           <span>]</span>
+         </span>
+        <span>{{product.productName}}</span>
+      </h1>
+    </div>
+    <div class="product-metadata">
+      <span>
+        <label>{{ product.start.city }}出发</label>
+        线路编号:{{ product.objectId }}
+      </span>
+    </div>
+  </div>
+</section>
+<section class="product-center" layout="row">
+  <div class="left">
+    <calendar-md flex layout layout-fill
+                 calendar-direction="direction"
+                 on-prev-month="prevMonth"
+                 on-next-month="nextMonth"
+                 on-day-click="dayClick"
+                 title-format="'MMMM y'"
+                 ng-model='selectedDate'
+                 day-format="'d'"
+                 day-label-format="'EEE'"
+                 day-label-tooltip-format="'EEEE'"
+                 day-tooltip-format="'fullDate'"
+                 week-starts-on="firstDayOfWeek"
+                 day-content="setDayContent"></calendar-md>
+  </div>
+  <div class="right">
+    <div class="detail-info">
+      <div class="detail-item">
+        <label class="detail-key">
+          <strong>
+            行程天数:
+          </strong>
+          <span>{{ product.duration }}天{{ product.hotelDuration }}晚</span>
+        </label>
+        <label class="detail-key">
+          <strong>
+            往返交通:
+          </strong>
+          <span>{{ product.transportStandard }}</span>
+        </label>
+      </div>
+      <div class="detail-item">
+        <label class="detail-key">
+          <strong>
+            销售价:
+          </strong>
+          <span>{{ product.latestAdultCompanySalePrice }}</span>
+        </label>
+      </div>
+    </div>
+    <div class="detail-reserve">
+      <div class="reserve-info">
+        <span>建议至少提前
+          <strong>{{ product.stopDay }}</strong>
+          天预订
+        </span>
+      </div>
+      <div class="reserve-time">
+        <label>出发日期: </label>
+        <div class="timebox">
+          {{ product.latestDate }}
+          <span>{{ product.latestAdultCompanySalePrice }}</span>
+          元/成人价,
+          <span>{{ product.latestChildCompanySalePrice }}</span>
+          元/儿童价
+        </div>
+      </div>
+      <div class="reserve-time">
+        <label>预订人数: </label>
+        <div class="people">
+          <span>成人</span>
+          <counter ng-model="adult"></counter>
+          <span>儿童</span>
+          <counter ng-model="child"></counter>
+        </div>
+      </div>
+      <div class="center">
+        <md-button class="md-raised md-primary" ng-click="order();">
+          预订
+        </md-button>
+      </div>
+    </div>
+    <div class="button-list">
+      <div class="icon">
+        <i class="print-icon fa fa-print" aria-hidden="true"></i>
+        <a>打印行程</a>
+      </div>
+      <div class="icon">
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        <a>下载pdf</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="product-information">
+  <md-tabs md-dynamic-height  md-border-bottom>
+    <md-tab label="行程信息">
+      <div ng-repeat="itinerary in product.itinerary" class="itinerary">
+        <div class="dayitem">
+          <span class="d">第{{$index + 1}}天</span>
+          <span class="s">{{ itinerary.title }}</span>
+        </div>
+        <div class="cyitem">
+          <p class="s1">
+            <strong>餐饮</strong>
+            {{ itinerary.food }}
+          </p>
+          <p class="s2">
+            <strong>住宿</strong>
+            {{ itinerary.hotelDetail }}或同级{{ itinerary.hotel }}
+          </p>
+          <p class="s3">
+            <strong>参考航班/火车班次</strong>
+            {{ itinerary.flight }}
+          </p>
+        </div>
+        <!--TODO: figure out why template directive not work inside ng-repeat-->
+        <div class="detail" ng-bind-html="getItinerary($index);"></div>
+      </div>
+    </md-tab>
+    <md-tab label="费用说明">
+      <div class="tab-item">
+        <div class="fyitem-wrapper">
+          <span class="fyitem">
+            费用包含
+          </span>
+        </div>
+        <div class="detail">
+          <div template key="priceInclude"></div>
+        </div>
+      </div>
+      <div class="tab-item">
+        <div class="fyitem-wrapper">
+          <span class="fyitem">
+            费用不含
+          </span>
+        </div>
+        <div class="detail">
+          <div template key="priceExclude"></div>
+        </div>
+      </div>
+    </md-tab>
+    <md-tab label="签证信息">
+      <div class="visa-info">
+        <div template key="visaInfo"></div>
+      </div>
+    </md-tab>
+    <md-tab label="预订须知">
+      <div class="tab-item">
+        <div class="detail">
+          <div template key="reserveInfo"></div>
+        </div>
+      </div>
+      <div class="tab-item">
+        <div class="fyitem-wrapper">
+          <span class="fyitem">
+            收客限制
+          </span>
+        </div>
+        <div class="detail">
+          <div template key="restriction"></div>
+        </div>
+      </div>
+    </md-tab>
+  </md-tabs>
+</section>
+

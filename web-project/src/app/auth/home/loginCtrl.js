@@ -4,7 +4,7 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
 
   function loginSuccess() {
     $log.log("login success");
-    commonSer.goAddProvider();    
+    commonSer.goAddProvider();
   }
 
   function loginFail() {}
@@ -13,7 +13,7 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
     commonSer.goHome();
   };
 
-  
+
   $scope.logout = () => {
     authFac.logout();
   };
@@ -21,7 +21,7 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
   $scope.register = () => {
     authFac.register($scope.username, $scope.password);
   };
-  
+
   $scope.login = () => {
     authFac.login($scope.username, $scope.password)
       .success(function(user) {
@@ -39,7 +39,7 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
             $log.log("Unknown user, should not happen!!");
             break;
           }
-        } 
+        }
       })
       .error(function(response) {
         // TODO: Use a nicer UI and translate..

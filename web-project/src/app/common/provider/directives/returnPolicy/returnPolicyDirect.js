@@ -1,10 +1,15 @@
 export default ($log, $rootScope, $state, $window) => {
   'ngInject';
   return {
-    restrict: 'A',
+    restrict: 'E',
     templateUrl: 'app/common/provider/directives/returnPolicy/returnPolicy.html',
-    replace: false,
+    replace: true,
+    scope: {
+      returnPolicy: '=ngModel',
+      isEditing: '=',
+    },
+    require: "ngModel",
     link: function(scope, element, attr) {
-    } 
+    }
   };
 };

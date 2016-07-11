@@ -1,0 +1,23 @@
+.order-table {
+  input {
+    height: 24px;
+  }
+}
+
+.customers {
+  min-width: 800px;
+  min-height: 500px;
+  .extra {
+    div {
+      width: 150px;
+    }
+  }
+  .birthDate {
+    .datepicker {
+      position: static;
+      td {
+        padding: 0;
+      }
+    }
+  }
+}

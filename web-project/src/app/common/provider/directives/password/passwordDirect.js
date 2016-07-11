@@ -1,9 +1,14 @@
 export default ($rootScope, $state, $window) => {
   'ngInject';
   return {
-    restrict: 'A',
+    restrict: 'E',
     templateUrl: 'app/common/provider/directives/password/password.html',
-    replace: false,
+    replace: true,
+    require: "ngModel",
+    scope: {
+      password: '=ngModel',
+      isEditing: '=',
+    },
     link: function(scope, element, attr) {
       scope.verify = () => {
         var verifiedTag = scope.clearVerified();
@@ -15,8 +20,8 @@ export default ($rootScope, $state, $window) => {
           verifiedTag.addClass("success");
           verifiedTag.html("密码验证成功!");
         }
-      }; 
-   
+      };
+
       scope.focus = () => {
         scope.clearVerified();
       };
@@ -26,7 +31,7 @@ export default ($rootScope, $state, $window) => {
         verifiedTag.html("");
         verifiedTag.removeClass("fail");
         verifiedTag.removeClass("success");
-        return verifiedTag; 
+        return verifiedTag;
       };
     }
   };

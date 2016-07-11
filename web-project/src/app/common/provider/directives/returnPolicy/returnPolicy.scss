@@ -1,8 +1,7 @@
-.inline {
-  display: inline;
-  padding-right: 10px;
-}
-
 .block {
   display: block;
+  div {
+    display: inline;
+    padding-right: 10px;
+  }
 }

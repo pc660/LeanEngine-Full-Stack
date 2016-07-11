@@ -1,0 +1,17 @@
+.multiple-choice {
+  label {
+    margin-left: 10px;
+    min-width: 80px;
+    input[type='checkbox'] {
+      display: inline-block;
+      position: relative;
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+    }
+    p {
+      margin-left: -3px;
+      font-weight: normal;
+    }
+  }
+}

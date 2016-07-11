@@ -1,0 +1,230 @@
+<div class="section">
+  <md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="我的账号">
+        <table>
+          <tr>
+            <td>用户名</td>
+            <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+            <td>密码</td>
+            <td>
+              <md-button class="md-raised md-primary">
+                更改密码
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </md-tab>
+      <md-tab class="dot" label="我的产品">
+        <section layout="row" flex>
+          <md-sidenav
+            class="md-sidenav-left shadow"
+            md-component-id="showProduct"
+            md-is-locked-open="true"
+            md-disable-backdrop
+            md-whiteframe="4">
+            <div class="sidebar-button">
+              <md-button ng-click="showMyProducts()" class="md-primary">
+                我发布的产品
+              </md-button>
+              <md-button ng-click="showUnverified()" class="md-primary">
+                需要我审核的产品
+              </md-button>
+            </div>
+          </md-sidenav>
+          <md-content flex layout-padding>
+            <table>
+              <tr>
+                <th>产品编号</th>
+                <th>产品名称</th>
+                <th>最近出发班期价格</th>
+                <th>负责人</th>
+                <th>详情</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+              <tr ng-repeat="product in products">
+                <td>{{ product.objectId }}</td>
+                <td>{{ product.productName }}</td>
+                <td>
+                  <div>日期: {{ product.latestDate }}</div>
+                  <div>门市价(成人): {{ product.latestAdultCompanySalePrice }}</div>
+                  <div>同行价(成人): {{ product.latestAdultCompanyCompetitorPrice }}</div>
+                  <div>结算价(成人): {{ product.latestAdultCompanyPrice }}</div>
+                </td>
+                <td>{{ product.responsible.contactname }}</td>
+                <td>
+                  <a target="_blank"
+                     ui-sref="home.show-product-detail({productId: '{{product.objectId}}' })"
+                     ui-sref-opts="{ absolute: true }">显示详情</a>
+                </td>
+                <td>
+                  <p ng-if="product.status == 1">下架</p>
+                  <p ng-if="product.status == 2">未审核</p>
+                  <p ng-if="product.status == 3">已审核</p>
+                </td>
+                <td>
+                  <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>
+                  <md-button class="md-raised md-primary" ng-click="remind($index);" ng-if="product.status == 2 && !unverified">提醒</md-button>
+                  <md-button class="md-raised md-primary" ng-click="verify($index);" ng-if="product.status == 2 && unverified">通过审核</md-button>
+                  <md-button class="md-raised md-primary" ng-click="unPost($index);" ng-if="product.status == 3">下架</md-button>
+                </td>
+              </tr>
+            </table>
+          </md-content>
+        </section>
+      </md-tab>
+      <md-tab label="供应商管理">
+        <section layout="row" flex>
+          <md-sidenav
+            class="md-sidenav-left shadow"
+            md-component-id="showProvider"
+            md-is-locked-open="true"
+            md-disable-backdrop
+            md-whiteframe="4">
+            <div class="sidebar-button">
+              <md-button ng-click="showMyContactList()" class="md-primary">
+                商户联系人管理
+              </md-button>
+              <md-button ng-click="showMyProvider()" class="md-primary">
+                供应商信息
+              </md-button>
+            </div>
+          </md-sidenav>
+          <md-content flex layout-padding>
+            <table ng-if="showContactList">
+              <tr>
+                <th>姓名</th>
+                <th>手机</th>
+                <th>座机</th>
+                <th>职位</th>
+                <th>QQ</th>
+                <th>微信</th>
+                <th>操作</th>
+              </tr>
+              <tr ng-repeat="contact in contactList">
+                <td>{{ contact.contactname }}</td>
+                <td>{{ contact.cellphone }}</td>
+                <td>{{ contact.homephone }}</td>
+                <td>{{ contact.position }}</td>
+                <td>{{ contact.qqnumber }}</td>
+                <td>{{ contact.wechat }}</td>
+                <td>
+                  <a href="#" ng-click="editContact($index)">编辑</a> / <a href="#" ng-click="deleteContact($index)">删除</a>
+                </td>
+              </tr>
+            </table>
+            <div class="submit">
+              <md-button ng-if="showContactList" ng-click="addContact();" class="md-raised md-primary">添加商户联系人</md-button>
+            </div>
+            <table ng-if="showProvider">
+              <tbody>
+                <tr>
+                  <td colspan="2" class="title">
+                    公司信息
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    品牌名称
+                  </td>
+                  <td>
+                    {{ provider.nickname }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    公司名称
+                  </td>
+                  <td>
+                    {{ provider.companyname }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>地址</td>
+                  <td>
+                    <address show-county=true is-editing="false" ng-model="provider.address"></address>
+                  </td>
+                </tr>
+                <tr>
+                  <td>营业执照</td>
+                  <td>
+                    <a href="#">显示证书</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="title">
+                    主营业务
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    主营目的地
+                  </td>
+                  <td>
+                    <multi-choice is-editing="false" type="主营目的地" ng-model="provider.destination"></multi-choice>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    主营口岸
+                  </td>
+                  <td>
+                    <multi-choice is-editing="false" type="主营口岸" ng-model="provider.start" other="true"></multi-choice>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="title">
+                    业务资源
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    航班资源
+                  </td>
+                  <td>
+                    <textarea ng-disabled="true" class="msd-elastic" ng-model="provider.flightResource"></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    收客情况
+                  </td>
+                  <td>
+                    <textarea ng-disabled="true" class="msd-elastic" ng-model="provider.customerResource"></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    产品优势
+                  </td>
+                  <td>
+                    <textarea ng-disabled="true" class="msd-elastic" ng-model="provider.productResource"></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" class="title">
+                    合作支持
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    加返政策
+                  </td>
+                  <td>
+                    <return-policy is-editing='false' ng-model="provider.returnPolicy"></return-policy>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="submit">
+              <md-button ng-if="showProvider" ng-click="editProvider();" class="md-raised md-primary">编辑</md-button>
+            </div>
+          </md-content>
+        </section>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+</div>

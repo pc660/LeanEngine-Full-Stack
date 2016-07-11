@@ -1,43 +1,15 @@
-.auth-home-module {
-  .block1 {
-    position: relative;
-    height: 340px;
-    padding: 18px $screenLeft 0px $screenLeft;
-    background-color: $lcBlue;
-    .logo {
-      display: inline-block;
-      color: $standardWhite;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btns {
-      position: absolute;
-      right: $screenLeft;
-      top: 15px;
-      color: $standardWhite;
-      .loginBtn, .registerBtn {
-        padding: 0px 18px;
-      }
-    }
+.unfinished {
+  position: relative;
+  .dot {
+    position: absolute;
+    display: inline-block;;
+    background: #f21717;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    top: 15px;
   }
-}
-
-
-//borders around the dropdown...
-.datepicker.dropdown-menu {
-  button {
-    outline: none;
-    border: 0px;
+  a {
+    padding-left: 20px;
   }
-}
-
-.datepicker th {
-  line-height: 30px;
-  height: 30px;
-  padding: 0 0 0 0;
-}
-
-.datepicker td {
-  padding: 0 0 0 0;
 }

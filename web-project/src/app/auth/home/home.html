@@ -6,7 +6,11 @@
         <li><a ui-sref=".add-provider">添加供应商</a></li>
         <li><a ui-sref=".add-product">发布产品</a></li>
         <li><a ui-sref=".show-products">产品管理</a></li>
-        <li><a ui-sref=".show-providers">供应商管理</a></li>
+        <!--<li><a ui-sref=".show-providers">供应商管理</a></li>-->
+        <li ng-class="{'unfinished':unfinished}">
+            <span class="dot"></span>
+            <a ui-sref=".my-account">我的账号</a>
+        </li>
     </ul>
 </nav>
 <div ui-view></div>

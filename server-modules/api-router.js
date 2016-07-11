@@ -18,6 +18,8 @@ const provider = require('./provider');
 const product = require('./product');
 const itinerary = require('./itinerary');
 const customer = require('./customer');
+const order = require('./order');
+const user = require('./user');
 
 // 一个 API 路由下的 hello 接口，访问 /api/hello
 const tool = require('./tool');
@@ -41,17 +43,30 @@ router.post('/provider/search',  provider.search);
 router.post('/product/add', product.add);
 router.post('/product/search', product.search);
 router.post('/product/signin', product.signin);
+// Maybe use a single entry point.
+router.post('/product/getUnverified', product.getUnverified);
+router.post('/product/hasUnfinished', product.hasUnfinished);
+router.post('/product/verify', product.verify);
+router.post('/product/getProductsCount', product.getProductsCount);
 
-router.get('/product/getAll', product.getAll);
+router.post('/product/getAll', product.getAll);
 router.post('/product/get', product.get);
 router.post('/itinerary/download', itinerary.download);
 router.post('/customer/search', customer.search);
 
+// Route order
+router.post('/order/add', order.add);
+router.post('/order/getAll', order.getAll);
 
+// router user.
+router.post('/user/get',  user.get);
+router.post('/user/getCurrentUserInfo',  user.getCurrentUserInfo);
+router.post('/user/addContactList',  user.addContactList);
+router.post('/user/getContactList',  user.getContactList);
+router.post('/user/editContactList',  user.editContactList);
+router.post('/user/deleteContactList',  user.deleteContactList);
 
-router.post('/auth/authenticate',
-  passport.authenticate('login', { failWithError: true }),
-   function(req, res) {
+router.post('/auth/authenticate', passport.authenticate('login', { failWithError: true }), function(req, res) {
     tool.l("login success");
     var user = {};
     user['id'] = req.user.id;
@@ -59,6 +74,7 @@ router.post('/auth/authenticate',
     res.cookie('user', JSON.stringify(user), {httpOnly: false});
     res.sendStatus(200);
   }, function(err, req, res, next) {
+    tool.l(err);
     tool.l("login failed");
     res.status(401).send({
       message: 'login failed'

@@ -1,0 +1,60 @@
+<div class="calendar">
+  <div>
+    <md-input-container class="year">
+      <md-select ng-change="selectYear();" ng-model="selectedYear">
+        <md-option ng-selected="$first"
+          ng-value="year"
+          ng-repeat="year in years">{{ year }}</md-option>
+      </md-select>
+    </md-input-container>
+    <div class="month-wrapper">
+      <a href="#" class="month"
+        ng-class="{'active-month': currentMonth === $index}"
+        ng-click="selectMonth($index)"
+        ng-repeat="month in months">{{ month }}月</a>
+    </div>
+  </div>
+  <table class="calendar-table" border="1">
+    <tr>
+      <th class="table-cell">
+        <div class="date">
+          {{ currentMonth + 1}}月
+        </div
+      </th>
+      <th class="table-cell" ng-repeat="title in titles">
+        <div class="cell">
+          {{ title.value }}
+        </div>
+      </th>
+      <th ng-if="isEditing" class="table-cell">
+        <div class="cell">操作</div>
+      </th>
+    </tr>
+    <tr  ng-repeat="day in days">
+      <td class="table-cell">
+        <div class="date">
+          {{ day }}
+        </div>
+      </td>
+      <td class="table-cell" ng-repeat="title in titles" ng-switch on="title.type">
+        <div class="cell">
+          {{ allDayEvents[$parent.$index][title.name] }}
+        </div>
+      </td>
+      <td ng-if="isEditing" class="table-cell">
+        <a ng-if="!allDayEvents[$index].filled"
+          class="cell"
+          ng-class="{off: allDayEvents[$index].filled}"
+          href="#" ng-click="addEvent($index);">添加</a>
+        <div
+          ng-if="allDayEvents[$index].filled"
+          ng-class="{off: !allDayEvents[$index].filled}">
+          <a href="#" ng-click="editEvent($index)">编辑</a>
+          <div class="inline">/</div>
+          <a href="#" ng-click="deleteEvent($index)">删除</a>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+

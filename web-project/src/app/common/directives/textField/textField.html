@@ -1,0 +1,4 @@
+<div ng-switch="inputType">
+  <input ng-switch-when="number" ng-disabled="!isEditing" type="number" ng-model="$parent.value">
+  <input ng-switch-default ng-disabled="!isEditing" type="text" ng-model="$parent.value">
+</div>

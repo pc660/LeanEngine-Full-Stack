@@ -10,7 +10,15 @@ import httpConfig from './config/http';
 import routerConfig from './config/route';
 import i18nConfig from './i18n/config';
 import authConfig from './config/auth';
+
 import cityData from './config/city';
+
+// data config
+import multiChoiceConfig from './config/multiChoiceConfig';
+import calendarConfig from './config/calendarConfig';
+import dispatcherConfig from './config/dispatcherConfig';
+import menuConfig from './config/menuConfig';
+import formConfig from './config/formConfig';
 
 // service
 import commonSer from './common/commonSer';
@@ -19,26 +27,29 @@ import helloSer from './auth/helloSer';
 // directive
 import headerDirect from './common/header/headerDirect';
 import pageDirect from './common/directives/page/pageDirect';
+import multiChoiceDirect from './common/directives/multiChoice/multiChoiceDirect';
+import calendarDirect from './common/directives/calendar/calendarDirect';
+import formCtrl from './common/directives/form/formCtrl';
+import textFieldDirect from './common/directives/textField/textFieldDirect';
+import counterDirect from './common/directives/counter/counterDirect';
+import templateDirect from './common/directives/template/templateDirect';
 
-
-// provider directive
-import providerTextfield from './common/provider/directives/textField/textFieldDirect';
-import providerMultiChoice from './common/provider/directives/multiChoice/multiChoiceDirect';
-import providerAddress from './common/provider/directives/address/addressDirect';
+import address from './common/provider/directives/address/addressDirect';
 import providerMenu from './common/provider/directives/menu/menuDirect';
-import uploadButton from './common/provider/directives/upload/uploadDirect';
 import returnPolicy from './common/provider/directives/returnPolicy/returnPolicyDirect';
 import password from './common/provider/directives/password/passwordDirect';
 
+
 // product directive
-import providerSideBar from './common/product/directives/providerSideBar/providerSideBarDirect'; 
-import productTextfield from './common/product/directives/textField/textFieldDirect'; 
+import providerSideBar from './common/product/directives/providerSideBar/providerSideBarDirect';
+import productTextfield from './common/product/directives/textField/textFieldDirect';
 
 // controller
 import homeCtrl from './auth/home/homeCtrl';
 import addProviderCtrl from './common/provider/addProviderCtrl';
 import showProviderCtrl from './common/provider/showProviderCtrl';
 import showProviderDetailCtrl from './common/provider/showProviderDetailCtrl';
+import myAccountCtrl from './common/account/myAccountCtrl';
 
 import addProductCtrl from './common/product/addProductCtrl';
 import modalCtrl from './common/product/directives/providerSideBar/contact/modalCtrl.js';
@@ -54,6 +65,10 @@ import signinCtrl from './common/sale/search/directives/signin/signinCtrl';
 import showCustomerCtrl from './common/sale/customer/showCustomerCtrl';
 import providerSearchCtrl from './common/product/directives/providerSideBar/search/advanceProviderSearchCtrl.js';
 
+import showProductSaleCtrl from './common/sale/search/showProductCtrl.js';
+import reserveFormCtrl from './common/sale/search/directives/reserve/reserveFormCtrl.js';
+import addOrderCtrl from './common/sale/order/addOrderCtrl.js';
+import showOrderCtrl from './common/sale/order/showOrderCtrl.js';
 
 // factory
 import authFac from './common/authFac';
@@ -62,34 +77,47 @@ import providerFac from './common/providerFac';
 import productFac from './common/productFac';
 import itineraryFac from './common/itineraryFac';
 import customerFac from './common/customerFac';
+import userFac from './common/userFac';
+import orderFac from './common/orderFac';
+
+// Testing util
+import fakeDataFac from './test/addFakeDataFac';
+import testCtrl from './test/testCtrl'
 
 angular.module('webProject',
-  ['ngAnimate', 'ngCookies', 'ngSanitize', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
-    'ngFileUpload', 'angular-md5', 'ui.bootstrap', 'monospaced.elastic'])
+  ['ngAnimate', 'ngCookies', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
+    'ngFileUpload', 'angular-md5', 'ui.bootstrap', 'monospaced.elastic', 'angucomplete-alt', 'textAngular',
+    'ng.ueditor', 'materialCalendar', 'oitozero.ngSweetAlert'])
   // 配置全局常量
   .constant('lcConfig', config)
   .constant('moment', window.moment)
   .constant('cityData', cityData)
-
+  .constant('multiChoiceConfig', multiChoiceConfig)
+  .constant('calendarConfig', calendarConfig)
+  .constant('dispatcherConfig', dispatcherConfig)
+  .constant('menuConfig', menuConfig)
+  .constant('formConfig', formConfig)
 
   // 基础配置
   .config(httpConfig)
   .config(routerConfig)
   // 自动执行
   .run(authConfig)
-
   // services 初始化
   .service('commonSer', commonSer)
   .service('helloSer', helloSer)
-
   // directive 初始化
+  // common directive 初始化
+  .directive('multiChoice', multiChoiceDirect)
+  .directive('calendar', calendarDirect)
+  .directive('textField', textFieldDirect)
+  .directive('counter', counterDirect)
+  .directive('template', templateDirect)
+
   .directive('lcHeader', headerDirect)
   .directive('pageControl', pageDirect)
-  .directive('providerTextfield', providerTextfield)
-  .directive('providerMultiChoice', providerMultiChoice)
-  .directive('providerAddress', providerAddress)
+  .directive('address', address)
   .directive('providerMenu', providerMenu)
-  .directive('uploadButton', uploadButton)
   .directive('returnPolicy', returnPolicy)
   .directive('password', password)
   // product directive 初始化
@@ -103,18 +131,23 @@ angular.module('webProject',
   .controller('addProductCtrl', addProductCtrl)
   .controller('modalCtrl', modalCtrl)
   .controller('showProductCtrl', showProductCtrl)
-  .controller('showProductDetailCtrl', showProductDetailCtrl) 
+  .controller('showProductDetailCtrl', showProductDetailCtrl)
   .controller('addItineraryCtrl', addItineraryCtrl)
   .controller('loginCtrl', loginCtrl)
-  .controller('saleCtrl', saleCtrl) 
-  .controller('searchCtrl', searchCtrl) 
+  .controller('saleCtrl', saleCtrl)
+  .controller('searchCtrl', searchCtrl)
   .controller('filterCtrl', filterCtrl)
   .controller('showItineraryCtrl', showItineraryCtrl)
   .controller('signinCtrl', signinCtrl)
   .controller('showCustomerCtrl', showCustomerCtrl)
   .controller('providerSearchCtrl', providerSearchCtrl)
   .controller('showProviderDetailCtrl', showProviderDetailCtrl)
-
+  .controller('formCtrl', formCtrl)
+  .controller('myAccountCtrl', myAccountCtrl)
+  .controller('showProductSaleCtrl', showProductSaleCtrl)
+  .controller('reserveFormCtrl', reserveFormCtrl)
+  .controller('addOrderCtrl', addOrderCtrl)
+  .controller('showOrderCtrl', showOrderCtrl)
 
   // factory
   .factory('authFac', authFac)
@@ -122,5 +155,10 @@ angular.module('webProject',
   .factory('providerFac', providerFac)
   .factory('productFac', productFac)
   .factory('itineraryFac', itineraryFac)
-  .factory('customerFac', customerFac);
+  .factory('customerFac', customerFac)
+  .factory('userFac', userFac)
+  .factory('orderFac', orderFac)
+  // testing
+  .factory('fakeDataFac', fakeDataFac)
+  .controller('testCtrl', testCtrl);
 

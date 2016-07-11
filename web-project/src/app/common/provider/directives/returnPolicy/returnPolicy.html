@@ -1,34 +1,36 @@
-<td>
-  加返政策:
-</td>
-<td>
+<div>
   <div class="block">
-    <div class="inline">
+    <div>
       全年总人数:
-      <input type="text" ng-disabled="!isEditing" name="returnTotalPeople"
+      <input ng-if="isEditing" type="text" ng-disabled="!isEditing" ng-model="returnPolicy.returnTotalPeople"
       ng-value="provider.returnTotalPeople">
-      (人) 
+      <p ng-if="!isEditing">{{ returnPolicy.returnTotalPeople }}</p>
+      (人)
     </div>
-    <div class="inline">
+    <div>
       加返
-      <input type="text" ng-disabled="!isEditing" name="returnMoneyEachPeople"
+      <input ng-if="isEditing" type="text" ng-disabled="!isEditing" ng-model="returnPolicy.returnMoneyEachPeople"
       ng-value="provider.returnMoneyEachPeople">
+      <p ng-if="!isEditing">{{ returnPolicy.returnMoneyEachPeople }}</p>
       (元/人)
       </div>
     </div>
   <div class="block">
-    <div class="inline">
+    <div>
     全年销售额:
-    <input type="number" ng-disabled="!isEditing"  name="returnTotalRevenue"
-    ng-value="provider.returnTotalRevenue">
+    <input ng-if="isEditing" type="number" ng-disabled="!isEditing"  ng-model="returnPolicy.returnTotalRevenue"
+      ng-value="provider.returnTotalRevenue">
+      <p ng-if="!isEditing">{{ returnPolicy.returnTotalRevenue }}</p>
     (元)
     </div>
-    <div class="inline">
+    <div>
        加返
-      <input type="number" ng-disabled="!isEditing" name="returnMoneyRevenue"
+      <input ng-if="isEditing" type="number" ng-disabled="!isEditing" ng-model="returnPolicy.returnMoneyRevenue"
       ng-value="provider.returnMoneyRevenue">
+      <p ng-if="!isEditing">{{ returnPolicy.returnMoneyRevenue }}</p>
       (元)
     </div>
   </div>
-</td>
+</div>
+
 

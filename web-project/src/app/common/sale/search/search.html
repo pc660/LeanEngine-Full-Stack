@@ -1,37 +1,137 @@
-<input placeholder="keywords" style="width: 60%;" type="text" ng-blur="openSearchBox();">
-<md-button class="md-raised md-primary">搜索</md-button>
-<div><a href="#" ng-click="openFilter();">高级搜索</a></div>
+<div class="selected-tags" ng-if="selectedTags">
+  <div ng-repeat="(key, value) in selectedTags">
+    <span class="key-span">{{ key }}:</span>
+    <span class="value-span">{{ value }}</span>
+    <a class="cancel-icon" ng-click="removeTag(key);"></a>
+  </div>
+</div>
 
-<h3>搜索结果</h3>
-<table>
+
+<table class="search-option">
   <tr>
-    <th>产品编号</th>
-    <th>产品名称</th>
-    <th>负责人</th>
-    <th>联系电话</th>
-    <th>产品目的地</th>
-    <th>报名人数</th>
-    <th>总人数</th>
-    <th>查看行程单</th>
-    <th>报名</th>
+    <td>出发城市</td>
+    <td class="address-tag">
+      <div>
+        <span ng-class="{'selected-tag': !showAddress}" ng-click="showAddress = false" class="unlimited">不限</span>
+        <span ng-class="{'selected-tag': showAddress}" ng-click="showAddress = true" class="unlimited">选择城市</span>
+        <address ng-show="showAddress" class="address" show-county=false is-editing="true" ng-model="start"></address>
+      </div>
+    </td>
   </tr>
-  <tr ng-repeat="product in products">
-    <td>{{ product.objectId }}</td>
-    <td>{{ product.productname }}</td>
-    <td>{{ product.phone }}</td>
-    <td>{{ product.people }}</td>
-    <td>{{ product.destination }}</td>
-    <td>{{ product.signinpeople }}</td>
-    <td>{{ product.people }}</td>
+  <tr>
+    <td>出发日期</td>
     <td>
-      <md-button class="md-raised md-primary"
-      ng-click="showItinerary(product.objectId);">显示行程单</md-button>
+      <span ng-class="{'selected-tag': !showDate}" ng-click="showDate = false" class="unlimited">不限</span>
+      <span ng-class="{'selected-tag': showDate}" ng-click="showDate = true" class="unlimited">选择出发日期</span>
+      <div ng-show="showDate" class="date-wrapper" layout="row">
+        <input
+          ng-model="startDate"
+          type="text"
+          data-date-type="string"
+          data-model-date-format="mediumDate"
+          bs-datepicker
+          data-date-format="mediumDate"
+          data-autoclose="true">
+        <div class="separator"> - </div>
+        <input
+          ng-model="endDate"
+          type="text"
+          data-date-type="string"
+          data-model-date-format="mediumDate"
+          bs-datepicker
+          data-date-format="mediumDate"
+          data-autoclose="true">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>行程天数</td>
+    <td class="selectable">
+      <div class="stop-day">
+        <span class="unlimited" ng-class="{'selected-tag': index['行程天数'] == -1}" ng-click="pick('行程天数', -1)">不限</span>
+        <span class="unlimited" ng-class="{'selected-tag': $index==index['行程天数']}" ng-click="pick('行程天数', $index)" ng-repeat="day in tags['行程天数']">{{ day }}天</span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>供应商</td>
+    <td>
+      <div class="selectable">
+        <span class="unlimited" ng-class="{'selected-tag': index['供应商'] == -1}" ng-click="pick('供应商', -1)">不限</span>
+        <span class="unlimited" ng-class="{'selected-tag': $index==index['供应商']}" ng-click="pick('供应商', $index)" ng-repeat="provider in tags['供应商']">{{ provider }}</span>
+      </div>
+    </td>
+  </tr>
+  <tr class="selectable">
+    <td>酒店星级</td>
+    <td>
+      <span class="unlimited" ng-class="{'selected-tag': index['酒店标准'] == -1}" ng-click="pick('酒店标准', -1)">不限</span>
+      <span class="unlimited" ng-class="{'selected-tag': $index==index['酒店标准']}" ng-click="pick('酒店标准', $index)" ng-repeat="hotel in tags['酒店标准']">{{ hotel }}</span>
+    </td>
+  </tr>
+  <tr  class="selectable">
+    <td>出行方式</td>
+    <td>
+      <span class="unlimited" ng-class="{'selected-tag': index['交通方式'] == -1}" ng-click="pick('交通方式', -1)">不限</span>
+      <span class="unlimited" ng-class="{'selected-tag': $index==index['交通方式']}" ng-click="pick('交通方式', $index)" ng-repeat="transport in tags['交通方式']">{{ transport }}</span>
+    </td>
+  </tr>
+  <tr  class="selectable">
+    <td>类型</td>
+    <td>
+      <span class="unlimited" ng-class="{'selected-tag': index['类型'] == -1}" ng-click="pick('类型', -1)">不限</span>
+      <span class="unlimited" ng-class="{'selected-tag': $index==index['类型']}" ng-click="pick('类型', $index)" ng-repeat="type in tags['类型']">{{ type }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      目的地
     </td>
     <td>
-      <md-button class="md-raised md-primary" ng-click="signin($index);">报名</md-button>
+      <div class="keyword">
+        <input type="text" placeholder="请输入目的地关键词" ng-model="destination">
+        <md-button class="md-raised md-primary" ng-click="search();">确认搜索</md-button>
+      </div>
     </td>
   </tr>
 </table>
- <md-select aria-label="state" ng-model="someModel">
-       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{opt }}</md-option>
-      </md-select>
+
+<div class="products">
+  <div class="product" ng-repeat="product in products">
+    <div class="left">
+      <a class="product-title"
+         target="_blank"
+         ui-sref="sale.show-product({productId: '{{product.objectId}}' })"
+         ui-sref-opts="{ absolute: true }">
+         <span ng-repeat="prefix in product.prefixArray">
+           <span>[</span>
+           <span>{{ prefix }}</span>
+           <span>]</span>
+         </span>
+        <span>{{product.productName}}</span>
+      </a>
+      <div class="metadata">
+        <span>出发地: {{ product.start.city }}</span>
+        <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span>
+        <span>最近班期：
+          <em>{{ product.latestDate }}</em>
+        </span>
+      </div>
+      <div class="metadata">
+        <span>线路编号：{{ product.objectId }}</span>
+        <span>供应商：{{ product.provider.companyname }}</span>
+      </div>
+    </div>
+    <div class="right">
+      <div class="pricebox">
+        <span>
+          门市价
+          <em><span class="large">{{ product.latestAdultCompanySalePrice }}</span></em>
+        </span>
+      </div>
+      <div>
+        <md-button class="md-raised md-primary">打印行程单</md-button>
+      </div>
+    </div>
+  </div>
+</div>

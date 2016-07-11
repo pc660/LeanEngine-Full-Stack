@@ -1,0 +1,167 @@
+<md-tabs md-dynamic-height  md-border-bottom>
+  <md-tab label="提交订单">
+    <table class="order-table">
+      <tr>
+        <td colspan="99" class="title">
+          产品基本信息
+        </td>
+      </tr>
+      <tr>
+        <td>产品编号</td>
+        <td>{{ product.objectId }}</td>
+      </tr>
+      <tr>
+        <td>出发地</td>
+        <td>{{ product.start.city }}</td>
+      </tr>
+      <tr>
+        <td>产品名称</td>
+        <td>{{ product.productName }}</td>
+      </tr>
+      <tr>
+        <td>出团日期</td>
+        <td>{{ order.date }}</td>
+      </tr>
+      <tr>
+        <td>供应商</td>
+        <td>{{ product.provider.companyname }}</td>
+      </tr>
+      <tr>
+        <td colspan="99" class="title">
+          团费
+        </td>
+      </tr>
+      <tr>
+        <td>类型</td>
+        <td>数量</td>
+        <td>单价</td>
+        <td>小计</td>
+      </tr>
+      <tr>
+        <td>成人</td>
+        <td>
+          <counter ng-model="order.adult"></counter>
+        </td>
+        <td>
+          {{ order.adultCompanySalePrice }}
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>儿童</td>
+        <td>
+          <counter ng-model="order.child"></counter>
+        </td>
+        <td>
+          {{ order.childCompanySalePrice }}
+        </td>
+        <td>
+          {{ order.totalPrice }}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="99" class="title">
+          预定信息
+        </td>
+      </tr>
+      <tr>
+        <td>业务联系人</td>
+        <td>
+          <input type="text" ng-model="order.contactname">
+        </td>
+      </tr>
+      <tr>
+        <td>手机</td>
+        <td>
+          <input type="text" ng-model="order.cellphone">
+        </td>
+      </tr>
+      <tr>
+        <td>邮箱</td>
+        <td>
+          <input type="text" ng-model="order.email">
+        </td>
+      </tr>
+    </table>
+  </md-tab>
+  <md-tab label="游客信息">
+    <md-content>
+      <table class="customers">
+        <tr>
+          <th>姓名</th>
+          <th>类型</th>
+          <th>性别</th>
+          <th>证件类型</th>
+          <th>证件号码</th>
+          <th>手机</th>
+          <th>出生日期</th>
+          <th>备注</th>
+        </tr>
+        <tr ng-repeat="customer in customers">
+          <td><input type="text" ng-model="customer.name"></td>
+          <td>
+            <md-input-container>
+              <md-select ng-model="customer.type">
+                <md-option ng-selected="$first" ng-value="type"
+                           ng-repeat="type in types">
+                  {{ type }}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </td>
+          <td>
+            <md-input-container>
+              <md-select ng-model="customer.sex">
+                <md-option ng-selected="$first" ng-value="sex"
+                           ng-repeat="sex in sexList">
+                  {{ sex }}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </td>
+          <td>
+            <md-input-container>
+              <md-select ng-model="customer.license">
+                <md-option ng-selected="$first" ng-value="license"
+                           ng-repeat="license in licenseList">
+                  {{ license }}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </td>
+          <td>
+            <input type="text" ng-model="customer.licenseNumber">
+          </td>
+          <td>
+            <input type="text" ng-model="customer.cellphone">
+          </td>
+          <td class="birthDate">
+            <input
+              ng-model="customer.birthDate"
+              type="text"
+              data-date-type="string"
+              data-model-date-format="mediumDate"
+              bs-datepicker
+              data-date-format="mediumDate"
+              data-autoclose="true">
+          </td>
+          <td class="extra">
+            <div>
+              <input type="checkbox" ng-model="customer.needVisa">
+              是否办签
+            </div>
+            <div>
+              <input type="checkbox" ng-model="customer.needShare">
+              是否拼房
+            </div>
+          </td>
+        </tr>
+      </table>
+    </md-content>
+    <div class="center">
+      <md-button class="md-raised md-primary" ng-click="submitOrder();">
+        提交订单
+      </md-button>
+    </div>
+  </md-tab>
+</md-tabs>

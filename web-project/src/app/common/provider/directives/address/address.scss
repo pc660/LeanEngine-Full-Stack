@@ -1,7 +1,15 @@
-.margin {
-  margin-left: 15px;
-}
-table tr td, table tr th {
-  height: 30px;
-  line-height: 30px;
+.address {
+  input {
+    margin-left: 5px;
+  }
+  md-input-container {
+    position: relative;
+    top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  p {
+    margin-right: 15px;
+    margin-left: -15px;
+  }
 }

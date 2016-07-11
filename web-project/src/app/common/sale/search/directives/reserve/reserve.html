@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h3 class="modal-title">预定</h3>
+</div>
+<div class="modal-body">
+  <div class="item">
+    <label>出发日期</label>
+    <md-input-container>
+      <md-select ng-model="reserve.date">
+        <md-option ng-selected="$first" ng-value="price.date" ng-repeat="price in priceArray">
+          {{price.date}}
+          成人<span style="color: #ff1a1a">{{ price.adultCompanySalePrice }}</span>元,
+          儿童<span style="color: #ff1a1a">{{ price.childCompanySalePrice }}</span>元
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+  <div class="item">
+    <label>预定人数</label>
+    <span>成人</span>
+    <counter ng-model="reserve.adult"></counter>
+    <span>儿童</span>
+    <counter ng-model="reserve.child"></counter>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" type="button" ng-click="close()">确认</button>
+  <button class="btn btn-warning" type="button" ng-click="cancel()">返回</button>
+</div>

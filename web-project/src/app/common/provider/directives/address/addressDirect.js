@@ -1,25 +1,69 @@
 export default ($log, $rootScope, $state, $window, cityData) => {
   'ngInject';
   return {
-    restrict: 'A',
+    restrict: 'E',
     templateUrl: 'app/common/provider/directives/address/address.html',
-    replace: false,
+    replace: true,
+    scope: {
+      showCounty: "=?",
+      address: '=ngModel',
+      isEditing: '=',
+    },
+    require: "ngModel",
     link: function(scope, element, attr) {
-      // TODO: Figure out why the scope does not need parent.
-      scope.$on('providerUpdate', function() {
-        scope.province = scope.provider.province;
-        scope.city = scope.provider.city;
+      scope.address = {};
+
+      // TODO: Figure out why the scope need $parent..
+      scope.$on('addressUpdate', function(event, parameter) {
+        scope.province = parameter.address.province;
+        scope.city = parameter.address.city;
+        scope.county = parameter.address.county;
+        scope.detail = parameter.address.detail;
+        scope.provinceListener();
+        scope.cityListener();
+        scope.countyListener();
       });
-      
+
       scope.provinces = cityData.province;
       scope.cities = cityData.province[0].city;
       scope.counties = scope.cities[0].county;
-      scope.onProvinceChange = () => {
-        var province = scope.selectedProvince;
+
+      scope.provinceListener = scope.$watch("province", function(province) {
+        if (!province) {
+          delete scope.address.province;
+          return;
+        }
+        scope.address.province = province.name;
         var index = scope.findProvinceIndex(province);
         scope.cities = cityData.province[index].city;
-        scope.province = province.name;
-      };
+        // If there is no cities in the province, then we should reset the county.
+        if (scope.cities === undefined) {
+          scope.counties = null;
+          scope.county = null;
+        }
+      });
+
+      scope.cityListener = scope.$watch("city", function(city) {
+        if (!city) {
+          delete scope.address.city;
+          return;
+        }
+        scope.address.city = city.name;
+        var index = scope.findCityIndex(city);
+        scope.counties = scope.cities[index].county;
+      });
+
+      scope.countyListener = scope.$watch("county", function(county) {
+        if (!county) {
+          delete scope.address.county;
+          return;
+        }
+        scope.address.county = county.name;
+      });
+
+      scope.$watch("detail", function(detail) {
+        scope.address.detail = detail;
+      });
 
       scope.findProvinceIndex = (province) => {
         for (var i = 0; i < cityData.province.length; i++) {
@@ -29,27 +73,15 @@ export default ($log, $rootScope, $state, $window, cityData) => {
         }
         return -1;
       };
-     
+
       scope.findCityIndex = (city) => {
-        for (var i = 0; i < scope.selectedProvince.city.length; i++) {
-          if (city.name === scope.selectedProvince.city[i].name) { 
+        for (var i = 0; i < scope.cities.length; i++) {
+          if (city.name === scope.cities[i].name) {
             return i;
           }
         }
         return -1;
-
       };
-
-      scope.onCityChange = () => {
-        var city = scope.selectedCity;
-        var index = scope.findCityIndex(city);
-        scope.counties = scope.selectedProvince.city[index].county;
-        scope.city = city.name;
-      };
-    
-      scope.onCountyChange = () => {
-        scope.county = scope.selectedCounty.name;
-      };
-    } 
+    }
   };
 };

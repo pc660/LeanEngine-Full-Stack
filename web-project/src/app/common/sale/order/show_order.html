@@ -1,0 +1,69 @@
+<div class="show-order" layout="row">
+  <md-sidenav
+    class="md-sidenav-order"
+    md-component-id="show-order"
+    md-is-locked-open="true"
+    md-whiteframe="2">
+    <md-toolbar class="md-theme-indigo">
+      <h1 class="md-toolbar-tools">订单管理</h1>
+    </md-toolbar>
+    <div class="sidebar-button">
+      <md-button ng-click="allOrder()" class="md-primary">
+        全部订单
+      </md-button>
+      <md-button ng-click="unpaidOrder()" class="md-primary">
+        待付款订单
+      </md-button>
+      <md-button ng-click="paidOrder()" class="md-primary">
+        已付款订单
+      </md-button>
+      <md-button ng-click="finishedOrder()" class="md-primary">
+        已完成订单
+      </md-button>
+    </div>
+  </md-sidenav>
+  <md-content layout-padding>
+    <table>
+      <tr ng-repeat="order in orders">
+        <td>
+          <div>
+            <div>订单来源： 旅游顾问-{{ order.contactname }}</div>
+            <a>
+              <span ng-repeat="prefix in order.product.prefixArray">[{{ prefix }}]</span>
+              {{ order.product.fullName }}</a>
+          </div>
+        </td>
+        <td>
+          <div class="detail">
+            <p><strong>￥{{ order.totalPrice }}</strong></p>
+            <div>
+              成人：{{ order.adult }}人 儿童：{{ order.child }}人
+            </div>
+            <div>
+              出团时间: {{ order.startDate }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="status">
+            <p>
+              <strong ng-if="order.status == 1">未付款</strong>
+              <strong ng-if="order.status == 2">已付款</strong>
+              <strong ng-if="order.status == 3">已完成</strong>
+            </p>
+            <md-button ng-if="order.status == 1" class="md-raised md-primary">确认付款</md-button>
+            <md-button ng-if="order.status == 2" class="md-raised md-primary">确认交易完成</md-button>
+          </div>
+        </td>
+        <td>
+          <div class="operation">
+            <a ng-click="showDetail();">查看详情</a>
+            <a ng-click="showConfirmation();">查看确认单</a>
+            <a ng-click="printReceipt();">打印发票</a>
+            <a ng-click="cancelOrder();">取消订单</a>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </md-content>
+</div>

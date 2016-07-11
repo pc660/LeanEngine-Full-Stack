@@ -1,0 +1,32 @@
+.counter {
+  display: inline-block;
+  .operator {
+    border: 1px solid #ededed;
+    display: inline-block;
+    float: left;
+    width: 19px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    font-style: normal;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    background: #f8f8f8;
+    user-select: none;
+    &:hover {
+      cursor: pointer;
+      color: #f60;
+    }
+  }
+  .number {
+    float: left;
+    font-size: 12px;
+    width: 32px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    vertical-align: top;
+    background: #fff;
+  }
+}

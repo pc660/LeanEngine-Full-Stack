@@ -1,9 +1,0 @@
-  <td>
-    {{name}}: 
-  </td>
-  <td>
-  <label class="checkbox-inline" ng-repeat="option in options">
-    <input type="checkbox" ng-model="option.state" ng-checked="{{ option.state }}" ng-disabled="!isEditing" class="checkbox" name="{{ option.name }}">
-    <p class="text">  {{ option.value }}</p>
-   </label>
-  </td>

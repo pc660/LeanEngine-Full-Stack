@@ -3,30 +3,38 @@
 const AV = require('leanengine');
 const tool = require('./tool');
 const fs = require('fs');
-let provider = {};
+let providerApi = {};
 
 var LIMIT = 50;
 
-provider.add = (req, res) => {
+providerApi.add = (req, res) => {
   tool.l('provider.add');
   // TODO: now we use a fake data to create a provider.
   // First we create a user for the provider.
- 
-  var body = req.body
+
+  tool.l(req.body.provider);
+  var provider = req.body.provider;
+  if (provider === undefined) {
+    res.status(404).send();
+  }
   // TODOw: maybe we can use a for loop?
   var user = new AV.User();
-  user.set('username', body.username);
-  user.set('password', body.password);
+  user.set('username', provider.username);
+  user.set('password', provider.password);
+  var contactAV = AV.Object.new('Contact');
+  contactAV.set('contactname', provider.contactname);
+  contactAV.set('cellphone', provider.cellphone);
+  contactAV.set('homephone', provider.homephone);
+  contactAV.set('qqnumber', provider.qqnumber);
+  contactAV.set('wechat', provider.wechat);
   user.signUp().then(function(user) {
     // Now add provider with this user. 
     // Redirect to the page.
-    provider.addProvider(req, res, user);
+    tool.l("sign up success");
+    providerApi.addProvider(provider, res, user, contactAV);
   }, function(error) {
-    console.log('Error: ' + error.code + ' ' + error.message);
-    res.send({
-        code: error.code,
-        message: error.message      
-    });
+    tool.l('Error: ' + error.code + ' ' + error.message);
+    res.status(error.code).send();
   });
 };
 
@@ -74,82 +82,65 @@ function returnBusinessScope(body, provider) {
 }
 
 
-provider.addProvider = (req, res, user) => {
+providerApi.addProvider = (provider, res, user, contact) => {
   tool.l('provider.addProvider');
-  var body = req.body;
-  tool.l(body);
   var providerAV = AV.Object.new('Provider');
-  
-  providerAV.set('contactname', body.contactname);
-  providerAV.set('sex', body.sex);
-  providerAV.set('homehone', body.homephone);
-  providerAV.set('fax', body.fax);
-  providerAV.set('cellphone', body.cellphone);
-  providerAV.set('qqnumber', body.qqnumber);
-  providerAV.set('wechat', body.wechat);
-
-  // Set 经营范围.
-  providerAV.set('arrival', body.arrival);
-  providerAV.set('departure', body.departure);
-  providerAV.set('dominal', body.dominal);
-  providerAV.set('ticketDelegate', body.ticketDelegate);
-  providerAV.set('bookhotel', body.bookhotel);
-  
   // 设置地址
-  providerAV.set('province', body.province);
-  providerAV.set('city', body.city);
-  providerAV.set('county', body.county);
-  providerAV.set('address', body.address);
-  
-  providerAV.set('nickname', body.nickname);
-  providerAV.set('companyname', body.companyname);
-  providerAV.set('zipcode', body.zipcode);
-  providerAV.set('foundTime', body.foundTime);
-  providerAV.set('companySize', body.companySize);
-  providerAV.set('capital', body.capital);
-  providerAV.set('license', body.license);
-  providerAV.set('licenseStart', body.licenseStart);
-  providerAV.set('licenseEnd', body.licenseEnd);
-  providerAV.set('taxnumber', body.taxnumber);
-  providerAV.set('mainBusiness', body.mainBusiness);
-  providerAV.set('mainDestination', body.mainDestination);
-  providerAV.set('contract', body.contract);
-  providerAV.set('contractStart', body.contractStart);
-  providerAV.set('contractEnd', body.contractEnd);
-  providerAV.set('returnPolicyPeople', body.returnPolicyPeople);
-  providerAV.set('returnPolicyPerPeople', body.returnPolicyPerPeople);
-  providerAV.set('returnPolicyRevenue', body.returnPolicyRevenue);
-  providerAV.set('returnPolicyMoney', body.returnPolicyMoney);
-  providerAV.set("businessScope", returnBusinessScope(body, providerAV));
-  providerAV.set('servingType', returnServingType(body, providerAV));
+  providerAV.set('address', provider.address);
+
+  // 设置基本信息.
+  providerAV.set('nickname', provider.nickname);
+  providerAV.set('companyname', provider.companyname);
+
+  // 设置主营业务.
+  providerAV.set('destination', Object.keys(provider.destination));
+  providerAV.set('start', Object.keys(provider.start));
+
+  // 设置业务资源.
+  providerAV.set('customerResource', provider.customerResource);
+  providerAV.set('flightResource', provider.flightResource);
+  providerAV.set('productResource', provider.productResource);
+
+  // 设置加返政策.
+  providerAV.set('returnPolicy', provider.returnPolicy);
+
   providerAV.set('user', user);
- 
   // Find the files.
+  var filename = provider.licenseFilename;
+  if (!filename) {
+    providerAV.save().then(function (provider) {
+      tool.l("success");
+      res.send();
+      contact.set("provider", provider);
+      tool.l(contact);
+      contact.save().then(function() {
+        tool.l("contact success");
+      })
+      return;
+    });
+  }
+
   var File = AV.Object.extend('_File');
   var query = new AV.Query(File);
-  tool.l(body.licenseFilename); 
-  query.equalTo("name", body.licenseFilename);
+  query.equalTo("name", provider.licenseFilename);
   query.first().then(function(result) {
     if (result !== undefined) {
       var file = AV.File.createWithoutData(result.getObjectId());
       providerAV.set("licenseFile", file);
     }
     providerAV.save().then(function() {
-      tool.l("success");
-      res.send();  
-    }, function(error) {
-      tool.l(error);
-      // 失败
-    });
+      res.send();
+    })
+
   }, function(response) {
-  });  
+  });
 };
 
 /**
  * @method: POST
  * @params: providerId
  * */
-provider.getReturnPolicy = (req, res) => {
+providerApi.getReturnPolicy = (req, res) => {
   tool.l('provider.getReturnPolicy');
   var id = req.body.providerId;
   var query = new AV.Query('Provider');
@@ -173,7 +164,7 @@ provider.getReturnPolicy = (req, res) => {
 
 // get the provvider according to the query in req.
 // TODO: Speed is not fast. We probably need cache here.
-provider.get = (req, res) => {
+providerApi.get = (req, res) => {
   tool.l('provider.get');
   var body = req.body;
   tool.l(body);
@@ -194,7 +185,18 @@ provider.get = (req, res) => {
       tool.l('Successfully retrieved ' + results.length + ' posts.');
       // 处理返回的结果数据
       // Extract user contact information.
-      res.send({"count": count, "providers": results});
+      // For each result, we need to retrieve the contact list.
+      var promises = [];
+      for (var i = 0; i < results.length; i++) {
+        var query = new AV.Query('Contact');
+        var provider = results[i];
+        query.equalTo("provider", provider);
+        promises.push(query.find());
+      }
+      Promise.all(promises).then(function(contactList) {
+        res.send({"count": count, "providers": results, "contacts": contactList});
+        return;
+      });
     }, function(error) {
       tool.l('Error: ' + error.code + ' ' + error.message);
     }); 
@@ -204,39 +206,56 @@ provider.get = (req, res) => {
   
 };
 
-
-provider.uploadfile = (req, res) => {
+// Now we only support upload one file.
+providerApi.uploadfile = (req, res) => {
   tool.l("uploadfile");
-  var files = req.files.file;
-
-  for (var filename in files) {
-    var file = files[filename];
-    var path = file.path;
-    var fsiz = file.size;
-    var buffer = new Buffer(fsiz);
- 
-    fs.readFile(path, function (err, data) {
-      var avFile = new AV.File(filename, data);
-      avFile.save().then(function(obj) {
-        tool.l("success");
-        res.send();
-      }, function(err) {
-      });
-      // TODO: Fix the http response logic. 
-      // set http code accordingly.
-      // This is too fragile and not acceptable.
-    });
+  var file = req.files.file;
+  tool.l(req.files);
+  if (!file) {
+    tool.l("find no files");
+    res.send();
   }
 
+  var path = file.path;
+  var fsiz = file.size;
+  var buffer = new Buffer(fsiz);
+  var filename = req.body.filename;
+  if (!filename) {
+    filename = file.originalFilename;
+  }
+  fs.readFile(path, function (err, data) {
+    var avFile = new AV.File(req.body.filename, data);
+    avFile.save().then(function(obj) {
+      tool.l("upload success");
+      res.send();
+    }, function(err) {
+    });
+    // TODO: Fix the http response logic.
+    // set http code accordingly.
+    // This is too fragile and not acceptable.
+  });
 };
 
-provider.search = (req, res) => {
+providerApi.search = (req, res) => {
   tool.l('provider.search');
   tool.l(req.body.query);
-  var query = JSON.parse(req.body.query);
-  var keyword = query.keyword;
+  var query = req.body.query;
+  var select = req.body.select;
   var mainQuery = new AV.Query('Provider');
-  if (query.keyword) {
+  tool.l(select);
+  if (select.length > 0) {
+    mainQuery.select(select);
+  }
+  if (query.self) {
+    var user = req.user;
+    if (!user) {
+      res.status(404).send();
+      return;
+    }
+    mainQuery.equalTo("user", user);
+  }
+
+  /*if (query.keyword) {
     var nicknameQuery = new AV.Query('Provider');
     nicknameQuery.contains('nickname', keyword);
     var capitalQuery = new AV.Query('Provider');
@@ -248,12 +267,12 @@ provider.search = (req, res) => {
   }
   if (query.servingType) {
     mainQuery.equalTo(query.servingType, true);
-  }
-  mainQuery.find()
-  .then(function(results) {
+  }*/
+  mainQuery.find().then(function(results) {
+    tool.l('Successfully retrieved ' + results.length + ' results.');
     res.send(results);
   }, function(error) {
     // TODO: handle error.
   });
 };
-module.exports = provider;
+module.exports = providerApi;
