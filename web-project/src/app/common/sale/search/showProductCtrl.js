@@ -9,6 +9,7 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     .then(function(result) {
       $scope.product = result.product;
       $scope.product.provider = result.provider;
+      $scope.product.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
       productFac.getLatestTrip($scope.product);
       $log.log($scope.product);
       // Set the current Date.

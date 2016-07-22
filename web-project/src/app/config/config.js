@@ -20,6 +20,7 @@ let config = {
     UNKNOWN: -1,
     ADMIN: 0,
     SALE: 1,
+    PROVIDER: 2,
   },
 
   CUSTOMER_STATE: {

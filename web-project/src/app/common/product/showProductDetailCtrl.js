@@ -1,4 +1,4 @@
-export default ($log, $scope, $window, $stateParams, productFac, providerFac, multiChoiceConfig) => {
+export default ($sce, $log, $scope, $window, $stateParams, productFac, providerFac, multiChoiceConfig) => {
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
@@ -13,8 +13,10 @@ export default ($log, $scope, $window, $stateParams, productFac, providerFac, mu
       $scope.product.contact = result.contact;
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.prefixArray = productFac.convertProductPrefix(result.product.prefix);
+      $log.log($scope.product);
       $scope.$broadcast("calendarUpdate", {price: $scope.product.price});
       $scope.$broadcast("addressUpdate", {address: $scope.product.start});
+      $scope.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
     }, function(error) {
       // TODO: handle failure.
     });

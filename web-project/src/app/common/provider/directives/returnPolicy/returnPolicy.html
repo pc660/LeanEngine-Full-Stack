@@ -2,8 +2,8 @@
   <div class="block">
     <div>
       全年总人数:
-      <input ng-if="isEditing" type="text" ng-disabled="!isEditing" ng-model="returnPolicy.returnTotalPeople"
-      ng-value="provider.returnTotalPeople">
+      <input ng-if="isEditing" type="text" ng-disabled="!isEditing" ng-model="returnTotalPeople"
+      ng-value="provider.returnTotalPeople" ng-change="test();">
       <p ng-if="!isEditing">{{ returnPolicy.returnTotalPeople }}</p>
       (人)
     </div>

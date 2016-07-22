@@ -31,6 +31,10 @@ const config = require('./config');
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'ejs');
 
+// TODO: Coment this in production
+AV._initialize("Dk6M8nJAQWwngq9VPjBV5oE6-gzGzoHsz", "p1VNltadO5zxcwzuJEDoBPAX", "3XFx9F7WKhKFxQRVKcnsOwtD");
+AV.Cloud.useMasterKey();
+
 app.use(express.static('public'));
 
 // 使用 LeanEngine 中间件

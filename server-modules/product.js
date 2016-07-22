@@ -51,7 +51,7 @@ productApi.add = (req, res) => {
   productAV.set("restriction", product.restriction);
   productAV.set("createdBy",  user);
 
-  var contact = AV.Object.createWithoutData('Contact', product.contactId);
+  var contact = AV.Object.createWithoutData('Contact', product.contact.objectId);
   productAV.set("contact",  contact);
 
   // set unpassed
@@ -206,6 +206,7 @@ productApi.get = (req, res) => {
    if (results.length == 1) {
      var product = results[0];
      // Fetch other information.
+     tool.l(product.get("contact"));
      res.send({product: product, provider: product.get("provider"),
        contact: product.get("contact"), platformcontact: product.get("platformcontact"),
        responsible:  product.get("responsible")});

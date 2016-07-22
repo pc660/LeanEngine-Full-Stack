@@ -95,11 +95,7 @@
     <div class="button-list">
       <div class="icon">
         <i class="print-icon fa fa-print" aria-hidden="true"></i>
-        <a>打印行程</a>
-      </div>
-      <div class="icon">
-        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-        <a>下载pdf</a>
+        <a href="{{ product.fileUrl }}">打印行程</a>
       </div>
     </div>
   </div>
@@ -115,7 +111,9 @@
         <div class="cyitem">
           <p class="s1">
             <strong>餐饮</strong>
-            {{ itinerary.food }}
+            <p>早 <span>{{ itinerary.food.morning }}</span> </p>
+            <p>早 <span>{{ itinerary.food.noon }}</span> </p>
+            <p>早 <span>{{ itinerary.food.evening }}</span> </p>
           </p>
           <p class="s2">
             <strong>住宿</strong>

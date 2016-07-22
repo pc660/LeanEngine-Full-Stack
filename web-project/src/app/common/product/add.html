@@ -37,7 +37,7 @@
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <md-button class="md-raised md-primary addcontact" ng-click="addContact();">添加商户联系人</md-button>
+                <md-button ng-if="isEditing" class="md-raised md-primary addcontact" ng-click="addContact();">添加商户联系人</md-button>
                 <p ng-if="!isEditing">{{ product.contact.contactname }}</p>
               </td>
             </tr>
@@ -227,7 +227,11 @@
             </tr>
           </table>
         </md-tab>
-        <md-tab class="tab-button" label="行程信息">
+        <md-tab class="tab-button" ng-if="!isEditing" label="行程表">
+          <iframe class="itinerary-page" src="{{ fileUrl }}">
+          </iframe>
+        </md-tab>
+        <md-tab class="tab-button" ng-if="isEditing" label="行程信息">
           <div ng-repeat="i in getDuration() track by $index" class="itinery">
             <div class="item">
               <label>第{{ $index + 1 }}天:</label>
@@ -252,7 +256,12 @@
             </div>
             <div class="item">
               <label>餐饮信息</label>
-              <input type="text" ng-model="product.itinerary[$index].food">
+              <input type="checkbox" ng-model="morning">早
+              <input type="text" ng-disabled="!morning" ng-model="product.itinerary[$index].food.morning">
+              <input type="checkbox" ng-model="noon">中
+              <input type="text" ng-disabled="!noon" ng-model="product.itinerary[$index].food.noon">
+              <input type="checkbox" ng-model="evening">晚
+              <input type="text" ng-disabled="!evening" ng-model="product.itinerary[$index].food.evening">
             </div>
             <div class="item">
               <label>详细描述: </label>
@@ -261,7 +270,7 @@
             <hr>
           </div>
         </md-tab>
-        <md-tab class="tab-button" label="其他信息">
+        <md-tab class="tab-button" ng-if="isEditing" label="其他信息">
           <div class="extra-item">
             <label>线路特色</label>
             <div class="editor ueditor" config="ueconfig" ng-model="product.description"></div>

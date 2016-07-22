@@ -7,12 +7,12 @@
   <tr>
     <td>联系人</td>
     <td>联系方式</td>
-    <td>备注</td>
+    <td>邮件</td>
   </tr>
   <tr>
-    <td>翁文川</td>
-    <td>12345</td>
-    <td>comments</td>
+    <td>{{ order.contactname }}</td>
+    <td>{{ order.cellphone }}</td>
+    <td>{{ order.email }}</td>
   </tr>
   <tr>
     <td colspan="2" class="title">
@@ -27,18 +27,21 @@
     <td>订单金额</td>
   </tr>
   <tr>
-    <td>FT12130164</td>
+    <td>{{ order.objectId }}</td>
     <td>
-      <a>【暑期】【畅享半岛】青岛、海阳万米沙滩、石岛出海捕捞、威海极地海洋馆、蓬莱不进不加纯玩亲子4晚5日游（高飞）</a>
-      <div>供应商: 杭州西湖假期国际旅行社有限公司城北分公司</div>
+      <a>
+        <span ng-repeat="prefix in order.product.prefixArray">[{{ prefix }}]</span>
+        {{ order.product.fullName }}
+      </a>
+      <div>供应商: {{ order.product.companyname }}</div>
     </td>
     <td>上海</td>
     <td>
-      <span>成人:2人</span>
-      <span>儿童:1人</span>
+      <span>成人: {{ order.adult }}人</span>
+      <span>儿童: {{ order.child }}人</span>
     </td>
     <td>
-      ￥6880
+      {{ order.totalPrice }}
     </td>
   </tr>
   <tr>
@@ -55,25 +58,25 @@
     <td>出生日期</td>
     <td>备注信息</td>
   </tr>
-  <tr>
+  <tr ng-repeat="customer in order.customers">
     <td>
-      <span>俞晓波</span>
-      <span>手机：13817327516</span>
+      <span>{{ customer.contactname }}</span>
+      <span>手机：{{ customer.cellphone }}</span>
     </td>
     <td>
-      成人
+      {{ customer.type }}
     </td>
     <td>
-      身份证
+      {{ customer.license }}
     </td>
     <td>
-      310105197812312838
+      {{ customer.licenseNumber }}
     </td>
     <td>
-      男
+      {{ customer.sex }}
     </td>
     <td>
-      21345
+      {{ customer.birthDate }}
     </td>
     <td>
       无

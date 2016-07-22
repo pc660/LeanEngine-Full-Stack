@@ -85,11 +85,14 @@
             md-disable-backdrop
             md-whiteframe="4">
             <div class="sidebar-button">
-              <md-button ng-click="showMyContactList()" class="md-primary">
+              <md-button ng-disabled="!fetchedProvider" ng-click="showMyContactList()" class="md-primary">
                 商户联系人管理
               </md-button>
-              <md-button ng-click="showMyProvider()" class="md-primary">
-                供应商信息
+              <md-button ng-disabled="!fetchedProvider" ng-click="showMyProvider()" class="md-primary">
+                显示供应商信息
+              </md-button>
+              <md-button ng-disabled="!fetchedProvider" ng-click="addMyProvider()" class="md-primary">
+                设置供应商信息
               </md-button>
             </div>
           </md-sidenav>

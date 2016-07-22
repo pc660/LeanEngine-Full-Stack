@@ -8,8 +8,12 @@ export default ($log, $rootScope, $state, $window) => {
       returnPolicy: '=ngModel',
       isEditing: '=',
     },
-    require: "ngModel",
     link: function(scope, element, attr) {
+      scope.test = () => {
+        $log.log(scope);
+
+        $log.log(scope.returnTotalPeople);
+      };
     }
   };
 };

@@ -1,4 +1,4 @@
-export default ($scope, $state, $log, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac, menuConfig, providerFac) => {
+export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac, menuConfig, providerFac) => {
   'ngInject';
 
   $scope.openSearchBox = () => {
@@ -77,6 +77,7 @@ export default ($scope, $state, $log, $mdSidenav, $window, $uibModal, lcConfig, 
       $scope.products.map(function(product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
         productFac.getLatestTrip(product);
+        product.fileUrl = $sce.trustAsResourceUrl(product.itineraryFile.url);
       });
       for (var i = 0; i < $scope.products.length; i++) {
         $scope.products[i].provider = results.providers[i];

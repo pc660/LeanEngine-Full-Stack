@@ -17,27 +17,25 @@ providerApi.add = (req, res) => {
   if (provider === undefined) {
     res.status(404).send();
   }
+  var user = req.user;
+  if (!user && !user.isCurrent()) {
+    res.status(404).send();
+    return;
+  }
+  //user = AV.User.current();
+  tool.l(AV.User.current());
   // TODOw: maybe we can use a for loop?
-  var user = new AV.User();
-  user.set('username', provider.username);
-  user.set('password', provider.password);
+  //var user = new AV.User();
+  //user.set('username', provider.username);
+  //user.set('password', provider.password);
   var contactAV = AV.Object.new('Contact');
   contactAV.set('contactname', provider.contactname);
   contactAV.set('cellphone', provider.cellphone);
   contactAV.set('homephone', provider.homephone);
   contactAV.set('qqnumber', provider.qqnumber);
   contactAV.set('wechat', provider.wechat);
-  user.signUp().then(function(user) {
-    // Now add provider with this user. 
-    // Redirect to the page.
-    tool.l("sign up success");
-    providerApi.addProvider(provider, res, user, contactAV);
-  }, function(error) {
-    tool.l('Error: ' + error.code + ' ' + error.message);
-    res.status(error.code).send();
-  });
+  providerApi.addProvider(provider, res, user, contactAV);
 };
-
 
 function returnServingType(body, provider) {
   var servingTypeList = [
@@ -104,19 +102,21 @@ providerApi.addProvider = (provider, res, user, contact) => {
   // 设置加返政策.
   providerAV.set('returnPolicy', provider.returnPolicy);
 
-  providerAV.set('user', user);
+  //providerAV.set('user', user);
   // Find the files.
   var filename = provider.licenseFilename;
   if (!filename) {
     providerAV.save().then(function (provider) {
+      user.set("provider", provider);
+      user.save();
       tool.l("success");
       res.send();
       contact.set("provider", provider);
-      tool.l(contact);
       contact.save().then(function() {
         tool.l("contact success");
-      })
-      return;
+      });
+    }, function(error) {
+      tool.l(error);
     });
   }
 
@@ -128,7 +128,18 @@ providerApi.addProvider = (provider, res, user, contact) => {
       var file = AV.File.createWithoutData(result.getObjectId());
       providerAV.set("licenseFile", file);
     }
-    providerAV.save().then(function() {
+    providerAV.save().then(function(provider) {
+      tool.l("success");
+      user.set("provider", provider);
+      user.save().then(function() {
+        tool.l("user success");
+      }, function(error) {
+        tool.l(error);
+      });
+      contact.set("provider", provider);
+      contact.save().then(function() {
+        tool.l("contact success");
+      });
       res.send();
     })
 
@@ -243,7 +254,7 @@ providerApi.search = (req, res) => {
   var select = req.body.select;
   var mainQuery = new AV.Query('Provider');
   tool.l(select);
-  if (select.length > 0) {
+  if (select && select.length > 0) {
     mainQuery.select(select);
   }
   if (query.self) {
@@ -252,7 +263,8 @@ providerApi.search = (req, res) => {
       res.status(404).send();
       return;
     }
-    mainQuery.equalTo("user", user);
+    var provider = user.get("provider");
+    //mainQuery.equalTo("user", user);
   }
 
   /*if (query.keyword) {

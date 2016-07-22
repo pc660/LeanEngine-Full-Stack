@@ -4,27 +4,6 @@
       <md-tab label="基本信息">
         <table>
            <tbody>
-           <tr ng-if="isEditing">
-             <td colspan="2" class="title">
-               注册用户
-             </td>
-           </tr>
-           <tr ng-if="isEditing">
-             <td>
-               用户名
-             </td>
-             <td>
-               <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.username"></text-field>
-             </td>
-           </tr>
-           <tr ng-if="isEditing">
-             <td>
-               密码
-             </td>
-             <td>
-               <password ng-model="provider.password"></password>
-             </td>
-           </tr>
             <tr>
               <td colspan="2" class="title">
                 公司信息
@@ -135,8 +114,13 @@
             </tr>
           </tbody>
         </table>
+        <div class="submit">
+          <md-button class="md-raised md-primary" ng-if="!confirmed" ng-click="confirm();">
+            确认
+          </md-button>
+        </div>
       </md-tab>
-      <md-tab label="业务资料">
+      <md-tab label="业务资料" ng-disabled="!confirmed" md-active="confirmed">
         <table>
           <tbody>
             <tr>
@@ -199,7 +183,40 @@
                 加返政策
               </td>
               <td>
-                <return-policy is-editing='isEditing' ng-model="provider.returnPolicy"></return-policy>
+                <div>
+                  <div class="block">
+                    <div>
+                      全年总人数:
+                      <input ng-if="isEditing" type="text" ng-disabled="!isEditing" ng-model="provider.returnPolicy.returnTotalPeople"
+                             ng-value="provider.returnTotalPeople" ng-change="test();">
+                      <p ng-if="!isEditing">{{ provider.returnPolicy.returnTotalPeople }}</p>
+                      (人)
+                    </div>
+                    <div>
+                      加返
+                      <input ng-if="isEditing" type="text" ng-disabled="!isEditing" ng-model="provider.returnPolicy.returnMoneyEachPeople"
+                             ng-value="provider.returnMoneyEachPeople">
+                      <p ng-if="!isEditing">{{ provider.returnPolicy.returnMoneyEachPeople }}</p>
+                      (元/人)
+                    </div>
+                  </div>
+                  <div class="block">
+                    <div>
+                      全年销售额:
+                      <input ng-if="isEditing" type="number" ng-disabled="!isEditing"  ng-model="provider.returnPolicy.returnTotalRevenue"
+                             ng-value="provider.returnTotalRevenue">
+                      <p ng-if="!isEditing">{{ provider.returnPolicy.returnTotalRevenue }}</p>
+                      (元)
+                    </div>
+                    <div>
+                      加返
+                      <input ng-if="isEditing" type="number" ng-disabled="!isEditing" ng-model="provider.returnPolicy.returnMoneyRevenue"
+                             ng-value="provider.returnMoneyRevenue">
+                      <p ng-if="!isEditing">{{ provider.returnPolicy.returnMoneyRevenue }}</p>
+                      (元)
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>

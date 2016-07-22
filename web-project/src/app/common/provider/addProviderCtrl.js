@@ -1,8 +1,12 @@
-export default ($log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
+export default ($state, $log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
   'ngInject';
     var url = lcConfig.apiHost + "/api/provider/add";
     $scope.addUrl = url;
     $scope.isEditing = true;
+    $scope.confirmed = false;
+    if ($state.params.provider) {
+      $scope.provider = $state.params.provider;
+    }
 
     $scope.upload = (file) => {
       if (!file) {
@@ -16,6 +20,12 @@ export default ($log, $scope, $document, $timeout, lcConfig, $window, providerFa
 
       });
     };
+
+    // TODO: Do param checking
+    $scope.confirm = () => {
+      $scope.confirmed = true;
+
+    }
 
     $scope.submit = () => {
       $log.log($scope.provider);

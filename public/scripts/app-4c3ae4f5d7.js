@@ -79,165 +79,235 @@
 
 	var _configCity2 = _interopRequireDefault(_configCity);
 
+	// data config
+
+	var _configMultiChoiceConfig = __webpack_require__(9);
+
+	var _configMultiChoiceConfig2 = _interopRequireDefault(_configMultiChoiceConfig);
+
+	var _configCalendarConfig = __webpack_require__(10);
+
+	var _configCalendarConfig2 = _interopRequireDefault(_configCalendarConfig);
+
+	var _configDispatcherConfig = __webpack_require__(11);
+
+	var _configDispatcherConfig2 = _interopRequireDefault(_configDispatcherConfig);
+
+	var _configMenuConfig = __webpack_require__(12);
+
+	var _configMenuConfig2 = _interopRequireDefault(_configMenuConfig);
+
+	var _configFormConfig = __webpack_require__(13);
+
+	var _configFormConfig2 = _interopRequireDefault(_configFormConfig);
+
 	// service
 
-	var _commonCommonSer = __webpack_require__(9);
+	var _commonCommonSer = __webpack_require__(14);
 
 	var _commonCommonSer2 = _interopRequireDefault(_commonCommonSer);
 
-	var _authHelloSer = __webpack_require__(10);
+	var _authHelloSer = __webpack_require__(15);
 
 	var _authHelloSer2 = _interopRequireDefault(_authHelloSer);
 
 	// directive
 
-	var _commonHeaderHeaderDirect = __webpack_require__(11);
+	var _commonHeaderHeaderDirect = __webpack_require__(16);
 
 	var _commonHeaderHeaderDirect2 = _interopRequireDefault(_commonHeaderHeaderDirect);
 
-	var _commonDirectivesPagePageDirect = __webpack_require__(12);
+	var _commonDirectivesPagePageDirect = __webpack_require__(17);
 
 	var _commonDirectivesPagePageDirect2 = _interopRequireDefault(_commonDirectivesPagePageDirect);
 
-	// provider directive
+	var _commonDirectivesMultiChoiceMultiChoiceDirect = __webpack_require__(18);
 
-	var _commonProviderDirectivesTextFieldTextFieldDirect = __webpack_require__(13);
+	var _commonDirectivesMultiChoiceMultiChoiceDirect2 = _interopRequireDefault(_commonDirectivesMultiChoiceMultiChoiceDirect);
 
-	var _commonProviderDirectivesTextFieldTextFieldDirect2 = _interopRequireDefault(_commonProviderDirectivesTextFieldTextFieldDirect);
+	var _commonDirectivesCalendarCalendarDirect = __webpack_require__(19);
 
-	var _commonProviderDirectivesMultiChoiceMultiChoiceDirect = __webpack_require__(14);
+	var _commonDirectivesCalendarCalendarDirect2 = _interopRequireDefault(_commonDirectivesCalendarCalendarDirect);
 
-	var _commonProviderDirectivesMultiChoiceMultiChoiceDirect2 = _interopRequireDefault(_commonProviderDirectivesMultiChoiceMultiChoiceDirect);
+	var _commonDirectivesFormFormCtrl = __webpack_require__(20);
 
-	var _commonProviderDirectivesAddressAddressDirect = __webpack_require__(15);
+	var _commonDirectivesFormFormCtrl2 = _interopRequireDefault(_commonDirectivesFormFormCtrl);
+
+	var _commonDirectivesTextFieldTextFieldDirect = __webpack_require__(21);
+
+	var _commonDirectivesTextFieldTextFieldDirect2 = _interopRequireDefault(_commonDirectivesTextFieldTextFieldDirect);
+
+	var _commonDirectivesCounterCounterDirect = __webpack_require__(22);
+
+	var _commonDirectivesCounterCounterDirect2 = _interopRequireDefault(_commonDirectivesCounterCounterDirect);
+
+	var _commonDirectivesTemplateTemplateDirect = __webpack_require__(23);
+
+	var _commonDirectivesTemplateTemplateDirect2 = _interopRequireDefault(_commonDirectivesTemplateTemplateDirect);
+
+	var _commonProviderDirectivesAddressAddressDirect = __webpack_require__(24);
 
 	var _commonProviderDirectivesAddressAddressDirect2 = _interopRequireDefault(_commonProviderDirectivesAddressAddressDirect);
 
-	var _commonProviderDirectivesMenuMenuDirect = __webpack_require__(16);
+	var _commonProviderDirectivesMenuMenuDirect = __webpack_require__(25);
 
 	var _commonProviderDirectivesMenuMenuDirect2 = _interopRequireDefault(_commonProviderDirectivesMenuMenuDirect);
 
-	var _commonProviderDirectivesUploadUploadDirect = __webpack_require__(17);
-
-	var _commonProviderDirectivesUploadUploadDirect2 = _interopRequireDefault(_commonProviderDirectivesUploadUploadDirect);
-
-	var _commonProviderDirectivesReturnPolicyReturnPolicyDirect = __webpack_require__(18);
+	var _commonProviderDirectivesReturnPolicyReturnPolicyDirect = __webpack_require__(26);
 
 	var _commonProviderDirectivesReturnPolicyReturnPolicyDirect2 = _interopRequireDefault(_commonProviderDirectivesReturnPolicyReturnPolicyDirect);
 
-	var _commonProviderDirectivesPasswordPasswordDirect = __webpack_require__(19);
+	var _commonProviderDirectivesPasswordPasswordDirect = __webpack_require__(27);
 
 	var _commonProviderDirectivesPasswordPasswordDirect2 = _interopRequireDefault(_commonProviderDirectivesPasswordPasswordDirect);
 
 	// product directive
 
-	var _commonProductDirectivesProviderSideBarProviderSideBarDirect = __webpack_require__(20);
+	var _commonProductDirectivesProviderSideBarProviderSideBarDirect = __webpack_require__(28);
 
 	var _commonProductDirectivesProviderSideBarProviderSideBarDirect2 = _interopRequireDefault(_commonProductDirectivesProviderSideBarProviderSideBarDirect);
 
-	var _commonProductDirectivesTextFieldTextFieldDirect = __webpack_require__(21);
+	var _commonProductDirectivesTextFieldTextFieldDirect = __webpack_require__(29);
 
 	var _commonProductDirectivesTextFieldTextFieldDirect2 = _interopRequireDefault(_commonProductDirectivesTextFieldTextFieldDirect);
 
 	// controller
 
-	var _authHomeHomeCtrl = __webpack_require__(22);
+	var _authHomeHomeCtrl = __webpack_require__(30);
 
 	var _authHomeHomeCtrl2 = _interopRequireDefault(_authHomeHomeCtrl);
 
-	var _commonProviderAddProviderCtrl = __webpack_require__(23);
+	var _commonProviderAddProviderCtrl = __webpack_require__(31);
 
 	var _commonProviderAddProviderCtrl2 = _interopRequireDefault(_commonProviderAddProviderCtrl);
 
-	var _commonProviderShowProviderCtrl = __webpack_require__(24);
+	var _commonProviderShowProviderCtrl = __webpack_require__(32);
 
 	var _commonProviderShowProviderCtrl2 = _interopRequireDefault(_commonProviderShowProviderCtrl);
 
-	var _commonProviderShowProviderDetailCtrl = __webpack_require__(25);
+	var _commonProviderShowProviderDetailCtrl = __webpack_require__(33);
 
 	var _commonProviderShowProviderDetailCtrl2 = _interopRequireDefault(_commonProviderShowProviderDetailCtrl);
 
-	var _commonProductAddProductCtrl = __webpack_require__(26);
+	var _commonAccountMyAccountCtrl = __webpack_require__(34);
+
+	var _commonAccountMyAccountCtrl2 = _interopRequireDefault(_commonAccountMyAccountCtrl);
+
+	var _commonProductAddProductCtrl = __webpack_require__(35);
 
 	var _commonProductAddProductCtrl2 = _interopRequireDefault(_commonProductAddProductCtrl);
 
-	var _commonProductDirectivesProviderSideBarContactModalCtrlJs = __webpack_require__(27);
+	var _commonProductDirectivesProviderSideBarContactModalCtrlJs = __webpack_require__(36);
 
 	var _commonProductDirectivesProviderSideBarContactModalCtrlJs2 = _interopRequireDefault(_commonProductDirectivesProviderSideBarContactModalCtrlJs);
 
-	var _commonProductShowProductCtrlJs = __webpack_require__(28);
+	var _commonProductShowProductCtrlJs = __webpack_require__(37);
 
 	var _commonProductShowProductCtrlJs2 = _interopRequireDefault(_commonProductShowProductCtrlJs);
 
-	var _commonProductShowProductDetailCtrlJs = __webpack_require__(29);
+	var _commonProductShowProductDetailCtrlJs = __webpack_require__(38);
 
 	var _commonProductShowProductDetailCtrlJs2 = _interopRequireDefault(_commonProductShowProductDetailCtrlJs);
 
-	var _commonProductDirectivesItineraryAddCtrlJs = __webpack_require__(30);
+	var _commonProductDirectivesItineraryAddCtrlJs = __webpack_require__(39);
 
 	var _commonProductDirectivesItineraryAddCtrlJs2 = _interopRequireDefault(_commonProductDirectivesItineraryAddCtrlJs);
 
-	var _authHomeLoginCtrl = __webpack_require__(31);
+	var _authHomeLoginCtrl = __webpack_require__(40);
 
 	var _authHomeLoginCtrl2 = _interopRequireDefault(_authHomeLoginCtrl);
 
-	var _commonSaleSaleCtrl = __webpack_require__(32);
+	var _commonSaleSaleCtrl = __webpack_require__(41);
 
 	var _commonSaleSaleCtrl2 = _interopRequireDefault(_commonSaleSaleCtrl);
 
-	var _commonSaleSearchSearchCtrl = __webpack_require__(33);
+	var _commonSaleSearchSearchCtrl = __webpack_require__(42);
 
 	var _commonSaleSearchSearchCtrl2 = _interopRequireDefault(_commonSaleSearchSearchCtrl);
 
-	var _commonSaleSearchDirectivesFilterFilterCtrl = __webpack_require__(34);
+	var _commonSaleSearchDirectivesFilterFilterCtrl = __webpack_require__(43);
 
 	var _commonSaleSearchDirectivesFilterFilterCtrl2 = _interopRequireDefault(_commonSaleSearchDirectivesFilterFilterCtrl);
 
-	var _commonProductShowItineraryCtrl = __webpack_require__(35);
+	var _commonProductShowItineraryCtrl = __webpack_require__(44);
 
 	var _commonProductShowItineraryCtrl2 = _interopRequireDefault(_commonProductShowItineraryCtrl);
 
-	var _commonSaleSearchDirectivesSigninSigninCtrl = __webpack_require__(36);
+	var _commonSaleSearchDirectivesSigninSigninCtrl = __webpack_require__(45);
 
 	var _commonSaleSearchDirectivesSigninSigninCtrl2 = _interopRequireDefault(_commonSaleSearchDirectivesSigninSigninCtrl);
 
-	var _commonSaleCustomerShowCustomerCtrl = __webpack_require__(37);
+	var _commonSaleCustomerShowCustomerCtrl = __webpack_require__(46);
 
 	var _commonSaleCustomerShowCustomerCtrl2 = _interopRequireDefault(_commonSaleCustomerShowCustomerCtrl);
 
-	var _commonProductDirectivesProviderSideBarSearchAdvanceProviderSearchCtrlJs = __webpack_require__(38);
+	var _commonProductDirectivesProviderSideBarSearchAdvanceProviderSearchCtrlJs = __webpack_require__(47);
 
 	var _commonProductDirectivesProviderSideBarSearchAdvanceProviderSearchCtrlJs2 = _interopRequireDefault(_commonProductDirectivesProviderSideBarSearchAdvanceProviderSearchCtrlJs);
 
+	var _commonSaleSearchShowProductCtrlJs = __webpack_require__(48);
+
+	var _commonSaleSearchShowProductCtrlJs2 = _interopRequireDefault(_commonSaleSearchShowProductCtrlJs);
+
+	var _commonSaleSearchDirectivesReserveReserveFormCtrlJs = __webpack_require__(49);
+
+	var _commonSaleSearchDirectivesReserveReserveFormCtrlJs2 = _interopRequireDefault(_commonSaleSearchDirectivesReserveReserveFormCtrlJs);
+
+	var _commonSaleOrderAddOrderCtrlJs = __webpack_require__(50);
+
+	var _commonSaleOrderAddOrderCtrlJs2 = _interopRequireDefault(_commonSaleOrderAddOrderCtrlJs);
+
+	var _commonSaleOrderShowOrderCtrlJs = __webpack_require__(51);
+
+	var _commonSaleOrderShowOrderCtrlJs2 = _interopRequireDefault(_commonSaleOrderShowOrderCtrlJs);
+
 	// factory
 
-	var _commonAuthFac = __webpack_require__(39);
+	var _commonAuthFac = __webpack_require__(52);
 
 	var _commonAuthFac2 = _interopRequireDefault(_commonAuthFac);
 
-	var _commonFileFac = __webpack_require__(40);
+	var _commonFileFac = __webpack_require__(53);
 
 	var _commonFileFac2 = _interopRequireDefault(_commonFileFac);
 
-	var _commonProviderFac = __webpack_require__(41);
+	var _commonProviderFac = __webpack_require__(54);
 
 	var _commonProviderFac2 = _interopRequireDefault(_commonProviderFac);
 
-	var _commonProductFac = __webpack_require__(42);
+	var _commonProductFac = __webpack_require__(55);
 
 	var _commonProductFac2 = _interopRequireDefault(_commonProductFac);
 
-	var _commonItineraryFac = __webpack_require__(43);
+	var _commonItineraryFac = __webpack_require__(56);
 
 	var _commonItineraryFac2 = _interopRequireDefault(_commonItineraryFac);
 
-	var _commonCustomerFac = __webpack_require__(44);
+	var _commonCustomerFac = __webpack_require__(57);
 
 	var _commonCustomerFac2 = _interopRequireDefault(_commonCustomerFac);
 
-	angular.module('webProject', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap', 'ngFileUpload', 'angular-md5', 'ui.bootstrap', 'monospaced.elastic'])
+	var _commonUserFac = __webpack_require__(58);
+
+	var _commonUserFac2 = _interopRequireDefault(_commonUserFac);
+
+	var _commonOrderFac = __webpack_require__(59);
+
+	var _commonOrderFac2 = _interopRequireDefault(_commonOrderFac);
+
+	// Testing util
+
+	var _testAddFakeDataFac = __webpack_require__(60);
+
+	var _testAddFakeDataFac2 = _interopRequireDefault(_testAddFakeDataFac);
+
+	var _testTestCtrl = __webpack_require__(61);
+
+	var _testTestCtrl2 = _interopRequireDefault(_testTestCtrl);
+
+	angular.module('webProject', ['ngAnimate', 'ngCookies', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap', 'ngFileUpload', 'angular-md5', 'ui.bootstrap', 'monospaced.elastic', 'angucomplete-alt', 'textAngular', 'ng.ueditor', 'materialCalendar', 'oitozero.ngSweetAlert'])
 	// 配置全局常量
-	.constant('lcConfig', _configConfig2['default']).constant('moment', window.moment).constant('cityData', _configCity2['default'])
+	.constant('lcConfig', _configConfig2['default']).constant('moment', window.moment).constant('cityData', _configCity2['default']).constant('multiChoiceConfig', _configMultiChoiceConfig2['default']).constant('calendarConfig', _configCalendarConfig2['default']).constant('dispatcherConfig', _configDispatcherConfig2['default']).constant('menuConfig', _configMenuConfig2['default']).constant('formConfig', _configFormConfig2['default'])
 
 	// 基础配置
 	.config(_configHttp2['default']).config(_configRoute2['default'])
@@ -246,15 +316,18 @@
 	// services 初始化
 	.service('commonSer', _commonCommonSer2['default']).service('helloSer', _authHelloSer2['default'])
 	// directive 初始化
-	.directive('lcHeader', _commonHeaderHeaderDirect2['default']).directive('pageControl', _commonDirectivesPagePageDirect2['default']).directive('providerTextfield', _commonProviderDirectivesTextFieldTextFieldDirect2['default']).directive('providerMultiChoice', _commonProviderDirectivesMultiChoiceMultiChoiceDirect2['default']).directive('providerAddress', _commonProviderDirectivesAddressAddressDirect2['default']).directive('providerMenu', _commonProviderDirectivesMenuMenuDirect2['default']).directive('uploadButton', _commonProviderDirectivesUploadUploadDirect2['default']).directive('returnPolicy', _commonProviderDirectivesReturnPolicyReturnPolicyDirect2['default']).directive('password', _commonProviderDirectivesPasswordPasswordDirect2['default'])
+	// common directive 初始化
+	.directive('multiChoice', _commonDirectivesMultiChoiceMultiChoiceDirect2['default']).directive('calendar', _commonDirectivesCalendarCalendarDirect2['default']).directive('textField', _commonDirectivesTextFieldTextFieldDirect2['default']).directive('counter', _commonDirectivesCounterCounterDirect2['default']).directive('template', _commonDirectivesTemplateTemplateDirect2['default']).directive('lcHeader', _commonHeaderHeaderDirect2['default']).directive('pageControl', _commonDirectivesPagePageDirect2['default']).directive('address', _commonProviderDirectivesAddressAddressDirect2['default']).directive('providerMenu', _commonProviderDirectivesMenuMenuDirect2['default']).directive('returnPolicy', _commonProviderDirectivesReturnPolicyReturnPolicyDirect2['default']).directive('password', _commonProviderDirectivesPasswordPasswordDirect2['default'])
 	// product directive 初始化
 	.directive('providerSideBar', _commonProductDirectivesProviderSideBarProviderSideBarDirect2['default']).directive('productTextfield', _commonProductDirectivesTextFieldTextFieldDirect2['default'])
 
 	// controller 初始化
-	.controller('homeCtrl', _authHomeHomeCtrl2['default']).controller('addProviderCtrl', _commonProviderAddProviderCtrl2['default']).controller('showProviderCtrl', _commonProviderShowProviderCtrl2['default']).controller('addProductCtrl', _commonProductAddProductCtrl2['default']).controller('modalCtrl', _commonProductDirectivesProviderSideBarContactModalCtrlJs2['default']).controller('showProductCtrl', _commonProductShowProductCtrlJs2['default']).controller('showProductDetailCtrl', _commonProductShowProductDetailCtrlJs2['default']).controller('addItineraryCtrl', _commonProductDirectivesItineraryAddCtrlJs2['default']).controller('loginCtrl', _authHomeLoginCtrl2['default']).controller('saleCtrl', _commonSaleSaleCtrl2['default']).controller('searchCtrl', _commonSaleSearchSearchCtrl2['default']).controller('filterCtrl', _commonSaleSearchDirectivesFilterFilterCtrl2['default']).controller('showItineraryCtrl', _commonProductShowItineraryCtrl2['default']).controller('signinCtrl', _commonSaleSearchDirectivesSigninSigninCtrl2['default']).controller('showCustomerCtrl', _commonSaleCustomerShowCustomerCtrl2['default']).controller('providerSearchCtrl', _commonProductDirectivesProviderSideBarSearchAdvanceProviderSearchCtrlJs2['default']).controller('showProviderDetailCtrl', _commonProviderShowProviderDetailCtrl2['default'])
+	.controller('homeCtrl', _authHomeHomeCtrl2['default']).controller('addProviderCtrl', _commonProviderAddProviderCtrl2['default']).controller('showProviderCtrl', _commonProviderShowProviderCtrl2['default']).controller('addProductCtrl', _commonProductAddProductCtrl2['default']).controller('modalCtrl', _commonProductDirectivesProviderSideBarContactModalCtrlJs2['default']).controller('showProductCtrl', _commonProductShowProductCtrlJs2['default']).controller('showProductDetailCtrl', _commonProductShowProductDetailCtrlJs2['default']).controller('addItineraryCtrl', _commonProductDirectivesItineraryAddCtrlJs2['default']).controller('loginCtrl', _authHomeLoginCtrl2['default']).controller('saleCtrl', _commonSaleSaleCtrl2['default']).controller('searchCtrl', _commonSaleSearchSearchCtrl2['default']).controller('filterCtrl', _commonSaleSearchDirectivesFilterFilterCtrl2['default']).controller('showItineraryCtrl', _commonProductShowItineraryCtrl2['default']).controller('signinCtrl', _commonSaleSearchDirectivesSigninSigninCtrl2['default']).controller('showCustomerCtrl', _commonSaleCustomerShowCustomerCtrl2['default']).controller('providerSearchCtrl', _commonProductDirectivesProviderSideBarSearchAdvanceProviderSearchCtrlJs2['default']).controller('showProviderDetailCtrl', _commonProviderShowProviderDetailCtrl2['default']).controller('formCtrl', _commonDirectivesFormFormCtrl2['default']).controller('myAccountCtrl', _commonAccountMyAccountCtrl2['default']).controller('showProductSaleCtrl', _commonSaleSearchShowProductCtrlJs2['default']).controller('reserveFormCtrl', _commonSaleSearchDirectivesReserveReserveFormCtrlJs2['default']).controller('addOrderCtrl', _commonSaleOrderAddOrderCtrlJs2['default']).controller('showOrderCtrl', _commonSaleOrderShowOrderCtrlJs2['default'])
 
 	// factory
-	.factory('authFac', _commonAuthFac2['default']).factory('fileFac', _commonFileFac2['default']).factory('providerFac', _commonProviderFac2['default']).factory('productFac', _commonProductFac2['default']).factory('itineraryFac', _commonItineraryFac2['default']).factory('customerFac', _commonCustomerFac2['default']);
+	.factory('authFac', _commonAuthFac2['default']).factory('fileFac', _commonFileFac2['default']).factory('providerFac', _commonProviderFac2['default']).factory('productFac', _commonProductFac2['default']).factory('itineraryFac', _commonItineraryFac2['default']).factory('customerFac', _commonCustomerFac2['default']).factory('userFac', _commonUserFac2['default']).factory('orderFac', _commonOrderFac2['default'])
+	// testing
+	.factory('fakeDataFac', _testAddFakeDataFac2['default']).controller('testCtrl', _testTestCtrl2['default']);
 
 /***/ },
 /* 1 */
@@ -292,6 +365,19 @@
 	  CUSTOMER_STATE: {
 	    UNPAID: 0,
 	    PAID: 1
+	  },
+
+	  // 产品情况
+	  productStatus: {
+	    UNPOSTED: 1,
+	    UNVERIFIED: 2,
+	    VERIFIED: 3
+	  },
+
+	  orderStatus: {
+	    UNPAID: 1,
+	    PAID: 2,
+	    FINISHED: 3
 	  }
 	};
 
@@ -388,6 +474,12 @@
 	  // try to figure out how to use a constant value
 	  $locationProvider.html5Mode(true);
 
+	  $stateProvider.state('test', {
+	    url: '/test',
+	    templateUrl: 'app/test/test.html',
+	    controller: 'testCtrl'
+	  });
+
 	  $stateProvider.state('login', {
 	    url: '/login',
 	    templateUrl: 'app/auth/home/login.html',
@@ -403,6 +495,22 @@
 	    templateUrl: 'app/common/sale/search/search.html',
 	    controller: 'searchCtrl',
 	    authenticate: lcConfig.userLevel.SALE
+	  }).state('sale.show-product', {
+	    url: '/show-product/:productId',
+	    templateUrl: 'app/common/sale/search/show_product.html',
+	    controller: 'showProductSaleCtrl'
+	  }).state('sale.add-order', {
+	    url: '/add-order/:productId',
+	    templateUrl: 'app/common/sale/order/add_order.html',
+	    controller: 'addOrderCtrl',
+	    params: {
+	      product: null,
+	      reserve: null
+	    }
+	  }).state('sale.show-order', {
+	    url: '/show-order',
+	    templateUrl: 'app/common/sale/order/show_order.html',
+	    controller: 'showOrderCtrl'
 	  }).state('sale.show-itinerary', {
 	    url: '/itineray/:productId',
 	    templateUrl: 'app/common/product/itinerary.html',
@@ -447,6 +555,14 @@
 	    templateUrl: 'app/common/product/add.html',
 	    controller: 'showProductDetailCtrl',
 	    authenticate: lcConfig.userLevel.ADMIN
+	  }).state('home.my-account', {
+	    url: '/my-account',
+	    templateUrl: 'app/common/account/account.html',
+	    controller: 'myAccountCtrl'
+	  }).state('home.test', {
+	    url: '/test',
+	    templateUrl: 'app/common/directives/calendar/calendar.html',
+	    controller: 'calendarCtrl'
 	  });
 
 	  $urlRouterProvider.otherwise('/login');
@@ -624,6 +740,108 @@
 /* 9 */
 /***/ function(module, exports) {
 
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	var multiChoiceConfig = {
+	  // TODO: Maybe we don't need the name here?
+	  data: {
+	    '产品类型': [{ name: 'productAbroadGroup', value: '出境跟团游' }, { name: 'productAbroadFreedom', value: '出境自由行' }, { name: 'productDomesticGroup', value: '国内跟团游' }, { name: 'productDomesticFreedom', value: '国内自由行' }, { name: 'productDomresticNearby', value: '国内周边游' }, { name: 'productVisaService', value: '签证服务' }],
+	    '经营范围': [{ name: 'providerDeparture', value: '出境旅游' }, { name: 'providerArrival', value: '入境旅游' }, { name: 'providerDomestic', value: '境内旅游' }, { name: 'providerTicketDelegate', value: '票务代理' }, { name: 'providerBookhotel', value: '住宿' }],
+	    '主营目的地': [{ name: 'ouzhou', value: '欧洲' }, { name: 'meizhou', value: '美洲' }, { name: 'aouzhou', value: '澳洲' }, { name: 'riben', value: '日本' }, { name: 'zhongya', value: '中亚' }, { name: 'guoneichangxian', value: '国内长线' }, { name: 'guoneizhoubian', value: '国内周边' }, { name: 'gangaotai', value: '港澳台' }],
+	    '主营口岸': [{ name: 'shanghai', value: '上海' }, { name: 'beijing', value: '北京' }, { name: 'tianjin', value: '天津' }, { name: 'hangzhou', value: '杭州' }, { name: 'nanjing', value: '南京' }, { name: 'wuxi', value: '无锡' }, { name: 'wuhan', value: '武汉' }, { name: 'xianggang', value: '香港' }, { name: 'nantong', value: '南通' }, { name: 'shenzhen', value: '深圳' }, { name: 'suzhou', value: '苏州' }, { name: 'changzhou', value: '常州' }, { name: 'aomen', value: '澳门' }, { name: 'ningbo', value: '宁波' }, { name: 'hefei', value: '合肥' }, { name: 'xuzhou', value: '徐州' }, { name: 'yangzhou', value: '扬州' }, { name: 'zhenjiang', value: '镇江' }, { name: 'yancheng', value: '盐城' }, { name: 'wenzhoug', value: '温州' }, { name: 'jinhua', value: '金华' }, { name: 'taizhou', value: '台州' }, { name: 'huaian', value: '淮安' }, { name: 'lianyugnang', value: '连云港' }, { name: 'yiwu', value: '义务' }, { name: 'guangzhou', value: '广州' }],
+	    '线路前缀': [{ name: 'duanwu', value: '端午' }, { name: 'shuqi', value: '暑期' }, { name: 'cuofengyou', value: '错峰游' }, { name: 'duorenlijian', value: '多人立减' }, { name: 'zaodinglijian', value: '早定立减' }],
+	    '线路区域': [{ name: 'youlun', value: '游轮' }, { name: 'zhongdongfeizhou', value: '中东非洲' }],
+	    '国家/省份': [{ name: 'xila', value: '希腊' }, { name: 'fenlan', value: '芬兰' }],
+	    '城市景区': []
+	  }
+	};
+
+	exports['default'] = multiChoiceConfig;
+	module.exports = exports['default'];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var calendarConfig = {
+	  data: {
+	    "团期报价": [{ type: "number", name: "adultCompanyCompetitorPrice", value: "成人同行价" }, { type: "number", name: "childCompanyCompetitorPrice", value: "儿童同行价" }, { type: "number", name: "adultCompanySalePrice", value: "成人销售价" }, { type: "number", name: "childCompanySalePrice", value: "儿童销售价" }, { type: "number", name: "adultCompanyPrice", value: "成人结算价" }, { type: "number", name: "childCompanyPrice", value: "儿童结算价" }, { type: "number", name: "singleRoomDifference", value: "全程单房差" }, { type: "number", name: "totalPeople", value: "入库数" }, { type: "number", name: "minimumPeople", value: "最低成团人数" }, { type: "date", name: "signupStart", value: "报名开始" }, { type: "number", name: "emergentValue", value: "预警值" }, { type: "number", name: "airticketEmergentValue", value: "机票预警值" }],
+	    "库存管理": [{ type: "number", name: "totalPeople", value: "入库数" }, { type: "number", name: "minimumPeople", value: "最低成团人数" }, { type: "number", name: "reservedPeopleNumber", value: "占位数" }, { type: "number", name: "paidPeopleNumber", value: "签约数" }, { type: "number", name: "restPeopleNumbner", value: "余位" }]
+	  }
+	};
+
+	exports["default"] = calendarConfig;
+	module.exports = exports["default"];
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	// TODO: We should use a query to do this. Just for demo purpose.
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var dispatcherConfig = {
+	  data: [{ name: "李杰", phone: "12345" }, { name: "潘超", phone: "12345" }]
+	};
+
+	exports["default"] = dispatcherConfig;
+	module.exports = exports["default"];
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var menuConfig = {
+	  // TODO: Maybe we don't need the name here?
+	  data: {
+	    "酒店标准": ["经济连锁酒店", "二星", "三星", "三星或四星", "四星", "五星", "指定酒店", "指定高星级酒店", "农家乐", "其他"],
+	    "交通方式": ["飞机往返", "火车往返", "飞机+火车", "巴士往返", "邮轮", "其他"],
+	    "类型": ["跟团游", "自由行", "当地玩乐"],
+	    "大区": ["出境游", "国内游", "周边游"]
+	  }
+	};
+
+	exports["default"] = menuConfig;
+	module.exports = exports["default"];
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var formConfig = {
+	  data: {
+	    "商户联系人": [{ type: "text", name: "contactname", key: "姓名" }, { type: "text", name: "cellphone", key: "手机" }, { type: "text", name: "homephone", key: "座机" }, { type: "text", name: "position", key: "职位" }, { type: "text", name: "qqnumber", key: "qq" }, { type: "text", name: "wechat", key: "微信" }]
+	  }
+	};
+
+	exports["default"] = formConfig;
+	module.exports = exports["default"];
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
 	/**
 	* 每位工程师都有保持代码优雅的义务
 	* Each engineer has a duty to keep the code elegant
@@ -651,13 +869,14 @@
 	    redirect: function redirect(url) {
 	      $window.location.href = url;
 	    }
+
 	  };
 	}];
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/**
@@ -690,7 +909,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/**
@@ -720,7 +939,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -762,7 +981,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -771,63 +990,274 @@
 	  value: true
 	});
 
-	exports['default'] = ["$log", "$rootScope", "$window", "$state", "fileFac", "providerFac", function ($log, $rootScope, $window, $state, fileFac, providerFac) {
+	exports['default'] = ["$rootScope", "$log", "$state", "$window", "multiChoiceConfig", function ($rootScope, $log, $state, $window, multiChoiceConfig) {
 	  'ngInject';
 	  return {
-	    restrict: 'A',
-	    templateUrl: 'app/common/provider/directives/textField/textField.html',
-	    replace: false,
-	    /*
-	     * key is the key in the database.
-	     * label is the name of the label appearing on the left part.
-	     * upload: show a upload button if this exists. The value could be used to
-	     * define the limited type.
-	     * */
+	    restrict: 'E',
+	    templateUrl: 'app/common/directives/multiChoice/multiChoice.html',
+	    replace: true,
+	    require: 'ngModel',
 	    scope: {
-	      key: '@',
-	      label: '@',
-	      upload: '@',
-	      duration: '@',
-	      isEditing: '@'
+	      other: '@',
+	      type: '@',
+	      isEditing: '=',
+	      model: '=ngModel'
 	    },
 	    link: function link(scope, element, attr) {
-	      scope.isEditing = scope.$parent.isEditing;
-	      scope.maximumColumn = 100;
-	      scope.$on('providerUpdate', function () {
-	        scope.value = scope.$parent.provider[scope.key];
-	        scope.fromDate = parseDate(scope.$parent.provider[scope.key + 'Start']);
-	        scope.endDate = parseDate(scope.$parent.provider[scope.key + 'End']);
-	      });
-
-	      if (attr.upload) {
-	        scope.show = !scope.show;
-
-	        scope.uploadFile = function (file) {
-	          scope.filename = file.name;
-	          var filename = fileFac.hash(scope.filename);
-	          providerFac.files[filename] = file;
-	          // upate the name of the file.
-	          scope.hashname = filename;
-	        };
+	      scope.types = {};
+	      scope.options = multiChoiceConfig.data[attr.type];
+	      for (var i = 0; i < scope.options.length; i++) {
+	        scope.options[i].state = false;
 	      }
 
-	      // Settings for datepicker.
-	      if (attr.duration) {
-	        scope.durationShow = !scope.durationShow;
-	      }
-
-	      // TODO: move this to a service.
-	      /**
-	      * @param dateString. A string with format: 2016年4月2日.
-	      * @return a Date object.
-	      * */
-	      function parseDate(dateString) {
-	        var dateExp = /([0-9]+)年([0-9]+)月([0-9]+)日/g;
-	        var match = dateExp.exec(dateString);
-	        if (!match) {
+	      // TODO: Model should be the same type.
+	      // Now we take into an array and convert to an object.
+	      scope.$watch('model', function () {
+	        if (scope.isEditing || !scope.model || Object.keys(scope.model).length === 0) {
 	          return;
 	        }
-	        return new Date(match[1], match[2], match[3]);
+	        for (var i = 0; i < scope.options.length; i++) {
+	          var option = scope.options[i];
+	          // If option is contained in the model.
+	          if (scope.model.indexOf(option.name) >= 0) {
+	            option.state = true;
+	          }
+	        }
+	        $log.log(scope.options);
+	        optionsListener();
+	      }, true);
+
+	      var optionsListener = scope.$watch('options', function (options) {
+	        scope.model = {};
+	        for (var i = 0; i < options.length; i++) {
+	          if (options[i].state) {
+	            scope.model[options[i].name] = true;
+	          }
+	        }
+	      }, true);
+
+	      // other text always is the last.
+	      scope.changeOther = function () {
+	        scope.model.other = scope.otherText;
+	      };
+	    }
+	  };
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$rootScope", "$uibModal", "$log", "$state", "$window", "calendarConfig", function ($rootScope, $uibModal, $log, $state, $window, calendarConfig) {
+	  'ngInject';
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'app/common/directives/calendar/calendar.html',
+	    replace: true,
+	    scope: {
+	      data: '@',
+	      model: '=ngModel',
+	      isEditing: '='
+	    },
+	    require: 'ngModel',
+	    link: function link(scope, element, attr, ctrl) {
+	      // TODO: The whole class is slow on performance.
+	      // Need to figure out how to optimize this.
+	      /**
+	      * A data structure that contains all the events.
+	      * It should have the following data structure:
+	      * year:
+	      *   [month1: [
+	      *     [day1: {
+	      *       key1: value1,
+	      *       key2: value2,
+	      *       ...
+	      *     },...]
+	      *   ],...]
+	      * */
+	      scope.allEvents = {};
+	      scope.allMonthEvents = [];
+	      scope.allDayEvents = [];
+	      scope.daysMap = {};
+	      scope.days = [];
+	      scope.months = [];
+
+	      scope.initYear = function (year) {
+	        // We should start from the current year and current month.
+	        if (!(year in scope.allEvents)) {
+	          scope.allEvents[year] = [];
+	        }
+	        scope.allMonthEvents = scope.allEvents[year];
+	      };
+
+	      // Month start from 0 to 11.
+	      scope.initMonth = function (month) {
+	        // If there are no events, create the array.
+	        if (scope.allMonthEvents.length === 0) {
+	          for (var i = 1; i <= 12; i++) {
+	            scope.allMonthEvents.push([]);
+	          }
+	        }
+	        scope.allDayEvents = scope.allMonthEvents[month];
+	        scope.days = scope.daysMap[month];
+	      };
+
+	      scope.initDay = function () {
+	        var numberOfDays = daysInMonth(scope.currentMonth, scope.currentYear);
+	        if (!scope.days || scope.days.length === 0) {
+	          scope.days = [];
+	          for (var i = 1; i <= numberOfDays; i++) {
+	            var day = getDay(i, scope.currentMonth, scope.currentYear);
+	            scope.days.push(i + ' ' + day);
+	          }
+	        }
+
+	        if (scope.allDayEvents.length) {
+	          for (var i = 1; i <= numberOfDays; i++) {
+	            //Push an empty event.
+	            scope.allDayEvents.push({});
+	          }
+	          scope.daysMap[scope.currentMonth] = scope.days;
+	        }
+	      };
+
+	      scope.init = function () {
+	        scope.years = [2016, 2017, 2018];
+
+	        scope.currentYear = scope.years[0];
+	        scope.initYear(scope.currentYear);
+
+	        if (scope.months.length !== 12) {
+	          for (var i = 1; i <= 12; i++) {
+	            scope.months.push(i);
+	          }
+	        }
+
+	        var date = new Date();
+	        scope.currentMonth = date.getMonth();
+	        scope.initMonth(scope.currentMonth);
+
+	        scope.titles = calendarConfig.data[scope.data];
+	        scope.initDay();
+	      };
+
+	      scope.init();
+
+	      scope.selectMonth = function (month) {
+	        scope.currentMonth = month;
+	        scope.initMonth(scope.currentMonth);
+	        scope.initDay();
+	      };
+
+	      scope.selectYear = function () {
+	        scope.currentYear = scope.selectedYear;
+	        scope.initYear(scope.currentYear);
+	        scope.initMonth(scope.currentMonth);
+	        scope.initDay();
+	      };
+
+	      scope.addEvent = function (index) {
+	        var items = [];
+	        for (var i = 0; i < scope.titles.length; i++) {
+	          var item = {};
+	          item.key = scope.titles[i].value;
+	          item.name = scope.titles[i].name;
+	          item.type = scope.titles[i].type;
+	          items.push(item);
+	        }
+	        scope.openEventModal(items, index);
+	      };
+
+	      scope.openEventModal = function (items, index) {
+	        var modalInstance = $uibModal.open({
+	          animation: true,
+	          templateUrl: 'app/common/directives/form/form.html',
+	          controller: 'formCtrl',
+	          resolve: {
+	            // Need to convert the titles into the following format.
+	            // {key: name, type: type}
+	            data: function data() {
+	              var title = '添加团期: ' + scope.currentYear + '年' + (scope.currentMonth + 1) + '月' + (index + 1) + '日';
+	              return { 'title': title, 'items': items };
+	            }
+	          }
+	        });
+	        modalInstance.result.then(function (items) {
+	          var event = {};
+	          items.forEach(function (item) {
+	            event[item.name] = item.value;
+	          });
+	          scope.allDayEvents[index] = event;
+	          scope.allDayEvents[index].filled = true;
+	        }, function () {});
+	      };
+
+	      scope.editEvent = function (index) {
+	        var items = [];
+	        $log.log(index);
+	        $log.log(scope.allDayEvents[index]);
+	        for (var i = 0; i < scope.titles.length; i++) {
+	          var item = {};
+	          item.key = scope.titles[i].value;
+	          item.name = scope.titles[i].name;
+	          item.type = scope.titles[i].type;
+	          var value = scope.allDayEvents[index][item.name];
+	          if (value) {
+	            item.value = value;
+	          }
+	          items.push(item);
+	        }
+	        scope.openEventModal(items, index);
+	      };
+
+	      scope.deleteEvent = function (index) {
+	        // Clear the event.
+	        scope.allDayEvents[index] = {};
+	      };
+
+	      // TODO: This performance might be bad. I don't know.
+	      scope.$watch('allEvents', function (value) {
+	        scope.model = value;
+	      }, true);
+
+	      scope.$on('calendarUpdate', function (event, parameter) {
+	        scope.allEvents = parameter.price;
+	        scope.init();
+	      });
+	      /**
+	      * Create an empty event from titles.
+	      * The title should have the following format.
+	      * [{name, type, value}]. For more details, please refer to
+	      * config/calendarConfig.js
+	      * */
+	      function createEmptyEvent(titles) {
+	        var event = {};
+	        for (var i = 0; i < titles.length; i++) {
+	          var type = titles[i].type;
+	          var name = titles[i].name;
+	          event[name] = '';
+	        }
+	        return event;
+	      }
+
+	      function daysInMonth(month, year) {
+	        // Need to + 1 because javascript use the absolute value as the month index.
+	        // e.g, 1 is Jan.
+	        return new Date(year, month + 1, 0).getDate();
+	      }
+
+	      function getDay(day, month, year) {
+	        var days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+	        var index = new Date(year, month, day).getDay();
+	        return days[index];
 	      }
 	    }
 	  };
@@ -836,7 +1266,86 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 20 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$scope", "$log", "$window", "$uibModalInstance", "data", function ($scope, $log, $window, $uibModalInstance, data) {
+	  'ngInject';
+
+	  $scope.items = data.items;
+	  $scope.title = data.title;
+
+	  $scope.cancel = function () {
+	    $uibModalInstance.dismiss('cancel');
+	  };
+
+	  $scope.close = function () {
+	    var saveFunction = data.save;
+	    if (saveFunction) {
+	      var object = convertToObject($scope.items);
+	      saveFunction(object).then(function (result) {
+	        $uibModalInstance.close($scope.items);
+	      });
+	    } else {
+	      $uibModalInstance.close($scope.items);
+	    }
+	  };
+
+	  function convertToObject(items) {
+	    var object = {};
+	    for (var i in items) {
+	      var item = items[i];
+	      object[item.name] = item.value;
+	    }
+	    $log.log(object);
+	    return object;
+	  }
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$log", "$http", "$state", "$window", function ($log, $http, $state, $window) {
+	  'ngInject';
+	  return {
+	    restrict: 'E',
+	    templateUrl: 'app/common/directives/textField/textField.html',
+	    replace: true,
+	    require: 'ngModel',
+	    scope: {
+	      isEditing: '=',
+	      model: '=ngModel',
+	      inputType: '='
+	    },
+	    link: function link(scope, element, attr, ctrl) {
+	      //$scope.type = "text";
+	      scope.inputType = attr.inputType;
+	      scope.$watch('value', function (value) {
+	        scope.model = value;
+	      });
+	    }
+	  };
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -848,46 +1357,79 @@
 	exports['default'] = ["$rootScope", "$log", "$state", "$window", function ($rootScope, $log, $state, $window) {
 	  'ngInject';
 	  return {
-	    restrict: 'A',
-	    templateUrl: 'app/common/provider/directives/multiChoice/multiChoice.html',
-	    replace: false,
+	    restrict: 'E',
+	    templateUrl: 'app/common/directives/counter/counter.html',
+	    replace: true,
+	    require: 'ngModel',
 	    scope: {
-	      type: '@'
+	      model: '=ngModel'
 	    },
 	    link: function link(scope, element, attr) {
-	      // TODO: maybe use global variable to store these configurations.
-	      scope.options = [];
-	      scope.isEditing = scope.$parent.isEditing;
-	      scope.$on('providerUpdate', function () {
-	        for (var i = 0; i < scope.options.length; i++) {
-	          var option = scope.options[i];
-	          if (scope.$parent.provider[option.name]) {
-	            $log.log('being true');
-	            $log.log(scope.options[i]);
-	            scope.options[i].state = true;
-	          }
-	        }
-	      });
-
-	      if (attr.type === '经营范围') {
-	        scope.name = attr.type;
-	        scope.options = [{ name: 'departure', value: '出境' }, { name: 'arrival', value: '入境' }, { name: 'dominal', value: '国内' }, { name: 'ticketDelegate', value: '票务代理' }, { name: 'bookhotel', value: '住宿' }];
-	      } else if (attr.type === '合作类型') {
-	        scope.name = attr.type;
-	        scope.options = [{ name: 'domestieOperator', value: '地接社' }, { name: 'domestieWholesaler', value: '出发地(组团社)' }, { name: 'airticket', value: '机票' }, { name: 'motorcade', value: '车队' }, { name: 'visa', value: '签证' }, { name: 'ticket', value: '门票' }, { name: 'hotel', value: '酒店' }, { name: 'cruises', value: '游轮' }];
+	      scope.value = 0;
+	      if (scope.model) {
+	        scope.value = scope.model;
 	      }
+	      scope.plus = function () {
+	        if (scope.value >= 99) {
+	          return;
+	        }
+	        scope.value = scope.value + 1;
+	        scope.model = scope.value;
+	      };
 
-	      scope.onChange = function () {};
+	      scope.minus = function () {
+	        if (scope.value <= 0) {
+	          return;
+	        }
+	        scope.value = scope.value - 1;
+	        scope.model = scope.value;
+	      };
 	    }
 	  };
 	}];
 
 	module.exports = exports['default'];
 
-	// Add the value to global form.
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$log", "$http", "$state", "$window", "$compile", function ($log, $http, $state, $window, $compile) {
+	  'ngInject';
+	  return {
+	    restrict: 'A',
+	    scope: {
+	      key: '@key'
+	    },
+	    link: function link(scope, element, attr, ctrl) {
+	      //$scope.type = "text";
+	      //$log.log(scope.model);
+	      var key = attr.key;
+	      /*scope.$on("test", function(event) {
+	        $log.log("update");
+	      });
+	      */
+	      scope.$on('updateTemplate', function (event, params) {
+	        $log.log('update');
+	        var content = params.params[key];
+	        var html = $compile(content)(scope);
+	        element.append(html);
+	        $log.log(scope.model);
+	      });
+	    }
+	  };
+	}];
+
+	module.exports = exports['default'];
 
 /***/ },
-/* 15 */
+/* 24 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -899,25 +1441,69 @@
 	exports['default'] = ["$log", "$rootScope", "$state", "$window", "cityData", function ($log, $rootScope, $state, $window, cityData) {
 	  'ngInject';
 	  return {
-	    restrict: 'A',
+	    restrict: 'E',
 	    templateUrl: 'app/common/provider/directives/address/address.html',
-	    replace: false,
+	    replace: true,
+	    scope: {
+	      showCounty: '=?',
+	      address: '=ngModel',
+	      isEditing: '='
+	    },
+	    require: 'ngModel',
 	    link: function link(scope, element, attr) {
-	      // TODO: Figure out why the scope does not need parent.
-	      scope.$on('providerUpdate', function () {
-	        scope.province = scope.provider.province;
-	        scope.city = scope.provider.city;
+	      scope.address = {};
+
+	      // TODO: Figure out why the scope need $parent..
+	      scope.$on('addressUpdate', function (event, parameter) {
+	        scope.province = parameter.address.province;
+	        scope.city = parameter.address.city;
+	        scope.county = parameter.address.county;
+	        scope.detail = parameter.address.detail;
+	        scope.provinceListener();
+	        scope.cityListener();
+	        scope.countyListener();
 	      });
 
 	      scope.provinces = cityData.province;
 	      scope.cities = cityData.province[0].city;
 	      scope.counties = scope.cities[0].county;
-	      scope.onProvinceChange = function () {
-	        var province = scope.selectedProvince;
+
+	      scope.provinceListener = scope.$watch('province', function (province) {
+	        if (!province) {
+	          delete scope.address.province;
+	          return;
+	        }
+	        scope.address.province = province.name;
 	        var index = scope.findProvinceIndex(province);
 	        scope.cities = cityData.province[index].city;
-	        scope.province = province.name;
-	      };
+	        // If there is no cities in the province, then we should reset the county.
+	        if (scope.cities === undefined) {
+	          scope.counties = null;
+	          scope.county = null;
+	        }
+	      });
+
+	      scope.cityListener = scope.$watch('city', function (city) {
+	        if (!city) {
+	          delete scope.address.city;
+	          return;
+	        }
+	        scope.address.city = city.name;
+	        var index = scope.findCityIndex(city);
+	        scope.counties = scope.cities[index].county;
+	      });
+
+	      scope.countyListener = scope.$watch('county', function (county) {
+	        if (!county) {
+	          delete scope.address.county;
+	          return;
+	        }
+	        scope.address.county = county.name;
+	      });
+
+	      scope.$watch('detail', function (detail) {
+	        scope.address.detail = detail;
+	      });
 
 	      scope.findProvinceIndex = function (province) {
 	        for (var i = 0; i < cityData.province.length; i++) {
@@ -929,23 +1515,12 @@
 	      };
 
 	      scope.findCityIndex = function (city) {
-	        for (var i = 0; i < scope.selectedProvince.city.length; i++) {
-	          if (city.name === scope.selectedProvince.city[i].name) {
+	        for (var i = 0; i < scope.cities.length; i++) {
+	          if (city.name === scope.cities[i].name) {
 	            return i;
 	          }
 	        }
 	        return -1;
-	      };
-
-	      scope.onCityChange = function () {
-	        var city = scope.selectedCity;
-	        var index = scope.findCityIndex(city);
-	        scope.counties = scope.selectedProvince.city[index].county;
-	        scope.city = city.name;
-	      };
-
-	      scope.onCountyChange = function () {
-	        scope.county = scope.selectedCounty.name;
 	      };
 	    }
 	  };
@@ -954,7 +1529,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -996,48 +1571,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	exports['default'] = ["$rootScope", "$state", "$window", "Upload", function ($rootScope, $state, $window, Upload) {
-	  'ngInject';
-	  return {
-	    restrict: 'A',
-	    templateUrl: 'app/common/provider/directives/upload/upload.html',
-	    replace: false,
-	    scope: {
-	      type: '@'
-	    },
-	    link: function link(scope, element, attr) {
-	      scope.upload = function () {
-	        $window.alert('upload');
-	        /*
-	        Upload.upload({
-	            url: 'upload/url',
-	            data: {file: file, 'username': $scope.username}
-	        }).then(function (resp) {
-	            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-	        }, function (resp) {
-	            console.log('Error status: ' + resp.status);
-	        }, function (evt) {
-	            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-	            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-	        });*/
-	      };
-	    }
-	  };
-	}];
-
-	module.exports = exports['default'];
-
-/***/ },
-/* 18 */
+/* 26 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1049,9 +1583,14 @@
 	exports['default'] = ["$log", "$rootScope", "$state", "$window", function ($log, $rootScope, $state, $window) {
 	  'ngInject';
 	  return {
-	    restrict: 'A',
+	    restrict: 'E',
 	    templateUrl: 'app/common/provider/directives/returnPolicy/returnPolicy.html',
-	    replace: false,
+	    replace: true,
+	    scope: {
+	      returnPolicy: '=ngModel',
+	      isEditing: '='
+	    },
+	    require: 'ngModel',
 	    link: function link(scope, element, attr) {}
 	  };
 	}];
@@ -1059,7 +1598,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 19 */
+/* 27 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1071,9 +1610,14 @@
 	exports['default'] = ["$rootScope", "$state", "$window", function ($rootScope, $state, $window) {
 	  'ngInject';
 	  return {
-	    restrict: 'A',
+	    restrict: 'E',
 	    templateUrl: 'app/common/provider/directives/password/password.html',
-	    replace: false,
+	    replace: true,
+	    require: 'ngModel',
+	    scope: {
+	      password: '=ngModel',
+	      isEditing: '='
+	    },
 	    link: function link(scope, element, attr) {
 	      scope.verify = function () {
 	        var verifiedTag = scope.clearVerified();
@@ -1105,7 +1649,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 20 */
+/* 28 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1122,8 +1666,15 @@
 	    replace: true,
 	    link: function link(scope, element, attr) {
 
+	      scope.filterProviders = [];
 	      scope.$on('sidebarOpen', function () {
-	        scope.initializeSidebar();
+	        // TODO: Maybe cache the value.
+	        $log.log(scope.providers);
+	        if (scope.providers) {
+	          scope.filterProviders = scope.providers;
+	        } else {
+	          scope.initializeSidebar();
+	        }
 	      });
 	      /*
 	      * Initilize for search box.
@@ -1139,10 +1690,8 @@
 
 	      // Initalize.
 	      scope.initializeSidebar = function () {
-	        scope.isMenu = true;
-	        scope.isSeondMenu = false;
 	        scope.providers = [];
-	        scope.servingType = '';
+	        scope.getProviderList();
 	      };
 
 	      /**
@@ -1157,51 +1706,48 @@
 	        }, function (error) {});
 	      };
 
-	      scope.advanceSearch = function () {
-	        var modalInstance = $uibModal.open({
-	          animation: true,
-	          templateUrl: 'app/common/product/directives/providerSideBar/search/advanceProviderSearch.html',
-	          controller: 'providerSearchCtrl'
-	        });
-
-	        modalInstance.result.then(function (results) {
-	          scope.providers = results;
-	          scope.isMenu = false;
-	          scope.isSecondMenu = true;
-	        }, function () {});
-	      };
-
-	      scope.getProviderList = function (servingType) {
-	        // TODO: finish the translation.
-	        var translate = {
-	          'motorcade': '车队',
-	          'domestieOperator': '地接社'
-	        };
-
+	      // TODO: Check how many providers we have. If too much, we need to do
+	      // index.
+	      scope.getProviderList = function () {
 	        var query = {};
-	        query[servingType] = true;
-	        $log.log(query);
 	        providerFac.getProvider(query).then(function (results) {
-	          scope.isMenu = false;
-	          scope.isSecondMenu = true;
 	          if (results.count > 0) {
-	            scope.providers = results.providers;
+	            // Set the provider contact list.
+	            for (var i = 0; i < results.providers.length; i++) {
+	              results.providers[i].contactList = results.contacts[i];
+	              $log.log('add provider');
+	              $log.log(results.providers[i]);
+	            }
+	            scope.filterProviders = scope.providers = results.providers;
+	            $log.log(scope.providers);
 	          }
 	        }, function (error) {});
-	        scope.servingType = translate[servingType];
 	      };
 
 	      scope.pickProvider = function (index) {
 	        // Add provider to the providerFac.
 	        var provider = scope.providers[index];
-	        provider.servingType = scope.servingType;
 	        provider.returnPolicy = providerFac.util.getReturnPolicy(provider);
 	        $mdSidenav('provider-side-bar').close().then(function () {
-	          //scope.$parent.providers = productFac.providers;
-	          scope.pickedProviders.push(provider);
-	          scope.initializeSidebar();
-	          scope.$broadcast('addProvider');
+	          scope.product.contact = {};
+	          scope.product.pickedProvider = provider;
 	        });
+	      };
+
+	      // Maybe use some query handling logic.
+	      scope.searchProvider = function (query) {
+	        scope.filterProviders = [];
+	        scope.providers.forEach(function (provider) {
+	          if (provider.nickname.toLowerCase().indexOf(query) >= 0 || provider.companyname.toLowerCase().indexOf(query) >= 0) {
+	            scope.filterProviders.push(provider);
+	          }
+	        });
+	        return scope.filterProviders;
+	      };
+
+	      scope.selectProvider = function (selected) {
+	        scope.filterProviders = [selected.originalObject];
+	        $log.log(scope.filterProviders);
 	      };
 
 	      scope.openContact = function (index) {
@@ -1251,7 +1797,7 @@
 	// TODO: error.
 
 /***/ },
-/* 21 */
+/* 29 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1285,7 +1831,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 22 */
+/* 30 */
 /***/ function(module, exports) {
 
 	/**
@@ -1295,90 +1841,63 @@
 	* @author wangxiao
 	*/
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports["default"] = ["$scope", "$window", "commonSer", "helloSer", "authFac", function ($scope, $window, commonSer, helloSer, authFac) {
-	  "ngInject";
-
-	  function loginSuccess(response) {
-	    $window.alert(response);
-	  }
-
-	  function loginFail(response) {
-	    $window.alert("fail");
-	  }
-
-	  $scope.goHome = function () {
-	    commonSer.goHome();
-	  };
-
-	  $scope.register = function () {
-	    authFac.register("admin", "admin", loginSuccess, loginFail);
-	  };
-
-	  $scope.login = function () {
-	    authFac.login("admin", "admin", loginSuccess, loginFail);
-	  };
-
-	  $scope.set = function () {
-	    authFac.setCredentials("admin", "admin");
-	  };
-
-	  $scope.clear = function () {
-	    authFac.clearCredentials();
-	  };
-	  //helloSer.getData().then((data) => {
-	  //  console.log(data);
-	  //});
-	}];
-
-	module.exports = exports["default"];
-
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
-
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
-	exports['default'] = ["$log", "$scope", "$document", "$timeout", "lcConfig", "$window", "providerFac", function ($log, $scope, $document, $timeout, lcConfig, $window, providerFac) {
+	exports['default'] = ["$log", "$state", "$scope", "$window", "commonSer", "helloSer", "productFac", function ($log, $state, $scope, $window, commonSer, helloSer, productFac) {
 	  'ngInject';
-	  var url = lcConfig.apiHost + '/api/provider/add';
-	  $scope.addUrl = url;
-	  $scope.uploadFiles = false;
-	  $scope.validate = true;
-	  $scope.isEditing = true;
-	  var submit = $document.find('#submittest');
-	  var validate = true;
-
-	  // TODO: Need to understand why angularjs can't submit the form manually.
-	  // TODO: First: Don't upload all the files at the end. A better way is to
-	  // upload each file when user click the upload button. The logic needs to be
-	  // handled in textField directive. But we need to figure out a smart way to
-	  // assoicate the file with the provider.
-	  $scope.upload = function () {
-	    $log.log('addProviderCtrl.upload');
-	    providerFac.uploadProviderFiles().then(function (response) {
-	      submit.trigger('click');
-	    }, function (error) {});
-	  };
-
-	  $scope.foundTimeOptions = ['1年以下', '1-5年', '5-8年', '8年以上'];
-
-	  $scope.sexOptions = ['男', '女'];
+	  /*productFac.hasUnfinished().then(function(result) {
+	    var count = result.count;
+	    if (count > 0) {
+	      $scope.unfinished = true;
+	     }
+	  }, function(error) {
+	    $state.go("login");
+	  });*/
 	}];
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 24 */
+/* 31 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = ["$log", "$scope", "$document", "$timeout", "lcConfig", "$window", "providerFac", "fileFac", "Upload", function ($log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) {
+	  "ngInject";
+	  var url = lcConfig.apiHost + "/api/provider/add";
+	  $scope.addUrl = url;
+	  $scope.isEditing = true;
+
+	  $scope.upload = function (file) {
+	    if (!file) {
+	      return;
+	    }
+	    $scope.filename = file.name;
+	    $scope.provider.licenseFilename = fileFac.hash(file.name);
+	    providerFac.uploadProviderFiles(file, $scope.provider.licenseFilename).then(function () {
+	      $log.log("upload success");
+	    }, function (error) {});
+	  };
+
+	  $scope.submit = function () {
+	    $log.log($scope.provider);
+	    providerFac.upload($scope.provider).then(function (result) {}, function (error) {});
+	  };
+	}];
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 32 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1425,7 +1944,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 25 */
+/* 33 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1442,6 +1961,8 @@
 	    // There should be only one result
 	    if (result.count === 1) {
 	      $scope.provider = result.providers[0];
+	      $scope.$broadcast("addressUpdate", { address: $scope.provider.address });
+	      $scope.$broadcast("resultUpdate");
 	    }
 	    $scope.$broadcast("providerUpdate");
 	  }, function (error) {});
@@ -1452,7 +1973,7 @@
 	// TODO: handle error.
 
 /***/ },
-/* 26 */
+/* 34 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1461,38 +1982,221 @@
 	  value: true
 	});
 
-	exports['default'] = ["$log", "$scope", "$mdSidenav", "$window", "$uibModal", "lcConfig", "itineraryFac", "productFac", function ($log, $scope, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac) {
+	exports['default'] = ["$log", "$state", "$scope", "$uibModal", "userFac", "lcConfig", "$window", "productFac", "formConfig", "providerFac", function ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac) {
+	  'ngInject';
+	  $log.log('init my account');
+	  if ($scope.$parent.unfinished) {
+	    $scope.unfinished = '(有未处理产品)';
+	  }
+
+	  $scope.contactList = [];
+
+	  userFac.getCurrentUserInfo().then(function (result) {
+	    $scope.user = result;
+	  }, function (error) {});
+
+	  providerFac.getMyProvider().then(function (results) {
+	    // There should be only one provider.
+	    if (results.length == 1) {
+	      $scope.provider = results[0];
+	      $scope.$broadcast('addressUpdate', { address: $scope.provider.address });
+	      providerFac.getContactList($scope.provider.objectId).then(function (results) {
+	        $scope.contactList = results;
+	      });
+	    }
+	  }, function (error) {});
+
+	  $scope.verify = function (index) {
+	    var product = $scope.products[index];
+	    productFac.verify(product.objectId).then(function (result) {}, function (error) {});
+	  };
+
+	  $scope.showUnverified = function () {
+	    $scope.unverified = true;
+	    var query = {};
+	    query.myResponsible = true;
+	    query.status = lcConfig.productStatus.UNVERIFIED;
+	    productFac.searchProduct(query).then(function (results) {
+	      $scope.products = results.products;
+	      for (var i = 0; i < $scope.products.length; i++) {
+	        $scope.products[i].responsible = results.responsible[i];
+	      }
+	    }, function (error) {});
+	  };
+
+	  $scope.showMyProducts = function () {
+	    $scope.unverified = false;
+	    // Construct the query.
+	    var query = {};
+	    query.self = true;
+	    productFac.searchProduct(query).then(function (results) {
+	      $scope.products = results.products;
+	      for (var i = 0; i < $scope.products.length; i++) {
+	        $scope.products[i].responsible = results.responsible[i];
+	      }
+	      $scope.products.forEach(function (product) {
+	        productFac.getLatestTrip(product);
+	      });
+	    }, function (error) {});
+	  };
+
+	  $scope.deleteContact = function (index) {
+	    var contact = $scope.contactList[index];
+	    $log.log(contact.objectId);
+	    userFac.deleteContactList(contact.objectId).then(function () {
+	      $scope.contactList.splice(index, 1);
+	    });
+	  };
+
+	  $scope.editContact = function (index) {
+	    var modalInstance = $uibModal.open({
+	      animation: true,
+	      templateUrl: 'app/common/directives/form/form.html',
+	      controller: 'formCtrl',
+	      resolve: {
+	        // Need to convert the titles into the following format.
+	        // {key: name, type: type}
+	        data: function data() {
+	          var title = '添加商户人信息';
+	          var contact = $scope.contactList[index];
+	          var items = formConfig.data['商户联系人'];
+	          // Add values to items.
+	          for (i in items) {
+	            var item = items[i];
+	            item.value = contact[item.name];
+	          }
+	          return { 'title': title, 'items': items };
+	        }
+	      }
+	    });
+	    modalInstance.result.then(function (items) {
+	      var contact = $scope.convertItemsToContact(items);
+	      contact.objectId = $scope.contactList[index].objectId;
+	      userFac.editContactList(contact).then(function () {
+	        $scope.contactList[index] = contact;
+	      });
+	    }, function () {});
+	  };
+
+	  $scope.convertItemsToContact = function (items) {
+	    var contact = {};
+	    items.forEach(function (item) {
+	      contact[item.name] = item.value;
+	    });
+	    contact.providerId = $scope.provider.objectId;
+	    return contact;
+	  };
+
+	  $scope.addContact = function () {
+	    userFac.addContact($scope.contactList, $scope.provider.objectId);
+	  };
+
+	  $scope.showMyProvider = function () {
+	    $scope.products = [];
+	    $scope.showProvider = true;
+	    $scope.showContactList = false;
+	  };
+
+	  $scope.showMyContactList = function () {
+	    $scope.products = [];
+	    $scope.showProvider = false;
+	    $scope.showContactList = true;
+	  };
+
+	  $scope.unPost = function (index) {
+	    var product = $scope.products[index];
+	    productFac.unPost(product.objectId).then(function (value) {});
+	  };
+
+	  $scope.verify = function (index) {
+	    var product = $scope.products[index];
+	    productFac.verify(product.objectId).then(function (value) {});
+	  };
+
+	  $scope.post = function (index) {
+	    var product = $scope.products[index];
+	    productFac.post(product.objectId).then(function (value) {});
+	  };
+
+	  // TODO.
+	  $scope.remind = function (index) {};
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$log", "$scope", "$mdSidenav", "$window", "dispatcherConfig", "$uibModal", "lcConfig", "itineraryFac", "productFac", "userFac", "menuConfig", function ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig) {
 	  'ngInject';
 	  // TODO: Currently, sidebar does not support dynamic md-component-id,
 	  // maybe create a cl for this bug.
+	  $scope.product = {};
 	  $scope.toggleLeft = buildToggler('provider-side-bar');
 	  $scope.pickedProviders = [];
 	  $scope.price = 0;
 	  $scope.addUrl = lcConfig.apiHost + '/api/product/add';
 	  // test
 	  $scope.isEditing = true;
+	  $scope.showItinerary = false;
+	  $scope.showNotice = false;
 	  $scope.itinerary = [];
-	  $scope.$on('addProvider', function () {
-	    $log.log($scope.pickedProviders);
-	  });
+	  $scope.dispatchers = dispatcherConfig.data;
+	  $scope.responses = [];
+	  $scope.hotels = menuConfig.data['酒店标准'];
+	  $scope.transports = menuConfig.data['交通方式'];
+	  $scope.types = menuConfig.data['类型'];
+	  $scope.areas = menuConfig.data['大区'];
+	  $scope.ueconfig = {
+	    toolbars: [['undo', 'redo', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify']]
+	  };
+
+	  $scope.getDuration = function () {
+	    if ($scope.product.duration) {
+	      return new Array($scope.product.duration);
+	    }
+	    return new Array(0);
+	  };
+
+	  $scope.submitProduct = function () {
+	    $log.log($scope.product);
+	    productFac.uploadProduct($scope.product).then(function (response) {
+	      $log.log('upload product success');
+	    }, function (error) {});
+	  };
+
 	  function buildToggler(navID) {
 	    return function () {
 	      $log.log('open sidebar');
 	      $scope.$broadcast('sidebarOpen');
-	      $mdSidenav(navID).toggle().then(function () {});
+	      $mdSidenav(navID).toggle().then(function () {
+	        $scope.providers = [];
+	      });
 	    };
 	  }
-	  $scope.updatePrice = function () {
-	    $scope.price = 0;
-	    for (var i = 0; i < $scope.pickedProviders.length; i++) {
-	      $scope.price = parseInt($scope.price) + parseInt($scope.pickedProviders[i].price);
+
+	  $scope.selectDispatcher = function (value) {
+	    if (value === undefined) {
+	      delete $scope.product.dispatcherName;
+	      delete $scope.product.dispatcherPhone;
+	    } else {
+	      $log.log($scope.product);
+	      var dispatch = value.originalObject;
+	      $log.log(dispatch);
+	      $scope.product.dispatcherName = dispatch.name;
+	      $scope.product.dispatcherPhone = dispatch.phone;
 	    }
 	  };
 
-	  $scope.submitProduct = function () {
-	    $scope.providerList = JSON.stringify($scope.pickedProviders);
-	    // stringify itineraray
-	    $scope.itineraryList = JSON.stringify($scope.itinerary);
+	  $scope.addContact = function () {
+	    userFac.addContact($scope.product.pickedProvider.contactList, $scope.product.pickedProvider.objectId);
 	  };
 
 	  $scope.addItinerary = function () {
@@ -1528,19 +2232,24 @@
 	    }, function () {});
 	  };
 
-	  function success() {}
+	  productFac.getInternalUsers().then(function (result) {
+	    $scope.responses = [];
+	    $log.log(result);
+	    for (var i = 0; i < result.length; i++) {
+	      $scope.responses.push(result[i]);
+	    }
+	  }, function (error) {});
 
-	  function fail() {}
-
-	  $scope.test = function () {
-	    itineraryFac.download(success, fail);
+	  $scope.pickContact = function (index) {
+	    $log.log($scope.product);
+	    //$scope.contact = $scope.pickedProvider.contactList[i];
 	  };
 	}];
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 27 */
+/* 36 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1564,7 +2273,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 28 */
+/* 37 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1573,25 +2282,62 @@
 	  value: true
 	});
 
-	exports['default'] = ["$scope", "$state", "$window", "lcConfig", "productFac", function ($scope, $state, $window, lcConfig, productFac) {
+	exports['default'] = ["$log", "$scope", "$state", "$window", "lcConfig", "productFac", function ($log, $scope, $state, $window, lcConfig, productFac) {
 	  'ngInject';
-	  // TODO: Currently, sidebar does not support dynamic md-component-id,
+	  // TODO: Use cache to store results?
 	  // maybe create a cl for this bug.
+
 	  $scope.products = [];
-	  productFac.getAllProducts(success, fail);
-
-	  function success(results) {
+	  /*productFac.getAllProducts(2).then(function(results) {
 	    $scope.products = results;
-	  }
+	  }, function(error) {
+	   });*/
 
-	  // handle error
-	  function fail() {}
+	  productFac.getProductsCount().then(function (result) {
+	    $scope.unposted = result.unposted;
+	    $scope.unverified = result.unverified;
+	    $scope.verified = result.verified;
+	  }, function (error) {});
+
+	  $scope.showVerified = function () {
+	    productFac.getAllProducts(3).then(function (results) {
+	      $scope.products = results.products;
+	      $scope.products.forEach(function (product, index) {
+	        product.responsible.contactname = results.contactname[index];
+	        productFac.getLatestTrip(product);
+	      });
+	    }, function (error) {});
+	  };
+
+	  $scope.showUnverified = function () {
+	    productFac.getAllProducts(2).then(function (results) {
+	      $scope.products = results.products;
+	      $scope.products.forEach(function (product, index) {
+	        product.responsible.contactname = results.contactname[index];
+	        productFac.getLatestTrip(product);
+	      });
+	    }, function (error) {});
+	  };
+
+	  $scope.showUnposted = function () {
+	    productFac.getAllProducts(1).then(function (results) {
+	      $scope.products = results.products;
+	      $scope.products.forEach(function (product, index) {
+	        product.responsible.contactname = results.contactname[index];
+	        productFac.getLatestTrip(product);
+	      });
+	    }, function (error) {});
+	  };
+
+	  $scope.updateProducts = function () {
+	    var date = getLatestTrip($scope.product);
+	  };
 	}];
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 29 */
+/* 38 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1600,18 +2346,22 @@
 	  value: true
 	});
 
-	exports["default"] = ["$log", "$scope", "$window", "$stateParams", "productFac", "providerFac", function ($log, $scope, $window, $stateParams, productFac, providerFac) {
+	exports["default"] = ["$log", "$scope", "$window", "$stateParams", "productFac", "providerFac", "multiChoiceConfig", function ($log, $scope, $window, $stateParams, productFac, providerFac, multiChoiceConfig) {
 	  "ngInject";
 	  // TODO: Currently, sidebar does not support dynamic md-component-id,
 	  // maybe create a cl for this bug.
 	  $scope.isEditing = false;
 	  productFac.getProductDetail($stateParams.productId).then(function (result) {
-	    $scope.product = result;
-	    $scope.pickedProviders = JSON.parse($scope.product.providers);
-	    $scope.updateProviders();
-	    $scope.$broadcast("valueUpdate");
-	    $scope.price = $scope.product.costprice;
-	    $scope.itinerary = JSON.parse($scope.product.itinerary);
+	    $log.log(result.product);
+	    $scope.product = result.product;
+	    $scope.product.pickedProvider = result.provider;
+	    // Convert prefix.
+	    $scope.product.responsible = result.responsible;
+	    $scope.product.contact = result.contact;
+	    $scope.product.platformcontact = result.platformcontact;
+	    $scope.product.prefixArray = productFac.convertProductPrefix(result.product.prefix);
+	    $scope.$broadcast("calendarUpdate", { price: $scope.product.price });
+	    $scope.$broadcast("addressUpdate", { address: $scope.product.start });
 	  }, function (error) {});
 
 	  $scope.updateProviders = function () {
@@ -1635,7 +2385,7 @@
 	// TODO: handle failure.
 
 /***/ },
-/* 30 */
+/* 39 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1676,7 +2426,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 31 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1737,7 +2487,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 32 */
+/* 41 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1753,59 +2503,146 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 33 */
+/* 42 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	exports['default'] = ["$scope", "$state", "$log", "$mdSidenav", "$window", "$uibModal", "lcConfig", "itineraryFac", "productFac", function ($scope, $state, $log, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac) {
-	  'ngInject';
+	exports["default"] = ["$scope", "$state", "$log", "$mdSidenav", "$window", "$uibModal", "lcConfig", "itineraryFac", "productFac", "menuConfig", "providerFac", function ($scope, $state, $log, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac, menuConfig, providerFac) {
+	  "ngInject";
 
 	  $scope.openSearchBox = function () {};
 
+	  $scope.selectedTags = {};
+
+	  $scope.index = {
+	    "酒店标准": -1,
+	    "交通方式": -1,
+	    "类型": -1,
+	    "供应商": -1,
+	    "行程天数": -1
+	  };
+
+	  $scope.tags = {
+	    "酒店标准": menuConfig.data["酒店标准"],
+	    "交通方式": menuConfig.data["交通方式"],
+	    "类型": menuConfig.data["类型"],
+	    "供应商": [],
+	    "行程天数": [1, 4, 5, 6, 7, 8, 9, 10]
+	  };
+
 	  $scope.showItinerary = function (id) {
-	    $state.go('sale.show-itinerary', { productId: id });
+	    $state.go("sale.show-itinerary", { productId: id });
 	  };
 
-	  $scope.openFilter = function () {
-	    var modalInstance = $uibModal.open({
-	      animation: true,
-	      templateUrl: 'app/common/sale/search/directives/filter/filter.html',
-	      controller: 'filterCtrl'
-	    });
-
-	    modalInstance.result.then(function (results) {
-	      $scope.products = results;
-	    }, function () {});
+	  // Parse the search query.
+	  $scope.parseDayQuery = function (query, day) {
+	    var length = $scope.tags["行程天数"].length;
+	    if (day == $scope.tags["行程天数"][length - 1]) {
+	      query.minDay = day;
+	      query.maxDay = Number.MAX_SAFE_INTEGER;
+	    } else {
+	      query.minDay = day;
+	      query.maxDay = day;
+	    }
 	  };
 
-	  $scope.signin = function (index) {
-	    var _product = $scope.products[index];
-	    var modalInstance = $uibModal.open({
-	      animation: true,
-	      templateUrl: 'app/common/sale/search/directives/signin/signin.html',
-	      controller: 'signinCtrl',
-	      resolve: {
-	        product: function product() {
-	          return _product;
-	        }
+	  $scope.search = function () {
+	    // Construct the query based on selected tag.
+	    $log.log($scope.start);
+	    var query = {};
+	    for (var key in $scope.selectedTags) {
+	      var value = $scope.selectedTags[key];
+	      var name = getKeyName(key);
+	      if (name == "stopDay") {
+	        $scope.parseDayQuery(query, value);
+	      } else if (name == "provider") {
+	        query[name] = $scope.providers[$scope.index[key]].objectId;
+	      } else {
+	        query[name] = value;
+	      }
+	    }
+
+	    query.status = 3;
+	    query.searchQuery = $scope.destination;
+
+	    if ($scope.showAddress && $scope.start) {
+	      query.start = $scope.start;
+	    }
+
+	    if ($scope.showDate && $scope.startDate) {
+	      query.startDate = $scope.startDate;
+	    }
+
+	    if ($scope.showDate && $scope.endDate) {
+	      query.endDate = $scope.endDate;
+	    }
+
+	    $log.log(query);
+
+	    productFac.searchProduct(query).then(function (results) {
+	      $scope.products = results.products;
+	      $scope.products.map(function (product) {
+	        product.prefixArray = productFac.convertProductPrefix(product.prefix);
+	        productFac.getLatestTrip(product);
+	      });
+	      for (var i = 0; i < $scope.products.length; i++) {
+	        $scope.products[i].provider = results.providers[i];
 	      }
 	    });
-
-	    modalInstance.result.then(function (results) {}, function () {});
 	  };
+
+	  providerFac.search({}, ["companyname"]).then(function (providers) {
+	    $scope.providers = providers;
+	    $scope.tags["供应商"] = providers.map(function (provider) {
+	      return provider.companyname;
+	    });
+	  });
+
+	  $scope.search();
+	  $scope.pick = function (key, index) {
+	    $scope.index[key] = index;
+	    if (index == -1) {
+	      delete $scope.selectedTags[key];
+	    } else {
+	      $scope.selectedTags[key] = $scope.tags[key][index];
+	    }
+	  };
+
+	  $scope.removeTag = function (key) {
+	    // Need to update index.
+	    delete $scope.selectedTags[key];
+	    $scope.index[key] = -1;
+	  };
+
+	  function getKeyName(key) {
+	    switch (key) {
+	      case "酒店标准":
+	        return "hotelStandard";
+	      case "交通方式":
+	        return "transportStandard";
+	      case "类型":
+	        return "type";
+	      case "行程天数":
+	        return "stopDay";
+	      case "供应商":
+	        return "provider";
+	      default:
+	        return "";
+	    }
+	  }
 	}];
 
-	module.exports = exports['default'];
+	module.exports = exports["default"];
 
 	// Show all cities.
 
 /***/ },
-/* 34 */
+/* 43 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1957,7 +2794,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 35 */
+/* 44 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1997,7 +2834,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 36 */
+/* 45 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2056,7 +2893,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 37 */
+/* 46 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2114,7 +2951,7 @@
 	// TODO: handle error.
 
 /***/ },
-/* 38 */
+/* 47 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2156,7 +2993,326 @@
 	// TODO: handle error.
 
 /***/ },
-/* 39 */
+/* 48 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by chaopan on 7/3/16.
+	 */
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = function ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce) {
+	  $scope.test = "123123";
+	  $scope.$broadcast("test");
+	  $scope.priceMap = {};
+	  productFac.getProductDetail($stateParams.productId).then(function (result) {
+	    $scope.product = result.product;
+	    $scope.product.provider = result.provider;
+	    productFac.getLatestTrip($scope.product);
+	    $log.log($scope.product);
+	    // Set the current Date.
+	    $scope.$broadcast("updateMaterialCalendar");
+	    $scope.$broadcast("updateTemplate", { params: $scope.product });
+	    //var date = new Date();
+	    //$scope.updateMonthContent({year: date.getFullYear(), month: date.getMonth()});
+	  }, function (error) {});
+
+	  $scope.selectedDate = null;
+	  $scope.firstDayOfWeek = 0;
+	  $scope.setDirection = function (direction) {
+	    $scope.direction = direction;
+	  };
+
+	  $scope.getItinerary = function (index) {
+	    return $sce.trustAsHtml($scope.product.itinerary[index].detail);
+	  };
+
+	  $scope.updateMonthContent = function (data) {
+	    var price = $scope.product.price;
+	    if (price[data.year]) {
+	      var month = price[data.year][data.month];
+	      for (i = 0; i < month.length; i++) {
+	        var date = new Date(data.year, data.month, i + 1);
+	        //$log.log(date);
+	        $scope.setDayContent(date);
+	      }
+	    }
+	  };
+
+	  $scope.prevMonth = function (data) {
+	    $scope.msg = "You clicked (prev) month " + data.month + ", " + data.year;
+	  };
+	  $scope.nextMonth = function (data) {
+	    $scope.msg = "You clicked (next) month " + data.month + ", " + data.year;
+	  };
+
+	  $scope.dayClick = function (date) {
+	    $log.log(date);
+	    if ($scope.priceMap[date]) {
+	      $scope.openReserveForm();
+	    }
+	    return;
+	  };
+
+	  $scope.openReserveForm = function () {
+	    // Show the model with the result.
+	    var modalInstance = $uibModal.open({
+	      animation: true,
+	      templateUrl: "app/common/sale/search/directives/reserve/reserve.html",
+	      controller: "reserveFormCtrl",
+	      resolve: {
+	        results: function results() {
+	          return $scope.priceMap;
+	        }
+	      }
+	    });
+	    modalInstance.result.then(function (reserve) {
+	      $log.log();
+	      $state.go("sale.add-order", { productId: $scope.product.objectId, product: $scope.product, reserve: reserve });
+	    }, function () {});
+	  };
+
+	  $scope.setDayContent = function (date) {
+	    // You would inject any HTML you wanted for
+	    // that particular date here.
+	    var year = date.getFullYear();
+	    var month = date.getMonth();
+	    var day = date.getDate();
+	    // Check if date in price map.
+	    var price = $scope.containsContent(date);
+	    if (price) {
+	      if (price.adultCompanySalePrice) {
+	        var adultCompanySalePrice = price.adultCompanySalePrice;
+	        $scope.priceMap[date] = price;
+	        return "<p class=\"cal-price\">" + "￥" + adultCompanySalePrice + "</p>";
+	      }
+	    }
+
+	    return "<p></p>";
+	  };
+
+	  $scope.containsContent = function (date) {
+	    var year = date.getFullYear();
+	    var month = date.getMonth();
+	    var day = date.getDate();
+
+	    if ($scope.product) {
+	      $log.log(date);
+	      var price = $scope.product.price;
+	      return price[year][month][day];
+	    }
+	    return null;
+	  };
+	};
+
+	module.exports = exports["default"];
+
+	// TODO: handle failure.
+
+/***/ },
+/* 49 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = ["$scope", "$log", "$window", "$uibModalInstance", "results", function ($scope, $log, $window, $uibModalInstance, results) {
+	  "ngInject";
+
+	  // This is for previous results
+	  $scope.results = results;
+	  $log.log(results);
+	  // Init.
+	  var keys = Object.keys(results);
+	  keys.sort();
+	  $scope.priceArray = keys.map(function (key) {
+	    var object = {};
+	    var date = new Date(key);
+	    var dateString = date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日";
+	    object.date = dateString;
+	    object.adultCompanySalePrice = results[key].adultCompanySalePrice;
+	    object.childCompanySalePrice = results[key].childCompanySalePrice;
+	    return object;
+	  });
+
+	  $log.log($scope.priceArray);
+
+	  $scope.cancel = function () {
+	    $uibModalInstance.dismiss("cancel");
+	  };
+
+	  $scope.close = function () {
+	    var result = {};
+	    for (var i = 0; i < $scope.priceArray.length; i++) {
+	      if ($scope.priceArray[i].date == $scope.reserve.date) {
+	        result = $scope.priceArray[i];
+	      }
+	    }
+	    $scope.reserve.adultCompanySalePrice = result.adultCompanySalePrice;
+	    $scope.reserve.childCompanySalePrice = result.childCompanySalePrice;
+	    $uibModalInstance.close($scope.reserve);
+	  };
+	}];
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = ["SweetAlert", "$log", "$scope", "$state", "$window", "lcConfig", "productFac", "$stateParams", "orderFac", function (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac, $stateParams, orderFac) {
+	  "ngInject";
+
+	  // TODO: Use url instead of state to manage this.
+	  $scope.licenseList = ["护照", "身份证"];
+	  $scope.sexList = ["男", "女"];
+	  $scope.types = ["成人", "小孩"];
+	  $scope.order = {};
+	  $scope.reserve = $state.params.reserve;
+	  $scope.product = $state.params.product;
+	  var productId = $state.params.productId;
+	  $scope.customers = [];
+	  $scope.order = $scope.reserve;
+	  var length = 0;
+	  if ($scope.order) {
+	    length = $scope.order.adult + $scope.order.child;
+	  }
+	  for (var i = 0; i < length; i++) {
+	    $scope.customers.push({ "index": i });
+	  }
+
+	  // TODO: Need to pick one.
+	  if (!$scope.product) {
+	    productFac.getProductDetail(productId).then(function (result) {
+	      $scope.product = result.product;
+	      $scope.product.provider = result.provider;
+	    });
+	  }
+
+	  $scope.$watch("order.adult", function (newValue, oldValue) {
+	    $scope.updateTotalPrice();
+	    if (oldValue < newValue) {
+	      $scope.customers.push({});
+	    } else if (oldValue > newValue) {
+	      $scope.customers.pop();
+	    }
+	  });
+
+	  $scope.$watch("order.child", function (newValue, oldValue) {
+	    $scope.updateTotalPrice();
+	    if (oldValue < newValue) {
+	      $scope.customers.push({});
+	    } else if (oldValue > newValue) {
+	      $scope.customers.pop();
+	    }
+	  });
+
+	  $scope.updateTotalPrice = function () {
+	    if ($scope.order) {
+	      $scope.order.totalPrice = $scope.order.adult * $scope.order.adultCompanySalePrice + $scope.order.child * $scope.order.childCompanySalePrice;
+	      $log.log($scope.order);
+	    } else {
+	      $scope.order = {};
+	      $scope.order.totalPrice = 0;
+	    }
+	  };
+
+	  $scope.submitOrder = function () {
+	    $scope.order.productId = $scope.product.objectId;
+	    $log.log($scope.order.productId);
+	    orderFac.submitOrder($scope.order, $scope.reserve).then(function (result) {
+	      $log.log("success");
+	      SweetAlert.swal("订单成功", "订单编号: " + result.objectId + " 请及时联系平台负责人确认订单情况.", "success");
+	    });
+	  };
+	}];
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 51 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["SweetAlert", "$log", "$scope", "$state", "$window", "orderFac", "productFac", function (SweetAlert, $log, $scope, $state, $window, orderFac, productFac) {
+	  'ngInject';
+
+	  $scope.allOrder = function () {
+	    orderFac.getAllOrder().then(function (results) {
+	      $log.log(results);
+	      $scope.orders = results.order;
+	      for (var i = 0; i < $scope.orders.length; i++) {
+	        var product = results.product[i];
+	        product.prefixArray = productFac.convertProductPrefix(product.prefix);
+	        $scope.orders[i].product = product;
+	      }
+	    });
+	  };
+
+	  $scope.unpaidOrder = function () {
+	    orderFac.getUnpaidOrder().then(function (results) {
+	      $scope.orders = results.order;
+	      for (var i = 0; i < $scope.orders.length; i++) {
+	        var product = results.product[i];
+	        product.prefixArray = productFac.convertProductPrefix(product.prefix);
+	        $scope.orders[i].product = product;
+	      }
+	    });
+	  };
+
+	  $scope.paidOrder = function () {
+	    orderFac.getPaidOrder().then(function (results) {
+	      $scope.orders = results.order;
+	      for (var i = 0; i < $scope.orders.length; i++) {
+	        var product = results.product[i];
+	        product.prefixArray = productFac.convertProductPrefix(product.prefix);
+	        $scope.orders[i].product = product;
+	      }
+	    });
+	  };
+
+	  $scope.finishedOrder = function () {
+	    orderFac.getFinishedOrder().then(function (results) {
+	      $scope.orders = results.order;
+	      for (var i = 0; i < $scope.orders.length; i++) {
+	        var product = results.product[i];
+	        product.prefixArray = productFac.convertProductPrefix(product.prefix);
+	        $scope.orders[i].product = product;
+	      }
+	    });
+	  };
+
+	  $scope.showDetail = function () {};
+
+	  $scope.showConfirmation = function () {};
+
+	  $scope.printReceipt = function () {};
+
+	  $scope.cancelOrder = function () {};
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 52 */
 /***/ function(module, exports) {
 
 	// A service that manages user authentications including login, cookie
@@ -2218,7 +3374,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 40 */
+/* 53 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2245,7 +3401,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 41 */
+/* 54 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2265,7 +3421,10 @@
 	  service.util = {};
 	  service.util.getReturnPolicy = getReturnPolicy;
 	  service.uploadProviderFiles = uploadProviderFiles;
+	  service.upload = upload;
 	  service.files = {};
+	  service.getContactList = getContactList;
+	  service.getMyProvider = getMyProvider;
 	  return service;
 
 	  /**
@@ -2313,31 +3472,46 @@
 	  }
 
 	  /**
-	  * @param: {filename: file} a dictionary of files of which key is the filename
-	  * and the value is the file content. 
+	   * @param file. The file you want to upload.
+	   * @param filename, the filename that you want to assign this file to.
+	   *
 	  * */
-	  function uploadProviderFiles() {
-	    $log.log('providerFac.uploadProviderFiles');
-	    $log.log(service.files);
+	  function uploadProviderFiles(file, filename) {
 	    return Upload.upload({
 	      url: '/api/provider/uploadfile',
-	      files: service.files
+	      data: { file: file, filename: filename }
 	    });
+	  }
+
+	  function upload(provider) {
+	    // First upload the file.
+	    $log.log('provider');
+	    $log.log(provider);
+	    return $http.post('/api/provider/add', { provider: provider });
 	  }
 
 	  /**
 	  * @param: query. A json object of query that contains keyword of the provider.
-	  * 
+	   * @params: include. A list of included attributions. If empty, then all.
+	  *
 	  * */
-	  function search(query) {
-	    return $http.post('/api/provider/search', { query: JSON.stringify(query) });
+	  function search(query, select) {
+	    return $http.post('/api/provider/search', { query: query, select: select });
+	  }
+
+	  function getMyProvider() {
+	    return $http.post('/api/provider/search', { query: { self: true } });
+	  }
+
+	  function getContactList(providerId) {
+	    return $http.post('/api/user/getContactList', { providerId: providerId });
 	  }
 	}];
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 42 */
+/* 55 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2346,7 +3520,7 @@
 	  value: true
 	});
 
-	exports['default'] = ["$rootScope", "$http", "$state", "lcConfig", "$window", "md5", "Upload", function ($rootScope, $http, $state, lcConfig, $window, md5, Upload) {
+	exports['default'] = ["$log", "$rootScope", "$http", "$state", "lcConfig", "$window", "md5", "Upload", "multiChoiceConfig", function ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload, multiChoiceConfig) {
 	  'ngInject';
 
 	  var service = {};
@@ -2356,7 +3530,24 @@
 	  service.getProductDetail = getProductDetail;
 	  service.searchProduct = searchProduct;
 	  service.signinUser = signinUser;
+	  service.uploadProduct = uploadProduct;
+	  service.getInternalUsers = getInternalUsers;
+	  service.getUnVerifiedProducts = getUnVerifiedProducts;
+	  service.hasUnfinished = hasUnfinished;
+	  service.verify = verify;
+	  service.post = post;
+	  service.unPost = unPost;
+	  service.getProductsCount = getProductsCount;
+	  service.getLatestTrip = getLatestTrip;
+	  service.convertProductPrefix = convertProductPrefix;
 	  return service;
+
+	  function uploadProduct(product) {
+	    // Handle all the serilize things here.
+	    // Save an additional field to accerlate search speed.
+	    $log.log(product);
+	    return $http.post('/api/product/add', { product: product });
+	  }
 
 	  function addProvider(provider) {
 	    service.providers.push(provider);
@@ -2371,23 +3562,115 @@
 	  }
 
 	  // TODO: add functionalities like partial sets.
-	  function getAllProducts(successCallback, failCallback) {
-	    $http.get('/api/product/getAll').then(function success(response) {
-	      successCallback(response);
-	    }, function error(response) {
-	      failCallback(response);
-	    });
+	  function getAllProducts(status) {
+	    // TODO: add status check.
+	    if (status !== undefined) {
+	      return $http.post('/api/product/getAll', { status: status });
+	    }
+	    return $http.post('/api/product/getAll');
 	  }
 
 	  function getProductDetail(objectId) {
 	    return $http.post('/api/product/get', { id: objectId });
 	  }
+
+	  // User a const value maybe.
+	  function getInternalUsers() {
+	    $log.log('get internal users');
+	    return $http.post('/api/user/get', { query: { level: 0 } });
+	  }
+
+	  function getUnVerifiedProducts() {
+	    return $http.post('/api/product/getUnverified');
+	  }
+
+	  function hasUnfinished() {
+	    return $http.post('/api/product/hasUnfinished');
+	  }
+
+	  function verify(objectId) {
+	    return $http.post('/api/product/verify', { objectId: objectId, status: 3 });
+	  }
+
+	  function unPost(objectId) {
+	    return $http.post('/api/product/verify', { objectId: objectId, status: 1 });
+	  }
+
+	  function post(objectId) {
+	    return $http.post('/api/product/verify', { objectId: objectId, status: 2 });
+	  }
+
+	  function getProductsCount() {
+	    return $http.post('/api/product/getProductsCount', { all: true });
+	  }
+
+	  // Get products related with the user.
+	  function getMyProducts(status) {
+	    // TODO: add status check.
+	    if (status !== undefined) {
+	      return $http.post('/api/product/getMy', { status: status });
+	    }
+	    return $http.post('/api/product/getMy');
+	  }
+
+	  function getLatestTrip(product) {
+	    $log.log('getLatestTrip');
+	    var price = product.price;
+	    var date = new Date();
+	    var year = date.getFullYear();
+	    var month = date.getMonth();
+	    var day = date.getDate();
+	    for (var i = 0; i < Object.keys(price).length; i++) {
+	      var event = findNextInOneYear(price, year + i, month, day);
+	      if (event) {
+	        product.latestDate = event.date;
+	        product.latestAdultCompanySalePrice = event.event.adultCompanySalePrice;
+	        product.latestAdultCompanyCompetitorPrice = event.event.adultCompanyCompetitorPrice;
+	        product.latestAdultCompanyPrice = event.event.adultCompanyPrice;
+	        product.latestChildCompanySalePrice = event.event.childCompanySalePrice;
+	      } else {
+	        month = 0;
+	        day = 0;
+	      }
+	    }
+	  }
+
+	  function findNextInOneYear(price, startYear, startMonth, startDay) {
+	    var events = price[startYear];
+	    if (events === undefined) {
+	      return null;
+	    }
+	    for (var i = startMonth; i < 12; i++) {
+	      var monthEvents = events[i];
+	      for (var j = startDay; j <= monthEvents.length; j++) {
+	        var event = monthEvents[j - 1];
+	        if (Object.keys(event).length == 0) {
+	          continue;
+	        }
+	        return { event: event, date: startYear + '年' + (startMonth + 1) + '月' + j + '日' };
+	      }
+	      startDay = 1;
+	    }
+	    return null;
+	  }
+
+	  function convertProductPrefix(prefixArray) {
+	    var prefixData = multiChoiceConfig.data['线路前缀'];
+	    return prefixArray.map(function (name) {
+	      for (var i = 0; i < prefixData.length; i++) {
+	        var prefix = prefixData[i];
+	        if (prefix.name === name) {
+	          return prefix.value;
+	        }
+	      }
+	    });
+	  };
 	}];
 
 	module.exports = exports['default'];
 
 /***/ },
-/* 43 */
+/* 56 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2415,7 +3698,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 44 */
+/* 57 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2438,35 +3721,381 @@
 
 	module.exports = exports['default'];
 
+/***/ },
+/* 58 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$log", "$rootScope", "$http", "$state", "lcConfig", "$window", "md5", "Upload", "$uibModal", "formConfig", function ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload, $uibModal, formConfig) {
+	  'ngInject';
+	  var service = {};
+	  service.getCurrentUserInfo = getCurrentUserInfo;
+	  service.addContactList = addContactList;
+	  service.editContactList = editContactList;
+	  service.deleteContactList = deleteContactList;
+	  service.addContact = addContact;
+	  return service;
+
+	  function getCurrentUserInfo() {
+	    return $http.post('/api/user/getCurrentUserInfo');
+	  }
+
+	  function addContactList(contact) {
+	    return $http.post('/api/user/addContactList', { contact: contact });
+	  }
+
+	  function deleteContactList(contactId) {
+	    return $http.post('/api/user/deleteContactList', { contactId: contactId });
+	  }
+
+	  function editContactList(contact) {
+	    return $http.post('/api/user/editContactList', { contact: contact });
+	  }
+
+	  function addContact(contactList, providerId) {
+	    var modalInstance = $uibModal.open({
+	      animation: true,
+	      templateUrl: 'app/common/directives/form/form.html',
+	      controller: 'formCtrl',
+	      resolve: {
+	        // Need to convert the titles into the following format.
+	        // {key: name, type: type}
+	        data: function data() {
+	          var title = '添加商户人信息';
+	          return { 'title': title, 'items': formConfig.data['商户联系人'] };
+	        }
+	      }
+	    });
+
+	    modalInstance.result.then(function (items) {
+	      var contact = convertItemsToContact(items, providerId);
+	      addContactList(contact).then(function () {
+	        contactList.push(contact);
+	      });
+	    }, function () {});
+	  };
+
+	  function convertItemsToContact(items, providerId) {
+	    var contact = {};
+	    items.forEach(function (item) {
+	      contact[item.name] = item.value;
+	    });
+	    contact.providerId = providerId;
+	    return contact;
+	  };
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 59 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	exports['default'] = ["$log", "$rootScope", "$http", "$state", "lcConfig", "$window", "md5", "Upload", "$uibModal", "formConfig", function ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload, $uibModal, formConfig) {
+	  'ngInject';
+	  var service = {};
+	  service.submitOrder = submitOrder;
+	  service.getAllOrder = getAllOrder;
+	  service.getUnpaidOrder = getUnpaidOrder;
+	  service.getPaidOrder = getPaidOrder;
+	  service.getFinishedOrder = getFinishedOrder;
+	  return service;
+
+	  function submitOrder(order, customers) {
+	    $log.log('submitOrder');
+	    return $http.post('/api/order/add', { order: order, customers: customers });
+	  }
+
+	  function getAllOrder() {
+	    return $http.post('/api/order/getAll');
+	  }
+
+	  function getUnpaidOrder() {
+	    return $http.post('/api/order/getAll', { status: lcConfig.orderStatus.UNPAID });
+	  }
+
+	  function getPaidOrder() {
+	    return $http.post('/api/order/getAll', { status: lcConfig.orderStatus.PAID });
+	  }
+
+	  function getFinishedOrder() {
+	    return $http.post('/api/order/getAll', { status: lcConfig.orderStatus.FINISHED });
+	  }
+	}];
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 60 */
+/***/ function(module, exports) {
+
+	// 用来往数据库添加虚假数据.
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = ["$log", "$rootScope", "$http", "$state", "formConfig", "lcConfig", "$window", "md5", "Upload", "multiChoiceConfig", "productFac", "calendarConfig", "menuConfig", function ($log, $rootScope, $http, $state, formConfig, lcConfig, $window, md5, Upload, multiChoiceConfig, productFac, calendarConfig, menuConfig) {
+	  "ngInject";
+
+	  var service = {};
+	  service.createProvider = createProvider;
+	  service.randomNumber = randomNumber;
+	  service.randomReturnPolicy = randomReturnPolicy;
+	  service.randomChoice = randomChoice;
+	  service.randomAddress = randomAddress;
+	  service.randomString = randomString;
+	  service.createProduct = createProduct;
+	  return service;
+
+	  function createProvider() {
+	    var provider = {};
+	    provider.username = randomString("用户");
+	    provider.password = "12345";
+	    provider.contactname = randomString("联系人姓名");
+	    provider.cellphone = randomString("手机号");
+	    provider.homephone = randomString("座机号");
+	    provider.qqnumber = randomString("QQ号码");
+	    provider.wechat = randomString("微信号");
+	    provider.address = randomAddress();
+	    provider.nickname = randomString("简称");
+	    provider.companyname = randomString("公司名称");
+	    provider.destination = randomChoice("主营目的地");
+	    provider.start = randomChoice("主营口岸");
+	    provider.customerResource = randomString("收客情况");
+	    provider.flightResource = randomString("航班资源");
+	    provider.productResource = randomString("产品优势");
+	    provider.returnPolicy = randomReturnPolicy();
+	    $log.log(provider);
+	    return provider;
+	  }
+
+	  function createProduct() {
+	    var product = {};
+	    product.productName = randomString("线路名称");
+	    product.fullName = randomString("供应商产品名称");
+	    product.start = randomAddress();
+	    product.type = randomMenu("类型");
+	    product.price = randomCalendar("团期报价");
+	    product.hotelStandard = randomMenu("酒店标准");
+	    product.transportStandard = randomMenu("交通方式");
+	    product.area = randomMenu("大区");
+	    product.stopDay = randomNumber() % 10;
+	    product.prefix = randomChoice("线路前缀");
+	    product.productManager = randomString("产品负责人");
+	    product.pickedProviderId = "576781716be3ff006a36a295";
+	    product.contactId = "576781721532bc0060317117";
+	    // product.contact = randomForm("商户联系人");
+	    // Do this at the end.
+	    product.responsible = randomString();
+	    $log.log(product);
+	    return product;
+	  }
+
+	  function randomContact(key) {
+	    var data = formConfig.data[key];
+	    var object = {};
+	    for (var i = 0; i < data.length; i++) {
+	      var item = data[i];
+	      switch (item.type) {
+	        case "text":
+	          object[item.name] = randomString(item.key);
+	          break;
+	        case "number":
+	          object[item.name] = randomNumber();
+	          break;
+	      }
+	    }
+	    return object;
+	  }
+
+	  function randomMenu(key) {
+	    var data = menuConfig.data[key];
+	    var index = randomNumber() % data.length;
+	    return data[index];
+	  }
+
+	  function createObject(data) {
+	    var object = {};
+	    for (var i = 0; i < data.length; i++) {
+	      switch (data[i].type) {
+	        case "number":
+	          object[data[i].name] = randomNumber();
+	          break;
+	        case "date":
+	          object[data[i].name] = randomDate();
+	      }
+	    }
+	    return object;
+	  }
+
+	  function createCalendar(data) {
+	    var object = {};
+	    for (var i = 0; i < data.length; i++) {
+	      switch (data[i].type) {
+	        case "number":
+	          object[data[i].name] = randomNumber();
+	          break;
+	        case "date":
+	          object[data[i].name] = randomDate();
+	      }
+	    }
+	    object[reservedPeopleNumber] = 0;
+	    object[paidPeopleNumber] = 0;
+	    object[restPeopleNumbner] = object[totalPeople];
+	    return object;
+	  }
+
+	  function randomDate() {
+	    var date = "2016年" + (randomNumber() % 12 + 1) + "月" + (randomNumber() % 28 + 1) + "日";
+	    return date;
+	  }
+
+	  function shouldShow() {
+	    return randomNumber() % 2 === 0;
+	  }
+
+	  function randomCalendar(key) {
+	    var data = calendarConfig.data[key];
+	    var calendar = {};
+	    calendar[2016] = [];
+	    // Create a random calendar.
+	    // We only create for 2016.
+	    for (var i = 0; i < 12; i++) {
+	      var month = [];
+	      for (var j = 0; j < 28; j++) {
+	        if (shouldShow()) {
+	          month.push(createObject(data));
+	        } else {
+	          month.push({});
+	        }
+	      }
+	      calendar[2016].push(month);
+	    }
+	    return calendar;
+	  }
+
+	  // A random number from 1 to 10000.
+	  function randomNumber() {
+	    return Math.floor(Math.random() * 10000 + 1);
+	  }
+
+	  function randomReturnPolicy() {
+	    var returnPolicy = {};
+	    returnPolicy.returnTotalPeople = randomNumber();
+	    returnPolicy.returnMoneyEachPeople = randomNumber();
+	    returnPolicy.returnTotalRevenue = randomNumber();
+	    returnPolicy.returnMoneyRevenue = randomNumber();
+	    return returnPolicy;
+	  }
+
+	  function randomChoice(key) {
+	    var data = multiChoiceConfig.data[key];
+	    var indexSet = new Set();
+	    for (var i = 0; i < data.length; i++) {
+	      indexSet.add(randomNumber() % data.length);
+	    }
+
+	    var dest = {};
+	    indexSet.forEach(function (index) {
+	      dest[data[index].name] = true;
+	    });
+	    return dest;
+	  }
+
+	  function randomAddress() {
+	    var address = {};
+	    address.province = "省" + randomNumber();
+	    address.city = "市" + randomNumber();
+	    address.county = "县" + randomNumber();
+	    address.detail = randomString("地址");
+	    return address;
+	  }
+
+	  function randomString(baseString) {
+	    return baseString + randomNumber();
+	  }
+	}];
+
+	module.exports = exports["default"];
+
+/***/ },
+/* 61 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports["default"] = ["$log", "$scope", "$document", "lcConfig", "fakeDataFac", "providerFac", "productFac", function ($log, $scope, $document, lcConfig, fakeDataFac, providerFac, productFac) {
+	  "ngInject";
+	  var provider = fakeDataFac.createProvider();
+	  var product = fakeDataFac.createProduct();
+	  product.responsible = "575ce1506be3ff006a41fb2e";
+	  product.platformcontact = "575ce1506be3ff006a41fb2e";
+	  //product.contact = "admin";
+	  productFac.uploadProduct(product).then(function () {
+	    $log.log("success");
+	  });
+	  //providerFac.upload(provider).then(function() {
+
+	  // });
+	}];
+
+	module.exports = exports["default"];
+
 /***/ }
 /******/ ]);
-angular.module("webProject").run(["$templateCache", function($templateCache) {$templateCache.put("app/auth/home/home.html","<nav class=\"navbar navbar-inverse\" role=\"navigation\"><div class=\"navbar-header\"><a class=\"navbar-brand\" ui-sref=\"#\">中途港产品发布系统</a></div><ul class=\"nav navbar-nav\"><li><a ui-sref=\".add-provider\">添加供应商</a></li><li><a ui-sref=\".add-product\">发布产品</a></li><li><a ui-sref=\".show-products\">产品管理</a></li><li><a ui-sref=\".show-providers\">供应商管理</a></li></ul></nav><div ui-view=\"\"></div>");
+angular.module("webProject").run(["$templateCache", function($templateCache) {$templateCache.put("app/test/test.html","");
+$templateCache.put("app/auth/home/home.html","<nav class=\"navbar navbar-inverse\" role=\"navigation\"><div class=\"navbar-header\"><a class=\"navbar-brand\" ui-sref=\"#\">中途港产品发布系统</a></div><ul class=\"nav navbar-nav\"><li><a ui-sref=\".add-provider\">添加供应商</a></li><li><a ui-sref=\".add-product\">发布产品</a></li><li><a ui-sref=\".show-products\">产品管理</a></li><li ng-class=\"{\'unfinished\':unfinished}\"><span class=\"dot\"></span> <a ui-sref=\".my-account\">我的账号</a></li></ul></nav><div ui-view=\"\"></div>");
 $templateCache.put("app/auth/home/login.html","<div style=\"text-align: center;\"><div style=\"width: 400px; display: inline-block;\"><h2 class=\"form-signin-heading\">请登录</h2><label for=\"inputEmail\" class=\"sr-only\">用户名</label> <input ng-model=\"username\" type=\"text\" class=\"form-control\" placeholder=\"用户名\"> <label for=\"inputPassword\" class=\"sr-only\">密码</label> <input ng-model=\"password\" type=\"password\" class=\"form-control\" placeholder=\"密码\"> <button class=\"btn btn-lg btn-primary btn-block\" type=\"button\" ng-click=\"login();\">登陆</button> <button class=\"btn btn-lg btn-primary btn-block\" type=\"button\" ng-click=\"register();\">register</button> <button class=\"btn btn-lg btn-primary btn-block\" type=\"button\" ng-click=\"logout();\">logout</button></div></div>");
+$templateCache.put("app/common/account/account.html","<div class=\"section\"><md-content><md-tabs md-dynamic-height=\"\" md-border-bottom=\"\"><md-tab label=\"我的账号\"><table><tr><td>用户名</td><td>{{ user.username }}</td></tr><tr><td>密码</td><td><md-button class=\"md-raised md-primary\">更改密码</md-button></td></tr></table></md-tab><md-tab class=\"dot\" label=\"我的产品\"><section layout=\"row\" flex=\"\"><md-sidenav class=\"md-sidenav-left shadow\" md-component-id=\"showProduct\" md-is-locked-open=\"true\" md-disable-backdrop=\"\" md-whiteframe=\"4\"><div class=\"sidebar-button\"><md-button ng-click=\"showMyProducts()\" class=\"md-primary\">我发布的产品</md-button><md-button ng-click=\"showUnverified()\" class=\"md-primary\">需要我审核的产品</md-button></div></md-sidenav><md-content flex=\"\" layout-padding=\"\"><table><tr><th>产品编号</th><th>产品名称</th><th>最近出发班期价格</th><th>负责人</th><th>详情</th><th>状态</th><th>操作</th></tr><tr ng-repeat=\"product in products\"><td>{{ product.objectId }}</td><td>{{ product.productName }}</td><td><div>日期: {{ product.latestDate }}</div><div>门市价(成人): {{ product.latestAdultCompanySalePrice }}</div><div>同行价(成人): {{ product.latestAdultCompanyCompetitorPrice }}</div><div>结算价(成人): {{ product.latestAdultCompanyPrice }}</div></td><td>{{ product.responsible.contactname }}</td><td><a target=\"_blank\" ui-sref=\"home.show-product-detail({productId: \'{{product.objectId}}\' })\" ui-sref-opts=\"{ absolute: true }\">显示详情</a></td><td><p ng-if=\"product.status == 1\">下架</p><p ng-if=\"product.status == 2\">未审核</p><p ng-if=\"product.status == 3\">已审核</p></td><td><md-button class=\"md-raised md-primary\" ng-click=\"post($index);\" ng-if=\"product.status == 1\">提交审核</md-button><md-button class=\"md-raised md-primary\" ng-click=\"remind($index);\" ng-if=\"product.status == 2 && !unverified\">提醒</md-button><md-button class=\"md-raised md-primary\" ng-click=\"verify($index);\" ng-if=\"product.status == 2 && unverified\">通过审核</md-button><md-button class=\"md-raised md-primary\" ng-click=\"unPost($index);\" ng-if=\"product.status == 3\">下架</md-button></td></tr></table></md-content></section></md-tab><md-tab label=\"供应商管理\"><section layout=\"row\" flex=\"\"><md-sidenav class=\"md-sidenav-left shadow\" md-component-id=\"showProvider\" md-is-locked-open=\"true\" md-disable-backdrop=\"\" md-whiteframe=\"4\"><div class=\"sidebar-button\"><md-button ng-click=\"showMyContactList()\" class=\"md-primary\">商户联系人管理</md-button><md-button ng-click=\"showMyProvider()\" class=\"md-primary\">供应商信息</md-button></div></md-sidenav><md-content flex=\"\" layout-padding=\"\"><table ng-if=\"showContactList\"><tr><th>姓名</th><th>手机</th><th>座机</th><th>职位</th><th>QQ</th><th>微信</th><th>操作</th></tr><tr ng-repeat=\"contact in contactList\"><td>{{ contact.contactname }}</td><td>{{ contact.cellphone }}</td><td>{{ contact.homephone }}</td><td>{{ contact.position }}</td><td>{{ contact.qqnumber }}</td><td>{{ contact.wechat }}</td><td><a href=\"#\" ng-click=\"editContact($index)\">编辑</a> / <a href=\"#\" ng-click=\"deleteContact($index)\">删除</a></td></tr></table><div class=\"submit\"><md-button ng-if=\"showContactList\" ng-click=\"addContact();\" class=\"md-raised md-primary\">添加商户联系人</md-button></div><table ng-if=\"showProvider\"><tbody><tr><td colspan=\"2\" class=\"title\">公司信息</td></tr><tr><td>品牌名称</td><td>{{ provider.nickname }}</td></tr><tr><td>公司名称</td><td>{{ provider.companyname }}</td></tr><tr><td>地址</td><td><address show-county=\"true\" is-editing=\"false\" ng-model=\"provider.address\"></address></td></tr><tr><td>营业执照</td><td><a href=\"#\">显示证书</a></td></tr><tr><td colspan=\"2\" class=\"title\">主营业务</td></tr><tr><td>主营目的地</td><td><multi-choice is-editing=\"false\" type=\"主营目的地\" ng-model=\"provider.destination\"></multi-choice></td></tr><tr><td>主营口岸</td><td><multi-choice is-editing=\"false\" type=\"主营口岸\" ng-model=\"provider.start\" other=\"true\"></multi-choice></td></tr><tr><td colspan=\"2\" class=\"title\">业务资源</td></tr><tr><td>航班资源</td><td><textarea ng-disabled=\"true\" class=\"msd-elastic\" ng-model=\"provider.flightResource\"></textarea></td></tr><tr><td>收客情况</td><td><textarea ng-disabled=\"true\" class=\"msd-elastic\" ng-model=\"provider.customerResource\"></textarea></td></tr><tr><td>产品优势</td><td><textarea ng-disabled=\"true\" class=\"msd-elastic\" ng-model=\"provider.productResource\"></textarea></td></tr><tr><td colspan=\"2\" class=\"title\">合作支持</td></tr><tr><td>加返政策</td><td><return-policy is-editing=\"false\" ng-model=\"provider.returnPolicy\"></return-policy></td></tr></tbody></table><div class=\"submit\"><md-button ng-if=\"showProvider\" ng-click=\"editProvider();\" class=\"md-raised md-primary\">编辑</md-button></div></md-content></section></md-tab></md-tabs></md-content></div>");
 $templateCache.put("app/common/header/header.html","<div class=\"common-header-module\"><div class=\"header-content\"><div class=\"logo\" ng-click=\"goHome();\">LeanEngine</div><md-menu ng-if=\"user.username\" class=\"account-menu\" md-position-mode=\"target-right target\" md-offset=\"0 48\"><md-button md-menu-origin=\"\" class=\"lc-btn\" ng-click=\"openMenu($mdOpenMenu, $event)\">{{user.username}}</md-button><md-menu-content><md-menu-item><md-button>{{i18n.header.setting}}</md-button></md-menu-item><md-menu-item><md-button>{{i18n.header.logout}}</md-button></md-menu-item></md-menu-content></md-menu><md-button ng-if=\"!user.username\" class=\"loginBtn\" ng-click=\"\">{{i18n.auth.login}}</md-button><div class=\"search-input\" ng-if=\"ui.showAskBtn\"><md-button class=\"md-icon-button searchBtn\" ng-click=\"\" aria-label=\"close\"><span></span></md-button><input class=\"search\" type=\"text\" placeholder=\"{{i18n.header.search}}\"></div><md-button class=\"askBtn lc-btn md-raised\" ng-click=\"creatTicket()\" ng-if=\"ui.showAskBtn\"><span class=\"ask-icon\"></span> <span>{{i18n.header.ask}}</span></md-button></div></div>");
 $templateCache.put("app/common/navigation/navbar.html","<nav class=\"navbar navbar-default\" role=\"navigation\" bs-navbar=\"\"><div class=\"navbar-header\"><a class=\"navbar-brand\" href=\"#\">Brand</a></div><ul class=\"nav navbar-nav\"><li data-match-route=\"/$\"><a href=\"#/\">Home</a></li><li data-match-route=\"/page-one\"><a href=\"#/page-one\">Page One</a></li><li data-match-route=\"/page-two.*\"><a href=\"#/page-two/sub-a\">Page Two</a></li></ul></nav>");
-$templateCache.put("app/common/product/add.html","<section layout=\"row\" flex=\"\"><provider-side-bar></provider-side-bar><md-content flex=\"\" layout-padding=\"\"><div><div><form ng-submit=\"submitProduct()\" method=\"post\" action=\"{{ addUrl }}\"><table><tr><td colspan=\"99\" class=\"title\">产品基本信息</td></tr><tr ng-if=\"!isEditing\" product-textfield=\"\" label=\"产品编号\" key=\"objectId\"></tr><tr product-textfield=\"\" label=\"产品名称\" key=\"productname\"></tr><tr product-textfield=\"\" label=\"出发地\" key=\"start\"></tr><tr product-textfield=\"\" label=\"目的地\" key=\"destination\"></tr><tr product-textfield=\"\" label=\"负责人\" key=\"user\"></tr><tr product-textfield=\"\" label=\"联系电话\" key=\"phone\"></tr><tr product-textfield=\"\" label=\"预计人数\" key=\"people\"></tr><tr ng-if=\"!isEditing\" product-textfield=\"\" label=\"报名人数\" key=\"signinpeople\"></tr><tr><td>\"备注\"</td><td colspan=\"99\"><textarea ng-model=\"comments\" name=\"comments\" msd-elastic=\"\" style=\"width: 600px;\"></textarea></td></tr><tr></tr><tr ng-if=\"isEditing\"><td colspan=\"99\"><md-button type=\"button\" ng-click=\"toggleLeft()\" class=\"md-primary\">添加供应商</md-button></td></tr><tr><th>服务类型</th><th>供应商名称</th><th>联系信息</th><th>价格</th><th>加返政策</th><th colspan=\"99\">详情</th></tr><tr ng-repeat=\"pickedProvider in pickedProviders\"><td>{{ pickedProvider.servingType }}</td><td>{{ pickedProvider.nickname }}</td><td>{{ pickedProvider.contactname }}</td><td><input ng-if=\"isEditing\" type=\"text\" name=\"{{pickedProvider}}\" ng-model=\"pickedProvider.price\" ng-blur=\"updatePrice()\"><div ng-if=\"!isEditing\">{{ pickedProvider.price }}</div></td><td>{{ pickedProvider.returnPolicy }}</td><td><a target=\"_blank\" ui-sref-opts=\"{ absolute: true }\" ui-sref=\"home.show-provider-detail({providerId: \'{{pickedProvider.objectId}}\' })\">查看详情</a></td></tr><tr><td>成本价格</td><td colspan=\"99\">{{price}}</td></tr><tr product-textfield=\"\" label=\"销售价格\" key=\"saleprice\" value=\"{{product.saleprice}}\"></tr><tr product-textfield=\"\" label=\"同行价格\" key=\"competitorprice\" value=\"{{product.competitorprice}}\"></tr><tr><td colspan=\"99\" class=\"title\">产品行程</td></tr><tr></tr><tr ng-if=\"isEditing\"><td colspan=\"99\"><md-button type=\"button\" ng-click=\"addItinerary()\" class=\"md-primary\">添加行程</md-button></td></tr><tr><th>日期</th><th>行程</th><th>用餐</th><th>住宿</th><th>出发时间</th><th style=\"width:350px;\">行程</th><th></th></tr><tr ng-repeat=\"detail in itinerary\"><td>{{detail.date}}</td><td>{{detail.start}} - {{detail.end}}</td><td>{{detail.cafe}}</td><td>{{detail.hotel}}</td><td>{{detail.startTime}}</td><td>{{detail.detail}}</td><td><a ng-click=\"editItinerary($index);\">点击编辑</a></td></tr></table><input ng-if=\"isEditing\" type=\"submit\" value=\"发布产品\"> <input type=\"hidden\" name=\"costprice\" value=\"{{ price }}\"> <input type=\"hidden\" name=\"providers\" value=\"{{ providerList }}\"> <input type=\"hidden\" name=\"itinerary\" value=\"{{ itineraryList }}\"></form></div></div></md-content></section>");
+$templateCache.put("app/common/provider/add.html","<div class=\"section\"><md-content><md-tabs md-dynamic-height=\"\" md-border-bottom=\"\"><md-tab label=\"基本信息\"><table><tbody><tr ng-if=\"isEditing\"><td colspan=\"2\" class=\"title\">注册用户</td></tr><tr ng-if=\"isEditing\"><td>用户名</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.username\"></text-field></td></tr><tr ng-if=\"isEditing\"><td>密码</td><td><password ng-model=\"provider.password\"></password></td></tr><tr><td colspan=\"2\" class=\"title\">公司信息</td></tr><tr><td>品牌名称</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.nickname\"></text-field><div ng-if=\"!isEditing\">{{ provider.nickname }}</div></td></tr><tr><td>公司名称</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.companyname\"></text-field><div ng-if=\"!isEditing\">{{ provider.companyname }}</div></td></tr><tr><td>地址</td><td><address show-county=\"true\" is-editing=\"isEditing\" ng-model=\"provider.address\"></address></td></tr><tr><td>营业执照</td><td><div ng-if=\"isEditing\"><md-button class=\"md-raised md-primary\" ngf-select=\"upload($file)\">上传文件</md-button><p ng-if=\"filename\">{{ filename }}</p></div><div ng-if=\"!isEditing\"><a href=\"#\">显示证书</a></div></td></tr><tr><td colspan=\"2\" class=\"title\">联系信息</td></tr><tr><td>姓名</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.contactname\"></text-field><div ng-if=\"!isEditing\">{{ provider.contactname }}</div></td></tr><tr><td>座机</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.homephone\"></text-field><div ng-if=\"!isEditing\">{{ provider.homephone }}</div></td></tr><tr><td>手机</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.cellphone\"></text-field><div ng-if=\"!isEditing\">{{ provider.cellphone }}</div></td></tr><tr><td>QQ号</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.qqnumber\"></text-field><div ng-if=\"!isEditing\">{{ provider.qqnumber }}</div></td></tr><tr><td>微信号</td><td><text-field ng-if=\"isEditing\" is-editing=\"isEditing\" ng-model=\"provider.wechat\"></text-field><div ng-if=\"!isEditing\">{{ provider.wechat }}</div></td></tr></tbody></table></md-tab><md-tab label=\"业务资料\"><table><tbody><tr><td colspan=\"2\" class=\"title\">主营业务</td></tr><tr><td>主营目的地</td><td><multi-choice is-editing=\"isEditing\" type=\"主营目的地\" ng-model=\"provider.destination\"></multi-choice></td></tr><tr><td>主营口岸</td><td><multi-choice is-editing=\"isEditing\" type=\"主营口岸\" ng-model=\"provider.start\" other=\"true\"></multi-choice></td></tr><tr><td colspan=\"2\" class=\"title\">业务资源</td></tr><tr><td>航班资源</td><td><textarea ng-disabled=\"!isEditing\" class=\"msd-elastic\" ng-model=\"provider.flightResource\"></textarea></td></tr><tr><td>收客情况</td><td><textarea ng-disabled=\"!isEditing\" class=\"msd-elastic\" ng-model=\"provider.customerResource\"></textarea></td></tr><tr><td>产品优势</td><td><textarea ng-disabled=\"!isEditing\" class=\"msd-elastic\" ng-model=\"provider.productResource\"></textarea></td></tr><tr><td colspan=\"2\" class=\"title\">合作支持</td></tr><tr><td>加返政策</td><td><return-policy is-editing=\"isEditing\" ng-model=\"provider.returnPolicy\"></return-policy></td></tr></tbody></table><div class=\"submit\"><md-button class=\"md-raised md-primary\" ng-click=\"submit();\">提交</md-button></div></md-tab></md-tabs></md-content></div>");
+$templateCache.put("app/common/provider/show.html","<table><tr><th>供应商编号</th><th>品牌名称</th><th>公司名称</th><th>营业执照</th><th>联系人姓名</th><th>联系人电话</th><th>详情</th></tr><tr ng-repeat=\"provider in providers\"><td>{{ provider.objectId }}</td><td>{{ provider.nickname }}</td><td>{{ provider.companyname }}</td><td><a ng-if=\"provider.licenseFile.url\" download=\".pdf\" href=\"{{ provider.licenseFile.url }}\">点击下载</a></td><td>{{ provider.contactname }}</td><td>{{ provider.cellphone }}</td><td><a target=\"_blank\" ui-sref=\"home.show-provider-detail({providerId: \'{{provider.objectId}}\' })\" ui-sref-opts=\"{ absolute: true }\">显示详情</a></td></tr></table><page-control></page-control>");
+$templateCache.put("app/common/product/add.html","<section layout=\"row\" flex=\"\"><provider-side-bar ng-if=\"isEditing\"></provider-side-bar><md-content flex=\"\" layout-padding=\"\"><div class=\"product\"><md-tabs md-dynamic-height=\"\" md-border-bottom=\"\"><md-tab class=\"tab-button\" label=\"选择供应商\"><table><tr><td colspan=\"99\" class=\"title\">供应商基本信息</td></tr><tr ng-if=\"isEditing\"><td><md-button type=\"button\" ng-click=\"toggleLeft()\" class=\"md-primary\">选择供应商</md-button></td></tr><tr ng-if=\"product.pickedProvider\"><td>供应商</td><td>{{ product.pickedProvider.companyname }} ({{ product.pickedProvider.nickname }})</td></tr><tr><td>商户联系人</td><td ng-if=\"product.pickedProvider\"><md-input-container ng-if=\"isEditing\"><md-select ng-change=\"pickContact();\" ng-model=\"product.contact\"><md-option ng-selected=\"$first\" ng-value=\"contact\" ng-repeat=\"contact in product.pickedProvider.contactList\">{{contact.contactname}}</md-option></md-select></md-input-container><md-button class=\"md-raised md-primary addcontact\" ng-click=\"addContact();\">添加商户联系人</md-button><p ng-if=\"!isEditing\">{{ product.contact.contactname }}</p></td></tr><tr ng-if=\"product.contact\"><td>手机</td><td><div>{{ product.contact.cellphone }}</div></td></tr><tr ng-if=\"product.contact\"><td>座机</td><td><div>{{ product.contact.homephone }}</div></td></tr><tr ng-if=\"product.contact\"><td>QQ号码</td><td><div>{{ product.contact.qqnumber }}</div></td></tr><tr ng-if=\"product.contact\"><td>微信</td><td><div>{{ product.contact.wechat }}</div></td></tr></table></md-tab><md-tab class=\"tab-button\" label=\"基本信息\"><table><tr><td colspan=\"99\" class=\"title\">产品基本信息</td></tr><tr ng-if=\"!isEditing\"><td>产品编号</td><td><p>{{ product.objectId }}</p></td></tr><tr><td>线路名称</td><td><input ng-if=\"isEditing\" type=\"text\" ng-model=\"product.fullName\"><div ng-if=\"!isEditing\"><span ng-repeat=\"prefix in product.prefixArray\"><span>[</span> <span>{{ prefix }}</span> <span>]</span></span> <span ng-if=\"!isEditing\">{{product.fullName}}</span></div></td></tr><tr><td>供应商产品名称</td><td><input ng-if=\"isEditing\" type=\"text\" ng-model=\"product.productName\"><p ng-if=\"!isEditing\">{{ product.productName }}</p></td></tr><tr ng-if=\"isEditing\"><td>线路名称前缀</td><td><multi-choice is-editing=\"isEditing\" type=\"线路前缀\" ng-model=\"product.prefix\"></multi-choice></td></tr><tr><td>酒店标准</td><td><md-input-container ng-if=\"isEditing\"><md-select ng-if=\"isEditing\" ng-model=\"product.hotelStandard\"><md-option ng-selected=\"$first\" ng-value=\"hotel\" ng-repeat=\"hotel in hotels\">{{hotel}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ product.hotelStandard }}</p></td></tr><tr><td>交通方式</td><td><md-input-container ng-if=\"isEditing\"><md-select ng-if=\"isEditing\" ng-model=\"product.transportStandard\"><md-option ng-selected=\"$first\" ng-value=\"transport\" ng-repeat=\"transport in transports\">{{transport}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ product.transportStandard }}</p></td></tr><tr><td>产品负责人</td><td><md-input-container ng-if=\"isEditing\"><md-select ng-model=\"product.responsible\"><md-option ng-selected=\"$first\" ng-value=\"response.objectId\" ng-repeat=\"response in responses track by $index\">{{response.contactname}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ product.responsible.contactname }}</p></td></tr><tr><td>行程天数</td><td><counter ng-if=\"isEditing\" ng-model=\"product.duration\"></counter><p ng-if=\"!isEditing\">{{ product.duration }}</p></td></tr><tr><td>酒店入住天数</td><td><counter ng-if=\"isEditing\" ng-model=\"product.hotelDuration\"></counter><p ng-if=\"!isEditing\">{{ product.hotelDuration }}</p></td></tr><tr><td>报名截止</td><td><div><span>出团前</span><counter ng-if=\"isEditing\" ng-model=\"product.stopDay\"></counter><p ng-if=\"!isEditing\">{{ product.stopDay }}</p><span>天</span></div></td></tr><tr><td>出发地</td><td><address is-editing=\"isEditing\" show-county=\"false\" ng-model=\"product.start\"></address></td></tr><tr><td>类型</td><td><md-input-container ng-if=\"isEditing\"><md-select ng-model=\"product.type\"><md-option ng-selected=\"$first\" ng-value=\"type\" ng-repeat=\"type in types\">{{type}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ product.type }}</p></td></tr><tr><td>大区</td><td><md-input-container ng-if=\"isEditing\"><md-select ng-model=\"product.area\"><md-option ng-selected=\"$first\" ng-value=\"area\" ng-repeat=\"area in areas\">{{area}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ product.area }}</p></td></tr><tr><td>平台联系人</td><td><md-input-container ng-if=\"isEditing\"><md-select ng-model=\"product.platformcontact\"><md-option ng-selected=\"$first\" ng-value=\"response.objectId\" ng-repeat=\"response in responses track by $index\">{{response.contactname}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ product.platformcontact.contactname }}</p></td></tr></table></md-tab><md-tab class=\"tab-button\" label=\"行程信息\"><div ng-repeat=\"i in getDuration() track by $index\" class=\"itinery\"><div class=\"item\"><label>第{{ $index + 1 }}天:</label> <input type=\"text\" ng-model=\"product.itinerary[$index].title\"> <span>请填写行程信息如: 上海-北京</span></div><div class=\"item\"><label>参考航班/列车班次</label> <input type=\"text\" ng-model=\"product.itinerary[$index].flight\"></div><div class=\"item\"><label>住宿信息</label> <input type=\"text\" ng-model=\"product.itinerary[$index].hotelDetail\"> <span>或同级</span><md-input-container><md-select ng-model=\"product.itinerary[$index].hotel\"><md-option ng-selected=\"$first\" ng-value=\"hotel\" ng-repeat=\"hotel in hotels\">{{hotel}}</md-option></md-select></md-input-container></div><div class=\"item\"><label>餐饮信息</label> <input type=\"text\" ng-model=\"product.itinerary[$index].food\"></div><div class=\"item\"><label>详细描述:</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.itinerary[$index].detail\"></div></div><hr></div></md-tab><md-tab class=\"tab-button\" label=\"其他信息\"><div class=\"extra-item\"><label>线路特色</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.description\"></div></div><div class=\"extra-item\"><label>费用包含</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.priceInclude\"></div></div><div class=\"extra-item\"><label>费用不含</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.priceExclude\"></div></div><div class=\"extra-item\"><label>自费项目</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.selfPaid\"></div></div><div class=\"extra-item\"><label>预定须知</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.reserveInfo\"></div></div><div class=\"extra-item\"><label>收客限制</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.restriction\"></div></div><div class=\"extra-item\"><label>签证信息</label><div class=\"editor ueditor\" config=\"ueconfig\" ng-model=\"product.visaInfo\"></div></div><div class=\"extra-item\"><label>材料截止时间</label> <input type=\"number\" ng-model=\"product.materialDeadline\"> 天</div></md-tab><md-tab class=\"tab-button\" label=\"团期报价\"><calendar is-editing=\"isEditing\" ng-model=\"product.price\" class=\"price-calendar\" data=\"团期报价\"></calendar><div class=\"submit\"><md-button ng-if=\"isEditing\" ng-click=\"submitProduct();\" class=\"md-raised md-primary\">发布产品</md-button></div></md-tab><md-tab class=\"tab-button\" ng-if=\"!isEditing\" label=\"库存管理\"><calendar class=\"inventory-calendar\" ng-model=\"product.storage\" data=\"库存管理\"></calendar></md-tab></md-tabs><input type=\"hidden\" name=\"costprice\" value=\"{{ price }}\"> <input type=\"hidden\" name=\"providers\" value=\"{{ providerList }}\"> <input type=\"hidden\" name=\"itinerary\" value=\"{{ itineraryList }}\"></div></md-content></section>");
 $templateCache.put("app/common/product/itinerary.html","<div class=\"wrapper\"><div class=\"mid-title\">上海锦江旅游有限公司 | 旅游线路行程单</div><div class=\"content\"><div>线路名称：</div><div class=\"col\">团号：</div><div class=\"col\">出团日期：</div><div>行程天数</div></div></div><div class=\"wrapper\"><div class=\"title\">价格列表</div><div class=\"content\"><div class=\"has-border\">团费(基本价): {{ product.saleprice }}</div></div></div><div class=\"wrapper\"><div class=\"title\">线路特色</div><div class=\"content\" id=\"margin-top-content\">特色内容</div></div><div class=\"wrapper\" ng-repeat=\"itinerary in itinerarys\"><div class=\"title\">出团线路行程</div><div class=\"subtitle\"><div class=\"col\">{{ itinerary.date }}</div><div class=\"col\">{{ itinerary.start }}—{{ itinerary.end }}</div></div><div class=\"content\"><div class=\"main\">{{ itinerary.detail }}</div><div class=\"detail\"><div calss=\"no-col\">交通情况: {{ itinerary.transportation }}</div><div class=\"no-col\">用餐情况: {{ itinerary.cafe }}</div><div class=\"no-col\">住宿情况: {{ itinerary.hotel }}</div><div class=\"col\">出发时间: {{ itinerary.startTime }}</div><div class=\"col\">抵达时间</div><div class=\"col\">过夜天数</div><div class=\"col\">班次／航班号</div></div></div></div><div class=\"wrapper\"><div class=\"title\">中山公园龙之梦营业部联系信息：</div><div class=\"content\"><div class=\"info\"><p>联系人: {{ product.user.username }}</p><p>电话：{{ product.user.phone }}</p></div><div class=\"info\" id=\"second-info\"><p>手机：{{ product.user.cellphone }}</p><p>QQ: {{ product.user.qqnumber }}</p><p>传真: {{ product.user.faxnumber }}</p></div></div></div>");
-$templateCache.put("app/common/product/show.html","<table><tr><th>产品编号</th><th>产品名称</th><th>负责人</th><th>联系电话</th><th>产品目的地</th><th>报名人数</th><th>参加总数</th><th>详情</th></tr><tr ng-repeat=\"product in products\"><td>{{ product.objectId }}</td><td>{{ product.productname }}</td><td>{{ product.phone }}</td><td>{{ product.people }}</td><td>{{ product.destination }}</td><td>{{ product.signinpeople }}</td><td>{{ product.people }}</td><td><a target=\"_blank\" ui-sref=\"home.show-product-detail({productId: \'{{product.objectId}}\' })\" ui-sref-opts=\"{ absolute: true }\">显示详情</a></td></tr></table>");
+$templateCache.put("app/common/product/show.html","<section layout=\"row\" flex=\"\"><div><md-sidenav class=\"md-sidenav-left shadow\" md-component-id=\"showProduct\" md-is-locked-open=\"true\" md-disable-backdrop=\"\" md-whiteframe=\"4\"><md-toolbar class=\"md-theme-indigo\"><h1 class=\"md-toolbar-tools\">产品管理</h1></md-toolbar><div class=\"sidebar-button\"><md-button ng-click=\"showVerified()\" class=\"md-primary\">出售中的产品 <span ng-if=\"verified\">({{ verified }})</span></md-button><md-button ng-click=\"showUnverified()\" class=\"md-primary\">待审核产品 <span ng-if=\"unverified\">({{ unverified }})</span></md-button><md-button ng-click=\"showUnposted()\" class=\"md-primary\">已下架产品 <span ng-if=\"unposted\">({{ unposted }})</span></md-button></div></md-sidenav></div><md-content flex=\"\" layout-padding=\"\"><table><tr><th>产品编号</th><th>产品名称</th><th>最近出发班期价格</th><th>负责人</th><th>详情</th><th>状态</th></tr><tr ng-repeat=\"product in products\"><td>{{ product.objectId }}</td><td>{{ product.productName }}</td><td><div>日期: {{ product.latestDate }}</div><div>门市价(成人): {{ product.latestAdultCompanySalePrice }}</div><div>同行价(成人): {{ product.latestAdultCompanyCompetitorPrice }}</div><div>结算价(成人): {{ product.latestAdultCompanyPrice }}</div></td><td>{{ product.responsible.contactname }}</td><td><a target=\"_blank\" ui-sref=\"home.show-product-detail({productId: \'{{product.objectId}}\' })\" ui-sref-opts=\"{ absolute: true }\">显示详情</a></td><td><p ng-if=\"product.status == 1\">下架</p><p ng-if=\"product.status == 2\">未审核</p><p ng-if=\"product.status == 3\">已审核</p></td></tr></table></md-content></section>");
 $templateCache.put("app/common/product/show_product.html","<div ui-view=\"\"></div>");
-$templateCache.put("app/common/provider/add.html","<div class=\"section\"><form id=\"form\" method=\"post\" action=\"{{addUrl}}\"><table><tbody><tr ng-if=\"isEditing\"><td colspan=\"2\" class=\"title\">账户信息</td></tr><tr ng-if=\"isEditing\" provider-textfield=\"\" label=\"用户名\" validate=\"duplicate\" key=\"username\"></tr><tr ng-if=\"isEditing\" password=\"\"></tr><tr><td colspan=\"2\" class=\"title\">公司信息</td></tr><tr provider-textfield=\"\" label=\"品牌名称\" key=\"nickname\"></tr><tr provider-textfield=\"\" label=\"公司名称\" key=\"companyname\"></tr><tr provider-multi-choice=\"\" type=\"经营范围\"></tr><tr provider-address=\"\"></tr><tr provider-textfield=\"\" label=\"邮编\" key=\"zipcode\"></tr><tr><td>成立时间</td><td><select class=\"menu\" ng-init=\"foundTime = foundTimeOptions[0]\" ng-if=\"isEditing\" name=\"foundTime\" ng-model=\"foundTime\" ng-options=\"option for option in foundTimeOptions track by option\"></select><p ng-if=\"!isEditing\">{{provider.foundTime}}</p></td></tr><tr provider-textfield=\"\" label=\"注册资金\" key=\"capital\"></tr><tr><td colspan=\"2\" class=\"title\">资质信息</td></tr><tr provider-textfield=\"\" label=\"营业执照号\" duration=\"证件有效期\" upload=\"pdf\" key=\"license\"></tr><tr><td colspan=\"2\" class=\"title\">合作信息</td></tr><tr provider-multi-choice=\"\" type=\"合作类型\"></tr><tr provider-textfield=\"\" label=\"主营业务\" key=\"mainBusiness\"></tr><tr provider-textfield=\"\" label=\"主要口岸\" key=\"mainDestination\"></tr><tr return-policy=\"\"></tr><tr><td colspan=\"2\" class=\"title\">联系信息</td></tr><tr provider-textfield=\"\" label=\"姓名\" key=\"contactname\"></tr><tr><td>性别</td><td><select ng-if=\"isEditing\" name=\"sex\" class=\"menu\" ng-init=\"sex = sexOptions[0]\" ng-model=\"sex\" ng-options=\"option for option in sexOptions track by option\"></select><p ng-if=\"!isEditing\">{{ provider.sex }}</p></td></tr><tr provider-textfield=\"\" label=\"座机\" key=\"homephone\"></tr><tr provider-textfield=\"\" label=\"传真\" key=\"fax\"></tr><tr provider-textfield=\"\" label=\"手机\" key=\"cellphone\"></tr><tr provider-textfield=\"\" label=\"QQ号\" key=\"qqnumber\"></tr><tr provider-textfield=\"\" label=\"微信号\" key=\"wechat\"></tr></tbody></table><input id=\"submit\" type=\"button\" value=\"确认\" ng-click=\"upload();\"> <input id=\"submittest\" type=\"submit\" value=\"确认\" style=\"display: None\"></form></div>");
-$templateCache.put("app/common/provider/show.html","<table><tr><th>供应商编号</th><th>品牌名称</th><th>公司名称</th><th>营业执照</th><th>主营业务</th><th>联系人姓名</th><th>联系人电话</th><th>详情</th></tr><tr ng-repeat=\"provider in providers\"><td>{{ provider.objectId }}</td><td>{{ provider.nickname }}</td><td>{{ provider.companyname }}</td><td><a ng-if=\"provider.licenseFile.url\" download=\".pdf\" href=\"{{ provider.licenseFile.url }}\">点击下载</a></td><td>{{ provider.mainBusiness }}</td><td>{{ provider.contactname }}</td><td>{{ provider.cellphone }}</td><td><a target=\"_blank\" ui-sref=\"home.show-provider-detail({providerId: \'{{provider.objectId}}\' })\" ui-sref-opts=\"{ absolute: true }\">显示详情</a></td></tr></table><page-control></page-control>");
-$templateCache.put("app/common/sale/index.html","<nav class=\"navbar navbar-inverse\" role=\"navigation\"><div class=\"navbar-header\"><a class=\"navbar-brand\" ui-sref=\"#\">AngularUI Router</a></div><ul class=\"nav navbar-nav\"><li><a ui-sref=\".search-product\">搜索产品</a></li><li><a ui-sref=\".show-customers\">客户管理</a></li></ul></nav><div ui-view=\"\"></div>");
+$templateCache.put("app/common/sale/index.html","<nav class=\"navbar navbar-inverse\" role=\"navigation\"><div class=\"navbar-header\"><a class=\"navbar-brand\" ui-sref=\"#\">AngularUI Router</a></div><ul class=\"nav navbar-nav\"><li><a ui-sref=\".search-product\">搜索产品</a></li><li><a ui-sref=\".show-order\">订单管理</a></li></ul></nav><div ui-view=\"\"></div>");
+$templateCache.put("app/common/directives/calendar/calendar.html","<div class=\"calendar\"><div><md-input-container class=\"year\"><md-select ng-change=\"selectYear();\" ng-model=\"selectedYear\"><md-option ng-selected=\"$first\" ng-value=\"year\" ng-repeat=\"year in years\">{{ year }}</md-option></md-select></md-input-container><div class=\"month-wrapper\"><a href=\"#\" class=\"month\" ng-class=\"{\'active-month\': currentMonth === $index}\" ng-click=\"selectMonth($index)\" ng-repeat=\"month in months\">{{ month }}月</a></div></div><table class=\"calendar-table\" border=\"1\"><tr><th class=\"table-cell\"><div class=\"date\">{{ currentMonth + 1}}月</div></th><th class=\"table-cell\" ng-repeat=\"title in titles\"><div class=\"cell\">{{ title.value }}</div></th><th ng-if=\"isEditing\" class=\"table-cell\"><div class=\"cell\">操作</div></th></tr><tr ng-repeat=\"day in days\"><td class=\"table-cell\"><div class=\"date\">{{ day }}</div></td><td class=\"table-cell\" ng-repeat=\"title in titles\" ng-switch=\"\" on=\"title.type\"><div class=\"cell\">{{ allDayEvents[$parent.$index][title.name] }}</div></td><td ng-if=\"isEditing\" class=\"table-cell\"><a ng-if=\"!allDayEvents[$index].filled\" class=\"cell\" ng-class=\"{off: allDayEvents[$index].filled}\" href=\"#\" ng-click=\"addEvent($index);\">添加</a><div ng-if=\"allDayEvents[$index].filled\" ng-class=\"{off: !allDayEvents[$index].filled}\"><a href=\"#\" ng-click=\"editEvent($index)\">编辑</a><div class=\"inline\">/</div><a href=\"#\" ng-click=\"deleteEvent($index)\">删除</a></div></td></tr></table></div>");
+$templateCache.put("app/common/directives/counter/counter.html","<div class=\"counter\"><span class=\"operator\" ng-click=\"minus();\">-</span> <input class=\"number\" ng-model=\"value\" ng-disabled=\"true\"> <span class=\"operator\" ng-click=\"plus();\">+</span></div>");
+$templateCache.put("app/common/directives/form/form.html","<div class=\"modal-header\"><h3 class=\"modal-title\">{{ title }}</h3></div><div class=\"modal-body\"><ul><li ng-repeat=\"item in items\"><div class=\"item\"><div class=\"key\">{{ item.key }}</div><div class=\"value\" ng-switch=\"\" on=\"item.type\"><input ng-switch-when=\"number\" type=\"number\" ng-model=\"item.value\"> <input class=\"datepicker\" ng-model=\"item.value\" ng-switch-when=\"date\" type=\"text\" data-date-type=\"string\" data-model-date-format=\"mediumDate\" bs-datepicker=\"\" data-date-format=\"mediumDate\" data-autoclose=\"true\"> <input class=\"datepicker\" ng-model=\"item.value\" ng-switch-when=\"text\" type=\"text\"></div></div></li></ul></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" type=\"button\" ng-click=\"close()\">确认</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"cancel()\">返回</button></div>");
+$templateCache.put("app/common/directives/multiChoice/multiChoice.html","<div class=\"multiple-choice\"><label ng-repeat=\"option in options\"><input type=\"checkbox\" ng-disabled=\"!isEditing\" ng-model=\"option.state\" checked=\"{{ option.state }}\"><p>{{ option.value }}</p></label> <label ng-if=\"other\"><input ng-if=\"isEditing\" placeholder=\"请输入其他\" type=\"text\" ng-change=\"changeOther();\" ng-model=\"otherText\"><p ng-if=\"!isEditing\">{{ otherText }}</p></label></div>");
 $templateCache.put("app/common/directives/page/page.html","<div class=\"center\"><a ng-repeat=\"page in pages\" ng-click=\"changePage($index)\">{{page}}</a></div>");
+$templateCache.put("app/common/directives/textField/textField.html","<div ng-switch=\"inputType\"><input ng-switch-when=\"number\" ng-disabled=\"!isEditing\" type=\"number\" ng-model=\"$parent.value\"> <input ng-switch-default=\"\" ng-disabled=\"!isEditing\" type=\"text\" ng-model=\"$parent.value\"></div>");
 $templateCache.put("app/common/sale/customer/show.html","<div class=\"search\"><h3>快速搜索</h3><ul><li><strong>姓名</strong> <input type=\"text\" placeholder=\"姓名\" ng-model=\"username\"></li><li><strong>身份证</strong> <input type=\"text\" placeholder=\"身份证\" ng-model=\"identifier\"></li><li><strong>产品编号</strong> <input type=\"text\" placeholder=\"姓名\" ng-model=\"productId\"></li><li><strong>付款状态</strong><md-select ng-model=\"state\" placeholder=\"付款状态\"><md-option ng-value=\"1\">已付款</md-option><md-option ng-value=\"0\">未付款</md-option></md-select></li></ul><md-button class=\"md-raised md-primary\" ng-click=\"search();\">搜索</md-button></div><div><table><tr><th>姓名</th><th>报名项目</th><th>联系电话</th><th>应付款项</th><th>付款情况</th></tr><tr ng-repeat=\"customer in customers track by $index\"><td>{{ customer.username }}</td><td><a href=\"#\">{{ customer.productname }}</a></td><td>{{ customer.phone }}</td><td>{{ customer.price }}</td><td>{{ customer.stateText }}</td></tr></table></div><div class=\"center\"><a>上一页</a> <a ng-repeat=\"page in pages\">{{ page }}</a> <a>下一页</a></div>");
-$templateCache.put("app/common/sale/search/search.html","<input placeholder=\"keywords\" style=\"width: 60%;\" type=\"text\" ng-blur=\"openSearchBox();\"><md-button class=\"md-raised md-primary\">搜索</md-button><div><a href=\"#\" ng-click=\"openFilter();\">高级搜索</a></div><h3>搜索结果</h3><table><tr><th>产品编号</th><th>产品名称</th><th>负责人</th><th>联系电话</th><th>产品目的地</th><th>报名人数</th><th>总人数</th><th>查看行程单</th><th>报名</th></tr><tr ng-repeat=\"product in products\"><td>{{ product.objectId }}</td><td>{{ product.productname }}</td><td>{{ product.phone }}</td><td>{{ product.people }}</td><td>{{ product.destination }}</td><td>{{ product.signinpeople }}</td><td>{{ product.people }}</td><td><md-button class=\"md-raised md-primary\" ng-click=\"showItinerary(product.objectId);\">显示行程单</md-button></td><td><md-button class=\"md-raised md-primary\" ng-click=\"signin($index);\">报名</md-button></td></tr></table><md-select aria-label=\"state\" ng-model=\"someModel\"><md-option ng-value=\"opt\" ng-repeat=\"opt in neighborhoods2\">{{opt }}</md-option></md-select>");
+$templateCache.put("app/common/sale/order/add_order.html","<md-tabs md-dynamic-height=\"\" md-border-bottom=\"\"><md-tab label=\"提交订单\"><table class=\"order-table\"><tr><td colspan=\"99\" class=\"title\">产品基本信息</td></tr><tr><td>产品编号</td><td>{{ product.objectId }}</td></tr><tr><td>出发地</td><td>{{ product.start.city }}</td></tr><tr><td>产品名称</td><td>{{ product.productName }}</td></tr><tr><td>出团日期</td><td>{{ order.date }}</td></tr><tr><td>供应商</td><td>{{ product.provider.companyname }}</td></tr><tr><td colspan=\"99\" class=\"title\">团费</td></tr><tr><td>类型</td><td>数量</td><td>单价</td><td>小计</td></tr><tr><td>成人</td><td><counter ng-model=\"order.adult\"></counter></td><td>{{ order.adultCompanySalePrice }}</td><td></td></tr><tr><td>儿童</td><td><counter ng-model=\"order.child\"></counter></td><td>{{ order.childCompanySalePrice }}</td><td>{{ order.totalPrice }}</td></tr><tr><td colspan=\"99\" class=\"title\">预定信息</td></tr><tr><td>业务联系人</td><td><input type=\"text\" ng-model=\"order.contactname\"></td></tr><tr><td>手机</td><td><input type=\"text\" ng-model=\"order.cellphone\"></td></tr><tr><td>邮箱</td><td><input type=\"text\" ng-model=\"order.email\"></td></tr></table></md-tab><md-tab label=\"游客信息\"><md-content><table class=\"customers\"><tr><th>姓名</th><th>类型</th><th>性别</th><th>证件类型</th><th>证件号码</th><th>手机</th><th>出生日期</th><th>备注</th></tr><tr ng-repeat=\"customer in customers\"><td><input type=\"text\" ng-model=\"customer.name\"></td><td><md-input-container><md-select ng-model=\"customer.type\"><md-option ng-selected=\"$first\" ng-value=\"type\" ng-repeat=\"type in types\">{{ type }}</md-option></md-select></md-input-container></td><td><md-input-container><md-select ng-model=\"customer.sex\"><md-option ng-selected=\"$first\" ng-value=\"sex\" ng-repeat=\"sex in sexList\">{{ sex }}</md-option></md-select></md-input-container></td><td><md-input-container><md-select ng-model=\"customer.license\"><md-option ng-selected=\"$first\" ng-value=\"license\" ng-repeat=\"license in licenseList\">{{ license }}</md-option></md-select></md-input-container></td><td><input type=\"text\" ng-model=\"customer.licenseNumber\"></td><td><input type=\"text\" ng-model=\"customer.cellphone\"></td><td class=\"birthDate\"><input ng-model=\"customer.birthDate\" type=\"text\" data-date-type=\"string\" data-model-date-format=\"mediumDate\" bs-datepicker=\"\" data-date-format=\"mediumDate\" data-autoclose=\"true\"></td><td class=\"extra\"><div><input type=\"checkbox\" ng-model=\"customer.needVisa\"> 是否办签</div><div><input type=\"checkbox\" ng-model=\"customer.needShare\"> 是否拼房</div></td></tr></table></md-content><div class=\"center\"><md-button class=\"md-raised md-primary\" ng-click=\"submitOrder();\">提交订单</md-button></div></md-tab></md-tabs>");
+$templateCache.put("app/common/sale/order/show_order.html","<div class=\"show-order\" layout=\"row\"><md-sidenav class=\"md-sidenav-order\" md-component-id=\"show-order\" md-is-locked-open=\"true\" md-whiteframe=\"2\"><md-toolbar class=\"md-theme-indigo\"><h1 class=\"md-toolbar-tools\">订单管理</h1></md-toolbar><div class=\"sidebar-button\"><md-button ng-click=\"allOrder()\" class=\"md-primary\">全部订单</md-button><md-button ng-click=\"unpaidOrder()\" class=\"md-primary\">待付款订单</md-button><md-button ng-click=\"paidOrder()\" class=\"md-primary\">已付款订单</md-button><md-button ng-click=\"finishedOrder()\" class=\"md-primary\">已完成订单</md-button></div></md-sidenav><md-content layout-padding=\"\"><table><tr ng-repeat=\"order in orders\"><td><div><div>订单来源： 旅游顾问-{{ order.contactname }}</div><a><span ng-repeat=\"prefix in order.product.prefixArray\">[{{ prefix }}]</span> {{ order.product.fullName }}</a></div></td><td><div class=\"detail\"><p><strong>￥{{ order.totalPrice }}</strong></p><div>成人：{{ order.adult }}人 儿童：{{ order.child }}人</div><div>出团时间: {{ order.startDate }}</div></div></td><td><div class=\"status\"><p><strong ng-if=\"order.status == 1\">未付款</strong> <strong ng-if=\"order.status == 2\">已付款</strong> <strong ng-if=\"order.status == 3\">已完成</strong></p><md-button ng-if=\"order.status == 1\" class=\"md-raised md-primary\">确认付款</md-button><md-button ng-if=\"order.status == 2\" class=\"md-raised md-primary\">确认交易完成</md-button></div></td><td><div class=\"operation\"><a ng-click=\"showDetail();\">查看详情</a> <a ng-click=\"showConfirmation();\">查看确认单</a> <a ng-click=\"printReceipt();\">打印发票</a> <a ng-click=\"cancelOrder();\">取消订单</a></div></td></tr></table></md-content></div>");
+$templateCache.put("app/common/sale/order/show_order_detail.html","<table><tr><td colspan=\"2\" class=\"title\">预订信息</td></tr><tr><td>联系人</td><td>联系方式</td><td>备注</td></tr><tr><td>翁文川</td><td>12345</td><td>comments</td></tr><tr><td colspan=\"2\" class=\"title\">产品信息</td></tr><tr><td>产品编号</td><td>产品名称</td><td>出发城市</td><td>出游人数</td><td>订单金额</td></tr><tr><td>FT12130164</td><td><a>【暑期】【畅享半岛】青岛、海阳万米沙滩、石岛出海捕捞、威海极地海洋馆、蓬莱不进不加纯玩亲子4晚5日游（高飞）</a><div>供应商: 杭州西湖假期国际旅行社有限公司城北分公司</div></td><td>上海</td><td><span>成人:2人</span> <span>儿童:1人</span></td><td>￥6880</td></tr><tr><td colspan=\"2\" class=\"title\">游客信息</td></tr><tr><td>姓名</td><td>客户类型</td><td>证件类型</td><td>证件号码</td><td>性别</td><td>出生日期</td><td>备注信息</td></tr><tr><td><span>俞晓波</span> <span>手机：13817327516</span></td><td>成人</td><td>身份证</td><td>310105197812312838</td><td>男</td><td>21345</td><td>无</td></tr></table>");
+$templateCache.put("app/common/sale/search/search.html","<div class=\"selected-tags\" ng-if=\"selectedTags\"><div ng-repeat=\"(key, value) in selectedTags\"><span class=\"key-span\">{{ key }}:</span> <span class=\"value-span\">{{ value }}</span> <a class=\"cancel-icon\" ng-click=\"removeTag(key);\"></a></div></div><table class=\"search-option\"><tr><td>出发城市</td><td class=\"address-tag\"><div><span ng-class=\"{\'selected-tag\': !showAddress}\" ng-click=\"showAddress = false\" class=\"unlimited\">不限</span> <span ng-class=\"{\'selected-tag\': showAddress}\" ng-click=\"showAddress = true\" class=\"unlimited\">选择城市</span><address ng-show=\"showAddress\" class=\"address\" show-county=\"false\" is-editing=\"true\" ng-model=\"start\"></address></div></td></tr><tr><td>出发日期</td><td><span ng-class=\"{\'selected-tag\': !showDate}\" ng-click=\"showDate = false\" class=\"unlimited\">不限</span> <span ng-class=\"{\'selected-tag\': showDate}\" ng-click=\"showDate = true\" class=\"unlimited\">选择出发日期</span><div ng-show=\"showDate\" class=\"date-wrapper\" layout=\"row\"><input ng-model=\"startDate\" type=\"text\" data-date-type=\"string\" data-model-date-format=\"mediumDate\" bs-datepicker=\"\" data-date-format=\"mediumDate\" data-autoclose=\"true\"><div class=\"separator\">-</div><input ng-model=\"endDate\" type=\"text\" data-date-type=\"string\" data-model-date-format=\"mediumDate\" bs-datepicker=\"\" data-date-format=\"mediumDate\" data-autoclose=\"true\"></div></td></tr><tr><td>行程天数</td><td class=\"selectable\"><div class=\"stop-day\"><span class=\"unlimited\" ng-class=\"{\'selected-tag\': index[\'行程天数\'] == -1}\" ng-click=\"pick(\'行程天数\', -1)\">不限</span> <span class=\"unlimited\" ng-class=\"{\'selected-tag\': $index==index[\'行程天数\']}\" ng-click=\"pick(\'行程天数\', $index)\" ng-repeat=\"day in tags[\'行程天数\']\">{{ day }}天</span></div></td></tr><tr><td>供应商</td><td><div class=\"selectable\"><span class=\"unlimited\" ng-class=\"{\'selected-tag\': index[\'供应商\'] == -1}\" ng-click=\"pick(\'供应商\', -1)\">不限</span> <span class=\"unlimited\" ng-class=\"{\'selected-tag\': $index==index[\'供应商\']}\" ng-click=\"pick(\'供应商\', $index)\" ng-repeat=\"provider in tags[\'供应商\']\">{{ provider }}</span></div></td></tr><tr class=\"selectable\"><td>酒店星级</td><td><span class=\"unlimited\" ng-class=\"{\'selected-tag\': index[\'酒店标准\'] == -1}\" ng-click=\"pick(\'酒店标准\', -1)\">不限</span> <span class=\"unlimited\" ng-class=\"{\'selected-tag\': $index==index[\'酒店标准\']}\" ng-click=\"pick(\'酒店标准\', $index)\" ng-repeat=\"hotel in tags[\'酒店标准\']\">{{ hotel }}</span></td></tr><tr class=\"selectable\"><td>出行方式</td><td><span class=\"unlimited\" ng-class=\"{\'selected-tag\': index[\'交通方式\'] == -1}\" ng-click=\"pick(\'交通方式\', -1)\">不限</span> <span class=\"unlimited\" ng-class=\"{\'selected-tag\': $index==index[\'交通方式\']}\" ng-click=\"pick(\'交通方式\', $index)\" ng-repeat=\"transport in tags[\'交通方式\']\">{{ transport }}</span></td></tr><tr class=\"selectable\"><td>类型</td><td><span class=\"unlimited\" ng-class=\"{\'selected-tag\': index[\'类型\'] == -1}\" ng-click=\"pick(\'类型\', -1)\">不限</span> <span class=\"unlimited\" ng-class=\"{\'selected-tag\': $index==index[\'类型\']}\" ng-click=\"pick(\'类型\', $index)\" ng-repeat=\"type in tags[\'类型\']\">{{ type }}</span></td></tr><tr><td>目的地</td><td><div class=\"keyword\"><input type=\"text\" placeholder=\"请输入目的地关键词\" ng-model=\"destination\"><md-button class=\"md-raised md-primary\" ng-click=\"search();\">确认搜索</md-button></div></td></tr></table><div class=\"products\"><div class=\"product\" ng-repeat=\"product in products\"><div class=\"left\"><a class=\"product-title\" target=\"_blank\" ui-sref=\"sale.show-product({productId: \'{{product.objectId}}\' })\" ui-sref-opts=\"{ absolute: true }\"><span ng-repeat=\"prefix in product.prefixArray\"><span>[</span> <span>{{ prefix }}</span> <span>]</span></span> <span>{{product.productName}}</span></a><div class=\"metadata\"><span>出发地: {{ product.start.city }}</span> <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span> <span>最近班期： <em>{{ product.latestDate }}</em></span></div><div class=\"metadata\"><span>线路编号：{{ product.objectId }}</span> <span>供应商：{{ product.provider.companyname }}</span></div></div><div class=\"right\"><div class=\"pricebox\"><span>门市价 <em><span class=\"large\">{{ product.latestAdultCompanySalePrice }}</span></em></span></div><div><md-button class=\"md-raised md-primary\">打印行程单</md-button></div></div></div></div>");
+$templateCache.put("app/common/sale/search/show_product.html","<section class=\"product-top\"><div class=\"title-block\"><div class=\"product-title\"><span class=\"product-tag\">{{ product.area }}</span><h1><span ng-repeat=\"prefix in product.prefixArray\"><span>[</span> <span>{{ prefix }}</span> <span>]</span></span> <span>{{product.productName}}</span></h1></div><div class=\"product-metadata\"><span><label>{{ product.start.city }}出发</label> 线路编号:{{ product.objectId }}</span></div></div></section><section class=\"product-center\" layout=\"row\"><div class=\"left\"><calendar-md flex=\"\" layout=\"\" layout-fill=\"\" calendar-direction=\"direction\" on-prev-month=\"prevMonth\" on-next-month=\"nextMonth\" on-day-click=\"dayClick\" title-format=\"\'MMMM y\'\" ng-model=\"selectedDate\" day-format=\"\'d\'\" day-label-format=\"\'EEE\'\" day-label-tooltip-format=\"\'EEEE\'\" day-tooltip-format=\"\'fullDate\'\" week-starts-on=\"firstDayOfWeek\" day-content=\"setDayContent\"></calendar-md></div><div class=\"right\"><div class=\"detail-info\"><div class=\"detail-item\"><label class=\"detail-key\"><strong>行程天数:</strong> <span>{{ product.duration }}天{{ product.hotelDuration }}晚</span></label> <label class=\"detail-key\"><strong>往返交通:</strong> <span>{{ product.transportStandard }}</span></label></div><div class=\"detail-item\"><label class=\"detail-key\"><strong>销售价:</strong> <span>{{ product.latestAdultCompanySalePrice }}</span></label></div></div><div class=\"detail-reserve\"><div class=\"reserve-info\"><span>建议至少提前 <strong>{{ product.stopDay }}</strong> 天预订</span></div><div class=\"reserve-time\"><label>出发日期:</label><div class=\"timebox\">{{ product.latestDate }} <span>{{ product.latestAdultCompanySalePrice }}</span> 元/成人价, <span>{{ product.latestChildCompanySalePrice }}</span> 元/儿童价</div></div><div class=\"reserve-time\"><label>预订人数:</label><div class=\"people\"><span>成人</span><counter ng-model=\"adult\"></counter><span>儿童</span><counter ng-model=\"child\"></counter></div></div><div class=\"center\"><md-button class=\"md-raised md-primary\" ng-click=\"order();\">预订</md-button></div></div><div class=\"button-list\"><div class=\"icon\"><i class=\"print-icon fa fa-print\" aria-hidden=\"true\"></i> <a>打印行程</a></div><div class=\"icon\"><i class=\"fa fa-file-pdf-o\" aria-hidden=\"true\"></i> <a>下载pdf</a></div></div></div></section><section class=\"product-information\"><md-tabs md-dynamic-height=\"\" md-border-bottom=\"\"><md-tab label=\"行程信息\"><div ng-repeat=\"itinerary in product.itinerary\" class=\"itinerary\"><div class=\"dayitem\"><span class=\"d\">第{{$index + 1}}天</span> <span class=\"s\">{{ itinerary.title }}</span></div><div class=\"cyitem\"><p class=\"s1\"><strong>餐饮</strong> {{ itinerary.food }}</p><p class=\"s2\"><strong>住宿</strong> {{ itinerary.hotelDetail }}或同级{{ itinerary.hotel }}</p><p class=\"s3\"><strong>参考航班/火车班次</strong> {{ itinerary.flight }}</p></div><div class=\"detail\" ng-bind-html=\"getItinerary($index);\"></div></div></md-tab><md-tab label=\"费用说明\"><div class=\"tab-item\"><div class=\"fyitem-wrapper\"><span class=\"fyitem\">费用包含</span></div><div class=\"detail\"><div template=\"\" key=\"priceInclude\"></div></div></div><div class=\"tab-item\"><div class=\"fyitem-wrapper\"><span class=\"fyitem\">费用不含</span></div><div class=\"detail\"><div template=\"\" key=\"priceExclude\"></div></div></div></md-tab><md-tab label=\"签证信息\"><div class=\"visa-info\"><div template=\"\" key=\"visaInfo\"></div></div></md-tab><md-tab label=\"预订须知\"><div class=\"tab-item\"><div class=\"detail\"><div template=\"\" key=\"reserveInfo\"></div></div></div><div class=\"tab-item\"><div class=\"fyitem-wrapper\"><span class=\"fyitem\">收客限制</span></div><div class=\"detail\"><div template=\"\" key=\"restriction\"></div></div></div></md-tab></md-tabs></section>");
+$templateCache.put("app/common/provider/directives/menu/menu.html","<td>{{label}}</td><td><md-select ng-if=\"isEditing\" ng-change=\"onValueChange();\" ng-model=\"selectValue\" aria-label=\"select\"><md-option ng-selected=\"$first\" ng-value=\"option\" ng-repeat=\"option in options\">{{option}}</md-option></md-select><p ng-if=\"!isEditing\">{{ value }}</p><input name=\"{{ name }}\" type=\"hidden\" value=\"{{ value }}\"></td>");
+$templateCache.put("app/common/provider/directives/address/address.html","<div class=\"address\" layout=\"row\" ayout-align=\"start center\"><div layout=\"row\" layout-align=\"start center\"><div>省份:</div><md-input-container><md-select class=\"margin\" ng-if=\"isEditing\" ng-model=\"$parent.province\"><md-option ng-selected=\"$first\" ng-value=\"province\" ng-repeat=\"province in provinces\">{{province.name}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ province }}</p></div><div layout-align=\"start center\" layout=\"row\"><div>城市:</div><md-input-container><md-select class=\"margin\" ng-if=\"isEditing\" ng-model=\"$parent.city\"><md-option ng-selected=\"$first\" ng-value=\"city\" ng-repeat=\"city in cities\">{{city.name}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ city }}</p></div><div layout-align=\"start center\" layout=\"row\" ng-if=\"showCounty\"><div>区县:</div><md-input-container><md-select class=\"margin\" ng-if=\"isEditing\" ng-model=\"$parent.county\"><md-option ng-selected=\"$first\" ng-value=\"county\" ng-repeat=\"county in counties\">{{county.name}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ county }}</p></div><div layout=\"row\" layout-align=\"start center\" ng-if=\"showCounty\"><div class=\"margin\">地址:</div><input ng-if=\"isEditing\" class=\"margin\" ng-disabled=\"!isEditing\" name=\"address\" type=\"text\" ng-model=\"detail\"><div ng-if=\"!isEditing\">{{ detail }}</div></div></div>");
+$templateCache.put("app/common/provider/directives/password/password.html","<div><input class=\"inline\" type=\"password\" ng-model=\"password\" ng-blur=\"verify();\" ng-focus=\"focus();\"><div class=\"inline\">确认密码:</div><input class=\"inline\" type=\"password\" ng-model=\"password2\" ng-blur=\"verify();\" ng-focus=\"focus();\"><div id=\"verified\" class=\"inline input-field\"></div></div>");
+$templateCache.put("app/common/provider/directives/returnPolicy/returnPolicy.html","<div><div class=\"block\"><div>全年总人数: <input ng-if=\"isEditing\" type=\"text\" ng-disabled=\"!isEditing\" ng-model=\"returnPolicy.returnTotalPeople\" ng-value=\"provider.returnTotalPeople\"><p ng-if=\"!isEditing\">{{ returnPolicy.returnTotalPeople }}</p>(人)</div><div>加返 <input ng-if=\"isEditing\" type=\"text\" ng-disabled=\"!isEditing\" ng-model=\"returnPolicy.returnMoneyEachPeople\" ng-value=\"provider.returnMoneyEachPeople\"><p ng-if=\"!isEditing\">{{ returnPolicy.returnMoneyEachPeople }}</p>(元/人)</div></div><div class=\"block\"><div>全年销售额: <input ng-if=\"isEditing\" type=\"number\" ng-disabled=\"!isEditing\" ng-model=\"returnPolicy.returnTotalRevenue\" ng-value=\"provider.returnTotalRevenue\"><p ng-if=\"!isEditing\">{{ returnPolicy.returnTotalRevenue }}</p>(元)</div><div>加返 <input ng-if=\"isEditing\" type=\"number\" ng-disabled=\"!isEditing\" ng-model=\"returnPolicy.returnMoneyRevenue\" ng-value=\"provider.returnMoneyRevenue\"><p ng-if=\"!isEditing\">{{ returnPolicy.returnMoneyRevenue }}</p>(元)</div></div></div>");
 $templateCache.put("app/common/product/directives/itinerary/add.html","<div class=\"modal-header\"><h3 class=\"modal-title\">添加行程信息</h3></div><div class=\"modal-body\"><table><tr><td>日期</td><td><input type=\"text\" ng-model=\"date\" placeholder=\"日期\" bs-datepicker=\"\" autoclose=\"true\"></td></tr><tr><td>路线</td><td><input type=\"text\" ng-model=\"start\" placeholder=\"起始点\"><p>-</p><input type=\"text\" ng-model=\"end\" placeholder=\"目的地\"></td></tr><tr><td>住宿</td><td><input type=\"text\" placeholder=\"住宿情况\" ng-model=\"hotel\"></td></tr><tr><td>餐饮</td><td><input type=\"text\" ng-model=\"cafe\" value=\"asdasd\"></td></tr><tr><td>交通</td><td><input type=\"text\" ng-model=\"transportation\"></td></tr><tr><td>出发时间</td><td><input type=\"text\" ng-model=\"startTime\"></td></tr><tr><td>游览行程</td><td colspan=\"4\"><textarea msd-elastic=\"\" style=\"width: 400px;\" ng-model=\"detail\"></textarea></td></tr></table></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" type=\"button\" ng-click=\"close()\">取消</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"add()\">确认</button></div>");
 $templateCache.put("app/common/product/directives/product-address/address.html","<style>\n    .select-address {\n        overflow: hidden;\n        position:fixed;\n        left: 50%;\n        z-index: 19911125;\n        transition:0.3s;\n        box-shadow: 0 3px 12px rgba(0,0,0,.175);\n        background: #fff;\n        display: none;\n    }\n    .select-address.active {\n        top: 0!important;\n    }\n    .select-address-container ul {\n        list-style: none;\n        margin: 0;\n        padding: 0;\n    }\n    .select-address-container ul li {\n        width: 240px;\n        padding: 10px;\n        display: table-cell;\n        vertical-align: middle;\n    }\n    .select-address-container ul li:nth-child(even) {\n        background: #eee;\n    }\n    .select-address-container ul li span {\n        font-size: 13px;\n        list-style: none;\n        display: inline-block;\n        margin:5px 7px;\n        cursor: pointer;\n    }\n    .select-address-footer {\n        border-top: 1px solid #eee;\n        padding: 10px 15px;\n        overflow: hidden;\n    }\n    .select-address-footer input {\n        min-width: 50%;\n    }\n</style><div class=\"select-address form-inline\"><div class=\"select-address-container\"><ul><li><span ng-repeat=\"item in provinces\" ng-click=\"aSet.p(item.p)\" ng-class=\"{\'label label-success\': p === item.p}\">{{item.p}} {{x}}</span></li><li ng-if=\"cities\"><span ng-repeat=\"item in cities\" ng-click=\"aSet.c(item.n)\" ng-class=\"{\'label label-success\': c === item.n}\">{{item.n}}</span></li><li ng-if=\"c\"><span ng-repeat=\"item in dists\" ng-click=\"aSet.a(item.s)\" ng-class=\"{\'label label-success\': a === item.s}\">{{item.s}}</span><h5 ng-if=\"!dists\" class=\"text-muted text-center\">没有县级资料</h5></li></ul></div><div class=\"select-address-footer\"><span class=\"pull-right\"><button ng-click=\"clear()\" class=\"btn btn-sm btn-link\">清空</button> <button ng-click=\"submit()\" class=\"btn btn-sm btn-success\" type=\"submit\">确定</button></span> <strong class=\"text-danger\">{{ p }} {{ c }} {{ a }}</strong> <input ng-show=\"p\" ng-model=\"d\" class=\"form-control input-sm\" type=\"text\" placeholder=\"具体街道\"></div></div>");
-$templateCache.put("app/common/product/directives/providerSideBar/providerSideBar.html","<md-sidenav class=\"md-sidenav-left md-whiteframe-z2\" md-component-id=\"provider-side-bar\"><md-toolbar class=\"md-theme-indigo search\"><h1 class=\"md-toolbar-tools\">Sidenav Left</h1><div><input class=\"inline box\" type=\"text\" ng-blur=\"search();\"><md-button class=\"inline md-raised\" style=\"color: black\">搜索</md-button></div><md-button class=\"md-raised\" style=\"color: black\" ng-click=\"advanceSearch();\">高级搜索</md-button></md-toolbar><div ng-show=\"isMenu\"><md-content layout-padding=\"\"><md-button ng-click=\"getProviderList(\'motorcade\')\" class=\"md-primary\">车队</md-button></md-content><md-content layout-padding=\"\"><md-button ng-click=\"getProviderList(\'airticket\')\" class=\"md-primary\">机票</md-button></md-content><md-content layout-padding=\"\"><md-button ng-click=\"getProviderList(\'domestieOperator\')\" class=\"md-primary\">地接社</md-button></md-content></div><div ng-show=\"isSecondMenu\"><table><tr ng-repeat=\"provider in providers\"><td><md-button ng-click=\"pickProvider($index)\" class=\"md-primary\">{{ provider.nickname }}</md-button></td><td><md-button ng-click=\"openContact($index)\" class=\"md-primary\">联系信息</md-button></td></tr></table></div></md-sidenav>");
+$templateCache.put("app/common/product/directives/providerSideBar/providerSideBar.html","<md-sidenav class=\"md-sidenav-left\" md-component-id=\"provider-side-bar\" md-whiteframe=\"4\"><md-toolbar class=\"md-theme-indigo search\"><h1 class=\"md-toolbar-tools\">选择供应商</h1></md-toolbar><div ng-if=\"providers.length > 0\" angucomplete-alt=\"\" id=\"ex1\" placeholder=\"搜索供应商\" pause=\"100\" selected-object=\"selectProvider\" local-data=\"providers\" local-search=\"searchProvider\" title-field=\"nickname,companyname\" auto-match=\"true\" minlength=\"1\" input-class=\"form-control form-control-small\"></div><div><md-content layout-padding=\"\" ng-repeat=\"provider in filterProviders\"><md-button ng-click=\"pickProvider($index)\" class=\"md-primary\">{{ provider.nickname }} ({{ provider.companyname}})</md-button></md-content></div></md-sidenav>");
 $templateCache.put("app/common/product/directives/textField/textField.html","<td>{{ label }}:</td><td colspan=\"{{ maximumColumn }}\"><input ng-if=\"isEditing\" class=\"input-field\" type=\"text\" name=\"{{key}}\"><div ng-if=\"!isEditing\">{{ value }}</div></td>");
-$templateCache.put("app/common/provider/directives/address/address.html","<td>地址:</td><td layout=\"row\"><div>省份:</div><md-input-container><md-select class=\"margin\" ng-if=\"isEditing\" ng-change=\"onProvinceChange();\" ng-model=\"$parent.$parent.selectedProvince\" aria-label=\"province-select\"><md-option ng-selected=\"$first\" ng-value=\"province\" ng-repeat=\"province in provinces\">{{province.name}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ province }}</p><div class=\"margin\">城市:</div><md-input-container><md-select class=\"margin\" ng-if=\"isEditing\" ng-change=\"onCityChange();\" ng-model=\"$parent.$parent.$parent.selectedCity\" aria-label=\"city-select\"><md-option ng-selected=\"$first\" ng-value=\"city\" ng-repeat=\"city in cities\">{{city.name}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ city }}</p><div class=\"margin\">区县:</div><md-input-container><md-select class=\"margin\" ng-if=\"isEditing\" ng-change=\"onCountyChange();\" ng-model=\"$parent.$parent.$parent.selectedCounty\" aria-label=\"county-select\"><md-option ng-selected=\"$first\" ng-value=\"county\" ng-repeat=\"county in counties\">{{county.name}}</md-option></md-select></md-input-container><p ng-if=\"!isEditing\">{{ province }}</p><div class=\"margin\">地址:</div><input class=\"margin\" ng-disabled=\"!isEditing\" name=\"address\" type=\"text\"> <input type=\"hidden\" name=\"province\" value=\"{{ province }}\"> <input type=\"hidden\" name=\"city\" value=\"{{ city }}\"> <input type=\"hidden\" name=\"county\" value=\"{{ county }}\"></td>");
-$templateCache.put("app/common/provider/directives/menu/menu.html","<td>{{label}}</td><td><md-select ng-if=\"isEditing\" ng-change=\"onValueChange();\" ng-model=\"selectValue\" aria-label=\"select\"><md-option ng-selected=\"$first\" ng-value=\"option\" ng-repeat=\"option in options\">{{option}}</md-option></md-select><p ng-if=\"!isEditing\">{{ value }}</p><input name=\"{{ name }}\" type=\"hidden\" value=\"{{ value }}\"></td>");
-$templateCache.put("app/common/provider/directives/label/providerLabel.html","<td>{{label}}:</td><td><div>{{ value }}</div></td>");
-$templateCache.put("app/common/provider/directives/multiChoice/multiChoice.html","<td>{{name}}:</td><td><label class=\"checkbox-inline\" ng-repeat=\"option in options\"><input type=\"checkbox\" ng-model=\"option.state\" ng-checked=\"{{ option.state }}\" ng-disabled=\"!isEditing\" class=\"checkbox\" name=\"{{ option.name }}\"><p class=\"text\">{{ option.value }}</p></label></td>");
-$templateCache.put("app/common/provider/directives/password/password.html","<td>密码:</td><td><div><input class=\"inline input-field\" type=\"password\" ng-model=\"password\" name=\"password\" ng-blur=\"verify();\" ng-focus=\"focus();\"><div class=\"inline input-field\">确认密码:</div><input class=\"inline input-field\" type=\"password\" ng-model=\"password2\" ng-blur=\"verify();\" ng-focus=\"focus();\"><div id=\"verified\" class=\"inline input-field\"></div></div></td>");
-$templateCache.put("app/common/provider/directives/returnPolicy/returnPolicy.html","<td>加返政策:</td><td><div class=\"block\"><div class=\"inline\">全年总人数: <input type=\"text\" ng-disabled=\"!isEditing\" name=\"returnTotalPeople\" ng-value=\"provider.returnTotalPeople\"> (人)</div><div class=\"inline\">加返 <input type=\"text\" ng-disabled=\"!isEditing\" name=\"returnMoneyEachPeople\" ng-value=\"provider.returnMoneyEachPeople\"> (元/人)</div></div><div class=\"block\"><div class=\"inline\">全年销售额: <input type=\"number\" ng-disabled=\"!isEditing\" name=\"returnTotalRevenue\" ng-value=\"provider.returnTotalRevenue\"> (元)</div><div class=\"inline\">加返 <input type=\"number\" ng-disabled=\"!isEditing\" name=\"returnMoneyRevenue\" ng-value=\"provider.returnMoneyRevenue\"> (元)</div></div></td>");
-$templateCache.put("app/common/provider/directives/textField/textField.html","<td>{{label}}:</td><td colspan=\"{{ maximumColumn }}\"><input ng-disabled=\"!isEditing\" class=\"input-field\" type=\"text\" name=\"{{key}}\" ng-value=\"value\"><div class=\"inline input-field\" ng-if=\"durationShow\"><div class=\"inline\">{{duration}}</div><input ng-disabled=\"!isEditing\" type=\"text\" class=\"inline input-field\" ng-model=\"fromDate\" placeholder=\"开始时间\" bs-datepicker=\"\" date-format=\"mediumDate\" name=\"{{key}}Start\"><div class=\"inline input-field\">-</div><input ng-disabled=\"!isEditing\" type=\"text\" class=\"inline input-field\" ng-model=\"endDate\" date-format=\"mediumDate\" placeholder=\"结束时间\" bs-datepicker=\"\" name=\"{{key}}End\"></div><md-button ng-if=\"show && isEditing\" class=\"md-raised md-primary\" ngf-select=\"uploadFile($file);\">上传文件</md-button><div ng-show=\"show\" class=\"inline input-field\">{{filename}} <input type=\"hidden\" name=\"{{key}}Filename\" value=\"{{hashname}}\"></div></td>");
-$templateCache.put("app/common/provider/directives/upload/upload.html","<md-button class=\"md-raised md-primary\" ngf-select=\"upload($file)\">上传文件</md-button>");
-$templateCache.put("app/common/product/directives/providerSideBar/contact/myModalContent.html","<div class=\"modal-header\"><h3 class=\"modal-title\">联系信息</h3></div><div class=\"modal-body\"><ul><li ng-repeat=\"item in contact\">{{ item.key }}: {{ item.value }}</li></ul></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" type=\"button\" ng-click=\"close()\">返回</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"showDetails()\">查看详情</button></div>");
 $templateCache.put("app/common/product/directives/providerSideBar/search/advanceProviderSearch.html","<div class=\"modal-header\"><h3 class=\"modal-title\">高级搜索</h3></div><div class=\"modal-body\"><ul><li><p>供应商名称</p><input type=\"text\" ng-model=\"keyword\"></li><li><p>服务地区</p><input type=\"text\" ng-model=\"mainDestination\"></li><li><p>服务类型</p><md-select ng-model=\"servingType\" placeholder=\"选择服务类型\"><md-option ng-value=\"type.key\" ng-repeat=\"type in types\">{{type.value}}</md-option></md-select></li></ul></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" type=\"button\" ng-click=\"close()\">返回</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"search()\">搜索</button></div>");
+$templateCache.put("app/common/product/directives/providerSideBar/contact/myModalContent.html","<div class=\"modal-header\"><h3 class=\"modal-title\">联系信息</h3></div><div class=\"modal-body\"><ul><li ng-repeat=\"item in contact\">{{ item.key }}: {{ item.value }}</li></ul></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" type=\"button\" ng-click=\"close()\">返回</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"showDetails()\">查看详情</button></div>");
+$templateCache.put("app/common/sale/search/directives/calendar/calendar.html","<md-content layout=\"column\" layout-fill=\"\" md-swipe-left=\"next()\" md-swipe-right=\"prev()\"><md-toolbar><div class=\"md-toolbar-tools\" layout=\"row\"><md-button class=\"md-icon-button\" ng-click=\"prev()\" aria-label=\"Previous month\"><md-tooltip ng-if=\"::tooltips()\">Previous month</md-tooltip><md-icon md-svg-icon=\"md-tabs-arrow\"></md-icon></md-button><div flex=\"\"></div><h2 class=\"calendar-md-title\"><span>{{ calendar.start | date:titleFormat:timezone }}</span></h2><div flex=\"\"></div><md-button class=\"md-icon-button\" ng-click=\"next()\" aria-label=\"Next month\"><md-tooltip ng-if=\"::tooltips()\">Next month</md-tooltip><md-icon md-svg-icon=\"md-tabs-arrow\" class=\"moveNext\"></md-icon></md-button></div></md-toolbar><md-content ng-if=\"weekLayout === columnWeekLayout\" class=\"agenda\"><div ng-repeat=\"week in calendar.weeks track by $index\"><div ng-if=\"sameMonth(day)\" ng-class=\'{\"disabled\" : isDisabled(day), active: active === day, \"has-events\": hasEvents(day) }\' ng-click=\"handleDayClick(day)\" ng-repeat=\"day in week\" layout=\"\"><md-tooltip ng-if=\"::tooltips()\">{{ day | date:dayTooltipFormat:timezone }}</md-tooltip><div>{{ day | date:dayFormat:timezone }}</div><div flex=\"\" ng-bind-html=\"dataService.data[dayKey(day)]\"></div></div></div></md-content><md-content ng-if=\"weekLayout !== columnWeekLayout\" flex=\"\" layout=\"column\" class=\"calendar\"><div layout=\"row\" class=\"subheader\"><div layout-padding=\"\" class=\"subheader-day\" flex=\"\" ng-repeat=\"day in calendar.weeks[0]\"><md-tooltip ng-if=\"::tooltips()\">{{ day | date:dayLabelTooltipFormat }}</md-tooltip>{{ day | date:dayLabelFormat }}</div></div><div ng-if=\"week.length\" ng-repeat=\"week in calendar.weeks track by $index\" flex=\"\" layout=\"row\"><div tabindex=\"{{ sameMonth(day) ? (day | date:dayFormat:timezone) : 0 }}\" ng-repeat=\"day in week track by $index\" ng-click=\"handleDayClick(day)\" flex=\"\" layout=\"\" layout-padding=\"\" ng-class=\'{\"disabled\" : isDisabled(day), \"active\": isActive(day), \"has-events\": hasEvents(day), \"md-whiteframe-12dp\": hover || focus }\' ng-focus=\"focus = true;\" ng-blur=\"focus = false;\" ng-mouseleave=\"hover = false\" ng-mouseenter=\"hover = true\"><md-tooltip ng-if=\"::tooltips()\">{{ day | date:dayTooltipFormat }}</md-tooltip><div>{{ day | date:dayFormat }}</div><div flex=\"\" ng-bind-html=\"dataService.data[dayKey(day)]\" id=\"{{ day | date:dayIdFormat }}\"></div></div></div></md-content></md-content>");
 $templateCache.put("app/common/sale/search/directives/filter/filter.html","<div class=\"modal-header\"><h3 class=\"modal-title\">高级搜索</h3></div><div class=\"modal-body\"><ul><li><strong>关键词</strong> <input type=\"text\" ng-model=\"keyword\"></li><li><strong>出发日期</strong> <a ng-class=\"{active: startLimit}\" ng-click=\"setStartLimit();\">不限</a> <input type=\"text\" class=\"inline\" data-date-format=\"yyyy-MM-dd\" ng-blur=\"setStartBlur();\" ng-model=\"startDate\" autoclose=\"true\" bs-datepicker=\"\"><div class=\"inline\">-</div><input type=\"text\" class=\"inline\" data-date-format=\"yyyy-MM-dd\" ng-blur=\"setStartBlur();\" ng-model=\"$parent.endDate\" autoclose=\"true\" bs-datepicker=\"\"></li><li><strong>价格范围</strong> <a ng-class=\"{active: priceLimit}\" ng-click=\"setPriceLimit();\">不限</a> <input type=\"number\" class=\"inline\" ng-model=\"priceMin\" ng-blur=\"setPriceBlur();\"><div class=\"inline\">-</div><input type=\"number\" class=\"inline\" ng-model=\"priceMax\" ng-blur=\"setPriceBlur();\"></li><li><strong>天数</strong> <label class=\"inline\" ng-repeat=\"day in days\"><input type=\"radio\" class=\"checkbox\" value=\"{{ day.value }}\" ng-click=\"setDay($index);\" name=\"days\"><p class=\"text\">{{ day.string }}</p></label></li></ul></div><div class=\"modal-footer\"><md-button class=\"md-raised\" ng-click=\"close()\">返回</md-button><md-button class=\"md-raised md-primary\" ng-click=\"search()\">搜索</md-button></div>");
+$templateCache.put("app/common/sale/search/directives/reserve/reserve.html","<div class=\"modal-header\"><h3 class=\"modal-title\">预定</h3></div><div class=\"modal-body\"><div class=\"item\"><label>出发日期</label><md-input-container><md-select ng-model=\"reserve.date\"><md-option ng-selected=\"$first\" ng-value=\"price.date\" ng-repeat=\"price in priceArray\">{{price.date}} 成人<span style=\"color: #ff1a1a\">{{ price.adultCompanySalePrice }}</span>元, 儿童<span style=\"color: #ff1a1a\">{{ price.childCompanySalePrice }}</span>元</md-option></md-select></md-input-container></div><div class=\"item\"><label>预定人数</label> <span>成人</span><counter ng-model=\"reserve.adult\"></counter><span>儿童</span><counter ng-model=\"reserve.child\"></counter></div></div><div class=\"modal-footer\"><button class=\"btn btn-primary\" type=\"button\" ng-click=\"close()\">确认</button> <button class=\"btn btn-warning\" type=\"button\" ng-click=\"cancel()\">返回</button></div>");
 $templateCache.put("app/common/sale/search/directives/signin/signin.html","<div class=\"modal-header\"><h3 class=\"modal-title\">{{ name }}报名表</h3></div><div class=\"modal-body\"><ul><li><strong>姓名</strong> <input type=\"text\" ng-model=\"username\"></li><li><strong>身份证</strong> <input type=\"text\" ng-model=\"identifier\"></li><li><strong>联系电话</strong> <input type=\"text\" ng-model=\"phone\"></li><li><strong>状态</strong><md-select placeholder=\"付款状态\" ng-model=\"state\" class=\"menu\"><md-option ng-value=\"opt.state\" ng-repeat=\"opt in options\">{{ opt.value }}</md-option></md-select></li></ul></div><div class=\"modal-footer\"><md-button class=\"md-raised\" ng-click=\"close()\">返回</md-button><md-button class=\"md-raised md-primary\" ng-click=\"signin()\">确认</md-button></div>");}]);

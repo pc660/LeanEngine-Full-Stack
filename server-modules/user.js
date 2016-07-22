@@ -15,6 +15,7 @@ userApi.get = (req, res) => {
     query.equalTo('level', level);
     query.find().then(function(results) {
         tool.l("get user success");
+        tool.l(results.length);
         tool.l(results);
         res.send(results);
     }, function(error) {

@@ -1,10 +1,11 @@
-export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac) => {
+export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac, SweetAlert) => {
   'ngInject';
   $log.log('init my account');
   if ($scope.$parent.unfinished) {
     $scope.unfinished = "(有未处理产品)";
   }
 
+  $scope.fetchedProvider = false;
   $scope.contactList = [];
 
   userFac.getCurrentUserInfo().then(function(result) {
@@ -14,6 +15,7 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
   });
 
   providerFac.getMyProvider().then(function(results) {
+    $scope.fetchedProvider = true;
     // There should be only one provider.
     if (results.length == 1) {
       $scope.provider = results[0];
@@ -23,6 +25,7 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
       });
     }
   }, function (error) {
+    $scope.fetchedProvider = true;
   });
 
   $scope.verify = (index) => {
@@ -113,6 +116,10 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
   };
 
   $scope.addContact = () => {
+    if (!$scope.provider) {
+      SweetAlert.swal("对不起,你还没有供应商");
+      return;
+    }
     userFac.addContact($scope.contactList, $scope.provider.objectId);
   };
 
@@ -151,5 +158,9 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
   // TODO.
   $scope.remind = (index) => {
 
+  };
+
+  $scope.addMyProvider = () => {
+    $state.go("home.add-provider", {"provider": $scope.provider});
   };
 };
