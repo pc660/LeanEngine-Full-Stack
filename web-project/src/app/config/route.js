@@ -15,8 +15,14 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
     .state('test', {
       url: '/test',
       templateUrl: 'app/test/test.html',
-      controller: 'testCtrl',
-      authenticate: lcConfig.userLevel.SALE,
+      controller: 'integrationTest',
+      authenticate: undefined,
+    })
+    .state('test.integration', {
+      url: '/test/integration',
+      templateUrl: 'app/test/test.html',
+      controller: 'integrationTest',
+      authenticate: undefined,
     });
 
   $stateProvider
@@ -24,7 +30,6 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       url: '/login',
       templateUrl: 'app/auth/home/login.html',
       controller: 'loginCtrl',
-      authenticate: lcConfig.userLevel.SALE,
     });
   $stateProvider
     .state('sale', {
@@ -58,6 +63,12 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       url: '/show-order',
       templateUrl: 'app/common/sale/order/show_order.html',
       controller: 'showOrderCtrl',
+      authenticate: lcConfig.userLevel.SALE,
+    })
+    .state('sale.show-order-detail', {
+      url: '/show-order-detail/:orderId',
+      templateUrl: 'app/common/sale/order/show_order_detail.html',
+      controller: 'showOrderDetailCtrl',
       authenticate: lcConfig.userLevel.SALE,
     })
     .state('sale.show-itinerary', {
@@ -120,14 +131,7 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       templateUrl: 'app/common/account/account.html',
       controller: 'myAccountCtrl',
       authenticate: lcConfig.userLevel.PROVIDER,
-    })
-    .state('home.test', {
-      url: '/test',
-      templateUrl: 'app/common/directives/calendar/calendar.html',
-      controller: 'calendarCtrl',
-      authenticate: lcConfig.userLevel.PROVIDER,
-    })
-;
+    });
 
   $urlRouterProvider.otherwise('/login');
 };

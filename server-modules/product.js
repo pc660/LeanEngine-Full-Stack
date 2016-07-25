@@ -15,7 +15,6 @@ productApi.add = (req, res) => {
   var user = req.user;
   var product = req.body.product;
   var productAV = AV.Object.new('Product');
-  tool.l(product);
   // TODO: Maybe we should use a for loop.
   productAV.set('productName', product.productName);
   productAV.set('fullName', product.fullName);
@@ -36,7 +35,7 @@ productApi.add = (req, res) => {
   productAV.set('duration', product.duration);
   productAV.set('hotelDuration', product.hotelDuration);
 
-  productAV.set('productManager', product.productManager);
+  tool.l(product.pickedProvider.objectId);
   var provider = AV.Object.createWithoutData('Provider', product.pickedProvider.objectId);
   productAV.set('provider', provider);
 

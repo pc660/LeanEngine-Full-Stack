@@ -15,7 +15,11 @@ export default ($log, $http, $state, $window, $compile) => {
 */
       scope.$on("updateTemplate", function(event, params) {
         $log.log("update");
+        $log.log(params.params[key]);
         var content = params.params[key];
+        if (content[0] != "<") {
+          content = "<p>" + content + "</p>";
+        }
         var html =  $compile(content)(scope);
         element.append(html);
         $log.log(scope.model);

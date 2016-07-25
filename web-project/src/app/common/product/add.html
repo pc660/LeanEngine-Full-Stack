@@ -232,22 +232,22 @@
           </iframe>
         </md-tab>
         <md-tab class="tab-button" ng-if="isEditing" label="行程信息">
-          <div ng-repeat="i in getDuration() track by $index" class="itinery">
+          <div ng-repeat="itineraryItem in product.itinerary track by $index" class="itinery">
             <div class="item">
               <label>第{{ $index + 1 }}天:</label>
-              <input type="text" ng-model="product.itinerary[$index].title">
+              <input type="text" ng-model="itineraryItem.title">
               <span>请填写行程信息如: 上海-北京</span>
             </div>
             <div class="item">
               <label>参考航班/列车班次</label>
-              <input type="text" ng-model="product.itinerary[$index].flight">
+              <input type="text" ng-model="itineraryItem.flight">
             </div>
             <div class="item">
               <label>住宿信息</label>
-              <input type="text" ng-model="product.itinerary[$index].hotelDetail">
+              <input type="text" ng-model="itineraryItem.hotelDetail">
               <span>或同级</span>
               <md-input-container>
-                <md-select ng-model="product.itinerary[$index].hotel">
+                <md-select ng-model="itineraryItem.hotel">
                   <md-option ng-selected="$first" ng-value="hotel" ng-repeat="hotel in hotels">
                     {{hotel}}
                   </md-option>
@@ -257,15 +257,15 @@
             <div class="item">
               <label>餐饮信息</label>
               <input type="checkbox" ng-model="morning">早
-              <input type="text" ng-disabled="!morning" ng-model="product.itinerary[$index].food.morning">
+              <input type="text" ng-disabled="!morning" ng-model="itineraryItem.food.morning">
               <input type="checkbox" ng-model="noon">中
-              <input type="text" ng-disabled="!noon" ng-model="product.itinerary[$index].food.noon">
+              <input type="text" ng-disabled="!noon" ng-model="itineraryItem.food.noon">
               <input type="checkbox" ng-model="evening">晚
-              <input type="text" ng-disabled="!evening" ng-model="product.itinerary[$index].food.evening">
+              <input type="text" ng-disabled="!evening" ng-model="itineraryItem.food.evening">
             </div>
             <div class="item">
               <label>详细描述: </label>
-              <div class="editor ueditor" config="ueconfig" ng-model="product.itinerary[$index].detail"></div>
+              <div class="editor ueditor" config="ueconfig" ng-model="itineraryItem.detail"></div>
             </div>
             <hr>
           </div>

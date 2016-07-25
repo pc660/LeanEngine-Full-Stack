@@ -27,7 +27,7 @@
       <tr ng-repeat="order in orders">
         <td>
           <div>
-            <div>订单来源： 旅游顾问-{{ order.contactname }}</div>
+            <div>订单来源： {{ order.contactname }}</div>
             <a>
               <span ng-repeat="prefix in order.product.prefixArray">[{{ prefix }}]</span>
               {{ order.product.fullName }}
@@ -52,16 +52,18 @@
               <strong ng-if="order.status == 2">已付款</strong>
               <strong ng-if="order.status == 3">已完成</strong>
             </p>
-            <md-button ng-if="order.status == 1" class="md-raised md-primary">确认付款</md-button>
+            <md-button ng-if="order.status == 1" ng-click="paid(order.objectId);" class="md-raised md-primary">确认付款</md-button>
             <md-button ng-if="order.status == 2" class="md-raised md-primary">确认交易完成</md-button>
           </div>
         </td>
         <td>
           <div class="operation">
-            <a ng-click="showDetail();">查看详情</a>
-            <a ng-click="showConfirmation();">查看确认单</a>
-            <a ng-click="printReceipt();">打印发票</a>
-            <a ng-click="cancelOrder();">取消订单</a>
+            <a target="_blank"
+               ui-sref="sale.show-order-detail({orderId: '{{order.objectId}}' })"
+               ui-sref-opts="{ absolute: true }">显示详情</a>
+            <a href="{{ order.fileUrl }}">查看确认单</a>
+            <a ng-click="printReceipt();">打印发票(未实现,电子发票这边文档比较麻烦看起来)</a>
+            <a ng-click="cancelOrder();">取消订单(未实现,但是很简单.)</a>
           </div>
         </td>
       </tr>

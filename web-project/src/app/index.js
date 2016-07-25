@@ -69,6 +69,7 @@ import showProductSaleCtrl from './common/sale/search/showProductCtrl.js';
 import reserveFormCtrl from './common/sale/search/directives/reserve/reserveFormCtrl.js';
 import addOrderCtrl from './common/sale/order/addOrderCtrl.js';
 import showOrderCtrl from './common/sale/order/showOrderCtrl.js';
+import showOrderDetailCtrl from './common/sale/order/showOrderDetailCtrl.js';
 
 // factory
 import authFac from './common/authFac';
@@ -79,10 +80,12 @@ import itineraryFac from './common/itineraryFac';
 import customerFac from './common/customerFac';
 import userFac from './common/userFac';
 import orderFac from './common/orderFac';
+import testFac from './test/testFac';
 
 // Testing util
 import fakeDataFac from './test/addFakeDataFac';
-import testCtrl from './test/testCtrl'
+import testCtrl from './test/testCtrl';
+import integrationTest from './test/integration/adminFlow';
 
 angular.module('webProject',
   ['ngAnimate', 'ngCookies', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
@@ -148,6 +151,7 @@ angular.module('webProject',
   .controller('reserveFormCtrl', reserveFormCtrl)
   .controller('addOrderCtrl', addOrderCtrl)
   .controller('showOrderCtrl', showOrderCtrl)
+  .controller('showOrderDetailCtrl', showOrderDetailCtrl)
 
   // factory
   .factory('authFac', authFac)
@@ -160,5 +164,7 @@ angular.module('webProject',
   .factory('orderFac', orderFac)
   // testing
   .factory('fakeDataFac', fakeDataFac)
-  .controller('testCtrl', testCtrl);
+  .factory('testFac', testFac)
+  .controller('testCtrl', testCtrl)
+  .controller('integrationTest', integrationTest);
 

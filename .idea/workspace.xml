@@ -2,63 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36d602e2-4574-40ef-8ee6-5cc17e2c110f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular-base64/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular-base64/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular/angular.min.js.gzip" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular/angular.min.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular/bower.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/app/common/bower_components/angular/package.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-13991fc40d.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-223a904097.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-33a0265481.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-42ff65c705.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-5decc18451.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-6875176c82.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-68cbf4bad2.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-6f0bcb476f.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-831944db1a.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-8fd5752c32.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-9136b98fa0.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-95cce65c12.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-c7d122c9eb.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-dad42c955f.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/app-ffeb43dfb4.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/vendor-aae64d1eeb.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/vendor-da4b9232cb.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/scripts/vendor-fe98b4732a.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-0968f07fbf.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-18f27cf38a.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-3778c6ffa7.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-3928974dfb.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-9625781886.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-db2c026a93.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/app-f06099321d.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/styles/vendor-200927bc42.css" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/account/account.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/provider/add.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/provider/add.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/provider/add.scss" afterPath="$PROJECT_DIR$/web-project/src/app/common/provider/add.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/provider/addProviderCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/provider/addProviderCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/app.js" afterPath="$PROJECT_DIR$/server-modules/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/config.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/auth/home/home.html" afterPath="$PROJECT_DIR$/web-project/src/app/auth/home/home.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/index.html" afterPath="$PROJECT_DIR$/public/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/api-router.js" afterPath="$PROJECT_DIR$/server-modules/api-router.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/auth.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/auth.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/directives/counter/counterDirect.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/directives/counter/counterDirect.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/index.js" afterPath="$PROJECT_DIR$/web-project/src/app/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/static/itinerary.html" afterPath="$PROJECT_DIR$/server-modules/static/itinerary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/auth/home/loginCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/auth/home/loginCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/order.js" afterPath="$PROJECT_DIR$/server-modules/order.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/orderFac.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/orderFac.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/product.js" afterPath="$PROJECT_DIR$/server-modules/product.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/provider.js" afterPath="$PROJECT_DIR$/server-modules/provider.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.scss" afterPath="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicyDirect.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicyDirect.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/providerFac.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/providerFac.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserveFormCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserveFormCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/route.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/route.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/search/searchCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/search/searchCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderCtrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/search/showProductCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/search/showProductCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/showProductDetailCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/showProductDetailCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/sale/search/show_product.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/sale/search/show_product.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/directives/template/templateDirect.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/directives/template/templateDirect.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/user.js" afterPath="$PROJECT_DIR$/server-modules/user.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -80,115 +48,223 @@
     <favorites_list name="LeanEngine-Full-Stack" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="showProductDetailCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showProductDetailCtrl.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="81" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="81" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="add_order.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.625">
-              <caret line="132" column="53" selection-start-line="132" selection-start-column="52" selection-end-line="132" selection-end-column="53" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="show_product.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/show_product.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="13.941176">
-              <caret line="97" column="35" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="showProductCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/showProductCtrl.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="calendarConfig.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/config/calendarConfig.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="show_order_detail.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.5">
-              <caret line="69" column="25" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="provider.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/server-modules/provider.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.04761905">
-              <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="show_order.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.875">
-              <caret line="61" column="19" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="search.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-7.8235292">
-              <caret line="132" column="35" selection-start-line="132" selection-start-column="35" selection-end-line="132" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="searchCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/searchCtrl.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="79" column="77" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="77" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="vertical" split-proportion="0.7946237">
+      <split-first>
+        <leaf>
+          <file leaf-file-name="show_order_detail.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-8.625">
+                  <caret line="70" column="9" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="9" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="showProductCtrl.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showProductCtrl.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-0.0">
+                  <caret line="0" column="12" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="12" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="search.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-15.5">
+                  <caret line="131" column="40" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="40" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="show_order.scss" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.scss">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-0.0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="add.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-3.372549">
+                  <caret line="160" column="64" selection-start-line="160" selection-start-column="62" selection-end-line="160" selection-end-column="64" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="addOrderCtrl.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="70" column="5" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="92" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="show.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/show.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-0.0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="show_product.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/show_product.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-0.0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="showItineraryCtrl.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showItineraryCtrl.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="show_order.html" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.7955801">
+                  <caret line="63" column="29" selection-start-line="63" selection-start-column="29" selection-end-line="63" selection-end-column="29" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="testFac.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/test/testFac.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.56692916">
+                  <caret line="44" column="47" selection-start-line="44" selection-start-column="47" selection-end-line="44" selection-end-column="47" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="provider.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/server-modules/provider.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="13.888889">
+                  <caret line="90" column="42" selection-start-line="90" selection-start-column="42" selection-end-line="90" selection-end-column="42" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="user.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/server-modules/user.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-7.7777777">
+                  <caret line="79" column="38" selection-start-line="79" selection-start-column="38" selection-end-line="79" selection-end-column="38" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="adminFlow.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/test/integration/adminFlow.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="addFakeDataFac.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/test/addFakeDataFac.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="productFac.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/productFac.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="22" column="24" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="24" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/index.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-6.111111">
+                  <caret line="87" column="22" selection-start-line="87" selection-start-column="7" selection-end-line="87" selection-end-column="22" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="auth.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/config/auth.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="route.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/config/route.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-5.5555553">
+                  <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/test/test.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-0.0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="SCSS File" />
-        <option value="Html5" />
         <option value="JavaScript File" />
+        <option value="Html5" />
       </list>
     </option>
   </component>
@@ -198,26 +274,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserve.html" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.scss" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/commonSer.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/directives/counter/counterDirect.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserveFormCtrl.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/order_finish.html" />
-        <option value="$PROJECT_DIR$/web-project/bower.json" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/test/addFakeDataFac.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/index.js" />
-        <option value="$PROJECT_DIR$/server-modules/config.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/orderFac.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/operation.scss" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js" />
-        <option value="$PROJECT_DIR$/server-modules/api-router.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderCtrl.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.scss" />
-        <option value="$PROJECT_DIR$/server-modules/order.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/index.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/provider/directives/address/address.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/search.scss" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/productFac.js" />
@@ -225,10 +281,6 @@
         <option value="$PROJECT_DIR$/web-project/src/app/common/directives/textField/textFieldDirect.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/product/directives/providerSideBar/providerSideBarDirect.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/config/config.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/config/route.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/auth/home/home.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" />
@@ -238,17 +290,41 @@
         <option value="$PROJECT_DIR$/web-project/src/app/common/provider/add.scss" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.scss" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/provider/add.html" />
-        <option value="$PROJECT_DIR$/server-modules/provider.js" />
         <option value="$PROJECT_DIR$/server-modules/app.js" />
-        <option value="$PROJECT_DIR$/server-modules/user.js" />
-        <option value="$PROJECT_DIR$/server-modules/product.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/product/showProductDetailCtrl.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/searchCtrl.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html" />
+        <option value="$PROJECT_DIR$/server-modules/static/order_confirm.html" />
+        <option value="$PROJECT_DIR$/web-project/src/app/auth/home/loginCtrl.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/test/testUtil.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/providerFac.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/test/addFakeDataFac.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/index.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/config/auth.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/config/route.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
+        <option value="$PROJECT_DIR$/server-modules/user.js" />
+        <option value="$PROJECT_DIR$/server-modules/provider.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/test/testFac.js" />
+        <option value="$PROJECT_DIR$/server-modules/product.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/test/integration/adminFlow.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/show_product.html" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/directives/template/templateDirect.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/directives/counter/counterDirect.js" />
+        <option value="$PROJECT_DIR$/server-modules/static/itinerary.html" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/showProductCtrl.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserveFormCtrl.js" />
+        <option value="$PROJECT_DIR$/server-modules/api-router.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/orderFac.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderCtrl.js" />
+        <option value="$PROJECT_DIR$/server-modules/order.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html" />
       </list>
     </option>
   </component>
@@ -407,6 +483,62 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="integration" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="i18n" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -531,6 +663,86 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="search" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sale" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="search" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="reserve" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sale" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="order" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -591,7 +803,75 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="account" />
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LeanEngine-Full-Stack" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="web-project" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="directives" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="counter" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -679,7 +959,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="config" />
+              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -768,12 +1048,12 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13192612" sideWeight="0.50524247" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.13192612" sideWeight="0.50524247" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -804,98 +1084,68 @@
           <line>27</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/web-project/src/app/test/integration/adminFlow.js</url>
+          <line>34</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/web-project/src/app/config/route.js</url>
+          <line>19</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/server-modules/product.js</url>
+          <line>39</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="24" />
+      <option name="time" value="31" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/config.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/providerFac.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="2" selection-start-line="23" selection-start-column="2" selection-end-line="23" selection-end-column="2" />
+          <caret line="73" column="29" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/auth.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="28" selection-start-line="46" selection-start-column="28" selection-end-line="46" selection-end-column="28" />
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/menuConfig.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/test/test.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/config/route.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="127" column="47" selection-start-line="127" selection-start-column="39" selection-end-line="127" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/show.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.75">
-          <caret line="52" column="48" selection-start-line="50" selection-start-column="9" selection-end-line="52" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/order.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="51" column="43" selection-start-line="51" selection-start-column="35" selection-end-line="51" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/show.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="-5.5555553">
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.111111">
-          <caret line="89" column="60" selection-start-line="89" selection-start-column="48" selection-end-line="89" selection-end-column="60" />
+        <state vertical-scroll-proportion="-6.111111">
+          <caret line="87" column="22" selection-start-line="87" selection-start-column="7" selection-end-line="87" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0">
-          <caret line="0" column="26" selection-start-line="0" selection-start-column="16" selection-end-line="0" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.scss">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/test/testCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -903,7 +1153,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/showProviderDetailCtrl.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/itineraryFac.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -911,33 +1161,147 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/commonSer.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.490196">
-          <caret line="96" column="18" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/customerFac.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/authFac.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="16" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="16" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/test/addFakeDataFac.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="16" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.444445">
+        <state vertical-scroll-proportion="0.0">
           <caret line="164" column="4" selection-start-line="164" selection-start-column="4" selection-end-line="164" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/auth/home/login.html">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.625">
+          <caret line="60" column="63" selection-start-line="58" selection-start-column="18" selection-end-line="60" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server-modules/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.7777777">
+          <caret line="79" column="38" selection-start-line="79" selection-start-column="38" selection-end-line="79" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server-modules/provider.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="13.888889">
+          <caret line="90" column="42" selection-start-line="90" selection-start-column="42" selection-end-line="90" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/productFac.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="22" column="24" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/test/integration/adminFlow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/directives/template/templateDirect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="e#0#41#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/auth/home/homeCtrl.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/directives/counter/counter.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.125">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/directives/counter/counterDirect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="25" selection-start-line="19" selection-start-column="25" selection-end-line="19" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server-modules/static/order_confirm.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-55.625">
+          <caret line="89" column="37" selection-start-line="89" selection-start-column="37" selection-end-line="89" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server-modules/static/itinerary.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.235294">
+          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server-modules/product.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.580646">
+          <caret line="262" column="4" selection-start-line="262" selection-start-column="4" selection-end-line="262" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -945,103 +1309,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/auth/home/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.5">
-          <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/auth/home/loginCtrl.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserve.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="11" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicyDirect.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/show_product.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="21.875">
+          <caret line="84" column="25" selection-start-line="84" selection-start-column="25" selection-end-line="84" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/showProductCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-20.555555">
+          <caret line="91" column="38" selection-start-line="91" selection-start-column="38" selection-end-line="91" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/test/testFac.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.56692916">
+          <caret line="44" column="47" selection-start-line="44" selection-start-column="47" selection-end-line="44" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/directives/reserve/reserveFormCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="42" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
+          <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-16.25">
-          <caret line="26" column="9" selection-start-line="0" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/add.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-20.0">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/directives/returnPolicy/returnPolicy.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.375">
-          <caret line="7" column="2" selection-start-line="7" selection-start-column="2" selection-end-line="7" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/addProviderCtrl.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/calendarConfig.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="6" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="6" />
+          <caret line="19" column="50" selection-start-line="19" selection-start-column="30" selection-end-line="19" selection-end-column="50" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/add.html">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="57.17647">
-          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
+        <state vertical-scroll-proportion="-8.392157">
+          <caret line="158" column="12" selection-start-line="158" selection-start-column="10" selection-end-line="158" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server-modules/config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.444445">
-          <caret line="58" column="1" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/passport.js">
-      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="35" column="13" selection-start-line="35" selection-start-column="2" selection-end-line="35" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/global.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/city.json">
+    <entry file="file://$PROJECT_DIR$/server-modules/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1052,36 +1384,68 @@
     <entry file="file://$PROJECT_DIR$/server-modules/api-router.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="21" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/orderFac.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="23" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-29.444445">
+          <caret line="53" column="13" selection-start-line="53" selection-start-column="13" selection-end-line="53" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server-modules/order.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.7777777">
+          <caret line="73" column="58" selection-start-line="73" selection-start-column="58" selection-end-line="73" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/provider/add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/auth.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/itinerary.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.5555553">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/app.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.2222223">
-          <caret line="33" column="9" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
+        <state vertical-scroll-proportion="-1.1111112">
+          <caret line="2" column="14" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/user.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.444445">
-          <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
+        <state vertical-scroll-proportion="-3.372549">
+          <caret line="160" column="64" selection-start-line="160" selection-start-column="62" selection-end-line="160" selection-end-column="64" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showItineraryCtrl.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/show.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1097,10 +1461,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showItineraryCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.4444447">
-          <caret line="76" column="60" selection-start-line="76" selection-start-column="53" selection-end-line="76" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -1108,111 +1472,47 @@
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showProductCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.8431373">
-          <caret line="230" column="39" selection-start-line="230" selection-start-column="25" selection-end-line="230" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.75">
-          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/product.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.7777777">
-          <caret line="231" column="0" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/calendarConfig.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.625">
-          <caret line="132" column="53" selection-start-line="132" selection-start-column="52" selection-end-line="132" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.875">
-          <caret line="61" column="19" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="19" />
+          <caret line="0" column="12" selection-start-line="0" selection-start-column="11" selection-end-line="0" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.8235292">
-          <caret line="132" column="35" selection-start-line="132" selection-start-column="35" selection-end-line="132" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/showProductDetailCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="81" selection-start-line="18" selection-start-column="23" selection-end-line="18" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/searchCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="79" column="77" selection-start-line="79" selection-start-column="26" selection-end-line="79" selection-end-column="77" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/showProductCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/show_product.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="13.941176">
-          <caret line="97" column="35" selection-start-line="97" selection-start-column="35" selection-end-line="97" selection-end-column="35" />
+        <state vertical-scroll-proportion="-15.5">
+          <caret line="131" column="40" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.5">
-          <caret line="69" column="25" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
+        <state vertical-scroll-proportion="-8.625">
+          <caret line="70" column="9" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server-modules/provider.js">
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.04761905">
-          <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="5" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7955801">
+          <caret line="63" column="29" selection-start-line="63" selection-start-column="29" selection-end-line="63" selection-end-column="29" />
           <folding />
         </state>
       </provider>

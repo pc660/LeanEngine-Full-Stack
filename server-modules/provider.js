@@ -16,6 +16,7 @@ providerApi.add = (req, res) => {
   var provider = req.body.provider;
   if (provider === undefined) {
     res.status(404).send();
+    return;
   }
   var user = req.user;
   if (!user && !user.isCurrent()) {
@@ -102,18 +103,17 @@ providerApi.addProvider = (provider, res, user, contact) => {
   // 设置加返政策.
   providerAV.set('returnPolicy', provider.returnPolicy);
 
-  //providerAV.set('user', user);
   // Find the files.
   var filename = provider.licenseFilename;
   if (!filename) {
     providerAV.save().then(function (provider) {
+      res.send(provider.id);
       user.set("provider", provider);
       user.save();
-      tool.l("success");
-      res.send();
       contact.set("provider", provider);
       contact.save().then(function() {
         tool.l("contact success");
+        return;
       });
     }, function(error) {
       tool.l(error);
@@ -130,6 +130,7 @@ providerApi.addProvider = (provider, res, user, contact) => {
     }
     providerAV.save().then(function(provider) {
       tool.l("success");
+      res.send(provider.id);
       user.set("provider", provider);
       user.save().then(function() {
         tool.l("user success");
@@ -139,8 +140,8 @@ providerApi.addProvider = (provider, res, user, contact) => {
       contact.set("provider", provider);
       contact.save().then(function() {
         tool.l("contact success");
+        return;
       });
-      res.send();
     })
 
   }, function(response) {

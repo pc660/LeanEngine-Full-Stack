@@ -32,6 +32,7 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
             break;
           }
           case lcConfig.userLevel.SALE: {
+            $log.log("/sale");
             $location.path("/sale");
             break;
           }

@@ -9,14 +9,20 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   $scope.reserve = $state.params.reserve;
   $scope.product = $state.params.product;
   var productId = $state.params.productId;
-  $scope.customers = [];
   $scope.order = $scope.reserve;
+  $log.log("get scope order");
+  $log.log($scope.order);
+  if (!$scope.order) {
+    $scope.order = {};
+  }
+  $scope.order.customers = [];
   var length = 0;
   if ($scope.order) {
     length = $scope.order.adult + $scope.order.child;
   }
+  $log.log(length);
   for (var i = 0; i < length; i++) {
-    $scope.customers.push({"index": i});
+    $scope.order.customers.push({"index": i + 1});
   }
 
   // TODO: Need to pick one.
@@ -30,18 +36,18 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   $scope.$watch("order.adult", function(newValue, oldValue) {
     $scope.updateTotalPrice();
     if (oldValue < newValue) {
-      $scope.customers.push({});
+      $scope.order.customers.push({});
     } else if (oldValue > newValue) {
-      $scope.customers.pop();
+      $scope.order.customers.pop();
     }
   });
 
   $scope.$watch("order.child", function(newValue, oldValue) {
     $scope.updateTotalPrice();
     if (oldValue < newValue) {
-      $scope.customers.push({});
+      $scope.order.customers.push({});
     } else if (oldValue > newValue) {
-      $scope.customers.pop();
+      $scope.order.customers.pop();
     }
   });
 
@@ -59,6 +65,7 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   $scope.submitOrder = () => {
     $scope.order.productId = $scope.product.objectId;
     $log.log($scope.order.productId);
+    $log.log($scope.order);
     orderFac.submitOrder($scope.order, $scope.reserve).then(function(result) {
       $log.log("success");
       SweetAlert.swal("订单成功", "订单编号: " + result.objectId + " 请及时联系平台负责人确认订单情况.", "success");

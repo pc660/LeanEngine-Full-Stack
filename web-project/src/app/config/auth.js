@@ -1,11 +1,12 @@
 const authenticate = (authFac, $location, $rootScope, $log, lcConfig, $state, $window, $cookies) => {
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
     // If we do not need authentication.
+    $log.log(toState.authenticate);
     if (toState.authenticate === undefined) {
       $log.log("No need authenticate");
       return;
     }
-  
+
     if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
       $log.log("admin");
       return;
@@ -20,7 +21,7 @@ const authenticate = (authFac, $location, $rootScope, $log, lcConfig, $state, $w
     $log.log("authenticate success");
   });
 
-  
+
 };
 
 export default authenticate;

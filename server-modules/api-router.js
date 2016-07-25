@@ -57,6 +57,8 @@ router.post('/customer/search', customer.search);
 // Route order
 router.post('/order/add', order.add);
 router.post('/order/getAll', order.getAll);
+router.post('/order/get', order.get);
+router.post('/order/update', order.update);
 
 // router user.
 router.post('/user/get',  user.get);
@@ -65,6 +67,7 @@ router.post('/user/addContactList',  user.addContactList);
 router.post('/user/getContactList',  user.getContactList);
 router.post('/user/editContactList',  user.editContactList);
 router.post('/user/deleteContactList',  user.deleteContactList);
+
 
 router.post('/auth/authenticate', passport.authenticate('login', { failWithError: true }), function(req, res) {
     tool.l("login success");

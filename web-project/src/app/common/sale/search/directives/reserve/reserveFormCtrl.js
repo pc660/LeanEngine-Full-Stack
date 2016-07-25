@@ -10,6 +10,8 @@ export default ($scope, $log, $window, $uibModalInstance, results) => {
   $scope.priceArray = keys.map(function(key) {
     var object = {};
     var date = new Date(key);
+    $log.log(date.getDate());
+    $log.log(date);
     var dateString = date.getFullYear() + "年" + (date.getMonth() + 1)+ "月" + date.getDate() + "日";
     object.date = dateString;
     object.adultCompanySalePrice = results[key].adultCompanySalePrice;

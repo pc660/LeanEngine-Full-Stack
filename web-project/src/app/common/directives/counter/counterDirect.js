@@ -10,9 +10,12 @@ export default ($rootScope, $log, $state, $window) => {
     },
     link: function(scope, element, attr) {
       scope.value = 0;
-      if (scope.model) {
-        scope.value = scope.model;
+      $log.log("counter");
+      if (!scope.model) {
+        scope.model = 0;
       }
+      scope.value = scope.model;
+
       scope.plus = () => {
         if (scope.value >= 99) {
           return;

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<style>
+    table {
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    h4 {
+        font-size: 22px;
+        text-align: center;
+        font-weight: bold;
+        line-height: 36px;
+    }
+    .doctable {
+        width: 100%;
+        font-size: 14px;
+        margin-bottom: 20px;
+        tr {
+            th {
+                background: #0070c0;
+                color: #fff;
+                font-weight: bold;
+            }
+            td {
+                border: 2px solid #111;
+                padding: 10px 5px;
+            }
+        }
+    }
+    .vis-table {
+        width: 100%;
+        font-size: 14px;
+        tr {
+            th {
+                background: #2f5496;
+                color: #fff;
+                padding: 10px;
+            }
+            td {
+                border: 1px solid #111;
+                padding: 10px 5px;
+            }
+        }
+    }
+</style>
+<h4>旅游产品确认单</h4>
+<table class="doctable" border="1">
+    <tr>
+        <th>订单编号</th>
+        <td>{{ orderId }}</td>
+    </tr>
+    <tr>
+        <th>产品名称</th>
+        <td>{{ productName }}</td>
+    </tr>
+    <tr>
+        <th>出团日期</th>
+        <td>{{ order.stateDate }}</td>
+    </tr>
+    <tr>
+        <th>出游人数</th>
+        <td>{{ order.adult }}(成人) : {{ order.child }}(儿童)</td>
+    </tr>
+</table>
+<table class="vis-table" border="1">
+    <tr>
+        <th colspan="8">结算信息</th>
+    </tr>
+    <tr>
+        <th>类型</th>
+        <th>数量</th>
+        <th>结算单价</th>
+        <th>结算价格小计</th>
+        <th>价格调整</th>
+        <th>金额总计</th>
+    </tr>
+    <tr>
+        <td>成人</td>
+        <td>{{ order.adult }}</td>
+        <td>￥{{ order.adultCompanySalePrice }}</td>
+        <td>￥{{ order.adultTotalPrice }}</td>
+        <td>￥0.00</td>
+        <td>￥{{ order.adultTotalPrice }}</td>
+    </tr>
+    <tr>
+        <td>儿童</td>
+        <td>{{ order.child }}</td>
+        <td>￥{{ order.childCompanySalePrice }}</td>
+        <td>￥{{ order.childTotalPrice }}</td>
+        <td>￥0.00</td>
+        <td>￥{{ order.childTotalPrice }}</td>
+    </tr>
+</table>
+<table class="vis-table" border="1">
+    <tr>
+        <th colspan="8">游客信息资料</th>
+    </tr>
+    <tr>
+        <th>序号</th>
+        <th>游客类型</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>出生日期</th>
+        <th>证件类型</th>
+        <th>证件号码</th>
+    </tr>
+    {% for customer in order.customers %}
+        <tr>
+            <td>{{ customer.index }}</td>
+            <td>{{ customer.type }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.sex }}</td>
+            <td>{{ customer.birthDate }}</td>
+            <td>{{ customer.license }}</td>
+            <td>{{ customer.licenseNumber }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<div>
+    <p><strong>备注信息：</strong></p>
+    <p><strong>回传确认单</strong></p>
+</div>
+{% for customer in order.customers %}
+    <div>
+        <p>游客{{ customer.name }}</p>
+        <br>
+    </div>
+{% endfor %}

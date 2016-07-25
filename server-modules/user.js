@@ -73,12 +73,15 @@ userApi.editContactList = (req, res) => {
 }
 
 userApi.getContactList = (req, res) => {
+    tool.l("userApi.getContactList");
     var providerId = req.body.providerId;
     var query = new AV.Query("Contact");
     var provider = AV.Object.createWithoutData("Provider", providerId);
     query.equalTo("provider", provider);
     query.find().then(function(results) {
         res.send(results);
+    }, function(error) {
+        tool.l(error);
     });
 }
 

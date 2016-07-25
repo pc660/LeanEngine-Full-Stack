@@ -105,7 +105,7 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     if ($scope.product) {
       $log.log(date);
       var price = $scope.product.price;
-      return price[year][month][day];
+      return price[year][month][day - 1];
     }
     return null;
   }

@@ -72,9 +72,6 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   }
 
   function upload(provider) {
-    // First upload the file.
-    $log.log("provider");
-    $log.log(provider);
     return $http.post('/api/provider/add', {provider: provider});
   }
 

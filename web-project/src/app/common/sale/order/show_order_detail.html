@@ -1,21 +1,23 @@
 <table>
   <tr>
-    <td colspan="2" class="title">
+    <td colspan="99" class="title">
       预订信息
     </td>
   </tr>
   <tr>
     <td>联系人</td>
+    <td colspan="99">{{ order.contactname }}</td>
+  </tr>
+  <tr>
     <td>联系方式</td>
+    <td colspan="99">{{ order.cellphone }}</td>
+  </tr>
+  <tr>
     <td>邮件</td>
+    <td colspan="99">{{ order.email }}</td>
   </tr>
   <tr>
-    <td>{{ order.contactname }}</td>
-    <td>{{ order.cellphone }}</td>
-    <td>{{ order.email }}</td>
-  </tr>
-  <tr>
-    <td colspan="2" class="title">
+    <td colspan="99" class="title">
       产品信息
     </td>
   </tr>
@@ -38,6 +40,7 @@
     <td>上海</td>
     <td>
       <span>成人: {{ order.adult }}人</span>
+      <span>/</span>
       <span>儿童: {{ order.child }}人</span>
     </td>
     <td>
@@ -45,7 +48,7 @@
     </td>
   </tr>
   <tr>
-    <td colspan="2" class="title">
+    <td colspan="99" class="title">
       游客信息
     </td>
   </tr>

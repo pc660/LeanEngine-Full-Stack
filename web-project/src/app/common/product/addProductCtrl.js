@@ -32,12 +32,18 @@ export default ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, 
     ],
   };
 
-  $scope.getDuration = () => {
-    if ($scope.product.duration) {
-      return new Array($scope.product.duration);
+  $scope.$watch("product.duration", function(newValue, oldValue) {
+    $log.log(newValue);
+    if (!$scope.product.itinerary) {
+      $scope.product.itinerary = [];
     }
-    return new Array(0);
-  }
+    if (newValue > oldValue) {
+      $scope.product.itinerary.push({});
+    } else if (newValue < oldValue){
+      $scope.product.itinerary.pop();
+    }
+    $log.log($scope.product.itinerary);
+  })
 
   $scope.submitProduct = () => {
     $log.log($scope.product);
@@ -76,41 +82,6 @@ export default ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, 
   $scope.addContact = () => {
     userFac.addContact($scope.product.pickedProvider.contactList, $scope.product.pickedProvider.objectId);
   }
-
-  $scope.addItinerary = () => {
-    var modalInstance = $uibModal.open({
-          animation: true,
-          templateUrl: 'app/common/product/directives/itinerary/add.html',
-          controller: 'addItineraryCtrl',
-          resolve: {
-            results: function () {
-              return {};
-            }
-          }
-        });
-        modalInstance.result.then(function (results) {
-          $scope.itinerary.push(results);
-        }, function () {
-        });
-  };
-
-  $scope.editItinerary = (index) => {
-    // Show the model with the result.
-    var modalInstance = $uibModal.open({
-          animation: true,
-          templateUrl: 'app/common/product/directives/itinerary/add.html',
-          controller: 'addItineraryCtrl',
-          resolve: {
-            results: function () {
-              return $scope.itinerary[index];
-            }
-          }
-        });
-        modalInstance.result.then(function (results) {
-          $scope.itinerary[index] = results;
-        }, function () {
-     });
-  };
 
   productFac.getInternalUsers().then(function(result) {
     $scope.responses = [];

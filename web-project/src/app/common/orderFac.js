@@ -6,11 +6,17 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getUnpaidOrder = getUnpaidOrder;
   service.getPaidOrder = getPaidOrder;
   service.getFinishedOrder = getFinishedOrder;
+  service.getOrder = getOrder;
+  service.orderGetPaid = orderGetPaid;
   return service;
 
   function submitOrder(order, customers) {
     $log.log("submitOrder");
     return $http.post('/api/order/add', {order: order, customers: customers});
+  }
+
+  function orderGetPaid(orderId) {
+    return $http.post('/api/order/update', {orderId: orderId, status: lcConfig.orderStatus.PAID});
   }
 
   function getAllOrder() {
@@ -27,5 +33,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function getFinishedOrder() {
     return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.FINISHED});
+  }
+
+  function getOrder(orderId) {
+    return $http.post('/api/order/get', {id: orderId});
   }
 };

@@ -46,7 +46,14 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
     })
   }
 
-  $scope.showDetail = () => {
+  $scope.showDetail = (orderId) => {
+    $state.go('sale.show-order-detail', {orderId: orderId });
+  }
+
+  $scope.paid = (orderId) => {
+    orderFac.orderGetPaid(orderId).then(function() {
+      SweetAlert.swal("订单付款成功成功", "订单编号: " + orderId, "success");
+    })
   }
 
   $scope.showConfirmation = () => {
