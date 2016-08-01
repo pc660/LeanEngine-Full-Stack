@@ -26,3 +26,12 @@
 .md-sidenav-order {
   width: 300px;
 }
+
+.order {
+  min-width: 1000px;
+  .order-title {
+    span {
+      margin-right: 25px;
+    }
+  }
+}

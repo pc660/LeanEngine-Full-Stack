@@ -6,7 +6,7 @@
     <label>出发日期</label>
     <md-input-container>
       <md-select ng-model="reserve.date">
-        <md-option ng-selected="$first" ng-value="price.date" ng-repeat="price in priceArray">
+        <md-option ng-value="price.date" ng-repeat="price in priceArray">
           {{price.date}}
           成人<span style="color: #ff1a1a">{{ price.adultCompanySalePrice }}</span>元,
           儿童<span style="color: #ff1a1a">{{ price.childCompanySalePrice }}</span>元

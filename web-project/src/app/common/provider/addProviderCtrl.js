@@ -1,4 +1,4 @@
-export default ($state, $log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
+export default (SweetAlert, $state, $log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
   'ngInject';
     var url = lcConfig.apiHost + "/api/provider/add";
     $scope.addUrl = url;
@@ -30,6 +30,7 @@ export default ($state, $log, $scope, $document, $timeout, lcConfig, $window, pr
     $scope.submit = () => {
       $log.log($scope.provider);
       providerFac.upload($scope.provider).then(function(result) {
+        SweetAlert.swal("注册商添加成功", " 请到我的账号中我发布的产品去查看更新.", "success");
       }, function(error) {
 
       });

@@ -9,7 +9,9 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     .then(function(result) {
       $scope.product = result.product;
       $scope.product.provider = result.provider;
-      $scope.product.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
+      if ($scope.product.itineraryFile) {
+        $scope.product.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
+      }
       productFac.getLatestTrip($scope.product);
       $log.log($scope.product);
       // Set the current Date.
@@ -50,16 +52,21 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     $scope.msg = "You clicked (next) month " + data.month + ", " + data.year;
   };
 
+  $scope.order = function() {
+    $log.log($scope.adult);
+    $scope.openReserveForm($scope.adult, $scope.child);
+  }
+
   $scope.dayClick = function(date) {
     $log.log(date);
     if ($scope.priceMap[date]) {
-      $scope.openReserveForm();
+      $scope.openReserveForm(0, 0);
     }
     return;
   }
 
 
-  $scope.openReserveForm = () => {
+  $scope.openReserveForm = (adult, child) => {
     // Show the model with the result.
     var modalInstance = $uibModal.open({
       animation: true,
@@ -68,6 +75,13 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
       resolve: {
         results: function () {
           return $scope.priceMap;
+        },
+        adult: function() {
+          $log.log(adult);
+          return adult;
+        },
+        child: function() {
+          return child;
         }
       }
     });

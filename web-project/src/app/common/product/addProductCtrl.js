@@ -1,7 +1,9 @@
-export default ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig) => {
+export default ($log, SweetAlert, $state, $scope, $stateParams, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig) => {
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
+  // Too hacky.
+  $scope.firstUpdates = false;
   $scope.product = {};
   $scope.toggleLeft = buildToggler('provider-side-bar');
   $scope.pickedProviders = [];
@@ -9,6 +11,7 @@ export default ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, 
   $scope.addUrl = lcConfig.apiHost + "/api/product/add";
   // test
   $scope.isEditing = true;
+  $scope.isExisting = false;
   $scope.showItinerary = false;
   $scope.showNotice = false;
   $scope.itinerary = [];
@@ -32,7 +35,40 @@ export default ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, 
     ],
   };
 
+  if ($stateParams.productId) {
+    // Update product.
+    $scope.isExisting = true;
+    productFac.getProductDetail($stateParams.productId).then(function(result) {
+      $scope.firstUpdates = true;
+
+      $log.log("get product detail");
+      $log.log(result);
+      $scope.product = result.product;
+      $scope.product.duration = $scope.product.itinerary.length;
+      $scope.product.responsible = result.responsible;
+      $scope.product.platformcontact = result.platformcontact;
+      $log.log($scope.product.responsible)
+      //$scope.product.respons
+      //$scope.product.duration = result.itinerary.length;
+      //$log.log($scope.product.duration);
+      $scope.product.pickedProvider = result.provider;
+      $scope.product.contact = result.contact;
+      providerFac.getContactList($scope.product.pickedProvider.objectId).then(function(contactList) {
+        $log.log(contactList);
+        $scope.product.pickedProvider.contactList = contactList;
+      })
+
+      $log.log($scope.product);
+    })
+  }
+  $log.log($stateParams);
+  $log.log($state.params);
+
   $scope.$watch("product.duration", function(newValue, oldValue) {
+    if ( $scope.firstUpdates) {
+      $scope.firstUpdates = false;
+      return;
+    }
     $log.log(newValue);
     if (!$scope.product.itinerary) {
       $scope.product.itinerary = [];
@@ -48,8 +84,9 @@ export default ($log, $scope, $mdSidenav, $window, dispatcherConfig, $uibModal, 
   $scope.submitProduct = () => {
     $log.log($scope.product);
     productFac.uploadProduct($scope.product)
-    .then(function(response) {
+    .then(function(result) {
       $log.log("upload product success");
+        SweetAlert.swal("发布成功", " 请到我的账号中我发布的产品去查看更新.", "success");
     }, function(error) {
     });
   };

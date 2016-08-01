@@ -4,8 +4,6 @@
     <th>品牌名称</th>
     <th>公司名称</th>
     <th>营业执照</th>
-    <th>联系人姓名</th>
-    <th>联系人电话</th>
     <th>详情</th>
   </tr>
   <tr ng-repeat="provider in providers">
@@ -13,8 +11,6 @@
     <td>{{ provider.nickname }}</td>
     <td>{{ provider.companyname }}</td>
     <td><a ng-if="provider.licenseFile.url" download=".pdf" href="{{ provider.licenseFile.url }}"> 点击下载</a></td>
-    <td>{{ provider.contactname }}</td>
-    <td>{{ provider.cellphone  }}</td>
     <td>
       <a target="_blank"
         ui-sref="home.show-provider-detail({providerId: '{{provider.objectId}}' })"

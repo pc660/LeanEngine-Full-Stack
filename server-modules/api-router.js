@@ -59,9 +59,11 @@ router.post('/order/add', order.add);
 router.post('/order/getAll', order.getAll);
 router.post('/order/get', order.get);
 router.post('/order/update', order.update);
+router.post('/order/cancel', order.cancel);
 
 // router user.
 router.post('/user/get',  user.get);
+router.post('/user/getProvider', user.getProvider);
 router.post('/user/getCurrentUserInfo',  user.getCurrentUserInfo);
 router.post('/user/addContactList',  user.addContactList);
 router.post('/user/getContactList',  user.getContactList);

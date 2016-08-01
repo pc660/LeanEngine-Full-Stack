@@ -5,8 +5,15 @@
 * @author wangxiao
 */
 
-export default ($log, $state, $scope, $window, commonSer, helloSer, productFac) => {
+export default (authFac, $log, lcConfig,  $state, $scope, $window, commonSer, helloSer, productFac) => {
   'ngInject';
+  // Need to get current user level.
+  $log.log(authFac.getUserLevel());
+  if (authFac.getUserLevel() == lcConfig.userLevel.ADMIN) {
+    $scope.admin = true;
+  } else {
+    $scope.admin = false;
+  }
   /*productFac.hasUnfinished().then(function(result) {
     var count = result.count;
     if (count > 0) {

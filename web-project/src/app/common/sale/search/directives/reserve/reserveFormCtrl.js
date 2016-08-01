@@ -1,8 +1,11 @@
-export default ($scope, $log, $window, $uibModalInstance, results) => {
+export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, adult, child) => {
   'ngInject';
 
   // This is for previous results
   $scope.results = results;
+  $scope.reserve = {};
+  $scope.reserve.adult = adult;
+  $scope.reserve.child = child;
   $log.log(results);
   // Init.
   var keys = Object.keys(results);
@@ -10,8 +13,6 @@ export default ($scope, $log, $window, $uibModalInstance, results) => {
   $scope.priceArray = keys.map(function(key) {
     var object = {};
     var date = new Date(key);
-    $log.log(date.getDate());
-    $log.log(date);
     var dateString = date.getFullYear() + "年" + (date.getMonth() + 1)+ "月" + date.getDate() + "日";
     object.date = dateString;
     object.adultCompanySalePrice = results[key].adultCompanySalePrice;
@@ -19,13 +20,17 @@ export default ($scope, $log, $window, $uibModalInstance, results) => {
     return object;
   });
 
-  $log.log($scope.priceArray);
-
   $scope.cancel = function() {
     $uibModalInstance.dismiss('cancel');
   };
 
   $scope.close = function () {
+    if (!$scope.reserve.date) {
+      SweetAlert.swal({
+        title: "请选择日期",
+        type: "warning"});
+      return;
+    }
     var result = {};
     for (var i = 0; i < $scope.priceArray.length; i++) {
       if ($scope.priceArray[i].date == $scope.reserve.date) {

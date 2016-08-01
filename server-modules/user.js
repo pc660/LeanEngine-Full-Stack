@@ -103,4 +103,20 @@ userApi.getCurrentUser = (req) => {
     return null;
 }
 
+userApi.getProvider = (req, res) => {
+    tool.l("userapi.getProvider");
+    var user = userApi.getCurrentUser(req);
+    if (!user) {
+        res.send(202);
+        return;
+    }
+
+    var provider = user.get("provider");
+    provider.fetch().then(function(result) {
+        res.send(result);
+        return;
+    })
+
+}
+
 module.exports = userApi;

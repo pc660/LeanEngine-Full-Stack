@@ -13,6 +13,9 @@ export default ($log, $http, $state, $window) => {
     link: function(scope, element, attr, ctrl) {
       //$scope.type = "text";
       scope.inputType = attr.inputType;
+      if (scope.model) {
+        scope.value = scope.model;
+      }
       scope.$watch("value", function(value) {
         scope.model = value;
       })

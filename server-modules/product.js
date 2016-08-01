@@ -10,22 +10,22 @@ const config = require('./config');
 const userApi = require('./user');
 const multiChoiceConfig = require('./config/multiChoiceConfig');
 
-productApi.add = (req, res) => {
-  tool.l('product.add');
-  var user = req.user;
-  var product = req.body.product;
-  var productAV = AV.Object.new('Product');
-  // TODO: Maybe we should use a for loop.
+function setProduct(productAV, product) {
   productAV.set('productName', product.productName);
   productAV.set('fullName', product.fullName);
   productAV.set('start', product.start);
   productAV.set('type', product.type);
   //productAV.set('responsible', product.responsible);
-  var responsibleAV = AV.Object.createWithoutData('_User', product.responsible);
-  productAV.set('responsible', responsibleAV);
-  var platformcontactAV = AV.Object.createWithoutData('_User', product.platformcontact);
-  productAV.set('platformcontact', platformcontactAV);
+  if (product.responsible) {
+    var responsibleAV = AV.Object.createWithoutData('_User', product.responsible.objectId);
+    productAV.set('responsible', responsibleAV);
+  }
+  if (product.platformcontact) {
+    var platformcontactAV = AV.Object.createWithoutData('_User', product.platformcontact.objectId);
+    productAV.set('platformcontact', platformcontactAV);
+  }
 
+  var price = setDefaultPriceMap(product.price);
   productAV.set('price', product.price);
   productAV.set('hotelStandard', product.hotelStandard);
   productAV.set('transportStandard', product.transportStandard);
@@ -40,18 +40,20 @@ productApi.add = (req, res) => {
   productAV.set('provider', provider);
 
   // HTML
-  productAV.set("description", product.description); 
-  productAV.set("itinerary", product.itinerary); 
+  productAV.set("description", product.description);
+  productAV.set("itinerary", product.itinerary);
   productAV.set("priceInclude", product.priceInclude);
   productAV.set("priceExclude", product.priceExclude);
   productAV.set("selfPaid", product.selfPaid);
-  productAV.set("visaInfo", product.visaInfo); 
+  productAV.set("visaInfo", product.visaInfo);
   productAV.set("reserveInfo", product.reserveInfo);
   productAV.set("restriction", product.restriction);
-  productAV.set("createdBy",  user);
+  productAV.set("reminder", product.reminder);
 
-  var contact = AV.Object.createWithoutData('Contact', product.contact.objectId);
-  productAV.set("contact",  contact);
+  if (product.contact) {
+    var contact = AV.Object.createWithoutData('Contact', product.contact.objectId);
+    productAV.set("contact",  contact);
+  }
 
   // set unpassed
   productAV.set("status", config.productStatus.UNPOSTED);
@@ -63,6 +65,26 @@ productApi.add = (req, res) => {
   productAV.set("visaInfo", product.visaInfo);
   productAV.set("reserveInfo", product.reserveInfo);
   productAV.set("restriction", product.restriction);
+}
+
+productApi.add = (req, res) => {
+  tool.l('product.add');
+  tool.l(req.body.product);
+  var user = req.user;
+  var product = req.body.product;
+  var productAV = {};
+  if (product.objectId) {
+    tool.l("existing product");
+    var productAV =  AV.Object.createWithoutData('Product', product.objectId);
+  } else {
+    tool.l("new product");
+    var productAV = AV.Object.new('Product');
+    productAV.set("createdBy",  user);
+  }
+  // TODO: Maybe we should use a for loop.
+  setProduct(productAV, product);
+
+  tool.l("save");
 
   productAV.save().then(function(productResult) {
       tool.l("success");
@@ -225,9 +247,9 @@ productApi.search = (req, res) => {
   // TODO: uncomment this.
   var user = userApi.getCurrentUser(req);
   /*if (!user) {
-    res.status(404).send();
-    return;
-  }*/
+   res.status(404).send();
+   return;
+   }*/
 
   // Some special handling for search params.
   if (params.self) {
@@ -265,15 +287,41 @@ productApi.search = (req, res) => {
         break;
     }
   }
+
+  query.include("responsible", "provider");
+  var queries = [query.find()];
+  // Do search query.
+  if (params.searchQuery) {
+    var searchQuery = new AV.SearchQuery('Product');
+    //searchQuery.queryString(params.searchQuery);
+    searchQuery.queryString(params.searchQuery);
+    queries.push(searchQuery.find());
+  }
   // TODO: add start date.
   // TODO: add days.
-  query.include("responsible", "provider");
-  query.find().then(function(products) {
+  Promise.all(queries).then(function (results) {
+    var searchResultSet = {};
+    // If there is no search query.
+    if (results.length > 1) {
+      results[1].forEach(function (result) {
+        searchResultSet[result.id] = true;
+      });
+    }
+    tool.l(results);
+    var products = results[0].filter(function (product) {
+      if (results.length > 1 && searchResultSet[product.id]) {
+        return true;
+      } else if (results.length == 1) {
+        return true;
+      }
+      return false;
+    });
     tool.l('Successfully retrieved ' + products.length);
+    tool.l(products);
     // Need to check min date and max date.
     if (params.startDate || params.endDate) {
       var filterProducts = [];
-      products.forEach(function(product) {
+      products.forEach(function (product) {
         var price = product.get("price");
         if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate)) {
           filterProducts.push(product);
@@ -285,7 +333,7 @@ productApi.search = (req, res) => {
     if (params.start) {
       tool.l("start");
       filterProducts = [];
-      products.forEach(function(product) {
+      products.forEach(function (product) {
         var start = product.get("start");
         if (start.province === params.start.province && start.city === params.start.city) {
           filterProducts.push(product);
@@ -295,18 +343,16 @@ productApi.search = (req, res) => {
     }
 
     // Also need to retrieve user information.
-    var responsible = products.map(function(product) {
+    var responsible = products.map(function (product) {
       return product.get("responsible");
     });
-    var providers = products.map(function(product) {
+    var providers = products.map(function (product) {
       return product.get("provider");
     });
 
-    tool.l(products);
     res.send({products: products, responsible: responsible, providers: providers});
     return;
-  }, function(error) {
-    // TODO: handle error.
+  }, function (error) {
     tool.l(error);
   });
 };
@@ -488,6 +534,21 @@ productApi.getProductsCount = (req, res) => {
   Promise.all([query1, query2, query3]).then(function(values) {
     res.send({unposted: values[0], unverified: values[1], verified: values[2]});
   });
+};
+
+function setDefaultPriceMap(priceMap) {
+  for (var key in priceMap) {
+    var monthEvents = priceMap[key];
+    monthEvents.forEach(function(dayEvents) {
+      dayEvents.forEach(function(event) {
+        if (event) {
+          event.reservedPeopleNumber = 0;
+          event.paidPeopleNumber = 0;
+          event.restPeopleNumbner = event.totalPeople;
+        }
+      })
+    })
+  }
 };
 
 module.exports = productApi;

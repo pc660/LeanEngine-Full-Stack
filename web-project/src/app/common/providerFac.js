@@ -85,7 +85,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   }
 
   function getMyProvider() {
-    return $http.post('/api/provider/search', {query: {self: true}});
+    return $http.post('/api/user/getProvider', {});
   }
 
   function getContactList(providerId) {

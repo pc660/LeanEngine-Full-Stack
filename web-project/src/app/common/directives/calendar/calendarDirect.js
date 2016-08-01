@@ -11,6 +11,14 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
     },
     require: "ngModel",
     link: function(scope, element, attr, ctrl) {
+      scope.$watch("model", function(value) {
+        $log.log("value updates");
+        $log.log(scope.model);
+        if (scope.model) {
+          scope.setEvents();
+          // Set the right events.
+        }
+      })
       // TODO: The whole class is slow on performance.
       // Need to figure out how to optimize this.
       /**
@@ -206,6 +214,25 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
         var days = ["周日",  "周一", "周二", "周三", "周四", "周五", "周六"];
         var index = new Date(year, month, day).getDay();
         return days[index];
+      }
+
+      scope.setEvents = () => {
+        $log.log("set events");
+        for (var year in scope.model) {
+          var monthEvents = scope.model[year];
+          for (var i = 0; i < monthEvents.length; i++) {
+            var dayEvents = monthEvents[i];
+            for (var j = 0; j < dayEvents.length; j++) {
+              var event = dayEvents[j];
+              if (event) {
+                $log.log(event);
+                var test = scope.allEvents[year][i][j];
+                scope.allEvents[year][i][j] = event;
+              }
+            }
+          }
+          $log.log(monthEvents);
+        }
       }
     }
   };

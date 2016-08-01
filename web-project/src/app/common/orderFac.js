@@ -8,6 +8,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getFinishedOrder = getFinishedOrder;
   service.getOrder = getOrder;
   service.orderGetPaid = orderGetPaid;
+  service.cancelOrder = cancelOrder;
   return service;
 
   function submitOrder(order, customers) {
@@ -19,23 +20,27 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     return $http.post('/api/order/update', {orderId: orderId, status: lcConfig.orderStatus.PAID});
   }
 
-  function getAllOrder() {
-    return $http.post('/api/order/getAll');
+  function getAllOrder(admin) {
+    return $http.post('/api/order/getAll', {admin: admin});
   }
 
-  function getUnpaidOrder() {
-    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.UNPAID});
+  function getUnpaidOrder(admin) {
+    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.UNPAID, admin: admin});
   }
 
-  function getPaidOrder() {
-    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.PAID});
+  function getPaidOrder(admin) {
+    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.PAID, admin: admin});
   }
 
-  function getFinishedOrder() {
-    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.FINISHED});
+  function getFinishedOrder(admin) {
+    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.FINISHED, admin: admin});
   }
 
   function getOrder(orderId) {
     return $http.post('/api/order/get', {id: orderId});
+  }
+
+  function cancelOrder(orderId) {
+    return $http.post('/api/order/cancel', {id: orderId});
   }
 };

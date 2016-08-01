@@ -139,45 +139,16 @@ orderApi.add = (req, res) => {
     // Maybe we shouln't store all the data in the price.
     product.fetch().then(function(productResult) {
         var priceMap = productResult.get('price');
-        // Get the exact storeage from the map.
-        var re = /([0-9]+)年([0-9]+)月([0-9]+)日/
-        var parts = order.date.match(re);
-        if (parts.length !== 4) {
-            tool.l("error! find malformat date" + order.date);
+        var price = orderApi.getPrice(priceMap, order.date);
+        if (!price) {
+            res.send(404);
+            return;
         }
-        var year = parts[1];
-        var month = parts[2];
-        var day = parts[3];
-        // Check year month day in priceMap.
-        // Need to check rest
-        if (priceMap[year] && priceMap[year][month - 1] && priceMap[year][month - 1][day - 1]) {
-            tool.l("find the right date");
-            tool.l(year);
-            tool.l(month);
-            tool.l(day);
+        var totalNumber = order.adult + order.child;
+        price.restPeopleNumbner = price.restPeopleNumbner - totalNumber;
+        // Currently we assume all people paid.
+        price.reservedPeopleNumber = price.reservedPeopleNumber + totalNumber;
 
-            var object = priceMap[year][month - 1][day - 1];
-            if (!object.restPeopleNumbner > 0) {
-                object.restPeopleNumbner = object.totalPeople;
-            }
-            if (!object.paidPeopleNumber) {
-                object.paidPeopleNumber = 0;
-            }
-            if (!object.reservedPeopleNumber) {
-                object.reservedPeopleNumber = 0;
-            }
-            var totalNumber = order.adult + order.child;
-            if (totalNumber > object.restPeopleNumbner) {
-                // Failed
-                res.send(404);
-                return;
-            }
-            object.restPeopleNumbner = object.restPeopleNumbner - totalNumber;
-            // Currently we assume all people paid.
-            // TODO:
-            object.reservedPeopleNumber = object.reservedPeopleNumber + totalNumber;
-            tool.l(priceMap[year][month][day - 1])
-        }
         productResult.set("price", priceMap);
         productResult.save();
 
@@ -216,6 +187,34 @@ orderApi.add = (req, res) => {
     }, function(error) {
         tool.l(error);
     })
+};
+
+orderApi.cancel = (req, res) => {
+    var order = AV.Object.createWithoutData('Order', req.body.id);
+    order.fetch({include: "product"}, null).then(function(result) {
+        // Have to update product.
+        var product = result.get("product");
+        var priceMap = product.get("price");
+        var price = orderApi.getPrice(priceMap, result.get("startDate"));
+        if (!price) {
+            res.send(404);
+            return;
+        }
+        var totalNumber = order.adult + order.child;
+        price.restPeopleNumbner = price.restPeopleNumbner + totalNumber;
+        // Currently we assume all people paid.
+        if (order.get("status") == config.orderStatus.UNPAID) {
+            price.reservedPeopleNumber = price.reservedPeopleNumber + totalNumber;
+        } else {
+            price.paidPeopleNumber = price.paidPeopleNumber + totalNumber;
+        }
+        product.set("price", priceMap);
+        product.save();
+        order.destroy().then(function() {
+            res.send();
+            return;
+        });
+    });
 };
 
 module.exports = orderApi;

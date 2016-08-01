@@ -29,7 +29,7 @@
               <md-button ng-click="showMyProducts()" class="md-primary">
                 我发布的产品
               </md-button>
-              <md-button ng-click="showUnverified()" class="md-primary">
+              <md-button ng-if="admin" ng-click="showUnverified()" class="md-primary">
                 需要我审核的产品
               </md-button>
             </div>
@@ -67,7 +67,8 @@
                 </td>
                 <td>
                   <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>
-                  <md-button class="md-raised md-primary" ng-click="remind($index);" ng-if="product.status == 2 && !unverified">提醒</md-button>
+                  <md-button class="md-raised md-primary" ng-click="editProduct($index);" ng-if="product.status == 1">修改</md-button>
+                  <md-button class="md-raised md-primary" ng-click="editProduct($index);" ng-if="product.status == 2 && !unverified">修改</md-button>
                   <md-button class="md-raised md-primary" ng-click="verify($index);" ng-if="product.status == 2 && unverified">通过审核</md-button>
                   <md-button class="md-raised md-primary" ng-click="unPost($index);" ng-if="product.status == 3">下架</md-button>
                 </td>

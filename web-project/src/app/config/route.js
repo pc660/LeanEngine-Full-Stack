@@ -95,6 +95,21 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       templateUrl: 'app/common/provider/add.html',
       controller: 'addProviderCtrl',
       authenticate: lcConfig.userLevel.PROVIDER,
+      params: {
+        provider: null,
+      },
+    })
+    .state('home.show-orders', {
+      url: '/show-order',
+      templateUrl: 'app/common/sale/order/show_order.html',
+      controller: 'showOrderCtrl',
+      authenticate: lcConfig.userLevel.ADMIN,
+    })
+    .state('home.show-order-detail', {
+      url: '/show-order-detail/:orderId',
+      templateUrl: 'app/common/sale/order/show_order_detail.html',
+      controller: 'showOrderDetailCtrl',
+      authenticate: lcConfig.userLevel.SALE,
     })
     .state('home.show-provider-detail', {
       url: '/show-provider/:providerId',
@@ -104,6 +119,15 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
     })
     .state('home.add-product', {
       url: '/add-product',
+      templateUrl: 'app/common/product/add.html',
+      controller: 'addProductCtrl',
+      authenticate: lcConfig.userLevel.PROVIDER,
+      params: {
+        product: null,
+      },
+    })
+    .state('home.edit-product', {
+      url: '/edit-product/:productId',
       templateUrl: 'app/common/product/add.html',
       controller: 'addProductCtrl',
       authenticate: lcConfig.userLevel.PROVIDER,

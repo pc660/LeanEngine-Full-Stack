@@ -1,14 +1,21 @@
 export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac) => {
   'ngInject';
 
+  $scope.admin = false;
+  if ($state.is('home.show-orders')) {
+    $scope.admin = true;
+  }
+
   $scope.allOrder = () => {
-    orderFac.getAllOrder().then(function(results) {
+    orderFac.getAllOrder($scope.admin).then(function(results) {
       $log.log(results);
       $scope.orders = results.order;
       for (var i = 0; i < $scope.orders.length; i++) {
         var product = results.product[i];
-        product.prefixArray = productFac.convertProductPrefix(product.prefix);
-        $scope.orders[i].product = product;
+        if (product) {
+          product.prefixArray = productFac.convertProductPrefix(product.prefix);
+          $scope.orders[i].product = product;
+        }
       }
     })
   };
@@ -62,6 +69,11 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
   $scope.printReceipt = () => {
   }
 
-  $scope.cancelOrder = () => {
+  $scope.cancelOrder = (orderId) => {
+    orderFac.cancelOrder(orderId).then(function(result) {
+      SweetAlert.swal("订单取消成功", "请稍后与平台确认", "success");
+    }, function(error){
+
+    });
   }
 };

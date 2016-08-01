@@ -4,12 +4,6 @@ export default ($log, $scope, $state, $window, lcConfig, productFac) => {
   // maybe create a cl for this bug.
 
   $scope.products = [];
-  /*productFac.getAllProducts(2).then(function(results) {
-    $scope.products = results;
-  }, function(error) {
-
-  });*/
-
   productFac.getProductsCount().then(function(result) {
     $scope.unposted = result.unposted;
     $scope.unverified = result.unverified;

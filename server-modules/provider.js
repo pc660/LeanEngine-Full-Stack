@@ -11,7 +11,6 @@ providerApi.add = (req, res) => {
   tool.l('provider.add');
   // TODO: now we use a fake data to create a provider.
   // First we create a user for the provider.
-
   tool.l(req.body.provider);
   var provider = req.body.provider;
   if (provider === undefined) {

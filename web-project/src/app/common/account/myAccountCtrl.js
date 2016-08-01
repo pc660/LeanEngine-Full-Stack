@@ -1,6 +1,12 @@
-export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac, SweetAlert) => {
+export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac, SweetAlert) => {
   'ngInject';
   $log.log('init my account');
+  if (authFac.getUserLevel() == lcConfig.userLevel.ADMIN) {
+    $scope.admin = true;
+  } else {
+    $scope.admin = false;
+  }
+
   if ($scope.$parent.unfinished) {
     $scope.unfinished = "(有未处理产品)";
   }
@@ -14,26 +20,19 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
 
   });
 
-  providerFac.getMyProvider().then(function(results) {
+  providerFac.getMyProvider().then(function(result) {
+    $log.log("success");
     $scope.fetchedProvider = true;
     // There should be only one provider.
-    if (results.length == 1) {
-      $scope.provider = results[0];
-      $scope.$broadcast("addressUpdate", {address: $scope.provider.address});
-      providerFac.getContactList($scope.provider.objectId).then(function(results) {
-        $scope.contactList = results;
-      });
-    }
+    $scope.provider = result;
+    $log.log(result);
+    $scope.$broadcast("addressUpdate", {address: $scope.provider.address});
+    providerFac.getContactList($scope.provider.objectId).then(function(results) {
+      $scope.contactList = results;
+    });
   }, function (error) {
     $scope.fetchedProvider = true;
   });
-
-  $scope.verify = (index) => {
-    var product = $scope.products[index];
-    productFac.verify(product.objectId).then(function(result) {
-    }, function(error) {
-    });
-  };
 
   $scope.showUnverified = () => {
     $scope.unverified = true;
@@ -138,6 +137,7 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
   $scope.unPost = (index) => {
     var product = $scope.products[index];
     productFac.unPost(product.objectId).then(function(value) {
+      SweetAlert.swal("下架成功", "请刷新网页", "success");
 
     });
   };
@@ -145,13 +145,14 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
   $scope.verify = (index) => {
     var product = $scope.products[index];
     productFac.verify(product.objectId).then(function(value) {
+      SweetAlert.swal("审核成功", "请刷新网页", "success");
     });
   };
 
   $scope.post = (index) => {
     var product = $scope.products[index];
     productFac.post(product.objectId).then(function(value) {
-
+      SweetAlert.swal("提交成功", "请刷新网页", "success");
     });
   };
 
@@ -161,6 +162,12 @@ export default ($log, $state, $scope, $uibModal, userFac, lcConfig, $window, pro
   };
 
   $scope.addMyProvider = () => {
+    $log.log($scope.provider);
     $state.go("home.add-provider", {"provider": $scope.provider});
+  };
+
+  $scope.editProduct = (index) => {
+    var product = $scope.products[index];
+    $state.go("home.edit-product", {productId: product.objectId});
   };
 };

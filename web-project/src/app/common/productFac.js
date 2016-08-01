@@ -123,7 +123,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
       var monthEvents = events[i];
       for (var j = startDay; j <= monthEvents.length; j++) {
         var event = monthEvents[j - 1];
-        if (Object.keys(event).length == 0) {
+        if (!event || Object.keys(event).length == 0) {
           continue;
         }
         return {event: event, date: startYear + "年" + (startMonth + 1) + "月" + j + "日"};
@@ -134,6 +134,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   function convertProductPrefix(prefixArray) {
+    if (!prefixArray) {
+      return [];
+    }
     var prefixData = multiChoiceConfig.data["线路前缀"];
     return prefixArray.map(function(name) {
       for (var i = 0; i < prefixData.length; i++) {

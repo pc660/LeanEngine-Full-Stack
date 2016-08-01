@@ -63,9 +63,14 @@
               </td>
               <td>
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.contactname"></text-field>
-                <div ng-if="!isEditing">
+                <div ng-if="!isEditing && !showing">
                   {{ provider.contactname }}
                 </div>
+                <md-select ng-show=!isEditing && showing"" ng-model="contactperson">
+                  <md-option ng-selected="$first" ng-value="contact" ng-repeat="contact in contactList">
+                    {{contact.contactname}}
+                  </md-option>
+                </md-select>
               </td>
             </tr>
             <tr>
@@ -76,6 +81,9 @@
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.homephone"></text-field>
                 <div ng-if="!isEditing">
                   {{ provider.homephone }}
+                </div>
+                <div ng-if="!isEditing" && showing>
+                  {{ contactperson.homephone }}
                 </div>
               </td>
             </tr>
@@ -88,6 +96,9 @@
                 <div ng-if="!isEditing">
                   {{ provider.cellphone }}
                 </div>
+                <div ng-if="!isEditing" && showing>
+                  {{ contactperson.cellphone }}
+                </div>
               </td>
             </tr>
             <tr>
@@ -98,6 +109,9 @@
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.qqnumber"></text-field>
                 <div ng-if="!isEditing">
                   {{ provider.qqnumber }}
+                </div>
+                <div ng-if="!isEditing" && showing>
+                  {{ contactperson.qqnumber }}
                 </div>
               </td>
             </tr>
@@ -110,6 +124,9 @@
                 <div ng-if="!isEditing">
                   {{ provider.wechat }}
                 </div>
+                <div ng-if="!isEditing" && showing>
+                  {{ contactperson.wechat }}
+                </div>
               </td>
             </tr>
           </tbody>
@@ -120,7 +137,7 @@
           </md-button>
         </div>
       </md-tab>
-      <md-tab label="业务资料" ng-disabled="!confirmed" md-active="confirmed">
+      <md-tab label="业务资料" ng-disabled="!confirmed && isEditing" md-active="confirmed">
         <table>
           <tbody>
             <tr>
@@ -221,7 +238,7 @@
             </tr>
           </tbody>
         </table>
-        <div class="submit">
+        <div ng-if="isEditing" class="submit">
           <md-button class="md-raised md-primary" ng-click="submit();">
             提交
           </md-button>

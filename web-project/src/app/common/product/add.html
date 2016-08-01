@@ -145,14 +145,14 @@
             <tr>
               <td>产品负责人</td>
               <td>
-                <md-input-container ng-if="isEditing">
+                <md-input-container ng-if="isEditing && !isExisting">
                   <md-select ng-model="product.responsible">
-                    <md-option ng-selected="$first" ng-value="response.objectId" ng-repeat="response in responses track by $index">
+                    <md-option ng-selected="$first" ng-value="response" ng-repeat="response in responses track by $index">
                       {{response.contactname}}
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <p ng-if="!isEditing">{{ product.responsible.contactname }}</p>
+                <p ng-if="isExisting || !isEditing">{{ product.responsible.contactname }}</p>
               </td>
             </tr>
             <tr>
@@ -215,14 +215,14 @@
             <tr>
               <td>平台联系人</td>
               <td>
-                <md-input-container ng-if="isEditing">
+                <md-input-container ng-if="isEditing && !isExisting">
                   <md-select ng-model="product.platformcontact">
-                    <md-option ng-selected="$first" ng-value="response.objectId" ng-repeat="response in responses track by $index">
+                    <md-option ng-selected="$first" ng-value="response" ng-repeat="response in responses track by $index">
                       {{response.contactname}}
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <p ng-if="!isEditing">{{ product.platformcontact.contactname }}</p>
+                <p ng-if="!isEditing || isExisting">{{ product.platformcontact.contactname }}</p>
               </td>
             </tr>
           </table>
@@ -296,13 +296,12 @@
             <div class="editor ueditor" config="ueconfig" ng-model="product.restriction"></div>
           </div>
           <div class="extra-item">
-            <label>签证信息</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.visaInfo"></div>
+            <label>温馨提示</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.reminder"></div>
           </div>
           <div class="extra-item">
-            <label>材料截止时间</label>
-            <input type="number" ng-model="product.materialDeadline">
-            天
+            <label>签证信息</label>
+            <div class="editor ueditor" config="ueconfig" ng-model="product.visaInfo"></div>
           </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">

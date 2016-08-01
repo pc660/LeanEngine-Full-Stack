@@ -23,50 +23,67 @@
     </div>
   </md-sidenav>
   <md-content layout-padding>
-    <table>
-      <tr ng-repeat="order in orders">
-        <td>
-          <div>
-            <div>订单来源： {{ order.contactname }}</div>
-            <a>
-              <span ng-repeat="prefix in order.product.prefixArray">[{{ prefix }}]</span>
-              {{ order.product.fullName }}
-            </a>
-          </div>
-        </td>
-        <td>
-          <div class="detail">
-            <p><strong>￥{{ order.totalPrice }}</strong></p>
-            <div>
-              成人：{{ order.adult }}人 儿童：{{ order.child }}人
+    <table class="order">
+      <tbody ng-repeat="order in orders">
+        <tr>
+          <td colspan="99">
+            <div class="order-title">
+              <span>订单号: {{order.objectId}}</span>
+              <span>下单时间: <span ng-bind="order.createdAt | date:'yyyy-mm-dd: HH:mm'"></span></span>
+              <span>供应商: 上海旅行社</span>
+              <span>和我联系</span>
             </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <div>
-              出团时间: {{ order.startDate }}
+              <div>订单来源： {{ order.contactname }}</div>
+              <a>
+                <span ng-repeat="prefix in order.product.prefixArray">[{{ prefix }}]</span>
+                {{ order.product.fullName }}
+              </a>
             </div>
-          </div>
-        </td>
-        <td>
-          <div class="status">
-            <p>
-              <strong ng-if="order.status == 1">未付款</strong>
-              <strong ng-if="order.status == 2">已付款</strong>
-              <strong ng-if="order.status == 3">已完成</strong>
-            </p>
-            <md-button ng-if="order.status == 1" ng-click="paid(order.objectId);" class="md-raised md-primary">确认付款</md-button>
-            <md-button ng-if="order.status == 2" class="md-raised md-primary">确认交易完成</md-button>
-          </div>
-        </td>
-        <td>
-          <div class="operation">
-            <a target="_blank"
-               ui-sref="sale.show-order-detail({orderId: '{{order.objectId}}' })"
-               ui-sref-opts="{ absolute: true }">显示详情</a>
-            <a href="{{ order.fileUrl }}">查看确认单</a>
-            <a ng-click="printReceipt();">打印发票(未实现,电子发票这边文档比较麻烦看起来)</a>
-            <a ng-click="cancelOrder();">取消订单(未实现,但是很简单.)</a>
-          </div>
-        </td>
-      </tr>
+          </td>
+          <td>
+            <div class="detail">
+              <p><strong>￥{{ order.totalPrice }}</strong></p>
+              <div>
+                成人：{{ order.adult }}人 儿童：{{ order.child }}人
+              </div>
+              <div>
+                出团时间: {{ order.startDate }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="status">
+              <p>
+                <strong ng-if="order.status == 1">未付款</strong>
+                <strong ng-if="order.status == 2">已付款</strong>
+                <strong ng-if="order.status == 3">已完成</strong>
+              </p>
+              <md-button ng-if="!admin && order.status == 1" ng-click="paid(order.objectId);" class="md-raised md-primary">确认付款</md-button>
+              <md-button ng-if="!admin && order.status == 2" class="md-raised md-primary">确认交易完成</md-button>
+            </div>
+          </td>
+          <td>
+            <div class="operation">
+              <a ng-if="!admin"
+                 target="_blank"
+                 ui-sref="sale.show-order-detail({orderId: '{{order.objectId}}' })"
+                 ui-sref-opts="{ absolute: true }">显示详情</a>
+              <a ng-if="admin"
+                 target="_blank"
+                 ui-sref="home.show-order-detail({orderId: '{{order.objectId}}' })"
+                 ui-sref-opts="{ absolute: true }">显示详情</a>
+              <a href="{{ order.fileUrl }}">查看确认单</a>
+              <a ng-if="!admin" ng-click="printReceipt();">打印发票</a>
+              <a ng-if="!admin" ng-click="cancelOrder(order.objectId);">取消订单</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </md-content>
 </div>
