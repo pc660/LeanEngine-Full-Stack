@@ -20,6 +20,7 @@ const itinerary = require('./itinerary');
 const customer = require('./customer');
 const order = require('./order');
 const user = require('./user');
+const word = require('./word');
 
 // 一个 API 路由下的 hello 接口，访问 /api/hello
 const tool = require('./tool');
@@ -68,6 +69,8 @@ router.post('/user/getContactList',  user.getContactList);
 router.post('/user/editContactList',  user.editContactList);
 router.post('/user/deleteContactList',  user.deleteContactList);
 
+// router word test
+router.get('/word/test', word.test);
 
 router.post('/auth/authenticate', passport.authenticate('login', { failWithError: true }), function(req, res) {
     tool.l("login success");
