@@ -8,6 +8,7 @@ const tool = require('./tool');
 var productApi = {};
 const config = require('./config');
 const userApi = require('./user');
+const tal = require('template-tal');
 const multiChoiceConfig = require('./config/multiChoiceConfig');
 
 function setProduct(productAV, product) {
@@ -94,6 +95,11 @@ productApi.add = (req, res) => {
       // We probably have to check any javascript stuff or link stuff here.
       // This is a probably a huge project.
       var params = productApi.constructItinerayParams(product);
+      params.id = productResult.id;
+      tool.l("getting params");
+      tool.l(params);
+      generateItinerary(params);
+      /*
       swig.setDefaults({autoescape: false});
       var file = swig.renderFile('server-modules/static/itinerary.html', {
         product: params,
@@ -101,12 +107,14 @@ productApi.add = (req, res) => {
 
       var objectId = productResult.id;
       var options = { format: 'Letter'};
+
       pdf.create(file, options).toBuffer(function(err, buffer) {
         var filename = objectId + "_行程" + ".pdf";
         var file = new AV.File(filename, buffer);
         productResult.set("itineraryFile", file);
         productResult.save();
-      });
+      });*/
+
   }, function(error) {
     // 失败
     tool.l(error);
@@ -549,6 +557,16 @@ function setDefaultPriceMap(priceMap) {
       })
     })
   }
+};
+
+function generateItinerary(params) {
+  fs.readFile("server-modules/static/f05tal.doc","utf8", function(err, data) {
+    var result = tal.process(data, params);
+    tool.l(params);
+    fs.writeFile("server-modules/static/f05tal-processed.doc", result, "utf8", function() {
+      tool.l("done.");
+    });
+  });
 };
 
 module.exports = productApi;

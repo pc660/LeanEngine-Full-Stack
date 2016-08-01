@@ -21,7 +21,7 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
   };
 
   $scope.unpaidOrder = () => {
-    orderFac.getUnpaidOrder().then(function(results) {
+    orderFac.getUnpaidOrder($scope.admin).then(function(results) {
       $scope.orders = results.order;
       for (var i = 0; i < $scope.orders.length; i++) {
         var product = results.product[i];
@@ -32,7 +32,7 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
   }
 
   $scope.paidOrder = () => {
-    orderFac.getPaidOrder().then(function(results) {
+    orderFac.getPaidOrder($scope.admin).then(function(results) {
       $scope.orders = results.order;
       for (var i = 0; i < $scope.orders.length; i++) {
         var product = results.product[i];
@@ -43,7 +43,7 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
   }
 
   $scope.finishedOrder = () => {
-    orderFac.getFinishedOrder().then(function(results) {
+    orderFac.getFinishedOrder($scope.admin).then(function(results) {
       $scope.orders = results.order;
       for (var i = 0; i < $scope.orders.length; i++) {
         var product = results.product[i];
