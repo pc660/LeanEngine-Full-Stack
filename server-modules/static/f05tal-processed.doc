@@ -544,7 +544,7 @@
                         <w:sz-cs w:val="28"/>
                     </w:rPr>
                     <w:t>【端午】</w:t>
-                    <w:t>213</w:t>
+                    <w:t>供应商产品名称</w:t>
                 </w:r>
             </w:p>
             <w:p wsp:rsidR="00F47490" wsp:rsidRDefault="00D475B5">
@@ -566,7 +566,7 @@
                         <w:sz w:val="24"/>
                         <w:sz-cs w:val="24"/>
                     </w:rPr>
-                    <w:t>(线路编号:579e9c01c4c971005adcc3e7)</w:t>
+                    <w:t>(线路编号:57a04f4ba341310063001f2e)</w:t>
                 </w:r>
             </w:p>
             <w:p wsp:rsidR="00F47490" wsp:rsidRDefault="00D475B5">
@@ -783,7 +783,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123&lt;/p&gt;</w:t>
+                                <w:t>名称&lt;w:br/&gt;名称&lt;w:br/&gt;名称s</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -952,7 +952,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>2016年7月31日</w:t>
+                                <w:t>2016年7月1日</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -983,7 +983,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>成人￥123;儿童￥123</w:t>
+                                <w:t>成人￥2;儿童￥2</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1015,7 +1015,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>2016年7月1日</w:t>
+                                <w:t>2016年7月2日</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1198,7 +1198,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123123&lt;/p&gt;</w:t>
+                                <w:t>名称&lt;w:br/&gt;名称2&lt;w:br/&gt;名称3</w:t>
                             </w:r>
                         </w:p>
                         <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
@@ -1218,9 +1218,9 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t>早餐：undefined</w:t>
-                                <w:t>午餐：undefined</w:t>
-                                <w:t>晚餐：undefined</w:t>
+                                <w:t>早餐：${self.itRow.food.breakfast}</w:t>
+                                <w:t>午餐：${self.itRow.food.lunch}</w:t>
+                                <w:t>晚餐：${self.itRow.food.dinner}</w:t>
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
                                 <w:br/>
@@ -1254,7 +1254,7 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t>123</w:t>
+                                <w:t>名称</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1361,7 +1361,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123&lt;/p&gt;</w:t>
+                                <w:t>名称&lt;w:br/&gt;名称z&lt;w:br/&gt;名称z</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1392,7 +1392,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123&lt;/p&gt;</w:t>
+                                <w:t>名称ff&lt;w:br/&gt;名称&lt;w:br/&gt;名称</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1463,7 +1463,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123123&lt;br/&gt;&lt;/p&gt;</w:t>
+                                <w:t>名称&lt;w:br/&gt;名称&lt;w:br/&gt;名称</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1532,7 +1532,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123&lt;/p&gt;</w:t>
+                                <w:t>名称</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1601,7 +1601,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123&lt;/p&gt;</w:t>
+                                <w:t>名称</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1675,7 +1675,7 @@
                                     <w:sz w:val="20"/>
                                     <w:sz-cs w:val="20"/>
                                 </w:rPr>
-                                <w:t>&lt;p&gt;123&lt;/p&gt;</w:t>
+                                <w:t>名称</w:t>
                             </w:r>
                         </w:p>
                         <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00F47490">

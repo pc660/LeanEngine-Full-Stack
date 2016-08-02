@@ -263,45 +263,45 @@
               <input type="checkbox" ng-model="evening">晚
               <input type="text" ng-disabled="!evening" ng-model="itineraryItem.food.evening">
             </div>
-            <div class="item">
+            <div class="item" layout="column">
               <label>详细描述: </label>
-              <div class="editor ueditor" config="ueconfig" ng-model="itineraryItem.detail"></div>
+              <textarea class="msd-elastic: \n\n;" ng-model="itineraryItem.detail"></textarea>
             </div>
             <hr>
           </div>
         </md-tab>
         <md-tab class="tab-button" ng-if="isEditing" label="其他信息">
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>线路特色</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.description"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.description"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>费用包含</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.priceInclude"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.priceInclude"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>费用不含</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.priceExclude"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.priceExclude"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>自费项目</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.selfPaid"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.selfPaid"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>预定须知</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.reserveInfo"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.reserveInfo"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>收客限制</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.restriction"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.restriction"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>温馨提示</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.reminder"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.reminder"></textarea>
           </div>
-          <div class="extra-item">
+          <div class="extra-item" layout="column">
             <label>签证信息</label>
-            <div class="editor ueditor" config="ueconfig" ng-model="product.visaInfo"></div>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.visaInfo"></textarea>
           </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">
