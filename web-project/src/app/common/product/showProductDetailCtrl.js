@@ -16,6 +16,7 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
       $scope.$broadcast("calendarUpdate", {price: $scope.product.price});
       $scope.$broadcast("addressUpdate", {address: $scope.product.start});
       $scope.$broadcast("updateMaterialCalendar");
+      $log.log($scope.product);
       $scope.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
     }, function(error) {
       // TODO: handle failure.

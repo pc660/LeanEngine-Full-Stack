@@ -11,16 +11,16 @@ export default (
   $cookies,
   $base64) => {
   'ngInject';
-  
+
   var service = {};
   service.isLoggedin = isLoggedin;
   service.getUserLevel = getUserLevel;
   service.login = login;
   service.register = register;
   service.logout = logout;
-  service.cookie = null; 
+  service.cookie = null;
   return service;
- 
+
   function getUserLevel() {
     if (!isLoggedin()) {
       return lcConfig.userLevel.UNKNOWN;
@@ -28,7 +28,7 @@ export default (
 
     var level = service.cookie.level;
     if (level === undefined) {
-      return lcConfig.userLevel.UNKNOWN; 
+      return lcConfig.userLevel.UNKNOWN;
     }
     return level;
   }
@@ -48,9 +48,10 @@ export default (
                       { username: username, password: password });
   }
 
-  function register(username, password) {
+  function register(username, password, level) {
+    $log.log(level);
     return $http.post('/api/auth/register',
-                      { username: username, password: password});
+                      { username: username, password: password, level: level});
   }
 
   function logout() {

@@ -543,13 +543,8 @@
                         <w:sz w:val="28"/>
                         <w:sz-cs w:val="28"/>
                     </w:rPr>
-<<<<<<< HEAD
                     
                     <w:t>123</w:t>
-=======
-                    <w:t>【端午】</w:t>
-                    <w:t>供应商产品名称</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
                 </w:r>
             </w:p>
             <w:p wsp:rsidR="00F47490" wsp:rsidRDefault="00D475B5">
@@ -571,11 +566,7 @@
                         <w:sz w:val="24"/>
                         <w:sz-cs w:val="24"/>
                     </w:rPr>
-<<<<<<< HEAD
-                    <w:t>(线路编号:579f02fa6be3ff0065f4ab06)</w:t>
-=======
-                    <w:t>(线路编号:57a05a9ad342d300572a544d)</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                    <w:t>(线路编号:57a06fcbd342d300572b209c)</w:t>
                 </w:r>
             </w:p>
             <w:p wsp:rsidR="00F47490" wsp:rsidRDefault="00D475B5">
@@ -792,11 +783,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称<w:br/>名称<w:br/>名称s</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -936,107 +923,7 @@
                     </w:tc>
                 </w:tr>
 
-<<<<<<< HEAD
                 
-=======
-                <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
-                    <w:tc>
-                        <w:tcPr>
-                            <w:tcW w:w="2644" w:type="dxa"/>
-                            <w:gridSpan w:val="4"/>
-                            <w:tcBorders>
-                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                                <w:bottom w:val="single" w:sz="12" wx:bdrwidth="30" w:space="0" w:color="auto"/>
-                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                            </w:tcBorders>
-                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                            <w:vAlign w:val="center"/>
-                        </w:tcPr>
-                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
-                            <w:pPr>
-                                <w:spacing w:before-lines="50" w:before="120" w:line="360" w:line-rule="auto"/>
-                                <w:jc w:val="center"/>
-                                <w:rPr>
-                                    <w:sz w:val="18"/>
-                                    <w:sz-cs w:val="18"/>
-                                </w:rPr>
-                            </w:pPr>
-                            <w:r wsp:rsidRPr="0047193A">
-                                <w:rPr>
-                                    <w:rFonts w:hint="fareast"/>
-                                    <w:sz w:val="18"/>
-                                    <w:sz-cs w:val="18"/>
-                                </w:rPr>
-                                <w:t>2016年7月1日</w:t>
-                            </w:r>
-                        </w:p>
-                    </w:tc>
-                    <w:tc>
-                        <w:tcPr>
-                            <w:tcW w:w="2646" w:type="dxa"/>
-                            <w:gridSpan w:val="2"/>
-                            <w:tcBorders>
-                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                                <w:bottom w:val="single" w:sz="12" wx:bdrwidth="30" w:space="0" w:color="auto"/>
-                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                            </w:tcBorders>
-                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                            <w:vAlign w:val="center"/>
-                        </w:tcPr>
-                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
-                            <w:pPr>
-                                <w:spacing w:before-lines="50" w:before="120" w:line="360" w:line-rule="auto"/>
-                                <w:rPr>
-                                    <w:sz w:val="18"/>
-                                    <w:sz-cs w:val="18"/>
-                                </w:rPr>
-                            </w:pPr>
-                            <w:r wsp:rsidRPr="0047193A">
-                                <w:rPr>
-                                    <w:rFonts w:hint="fareast"/>
-                                    <w:sz w:val="18"/>
-                                    <w:sz-cs w:val="18"/>
-                                </w:rPr>
-                                <w:t>成人￥2;儿童￥2</w:t>
-                            </w:r>
-                        </w:p>
-                    </w:tc>
-                    <w:tc>
-                        <w:tcPr>
-                            <w:tcW w:w="3069" w:type="dxa"/>
-                            <w:gridSpan w:val="2"/>
-                            <w:tcBorders>
-                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                                <w:bottom w:val="single" w:sz="12" wx:bdrwidth="30" w:space="0" w:color="auto"/>
-                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
-                            </w:tcBorders>
-                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                            <w:vAlign w:val="center"/>
-                        </w:tcPr>
-                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
-                            <w:pPr>
-                                <w:spacing w:before-lines="50" w:before="120" w:line="360" w:line-rule="auto"/>
-                                <w:jc w:val="center"/>
-                                <w:rPr>
-                                    <w:sz w:val="18"/>
-                                    <w:sz-cs w:val="18"/>
-                                </w:rPr>
-                            </w:pPr>
-                            <w:r wsp:rsidRPr="0047193A">
-                                <w:rPr>
-                                    <w:rFonts w:hint="fareast"/>
-                                    <w:sz w:val="18"/>
-                                    <w:sz-cs w:val="18"/>
-                                </w:rPr>
-                                <w:t>2016年7月2日</w:t>
-                            </w:r>
-                        </w:p>
-                    </w:tc>
-                </w:tr>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
 
                 <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
                     <w:tc>
@@ -1134,9 +1021,6 @@
                     </w:tc>
                 </w:tr>
 
-<<<<<<< HEAD
-                
-=======
                 <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
                     <w:tc>
                         <w:tcPr>
@@ -1218,7 +1102,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-                                <w:t>名称<w:br/>名称2<w:br/>名称3</w:t>
+                                <w:t>12312312</w:t>
                             </w:r>
                         </w:p>
                         <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
@@ -1238,9 +1122,9 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t>早餐：${self.itRow.food.breakfast}</w:t>
-                                <w:t>午餐：${self.itRow.food.lunch}</w:t>
-                                <w:t>晚餐：${self.itRow.food.dinner}</w:t>
+                                <w:t>早餐：undefined</w:t>
+                                <w:t>午餐：undefined</w:t>
+                                <w:t>晚餐：undefined</w:t>
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
                                 <w:br/>
@@ -1274,12 +1158,11 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t>名称</w:t>
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
                 </w:tr>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
 
                 <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
                     <w:tc>
@@ -1382,11 +1265,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称<w:br/>名称z<w:br/>名称z</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1417,11 +1296,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称ff<w:br/>名称<w:br/>名称</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1492,11 +1367,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称<w:br/>名称<w:br/>名称</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1565,11 +1436,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1638,11 +1505,7 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1716,11 +1579,7 @@
                                     <w:sz w:val="20"/>
                                     <w:sz-cs w:val="20"/>
                                 </w:rPr>
-<<<<<<< HEAD
-                                <w:t></w:t>
-=======
-                                <w:t>名称</w:t>
->>>>>>> 442aa5a4ed9b0ab94d51542cc3eb0c21cc7bf46a
+                                <w:t>123</w:t>
                             </w:r>
                         </w:p>
                         <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00F47490">

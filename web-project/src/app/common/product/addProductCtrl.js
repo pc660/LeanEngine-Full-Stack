@@ -23,19 +23,6 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
   $scope.types = menuConfig.data["类型"];
   $scope.areas = menuConfig.data["大区"];
   $scope.priceItems = calendarConfig.data["团期报价"];
-  $scope.ueconfig = {
-    toolbars: [
-      ['undo', 'redo', '|', 'bold', 'italic', 'underline',
-        'fontborder', 'strikethrough', 'superscript', 'subscript',
-        'removeformat', 'formatmatch', 'autotypeset', 'blockquote',
-        'pasteplain', '|',
-        'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
-        'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
-        'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
-        'directionalityltr', 'directionalityrtl', 'indent', '|',
-        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify']
-    ],
-  };
 
   if ($stateParams.productId) {
     // Update product.

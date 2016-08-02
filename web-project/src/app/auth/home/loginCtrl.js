@@ -1,6 +1,12 @@
 
-export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer, authFac) => {
+export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSer, helloSer, authFac) => {
   'ngInject';
+
+  $log.log("getting levels");
+  $scope.levels = [
+    {level: 2, value: "供应商"},
+    {level: 1, value:  "分销商"},
+  ]
 
   function loginSuccess() {
     $log.log("login success");
@@ -19,7 +25,10 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
   };
 
   $scope.register = () => {
-    authFac.register($scope.username, $scope.password);
+    $log.log($scope.level);
+    authFac.register($scope.username, $scope.password, $scope.level).then(function() {
+      SweetAlert.swal("账号注册成功", "请保存这条信息,并告知对方.账号: " + $scope.username + " 密码: " + $scope.password, "success");
+    });
   };
 
   $scope.login = () => {

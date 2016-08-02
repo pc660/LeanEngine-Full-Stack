@@ -30,10 +30,12 @@ pub.register = (req, res) => {
   tool.l(req.body);
   var username = req.body.username;
   var password = req.body.password;
+  var level = req.body.level;
   var user = new AV.User();
   tool.l(req.body.password);
   user.set('username', username);
   user.set('password', password);
+  user.set("level", level);
   user.signUp().then(function(user) {
     tool.l('success')
     res.send({

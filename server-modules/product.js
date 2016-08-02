@@ -10,7 +10,6 @@ const config = require('./config');
 const userApi = require('./user');
 const tal = require('template-tal');
 const multiChoiceConfig = require('./config/multiChoiceConfig');
-var sanitizeHtml = require('sanitize-html');
 
 function setProduct(productAV, product) {
   productAV.set('productName', product.productName);
@@ -99,23 +98,7 @@ productApi.add = (req, res) => {
       params.id = productResult.id;
       tool.l("getting params");
       tool.l(params);
-      generateItinerary(params);
-      /*
-      swig.setDefaults({autoescape: false});
-      var file = swig.renderFile('server-modules/static/itinerary.html', {
-        product: params,
-      });
-
-      var objectId = productResult.id;
-      var options = { format: 'Letter'};
-
-      pdf.create(file, options).toBuffer(function(err, buffer) {
-        var filename = objectId + "_行程" + ".pdf";
-        var file = new AV.File(filename, buffer);
-        productResult.set("itineraryFile", file);
-        productResult.save();
-      });*/
-
+      generateItinerary(params, productResult);
   }, function(error) {
     // 失败
     tool.l(error);
@@ -166,9 +149,9 @@ productApi.parsePriceMap = (priceMap, duration) => {
   var priceArray = [];
   for (var year in priceMap) {
     var yearEvents = priceMap[year];
-    for (var month = 0; month < yearEvents.length; month++) {
+    for (var month in yearEvents) {
       var monthEvents = yearEvents[month];
-      for (var day = 0; day < monthEvents.length; day++) {
+      for (var day in monthEvents) {
         var price = monthEvents[day];
         if (price) {
           var priceObject = {};
@@ -187,6 +170,7 @@ productApi.parsePriceMap = (priceMap, duration) => {
       }
     }
   }
+  tool.l(priceArray);
   return priceArray;
 };
 
@@ -560,21 +544,17 @@ function setDefaultPriceMap(priceMap) {
   }
 };
 
-function generateItinerary(params) {
+function generateItinerary(params, productResult) {
   fs.readFile("server-modules/static/f05tal.doc","utf8", function(err, data) {
     recursiveIteration(params, function(object, property) {
       if (typeof object[property] === 'string') {
-        tool.l(object[property]);
         object[property] = object[property].replaceAll("\n", "<w:br/>");
       }
-    });
-    var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");
-    tool.l(params);
-    fs.writeFile("server-modules/static/xml.txt", "<w:br/>", "utf8", function() {
-      tool.l("done.");
-    });
-    fs.writeFile("server-modules/static/f05tal-processed.doc", result, "utf8", function() {
-      tool.l("done.");
+      var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");
+      var filename = params.id + "_行程" + ".doc";
+      var file = new AV.File(filename, toUTF8Array(result));
+      productResult.set("itineraryFile", file);
+      productResult.save();
     });
   });
 };
@@ -597,5 +577,36 @@ String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
+
+function toUTF8Array(str) {
+  var utf8 = [];
+  for (var i=0; i < str.length; i++) {
+    var charcode = str.charCodeAt(i);
+    if (charcode < 0x80) utf8.push(charcode);
+    else if (charcode < 0x800) {
+      utf8.push(0xc0 | (charcode >> 6),
+          0x80 | (charcode & 0x3f));
+    }
+    else if (charcode < 0xd800 || charcode >= 0xe000) {
+      utf8.push(0xe0 | (charcode >> 12),
+          0x80 | ((charcode>>6) & 0x3f),
+          0x80 | (charcode & 0x3f));
+    }
+    // surrogate pair
+    else {
+      i++;
+      // UTF-16 encodes 0x10000-0x10FFFF by
+      // subtracting 0x10000 and splitting the
+      // 20 bits of 0x0-0xFFFFF into two halves
+      charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+          | (str.charCodeAt(i) & 0x3ff));
+      utf8.push(0xf0 | (charcode >>18),
+          0x80 | ((charcode>>12) & 0x3f),
+          0x80 | ((charcode>>6) & 0x3f),
+          0x80 | (charcode & 0x3f));
+    }
+  }
+  return utf8;
+}
 
 module.exports = productApi;

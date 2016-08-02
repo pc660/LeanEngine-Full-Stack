@@ -1,0 +1,16 @@
+<div style="text-align: center;">
+  <div style="width: 400px; display: inline-block;">
+    <h2 class="form-signin-heading">请输入账号和密码,</h2>
+    <md-select ng-model="level">
+      <md-option ng-selected="$first" ng-value="level.level" ng-repeat="level in levels">
+        {{ level.value }}
+      </md-option>
+    </md-select>
+    <label for="inputEmail" class="sr-only">用户名</label>
+    <input ng-model="username" type="text" class="form-control" placeholder="用户名">
+    <label for="inputPassword" class="sr-only">密码</label>
+    <input ng-model="password" type="password"  class="form-control" placeholder="密码">
+    <button class="btn btn-lg btn-primary btn-block" type="button"
+            ng-click="register();">注册</button>
+  </div>
+</div>

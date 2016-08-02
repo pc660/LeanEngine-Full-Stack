@@ -228,8 +228,7 @@
           </table>
         </md-tab>
         <md-tab class="tab-button" ng-if="!isEditing" label="行程表">
-          <iframe class="itinerary-page" src="{{ fileUrl }}">
-          </iframe>
+          <a  target="_self" href="{{ fileUrl }}" download="行程.doc">下载</a>
         </md-tab>
         <md-tab class="tab-button" ng-if="isEditing" label="行程信息">
           <div ng-repeat="itineraryItem in product.itinerary track by $index" class="itinery">

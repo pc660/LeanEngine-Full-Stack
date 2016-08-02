@@ -90,6 +90,12 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       controller: 'homeCtrl',
       authenticate: lcConfig.userLevel.PROVIDER,
     })
+    .state('home.add-provider-account', {
+      url: '/add-provider-account',
+      templateUrl: 'app/common/provider/add_account.html',
+      controller: 'loginCtrl',
+      authenticate: lcConfig.userLevel.ADMIN,
+    })
     .state('home.add-provider', {
       url: '/add-provider',
       templateUrl: 'app/common/provider/add.html',
