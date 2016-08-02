@@ -568,8 +568,11 @@ function generateItinerary(params) {
         object[property] = object[property].replaceAll("\n", "<w:br/>");
       }
     });
-    var result = tal.process(data, params);
+    var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");
     tool.l(params);
+    fs.writeFile("server-modules/static/xml.txt", "<w:br/>", "utf8", function() {
+      tool.l("done.");
+    });
     fs.writeFile("server-modules/static/f05tal-processed.doc", result, "utf8", function() {
       tool.l("done.");
     });
