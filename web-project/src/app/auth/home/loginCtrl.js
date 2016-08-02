@@ -36,6 +36,10 @@ export default (lcConfig, $location, $scope, $window, $log, commonSer, helloSer,
             $location.path("/sale");
             break;
           }
+          case lcConfig.userLevel.PROVIDER: {
+            $location.path("/admin");
+            break;
+          }
           default: {
             $log.log("Unknown user, should not happen!!");
             break;

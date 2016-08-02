@@ -77,6 +77,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
       $scope.products.map(function(product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
         productFac.getLatestTrip(product);
+        $log.log(product);
         product.fileUrl = $sce.trustAsResourceUrl(product.itineraryFile.url);
       });
       for (var i = 0; i < $scope.products.length; i++) {

@@ -1,6 +1,7 @@
 export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac, SweetAlert) => {
   'ngInject';
   $log.log('init my account');
+  $scope.admin = false;
   if (authFac.getUserLevel() == lcConfig.userLevel.ADMIN) {
     $scope.admin = true;
   } else {

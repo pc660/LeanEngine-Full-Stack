@@ -2,9 +2,8 @@
  * Created by chaopan on 7/3/16.
  */
 export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce) => {
-  $scope.test = "123123";
-  $scope.$broadcast("test");
   $scope.priceMap = {};
+  $scope.product = {};
   productFac.getProductDetail($stateParams.productId)
     .then(function(result) {
       $scope.product = result.product;
@@ -99,7 +98,9 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     var month = date.getMonth();
     var day = date.getDate();
     // Check if date in price map.
-    var price = $scope.containsContent(date);
+    $log.log("getting product");
+    $log.log($scope.product);
+    var price = productFac.getPrice(year, month, day, $scope.product);
     if (price) {
       if (price.adultCompanySalePrice) {
         var adultCompanySalePrice = price.adultCompanySalePrice;
@@ -110,17 +111,4 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
 
     return "<p></p>";
   };
-
-  $scope.containsContent = (date) => {
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-
-    if ($scope.product) {
-      $log.log(date);
-      var price = $scope.product.price;
-      return price[year][month][day - 1];
-    }
-    return null;
-  }
 }

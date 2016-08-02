@@ -5,22 +5,26 @@
 * @author wangxiao
 */
 
-export default ($http, $state, lcConfig, $window, Upload) => {
+export default ($http, $state, lcConfig, $window, Upload, $log) => {
   'ngInject';
   return {
-    goAddProvider: () => {
-      $state.go('home');
-    },
+    addProps: function(obj, arr, val)  {
+      var self = this;
 
-    goHome: () => {
-      $window.alert("going home");
-      $state.go('home');
-    },
-    redirect: (url) => {
-      $window.location.href = url;
+      obj[arr[0]] = obj[arr[0]] || {};
+
+      var tmpObj = obj[arr[0]];
+
+      if (arr.length > 1) {
+        arr.shift();
+        this.addProps(tmpObj, arr, val);
+      }
+      else {
+        obj[arr[0]] = val;
+      }
+
+      return obj;
     }
-
-
   };
 };
 

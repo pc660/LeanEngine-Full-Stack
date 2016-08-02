@@ -1,10 +1,11 @@
-export default ($log, SweetAlert, $state, $scope, $stateParams, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig) => {
+export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig, calendarConfig) => {
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
   // Too hacky.
   $scope.firstUpdates = false;
   $scope.product = {};
+  $scope.product.price = {};
   $scope.toggleLeft = buildToggler('provider-side-bar');
   $scope.pickedProviders = [];
   $scope.price = 0;
@@ -21,6 +22,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, providerFac, $md
   $scope.transports = menuConfig.data["交通方式"];
   $scope.types = menuConfig.data["类型"];
   $scope.areas = menuConfig.data["大区"];
+  $scope.priceItems = calendarConfig.data["团期报价"];
   $scope.ueconfig = {
     toolbars: [
       ['undo', 'redo', '|', 'bold', 'italic', 'underline',
@@ -40,25 +42,17 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, providerFac, $md
     $scope.isExisting = true;
     productFac.getProductDetail($stateParams.productId).then(function(result) {
       $scope.firstUpdates = true;
-
-      $log.log("get product detail");
-      $log.log(result);
       $scope.product = result.product;
       $scope.product.duration = $scope.product.itinerary.length;
       $scope.product.responsible = result.responsible;
       $scope.product.platformcontact = result.platformcontact;
-      $log.log($scope.product.responsible)
-      //$scope.product.respons
-      //$scope.product.duration = result.itinerary.length;
-      //$log.log($scope.product.duration);
       $scope.product.pickedProvider = result.provider;
       $scope.product.contact = result.contact;
       providerFac.getContactList($scope.product.pickedProvider.objectId).then(function(contactList) {
-        $log.log(contactList);
         $scope.product.pickedProvider.contactList = contactList;
       })
 
-      $log.log($scope.product);
+      $scope.$broadcast("updateMaterialCalendar");
     })
   }
   $log.log($stateParams);
@@ -134,4 +128,36 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, providerFac, $md
     $log.log($scope.product);
     //$scope.contact = $scope.pickedProvider.contactList[i];
   };
+
+  $scope.dayClick = (date) => {
+    $log.log(date);
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+    $scope.currentPrice = productFac.getPrice(year, month, day, $scope.product);
+    $scope.currentPrice.year = year;
+    $scope.currentPrice.month = month;
+    $scope.currentPrice.day = day;
+  };
+
+  $scope.setDayContent = (date) => {
+    return productFac.setDayContent(date, $scope.product);
+  };
+
+  $scope.setPrice = () => {
+    var year = $scope.currentPrice.year;
+    var month = $scope.currentPrice.month;
+    var day = $scope.currentPrice.day;
+    if ($scope.currentPrice && Object.keys($scope.currentPrice).length > 0) {
+      commonSer.addProps($scope.product.price, [year, month, day], $scope.currentPrice);
+    }
+  };
+
+  $scope.$watch("currentPrice", function(newValue, oldValue) {
+    // Set day content.
+    if ($scope.currentPrice) {
+      $scope.setPrice();
+      $scope.$broadcast("updateMaterialCalendar");
+    }
+  }, true);
 };

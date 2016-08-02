@@ -1,0 +1,46 @@
+<div class="input-form">
+  <div class="modal-header">
+    <h3 class="modal-title">{{ title }}
+      <span ng-if="model.year">{{ model.year }}年</span>
+      <span ng-if="model.month">{{ model.month + 1}}月</span>
+      <span ng-if="model.day">{{ model.day }}日</span>
+    </h3>
+  </div>
+  <div class="modal-body">
+    <ul>
+      <li ng-repeat="item in items">
+        <div class="item">
+          <div class="key">
+            {{ item.key }}
+          </div>
+          <div ng-if="isEditing" class="value" ng-switch on="item.type">
+            <input
+              ng-switch-when='number'
+              type="number"
+              ng-model="item.value">
+            <input
+              class="datepicker"
+              ng-model="item.value"
+              ng-switch-when='date'
+              type="text"
+              data-date-type="string"
+              data-model-date-format="mediumDate"
+              bs-datepicker
+              data-date-format="mediumDate"
+              data-autoclose="true">
+            <input
+              class="datepicker"
+              ng-model="item.value"
+              ng-switch-when='text'
+              type="text">
+          </div>
+          <p ng-if="!isEditing">{{ item.value }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="confirm();">确认</button>
+    <button class="btn btn-warning" type="button" ng-click="clear();">清空</button>
+  </div>
+</div>

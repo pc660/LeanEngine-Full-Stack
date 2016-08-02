@@ -29,16 +29,15 @@ import headerDirect from './common/header/headerDirect';
 import pageDirect from './common/directives/page/pageDirect';
 import multiChoiceDirect from './common/directives/multiChoice/multiChoiceDirect';
 import calendarDirect from './common/directives/calendar/calendarDirect';
-import formCtrl from './common/directives/form/formCtrl';
 import textFieldDirect from './common/directives/textField/textFieldDirect';
 import counterDirect from './common/directives/counter/counterDirect';
 import templateDirect from './common/directives/template/templateDirect';
+import inputFormDirect from './common/directives/inputForm/inputFormDirect';
 
 import address from './common/provider/directives/address/addressDirect';
 import providerMenu from './common/provider/directives/menu/menuDirect';
 import returnPolicy from './common/provider/directives/returnPolicy/returnPolicyDirect';
 import password from './common/provider/directives/password/passwordDirect';
-
 
 // product directive
 import providerSideBar from './common/product/directives/providerSideBar/providerSideBarDirect';
@@ -116,6 +115,7 @@ angular.module('webProject',
   .directive('textField', textFieldDirect)
   .directive('counter', counterDirect)
   .directive('template', templateDirect)
+  .directive('inputForm', inputFormDirect)
 
   .directive('lcHeader', headerDirect)
   .directive('pageControl', pageDirect)
@@ -145,7 +145,6 @@ angular.module('webProject',
   .controller('showCustomerCtrl', showCustomerCtrl)
   .controller('providerSearchCtrl', providerSearchCtrl)
   .controller('showProviderDetailCtrl', showProviderDetailCtrl)
-  .controller('formCtrl', formCtrl)
   .controller('myAccountCtrl', myAccountCtrl)
   .controller('showProductSaleCtrl', showProductSaleCtrl)
   .controller('reserveFormCtrl', reserveFormCtrl)

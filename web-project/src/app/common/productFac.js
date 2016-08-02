@@ -18,6 +18,8 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getProductsCount = getProductsCount;
   service.getLatestTrip = getLatestTrip;
   service.convertProductPrefix = convertProductPrefix;
+  service.setDayContent = setDayContent;
+  service.getPrice = getPrice;
   return service;
 
   function uploadProduct(product) {
@@ -109,24 +111,30 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
         product.latestChildCompanySalePrice = event.event.childCompanySalePrice;
       } else {
         month = 0;
-        day = 0;
+        day = 1;
       }
     }
   }
 
   function findNextInOneYear(price, startYear, startMonth, startDay) {
-    var events = price[startYear];
-    if (events === undefined) {
+    if (!startYear in price) {
       return null;
     }
-    for (var i = startMonth; i < 12; i++) {
-      var monthEvents = events[i];
-      for (var j = startDay; j <= monthEvents.length; j++) {
-        var event = monthEvents[j - 1];
+    var events = price[startYear];
+    for (var month = startMonth; month < 12; month++) {
+      if (!month in events) {
+        continue;
+      }
+      var monthEvents = events[month];
+      for (var day = startDay; day <= 31; day++) {
+        if (!day in monthEvents) {
+          continue;
+        }
+        var event = monthEvents[day];
         if (!event || Object.keys(event).length == 0) {
           continue;
         }
-        return {event: event, date: startYear + "年" + (startMonth + 1) + "月" + j + "日"};
+        return {event: event, date: startYear + "年" + (month + 1) + "月" + day + "日"};
       }
       startDay = 1;
     }
@@ -147,4 +155,40 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
       }
     });
   };
+
+  function setDayContent(date, product) {
+    if (!product.price) {
+      return "<div></div>";
+    }
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+    var price = getPrice(year, month, day, product);
+    if (price && Object.keys(price).length > 3) {
+      $log.log("updating price");
+      $log.log(price);
+      $log.log(Object.keys(price).length);
+      var content = {};
+      content["同行"] = "¥" + price.adultCompanyCompetitorPrice || "";
+      content["销售"] = "¥" + price.adultCompanySalePrice || "";
+      content["结算"] = "¥" + price.adultCompanyPrice || "";
+      content["库存"] = price.totalPeople;
+      // Construct the content.
+      var htmlString = "";
+      for (var key in content) {
+        htmlString = htmlString + '<div>' + key + ": " + content[key] + '</div>'
+      }
+      return htmlString;
+    }
+    return "<div></div>";
+  }
+
+  function getPrice(year, month, day, product) {
+
+    var price = product.price || {}
+    price = price[year] || {};
+    price = price[month] || {};
+    price = price[day] || {};
+    return price;
+  }
 };

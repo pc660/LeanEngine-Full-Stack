@@ -545,17 +545,17 @@ productApi.getProductsCount = (req, res) => {
 };
 
 function setDefaultPriceMap(priceMap) {
-  for (var key in priceMap) {
-    var monthEvents = priceMap[key];
-    monthEvents.forEach(function(dayEvents) {
-      dayEvents.forEach(function(event) {
+  for (var year in priceMap) {
+    for (var month in priceMap[year]) {
+      for (var day in priceMap[year][month]) {
+        var event = priceMap[year][month][day];
         if (event) {
           event.reservedPeopleNumber = 0;
           event.paidPeopleNumber = 0;
           event.restPeopleNumbner = event.totalPeople;
         }
-      })
-    })
+      }
+    }
   }
 };
 

@@ -305,7 +305,29 @@
           </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">
-        <calendar is-editing="isEditing" ng-model="product.price" class="price-calendar" data="团期报价"></calendar>
+          <div class="product-calendar" layout="row">
+            <calendar-md class="calendar-block"
+                         calendar-direction="direction"
+                         on-prev-month="prevMonth"
+                         on-next-month="nextMonth"
+                         on-day-click="dayClick"
+                         title-format="'MMMM y'"
+                         ng-model='selectedDate'
+                         day-format="'d'"
+                         day-label-format="'EEE'"
+                         day-label-tooltip-format="'EEEE'"
+                         day-tooltip-format="'fullDate'"
+                         week-starts-on="firstDayOfWeek"
+                         day-content="setDayContent"></calendar-md>
+            <!--There is a bug that this is removed when the windows size is too large.
+                TODO-->
+            <div class="calendar-form">
+              <input-form type="团期报价" title="団期报价" is-editing="isEditing" ng-model="currentPrice">
+              </input-form>
+            </div>
+          </div>
+
+        <!--calendar is-editing="isEditing" ng-model="product.price" class="price-calendar" data="团期报价"></calendar-->
         <div class="submit">
           <md-button ng-if="isEditing" ng-click="submitProduct();" class="md-raised md-primary">发布产品</md-button>
         </div>

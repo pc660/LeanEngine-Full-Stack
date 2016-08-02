@@ -16,6 +16,9 @@ export default ($log, $http, $state, $window, $compile) => {
       scope.$on("updateTemplate", function(event, params) {
         $log.log("update");
         $log.log(params.params[key]);
+        if (!params.params[key]) {
+          return;
+        }
         var content = params.params[key];
         if (content[0] != "<") {
           content = "<p>" + content + "</p>";

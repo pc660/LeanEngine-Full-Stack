@@ -3,9 +3,9 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
   $scope.isEditing = false;
+  $scope.product = {};
   productFac.getProductDetail($stateParams.productId)
     .then(function(result) {
-      $log.log(result.product);
       $scope.product = result.product;
       $scope.product.pickedProvider = result.provider;
       // Convert prefix.
@@ -13,9 +13,9 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
       $scope.product.contact = result.contact;
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.prefixArray = productFac.convertProductPrefix(result.product.prefix);
-      $log.log($scope.product);
       $scope.$broadcast("calendarUpdate", {price: $scope.product.price});
       $scope.$broadcast("addressUpdate", {address: $scope.product.start});
+      $scope.$broadcast("updateMaterialCalendar");
       $scope.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
     }, function(error) {
       // TODO: handle failure.
@@ -25,6 +25,21 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
     for(var i = 0; i < $scope.pickedProviders.length; i++) {
       getReturnPolicy(i);
     }
+  };
+
+  $scope.setDayContent = (date) => {
+    return productFac.setDayContent(date, $scope.product);
+  };
+
+
+  $scope.dayClick = (date) => {
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+    $scope.currentPrice = productFac.getPrice(year, month, day, $scope.product);
+    $scope.currentPrice.year = year;
+    $scope.currentPrice.month = month;
+    $scope.currentPrice.day = day;
   };
 
   function getReturnPolicy(index) {
