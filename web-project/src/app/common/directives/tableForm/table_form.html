@@ -1,0 +1,41 @@
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title">{{ title }}</h3>
+  </div>
+  <div class="modal-body">
+    <ul>
+      <li ng-repeat="item in items">
+      <div class="item">
+        <div class="key">
+          {{ item.key }}
+        </div>
+        <div class="value" ng-switch on="item.type">
+        <input
+          ng-switch-when='number'
+          type="number"
+          ng-model="item.value">
+        <input
+          class="datepicker"
+          ng-model="item.value"
+          ng-switch-when='date'
+          type="text"
+          data-date-type="string"
+          data-model-date-format="mediumDate"
+          bs-datepicker
+          data-date-format="mediumDate"
+          data-autoclose="true">
+        <input
+          class="datepicker"
+          ng-model="item.value"
+          ng-switch-when='text'
+          type="text">
+        </div>
+      </div>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="close()">确认</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+  </div>
+</div>>

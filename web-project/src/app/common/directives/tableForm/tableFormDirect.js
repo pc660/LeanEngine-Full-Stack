@@ -1,6 +1,20 @@
 export default ($scope, $log, $window, $uibModalInstance, data) => {
   'ngInject';
-
+  return {
+    restrict: 'E',
+    templateUrl: 'app/common/directives/tableForm/form.html',
+    replace: true,
+    require: 'ngModel',
+    scope: {
+      isEditing: "=",
+      model: '=ngModel',
+    },
+    link: function(scope, element, attr) {
+      scope.types = {};
+      scope.options = multiChoiceConfig.data[attr.type];
+    }
+  };
+  /*
   $scope.items = data.items;
   $scope.title = data.title;
 
@@ -28,5 +42,5 @@ export default ($scope, $log, $window, $uibModalInstance, data) => {
     }
     $log.log(object);
     return object;
-  }
+  }*/
 };
