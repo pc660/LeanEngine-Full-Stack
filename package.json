@@ -23,6 +23,8 @@
     "leanengine": "^0.2.0",
     "passport": "^0.2.1",
     "template-tal": "latest",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "angular-elastic": "latest",
+    "sanitize-html": "latest"
   }
 }

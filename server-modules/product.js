@@ -10,6 +10,7 @@ const config = require('./config');
 const userApi = require('./user');
 const tal = require('template-tal');
 const multiChoiceConfig = require('./config/multiChoiceConfig');
+var sanitizeHtml = require('sanitize-html');
 
 function setProduct(productAV, product) {
   productAV.set('productName', product.productName);
@@ -561,12 +562,40 @@ function setDefaultPriceMap(priceMap) {
 
 function generateItinerary(params) {
   fs.readFile("server-modules/static/f05tal.doc","utf8", function(err, data) {
-    var result = tal.process(data, params);
+    recursiveIteration(params, function(object, property) {
+      if (typeof object[property] === 'string') {
+        tool.l(object[property]);
+        object[property] = object[property].replaceAll("\n", "<w:br/>");
+      }
+    });
+    var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");
     tool.l(params);
+    fs.writeFile("server-modules/static/xml.txt", "<w:br/>", "utf8", function() {
+      tool.l("done.");
+    });
     fs.writeFile("server-modules/static/f05tal-processed.doc", result, "utf8", function() {
       tool.l("done.");
     });
   });
+};
+
+function recursiveIteration(object, callback) {
+    for (var property in object) {
+        if (object.hasOwnProperty(property)) {
+            if (typeof object[property] == "object"){
+                recursiveIteration(object[property], callback);
+            }else{
+                //found a property which is not an object, check for your conditions here
+                callback(object, property);
+                
+            }
+        }
+    }
+};
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
 };
 
 module.exports = productApi;
