@@ -70,6 +70,9 @@ import addOrderCtrl from './common/sale/order/addOrderCtrl.js';
 import showOrderCtrl from './common/sale/order/showOrderCtrl.js';
 import showOrderDetailCtrl from './common/sale/order/showOrderDetailCtrl.js';
 
+import formCtrl from './common/directives/form/formCtrl.js';
+
+
 // factory
 import authFac from './common/authFac';
 import fileFac from './common/fileFac';
@@ -151,6 +154,7 @@ angular.module('webProject',
   .controller('addOrderCtrl', addOrderCtrl)
   .controller('showOrderCtrl', showOrderCtrl)
   .controller('showOrderDetailCtrl', showOrderDetailCtrl)
+  .controller('formCtrl', formCtrl)
 
   // factory
   .factory('authFac', authFac)

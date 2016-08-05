@@ -255,6 +255,7 @@ productApi.search = (req, res) => {
 
   // Check all query parameters.
   for (var key in params) {
+    tool.l(key);
     switch (key) {
       case "hotelStandard":
         query.equalTo("hotelStandard", params["hotelStandard"]);
@@ -285,14 +286,17 @@ productApi.search = (req, res) => {
   var queries = [query.find()];
   // Do search query.
   if (params.searchQuery) {
+    tool.l("search Query");
     var searchQuery = new AV.SearchQuery('Product');
     //searchQuery.queryString(params.searchQuery);
     searchQuery.queryString(params.searchQuery);
     queries.push(searchQuery.find());
   }
+
   // TODO: add start date.
   // TODO: add days.
   Promise.all(queries).then(function (results) {
+    tool.l(results[0].length);
     var searchResultSet = {};
     // If there is no search query.
     if (results.length > 1) {
@@ -300,7 +304,6 @@ productApi.search = (req, res) => {
         searchResultSet[result.id] = true;
       });
     }
-    tool.l(results);
     var products = results[0].filter(function (product) {
       if (results.length > 1 && searchResultSet[product.id]) {
         return true;
@@ -310,7 +313,6 @@ productApi.search = (req, res) => {
       return false;
     });
     tool.l('Successfully retrieved ' + products.length);
-    tool.l(products);
     // Need to check min date and max date.
     if (params.startDate || params.endDate) {
       var filterProducts = [];
