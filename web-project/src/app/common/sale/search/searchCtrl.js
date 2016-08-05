@@ -20,7 +20,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
     "交通方式": menuConfig.data["交通方式"],
     "类型": menuConfig.data["类型"],
     "供应商": [],
-    "行程天数": [1, 4, 5, 6, 7, 8, 9, 10],
+    "行程天数": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   }
 
   $scope.showItinerary = (id) => {

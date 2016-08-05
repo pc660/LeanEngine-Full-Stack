@@ -57,15 +57,14 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
   }
 
   $scope.dayClick = function(date) {
-    $log.log(date);
     if ($scope.priceMap[date]) {
-      $scope.openReserveForm(0, 0);
+      $scope.openReserveForm(0, 0, date);
     }
     return;
   }
 
 
-  $scope.openReserveForm = (adult, child) => {
+  $scope.openReserveForm = (adult, child, date) => {
     // Show the model with the result.
     var modalInstance = $uibModal.open({
       animation: true,
@@ -76,11 +75,13 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
           return $scope.priceMap;
         },
         adult: function() {
-          $log.log(adult);
           return adult;
         },
         child: function() {
           return child;
+        },
+        date: function() {
+          return date;
         }
       }
     });

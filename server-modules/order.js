@@ -39,6 +39,7 @@ orderApi.getAll = (req, res) => {
     if (req.body.status) {
         query.equalTo("status", parseInt(req.body.status));
     }
+    query.descending("createdAt");
     query.find().then(function(results) {
         tool.l("successfully get " + results.length + " results");
         tool.l(results);
@@ -96,13 +97,15 @@ orderApi.getPrice = (priceMap, orderDate) => {
     var year = parts[1];
     var month = parts[2];
     var day = parts[3];
+    tool.l(priceMap);
     // Check year month day in priceMap.
     // Need to check rest
-    if (priceMap[year] && priceMap[year][month - 1] && priceMap[year][month - 1][day - 1]) {
+    tool.l(month);
+    if (priceMap[year] && priceMap[year][month - 1] && priceMap[year][month - 1][day]) {
         tool.l("find the right date");
-        var object = priceMap[year][month - 1][day - 1];
-        if (!object.restPeopleNumbner > 0) {
-            object.restPeopleNumbner = object.totalPeople;
+        var object = priceMap[year][month - 1][day];
+        if (!object.restPeopleNumber > 0) {
+            object.restPeopleNumber = object.totalPeople;
         }
         if (!object.paidPeopleNumber) {
             object.paidPeopleNumber = 0;

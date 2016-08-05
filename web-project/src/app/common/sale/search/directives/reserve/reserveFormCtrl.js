@@ -1,4 +1,4 @@
-export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, adult, child) => {
+export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, adult, child, date) => {
   'ngInject';
 
   // This is for previous results
@@ -10,6 +10,8 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
   // Init.
   var keys = Object.keys(results);
   keys.sort();
+  $scope.selectedIndex = keys.indexOf(date + "");
+  $scope.date = date + "";
   $scope.priceArray = keys.map(function(key) {
     var object = {};
     var date = new Date(key);
@@ -19,8 +21,9 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
     object.childCompanySalePrice = results[key].childCompanySalePrice;
     return object;
   });
+  //$scope.reserve.date = $scope.priceArray[0].date;
 
-  $scope.cancel = function() {
+    $scope.cancel = function() {
     $uibModalInstance.dismiss('cancel');
   };
 

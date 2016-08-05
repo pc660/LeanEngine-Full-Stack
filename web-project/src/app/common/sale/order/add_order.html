@@ -12,7 +12,10 @@
       </tr>
       <tr>
         <td>出发地</td>
-        <td>{{ product.start.city }}</td>
+        <td>
+          <span ng-if="product.start.city == '市辖区'">{{ product.start.province }}</span>
+          <span ng-if="product.start.city != '市辖区'">{{ product.start.city }}</span>
+        </td>
       </tr>
       <tr>
         <td>产品名称</td>
@@ -148,11 +151,11 @@
           <td class="extra">
             <div>
               <input type="checkbox" ng-model="customer.needVisa">
-              是否办签
+              需要办签
             </div>
             <div>
               <input type="checkbox" ng-model="customer.needShare">
-              是否拼房
+              需要拼房
             </div>
           </td>
         </tr>
