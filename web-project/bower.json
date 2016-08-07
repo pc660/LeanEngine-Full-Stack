@@ -1,11 +1,9 @@
 {
-  "name": "LeanEngine-Full-Stack-Web",
+  "name": "ztg",
   "version": "1.0.0",
   "dependencies": {
     "angular-sweetalert": "latest",
-    "angular-ueditor": "latest",
     "material-calendar": "latest",
-    "textAngular": "latest",
     "angucomplete-alt": "latest",
     "angular-elastic": "latest",
     "ng-file-upload-shim": "latest",

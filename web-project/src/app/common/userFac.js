@@ -6,6 +6,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.editContactList = editContactList;
   service.deleteContactList = deleteContactList;
   service.addContact = addContact;
+  service.getProvider = getProvider;
   return service;
 
   function getCurrentUserInfo() {
@@ -55,5 +56,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     });
     contact.providerId = providerId;
     return contact;
+  };
+
+  function getProvider() {
+    return $http.post('/api/user/getProvider');
   };
 };

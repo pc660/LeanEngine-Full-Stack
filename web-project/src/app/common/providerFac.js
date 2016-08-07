@@ -28,7 +28,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   * set, if not, assume the index is 0.
   * */
   function getProvider(query) {
-    return $http.post('/api/provider/get', {query: JSON.stringify(query)});
+    return $http.post('/api/provider/get', {query: query});
   }
 
   /**

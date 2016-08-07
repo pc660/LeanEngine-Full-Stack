@@ -178,41 +178,39 @@ providerApi.getReturnPolicy = (req, res) => {
 providerApi.get = (req, res) => {
   tool.l('provider.get');
   var body = req.body;
-  tool.l(body);
-  var queryParameters = JSON.parse(body.query);
+  var queryParameters = body.query;
   var query = new AV.Query('Provider');
   query.limit(LIMIT);
+  /*
   if (queryParameters.index !== undefined) {
     var index = parseInt(queryParameters.index);
     query.skip(index * LIMIT);
     delete queryParameters.index;
   }
+
   for (var key in queryParameters) {
     tool.l(key);
     query.equalTo(key, queryParameters[key]);
-  }
-  query.count().then(function(count) {
-    query.find().then(function(results) {
-      tool.l('Successfully retrieved ' + results.length + ' posts.');
-      // 处理返回的结果数据
-      // Extract user contact information.
-      // For each result, we need to retrieve the contact list.
-      var promises = [];
-      for (var i = 0; i < results.length; i++) {
-        var query = new AV.Query('Contact');
-        var provider = results[i];
-        query.equalTo("provider", provider);
-        promises.push(query.find());
-      }
-      Promise.all(promises).then(function(contactList) {
-        res.send({"count": count, "providers": results, "contacts": contactList});
-        return;
-      });
-    }, function(error) {
-      tool.l('Error: ' + error.code + ' ' + error.message);
-    }); 
+  }*/
+
+  query.find().then(function(results) {
+    tool.l('Successfully retrieved ' + results.length + ' posts.');
+    // 处理返回的结果数据
+    // Extract user contact information.
+    // For each result, we need to retrieve the contact list.
+    var promises = [];
+    for (var i = 0; i < results.length; i++) {
+      var query = new AV.Query('Contact');
+      var provider = results[i];
+      query.equalTo("provider", provider);
+      promises.push(query.find());
+    }
+    Promise.all(promises).then(function(contactList) {
+      res.send({ "providers": results, "contacts": contactList});
+      return;
+    });
   }, function(error) {
-    // TODO: handle error.
+    tool.l('Error: ' + error.code + ' ' + error.message);
   });
   
 };

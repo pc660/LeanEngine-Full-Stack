@@ -1,4 +1,4 @@
-export default ($log, $rootScope, $mdSidenav, $state, $window, providerFac, $uibModal, productFac) => {
+export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window, providerFac, $uibModal, productFac) => {
   'ngInject';
   return {
     restrict: 'E',
@@ -6,6 +6,7 @@ export default ($log, $rootScope, $mdSidenav, $state, $window, providerFac, $uib
     replace: true,
     link: function(scope, element, attr) {
 
+      $log.log("123");
       scope.filterProviders = [];
       scope.$on("sidebarOpen", function() {
         // TODO: Maybe cache the value.
@@ -16,21 +17,6 @@ export default ($log, $rootScope, $mdSidenav, $state, $window, providerFac, $uib
           scope.initializeSidebar();
         }
       });
-      /*
-      * Initilize for search box.
-      * */
-      scope.doSearch = (searchString) => {
-        var query = JSON.stringify(
-          {"mainBusiness": searchString, "type": "contain"});
-        providerFac.getProvider(query)
-          .then(function(results) {
-            scope.providers = results;
-            scope.isMenu = false;
-            scope.isSecondMenu = true;
-          }, function(error) {
-            // TODO: handle error.
-          });
-      };
 
       // Initalize.
       scope.initializeSidebar = () => {
@@ -38,40 +24,32 @@ export default ($log, $rootScope, $mdSidenav, $state, $window, providerFac, $uib
         scope.getProviderList();
       };
 
-      /**
-      * 搜索供应商根据关键词，关键词为供应商名词.
-      * */
-      scope.searchFromKeyword = (keyword) => {
-        var query = JSON.stringify({"keyword": keyword});
-        providerFac.getProvider(query)
-          .then(function(results) {
-            scope.providers = results;
-            scope.isMenu = false;
-            scope.isSecondMenu = true;
-          }, function(error) {
-            // TODO: handle error.
-          });
-      };
-
       // TODO: Check how many providers we have. If too much, we need to do
       // index.
       scope.getProviderList = () => {
         var query = {};
-        providerFac.getProvider(query)
-        .then(function(results) {
-          if (results.count > 0) {
-            // Set the provider contact list.
-            for (var i = 0; i < results.providers.length; i++) {
-              results.providers[i].contactList = results.contacts[i];
-              $log.log("add provider");
-              $log.log(results.providers[i]);
-            }
-            scope.filterProviders = scope.providers = results.providers;
-            $log.log(scope.providers);
-          }
-        }, function(error) {
-          // TODO: error.
-        });
+        var level = authFac.getUserLevel();
+        // ADMIN
+        if (level == 0) {
+          providerFac.getProvider(query)
+            .then(function(results) {
+              if (results.count > 0) {
+                // Set the provider contact list.
+                for (var i = 0; i < results.providers.length; i++) {
+                  results.providers[i].contactList = results.contacts[i];
+                }
+                scope.filterProviders = scope.providers = results.providers;
+                $log.log(scope.providers);
+              }
+            }, function(error) {
+              // TODO: error.
+            });
+        } else {
+          userFac.getProvider().then(function(result) {
+            tool.l(result);
+            scope.filterProviders = scope.providers = [result];
+          });
+        }
       };
 
       scope.pickProvider = (index) => {
