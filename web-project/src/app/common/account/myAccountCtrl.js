@@ -92,7 +92,7 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
             var item = items[i];
             item.value = contact[item.name];
           }
-          return {"title": title, "items": items};
+          return {"title": title, "items": items };
         }
       }
     });

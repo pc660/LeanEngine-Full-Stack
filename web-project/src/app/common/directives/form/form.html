@@ -10,7 +10,7 @@
           <div class="key">
             {{ item.key }}
           </div>
-          <div class="value" ng-switch on="item.type">
+          <div class="value" ng-if="editable" ng-switch on="item.type">
             <input
               ng-switch-when='number'
               type="number"
@@ -31,12 +31,18 @@
               ng-switch-when='text'
               type="text">
           </div>
+          <div class="value" ng-if="!editable">
+            {{ item.value }}
+          </div>
         </div>
       </li>
     </ul>
   </div>
-  <div class="modal-footer">
+  <div ng-if="editable" class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="close()">确认</button>
     <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+  </div>
+  <div ng-if="!editable" class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="cancel()">确认</button>
   </div>
 </div>

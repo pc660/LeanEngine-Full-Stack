@@ -1,4 +1,4 @@
-export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac) => {
+export default (SweetAlert, $log, $scope, $state, $window, $uibModal, orderFac, productFac, userFac) => {
   'ngInject';
 
   $scope.admin = false;
@@ -75,5 +75,13 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
     }, function(error){
 
     });
+<<<<<<< HEAD
+=======
+  }
+  
+  $scope.showContact = (order) => {
+    $log.log(order);
+    userFac.showContact(order);
+>>>>>>> 3ab9384a84eb6a0437ddbe4c5d116dbab09d1773
   };
 };
