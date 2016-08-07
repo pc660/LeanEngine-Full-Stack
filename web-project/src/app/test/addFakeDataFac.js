@@ -66,7 +66,7 @@ export default ($log, $rootScope, $http, $state, formConfig, lcConfig, $window, 
           object[item.name] = randomString(item.key);
           break;
         case "number":
-          object[item.name] = randomNumber()
+          object[item.name] = randomNumber();
           break;
       }
     }
@@ -104,9 +104,9 @@ export default ($log, $rootScope, $http, $state, formConfig, lcConfig, $window, 
           object[data[i].name] = randomDate();
       }
     }
-    object[reservedPeopleNumber] = 0;
-    object[paidPeopleNumber] = 0;
-    object[restPeopleNumbner] = object[totalPeople];
+    object.reservedPeopleNumber = 0;
+    object.paidPeopleNumber = 0;
+    object.restPeopleNumbner = object.totalPeople;
     return object;
   }
 

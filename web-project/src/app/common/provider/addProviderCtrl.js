@@ -24,8 +24,7 @@ export default (SweetAlert, $state, $log, $scope, $document, $timeout, lcConfig,
     // TODO: Do param checking
     $scope.confirm = () => {
       $scope.confirmed = true;
-
-    }
+    };
 
     $scope.submit = () => {
       $log.log($scope.provider);

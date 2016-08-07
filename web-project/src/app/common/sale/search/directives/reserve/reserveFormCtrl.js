@@ -36,7 +36,7 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
     }
     var result = {};
     for (var i = 0; i < $scope.priceArray.length; i++) {
-      if ($scope.priceArray[i].date == $scope.reserve.date) {
+      if ($scope.priceArray[i].date === $scope.reserve.date) {
         result = $scope.priceArray[i];
       }
     }

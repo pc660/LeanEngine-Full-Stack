@@ -13,7 +13,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
     "类型": -1,
     "供应商": -1,
     "行程天数": -1,
-  }
+  };
 
   $scope.tags = {
     "酒店标准": menuConfig.data["酒店标准"],
@@ -21,7 +21,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
     "类型": menuConfig.data["类型"],
     "供应商": [],
     "行程天数": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  }
+  };
 
   $scope.showItinerary = (id) => {
     $state.go('sale.show-itinerary', {productId: id});
@@ -30,14 +30,14 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
   // Parse the search query.
   $scope.parseDayQuery = (query, day) => {
     var length = $scope.tags["行程天数"].length;
-    if (day == $scope.tags["行程天数"][length - 1]) {
+    if (day === $scope.tags["行程天数"][length - 1]) {
       query.minDay = day;
       query.maxDay = Number.MAX_SAFE_INTEGER;
     } else {
       query.minDay = day;
       query.maxDay = day;
     }
-  }
+  };
 
   $scope.search = () => {
     // Construct the query based on selected tag.
@@ -46,9 +46,9 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
     for (var key in $scope.selectedTags) {
       var value = $scope.selectedTags[key];
       var name = getKeyName(key);
-      if (name == "stopDay") {
+      if (name === "stopDay") {
         $scope.parseDayQuery(query, value);
-      } else if (name == "provider") {
+      } else if (name === "provider") {
         query[name] = $scope.providers[$scope.index[key]].objectId;
       } else {
         query[name] = value;
@@ -84,30 +84,30 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
         $scope.products[i].provider = results.providers[i];
       }
     });
-  }
+  };
 
   providerFac.search({}, ["companyname"]).then(function(providers) {
     $scope.providers = providers;
     $scope.tags['供应商'] = providers.map(function(provider) {
       return provider.companyname;
     });
-  })
+  });
 
   $scope.search();
   $scope.pick = (key, index) => {
     $scope.index[key] = index;
-    if (index == -1) {
+    if (index === -1) {
       delete $scope.selectedTags[key];
     } else {
       $scope.selectedTags[key] = $scope.tags[key][index];
     }
-  }
+  };
 
   $scope.removeTag = (key) => {
     // Need to update index.
     delete $scope.selectedTags[key];
     $scope.index[key] = -1;
-  }
+  };
 
   function getKeyName(key) {
     switch (key) {

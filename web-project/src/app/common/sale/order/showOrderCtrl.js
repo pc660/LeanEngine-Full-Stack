@@ -17,7 +17,7 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
           $scope.orders[i].product = product;
         }
       }
-    })
+    });
   };
 
   $scope.unpaidOrder = () => {
@@ -28,8 +28,8 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
         $scope.orders[i].product = product;
       }
-    })
-  }
+    });
+  };
 
   $scope.paidOrder = () => {
     orderFac.getPaidOrder($scope.admin).then(function(results) {
@@ -39,8 +39,8 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
         $scope.orders[i].product = product;
       }
-    })
-  }
+    });
+  };
 
   $scope.finishedOrder = () => {
     orderFac.getFinishedOrder($scope.admin).then(function(results) {
@@ -50,24 +50,24 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
         $scope.orders[i].product = product;
       }
-    })
-  }
+    });
+  };
 
   $scope.showDetail = (orderId) => {
     $state.go('sale.show-order-detail', {orderId: orderId });
-  }
+  };
 
   $scope.paid = (orderId) => {
     orderFac.orderGetPaid(orderId).then(function() {
       SweetAlert.swal("订单付款成功成功", "订单编号: " + orderId, "success");
-    })
-  }
+    });
+  };
 
   $scope.showConfirmation = () => {
-  }
+  };
 
   $scope.printReceipt = () => {
-  }
+  };
 
   $scope.cancelOrder = (orderId) => {
     orderFac.cancelOrder(orderId).then(function(result) {
@@ -75,5 +75,5 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
     }, function(error){
 
     });
-  }
+  };
 };

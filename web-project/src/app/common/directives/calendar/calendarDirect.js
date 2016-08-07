@@ -18,7 +18,7 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
           scope.setEvents();
           // Set the right events.
         }
-      })
+      });
       // TODO: The whole class is slow on performance.
       // Need to figure out how to optimize this.
       /**
@@ -71,7 +71,7 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
         }
 
         if (scope.allDayEvents.length) {
-          for (var i = 1; i <= numberOfDays; i++) {
+          for (i = 1; i <= numberOfDays; i++) {
             //Push an empty event.
             scope.allDayEvents.push({});
           }

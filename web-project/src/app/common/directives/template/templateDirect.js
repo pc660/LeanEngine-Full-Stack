@@ -20,13 +20,13 @@ export default ($log, $http, $state, $window, $compile) => {
           return;
         }
         var content = params.params[key];
-        if (content[0] != "<") {
+        if (content[0] !== "<") {
           content = "<p>" + content + "</p>";
         }
         var html =  $compile(content)(scope);
         element.append(html);
         $log.log(scope.model);
-      })
+      });
     }
   };
 };

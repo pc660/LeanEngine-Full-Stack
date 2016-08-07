@@ -18,7 +18,7 @@ export default ($log, $http, $state, $window) => {
       }
       scope.$watch("value", function(value) {
         scope.model = value;
-      })
+      });
     }
   };
 };

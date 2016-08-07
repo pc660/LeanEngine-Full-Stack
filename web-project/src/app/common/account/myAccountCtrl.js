@@ -2,7 +2,7 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
   'ngInject';
   $log.log('init my account');
   $scope.admin = false;
-  if (authFac.getUserLevel() == lcConfig.userLevel.ADMIN) {
+  if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
     $scope.admin = true;
   } else {
     $scope.admin = false;
@@ -72,7 +72,7 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
     $log.log(contact.objectId);
     userFac.deleteContactList(contact.objectId).then(function() {
       $scope.contactList.splice(index, 1);
-    })
+    });
   };
 
   $scope.editContact = (index) => {
@@ -88,7 +88,7 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
           var contact = $scope.contactList[index];
           var items = formConfig.data["商户联系人"];
           // Add values to items.
-          for (i in items) {
+          for (var i in items) {
             var item = items[i];
             item.value = contact[item.name];
           }
@@ -101,7 +101,7 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
       contact.objectId = $scope.contactList[index].objectId;
       userFac.editContactList(contact).then(function() {
         $scope.contactList[index] = contact;
-      })
+      });
     }, function () {
     });
   };

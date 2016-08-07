@@ -34,7 +34,7 @@ export default ($rootScope, $log, $state, $window) => {
 
       scope.$watch("model", function(value) {
         scope.value = scope.model;
-      })
+      });
     }
   };
 };

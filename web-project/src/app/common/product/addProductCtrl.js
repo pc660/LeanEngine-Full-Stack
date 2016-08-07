@@ -37,10 +37,10 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
       $scope.product.contact = result.contact;
       providerFac.getContactList($scope.product.pickedProvider.objectId).then(function(contactList) {
         $scope.product.pickedProvider.contactList = contactList;
-      })
+      });
 
       $scope.$broadcast("updateMaterialCalendar");
-    })
+    });
   }
   $log.log($stateParams);
   $log.log($state.params);
@@ -60,7 +60,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
       $scope.product.itinerary.pop();
     }
     $log.log($scope.product.itinerary);
-  })
+  });
 
   $scope.submitProduct = () => {
     $log.log($scope.product);
@@ -99,7 +99,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
 
   $scope.addContact = () => {
     userFac.addContact($scope.product.pickedProvider.contactList, $scope.product.pickedProvider.objectId);
-  }
+  };
 
   productFac.getInternalUsers().then(function(result) {
     $scope.responses = [];

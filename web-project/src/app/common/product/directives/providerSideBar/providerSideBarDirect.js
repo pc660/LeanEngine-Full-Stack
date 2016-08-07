@@ -30,24 +30,22 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
         var query = {};
         var level = authFac.getUserLevel();
         // ADMIN
-        if (level == 0) {
+        if (level === 0) {
           providerFac.getProvider(query)
             .then(function(results) {
-              if (results.count > 0) {
-                // Set the provider contact list.
-                for (var i = 0; i < results.providers.length; i++) {
-                  results.providers[i].contactList = results.contacts[i];
-                }
-                scope.filterProviders = scope.providers = results.providers;
-                $log.log(scope.providers);
+              for (var i = 0; i < results.providers.length; i++) {
+                results.providers[i].contactList = results.contacts[i];
               }
+              scope.filterProviders = scope.providers = results.providers;
+              $log.log(scope.providers);
             }, function(error) {
               // TODO: error.
             });
         } else {
           userFac.getProvider().then(function(result) {
-            tool.l(result);
-            scope.filterProviders = scope.providers = [result];
+            $log.log(result);
+            result.provider.contactList = result.contacts;
+            scope.filterProviders = scope.providers = [result.provider];
           });
         }
       };

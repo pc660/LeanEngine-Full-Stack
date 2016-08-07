@@ -9,18 +9,9 @@ export default (authFac, $log, lcConfig,  $state, $scope, $window, commonSer, he
   'ngInject';
   // Need to get current user level.
   $log.log(authFac.getUserLevel());
-  if (authFac.getUserLevel() == lcConfig.userLevel.ADMIN) {
+  if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
     $scope.admin = true;
   } else {
     $scope.admin = false;
   }
-  /*productFac.hasUnfinished().then(function(result) {
-    var count = result.count;
-    if (count > 0) {
-      $scope.unfinished = true;
-
-    }
-  }, function(error) {
-    $state.go("login");
-  });*/
 };

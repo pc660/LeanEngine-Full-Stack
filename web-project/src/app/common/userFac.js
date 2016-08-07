@@ -44,10 +44,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
       var contact = convertItemsToContact(items, providerId);
       addContactList(contact).then(function() {
         contactList.push(contact);
-      })
+      });
     }, function () {
     });
-  };
+  }
 
   function convertItemsToContact(items, providerId) {
     var contact = {};
@@ -56,9 +56,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     });
     contact.providerId = providerId;
     return contact;
-  };
+  }
 
   function getProvider() {
     return $http.post('/api/user/getProvider');
-  };
+  }
 };

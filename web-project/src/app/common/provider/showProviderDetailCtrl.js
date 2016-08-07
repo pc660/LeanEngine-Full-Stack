@@ -25,5 +25,5 @@ export default ($stateParams, $log, $scope, $document, $timeout, lcConfig, $wind
     $log.log("contact value");
     $log.log($scope.contactperson);
     $log.log(value);
-  })
+  });
 };

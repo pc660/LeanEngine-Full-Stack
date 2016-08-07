@@ -6,5 +6,5 @@ export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac)
   orderFac.getOrder($state.params.orderId).then(function(order) {
     $scope.order = order;
     $log.log($scope.order);
-  })
+  });
 };

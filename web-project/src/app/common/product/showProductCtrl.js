@@ -44,8 +44,4 @@ export default ($log, $scope, $state, $window, lcConfig, productFac) => {
     }, function(error) {
     });
   };
-
-  $scope.updateProducts = () => {
-    var date = getLatestTrip($scope.product);
-  }
 };

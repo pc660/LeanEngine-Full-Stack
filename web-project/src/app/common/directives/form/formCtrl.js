@@ -10,15 +10,15 @@ export default ($scope, $log, $window, $uibModalInstance, data) => {
    };
 
    $scope.close = function () {
-   var saveFunction = data.save;
-   if (saveFunction) {
-     var object = convertToObject($scope.items);
-     saveFunction(object).then(function(result) {
+     var saveFunction = data.save;
+     if (saveFunction) {
+       var object = convertToObject($scope.items);
+       saveFunction(object).then(function(result) {
+         $uibModalInstance.close($scope.items);
+       });
+     } else {
        $uibModalInstance.close($scope.items);
-     })
-   } else {
-     $uibModalInstance.close($scope.items);
-   }
+     }
    };
 
    function convertToObject(items) {

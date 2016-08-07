@@ -6,7 +6,7 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
   $scope.levels = [
     {level: 2, value: "供应商"},
     {level: 1, value:  "分销商"},
-  ]
+  ];
 
   function loginSuccess() {
     $log.log("login success");

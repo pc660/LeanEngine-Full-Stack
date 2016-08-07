@@ -30,19 +30,19 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
 
   $scope.getItinerary = (index) => {
     return $sce.trustAsHtml($scope.product.itinerary[index].detail);
-  }
+  };
 
   $scope.updateMonthContent = (data) => {
     var price = $scope.product.price;
     if (price[data.year]) {
       var month = price[data.year][data.month];
-      for (i = 0; i < month.length; i++) {
+      for (var i = 0; i < month.length; i++) {
         var date = new Date(data.year, data.month, i + 1);
         //$log.log(date);
         $scope.setDayContent(date);
       }
     }
-  }
+  };
 
   $scope.prevMonth = function(data) {
     $scope.msg = "You clicked (prev) month " + data.month + ", " + data.year;
@@ -54,14 +54,14 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
   $scope.order = function() {
     $log.log($scope.adult);
     $scope.openReserveForm($scope.adult, $scope.child);
-  }
+  };
 
   $scope.dayClick = function(date) {
     if ($scope.priceMap[date]) {
       $scope.openReserveForm(0, 0, date);
     }
     return;
-  }
+  };
 
 
   $scope.openReserveForm = (adult, child, date) => {
@@ -109,7 +109,6 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
         return '<p class="cal-price">' + "￥" + adultCompanySalePrice + "</p>";
       }
     }
-
     return "<p></p>";
   };
-}
+};

@@ -17,11 +17,11 @@ export default ($rootScope, $log, $state, $window, formConfig) => {
         $log.log(scope.model);
         scope.items.forEach(function(item) {
           item.value = "";
-        })
+        });
         // Set the correct value.
         for (var key in scope.model) {
           for (var i in scope.items) {
-            if (scope.items[i].name == key) {
+            if (scope.items[i].name === key) {
               scope.items[i].value = scope.model[key];
             }
           }
@@ -31,14 +31,14 @@ export default ($rootScope, $log, $state, $window, formConfig) => {
       scope.confirm = () => {
         scope.items.forEach(function(item) {
           scope.model[item.name] = item.value;
-        })
+        });
       };
 
       scope.clear = () => {
         scope.items.forEach(function(item) {
           item.value = "";
           delete scope.model[item.name];
-        })
+        });
         $log.log(scope.model);
       };
     }

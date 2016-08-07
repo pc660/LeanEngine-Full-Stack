@@ -27,11 +27,10 @@ export default ($log, $rootScope, $http, $state,
             product.contact = results[0];
             $log.log(product);
             productFac.uploadProduct(product).then(function() {
-
-            })
-          })
-        })
-      })
+            });
+          });
+        });
+      });
     });
   }
 

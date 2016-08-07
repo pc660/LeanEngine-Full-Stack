@@ -117,21 +117,21 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   function findNextInOneYear(price, startYear, startMonth, startDay) {
-    if (!startYear in price) {
+    if (! (startYear in price)) {
       return null;
     }
     var events = price[startYear];
     for (var month = startMonth; month < 12; month++) {
-      if (!month in events) {
+      if (!(month in events)) {
         continue;
       }
       var monthEvents = events[month];
       for (var day = startDay; day <= 31; day++) {
-        if (!day in monthEvents) {
+        if (!(day in monthEvents)) {
           continue;
         }
         var event = monthEvents[day];
-        if (!event || Object.keys(event).length == 0) {
+        if (!event || Object.keys(event).length === 0) {
           continue;
         }
         return {event: event, date: startYear + "年" + (month + 1) + "月" + day + "日"};
@@ -154,7 +154,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
         }
       }
     });
-  };
+  }
 
   function setDayContent(date, product) {
     if (!product.price) {
@@ -176,7 +176,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
       // Construct the content.
       var htmlString = "";
       for (var key in content) {
-        htmlString = htmlString + '<div>' + key + ": " + content[key] + '</div>'
+        htmlString = htmlString + '<div>' + key + ": " + content[key] + '</div>';
       }
       return htmlString;
     }
@@ -185,7 +185,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function getPrice(year, month, day, product) {
 
-    var price = product.price || {}
+    var price = product.price || {};
     price = price[year] || {};
     price = price[month] || {};
     price = price[day] || {};

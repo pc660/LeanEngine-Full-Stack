@@ -106,6 +106,7 @@ userApi.getCurrentUser = (req) => {
 userApi.getProvider = (req, res) => {
     tool.l("userapi.getProvider");
     var user = userApi.getCurrentUser(req);
+    tool.l(user);
     if (!user) {
         res.send(202);
         return;
@@ -113,7 +114,12 @@ userApi.getProvider = (req, res) => {
 
     var provider = user.get("provider");
     provider.fetch().then(function(result) {
-        res.send(result);
+        var query = new AV.Query('Contact');
+        query.equalTo("provider", result);
+        query.find().then(function(contactList) {
+            tool.l(contactList);
+            res.send({ "provider": result, "contacts": contactList});
+        })
         return;
     })
 
