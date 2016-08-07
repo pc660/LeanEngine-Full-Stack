@@ -4,6 +4,8 @@ export default ($scope, $log, $window, $uibModalInstance, data) => {
 
    $scope.items = data.items;
    $scope.title = data.title;
+   $scope.editable = data.editable;
+   
 
    $scope.cancel = function () {
       $uibModalInstance.dismiss('cancel');

@@ -7,6 +7,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.deleteContactList = deleteContactList;
   service.addContact = addContact;
   service.getProvider = getProvider;
+  service.showContact = showContact;
   return service;
 
   function getCurrentUserInfo() {
@@ -35,7 +36,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
         // {key: name, type: type}
         data: function () {
           var title = "添加商户人信息";
-          return {"title": title, "items": formConfig.data["商户联系人"]};
+          return {"title": title, "items": formConfig.data["商户联系人"], "editable": true};
         }
       }
     });
@@ -46,6 +47,36 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
         contactList.push(contact);
       })
     }, function () {
+    });
+  };
+  
+  function showContact(order) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'app/common/directives/form/form.html',
+      controller: 'formCtrl',
+      resolve: {
+        // Need to convert the titles into the following format.
+        // {key: name, type: type}
+        data: function () {
+          var title = "联系信息";
+          var items = [
+            {
+              "key": "姓名",
+              "value": order.contactname
+            },
+            {
+              "key": "手机",
+              "value": order.cellphone
+            },
+            {
+              "key": "邮箱",
+              "value": order.email
+            },
+            ];
+          return {"title": title, "items": items, "editable": false};
+        }
+      }
     });
   };
 

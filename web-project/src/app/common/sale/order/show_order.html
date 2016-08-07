@@ -31,7 +31,7 @@
               <span>订单号: {{order.objectId}}</span>
               <span>下单时间: <span ng-bind="order.createdAt | date:'yyyy-MM-dd HH:mm'"></span>{{ order.createdAt }}</span>
               <span>供应商: 上海旅行社</span>
-              <span>和我联系</span>
+              <a ng-click="showContact(order);">和我联系</a>
             </div>
           </td>
         </tr>
