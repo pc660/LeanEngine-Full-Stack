@@ -318,7 +318,7 @@ productApi.search = (req, res) => {
       var filterProducts = [];
       products.forEach(function (product) {
         var price = product.get("price");
-        if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate)) {
+        if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate, product.get("stopDay"))) {
           filterProducts.push(product);
         }
       })
@@ -352,70 +352,78 @@ productApi.search = (req, res) => {
   });
 };
 
-productApi.checkPriceWithinDate = (priceMap, minDate, maxDate) => {
-  // Make the startDate as the current time.
-  var currentDate = new Date();
-  var startDate = {
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-    date: currentDate.getDate() - 1
-  };
-  var endDate = {
-    year: 2050,
-    month: 11,
-    date: 30
-  };
+productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
+  // Make the startDate as the current time + stopDay.
+  var startDate = new Date();
+  startDate.setDate(startDate.getDate() + stopDay);
   if (minDate) {
-    // Parse date
-    productApi.parseDate(minDate, startDate);
+    var minParsedDate = productApi.parseDate(minDate);
+    minParsedDate.setDate(minParsedDate.getDate() + stopDay);
+    if (minParsedDate - startDate > 0) {
+      startDate = minParsedDate;
+    }
   }
 
+  var endDate = new Date(2050, 1, 1);
   if (maxDate) {
-    productApi.parseDate(maxDate, endDate);
+    var maxParsedDate = productApi.parseDate(maxDate);
+    maxParsedDate.setDate(maxParsedDate.getDate() + stopDay);
+    if (maxParsedDate - endDate < 0) {
+      endDate = maxParsedDate;
+    }
   }
 
-  var years = Object.keys(priceMap);
+  var years = Object.keys(priceMap).sort();
   return years.some(function(year) {
-    if (year >= startDate.year && year <= endDate.year) {
-      var month = priceMap[year];
+    if (year >= startDate.getFullYear() && year <= endDate.getFullYear()) {
+      var monthPrice = priceMap[year];
       var startMonth = 0;
       var endMonth = 11;
-      if (year == startDate.year) {
-        startMonth = startDate.month;
+      if (year == startDate.getFullYear()) {
+        startMonth = startDate.getMonth();
       }
-      if (year == endDate.year) {
-        endMonth = endDate.month;
+      if (year == endDate.getFullYear()) {
+        endMonth = endDate.getMonth();
       }
 
-      for (var i = startMonth; i <= endMonth; i++) {
-        var dates = month[i];
+      for (var month = startMonth; month <= endMonth; month++) {
+        if (! (month in monthPrice)) {
+          continue;
+        }
+
+        var dayPrice = monthPrice[month];
         var startDay = 0;
-        var endDay = dates.length;
-        if (i == startMonth && year == startDate.year) {
-          startDay = startDate.date;
+        var endDay = 31;
+        if (month == startMonth && year == startDate.getFullYear()) {
+          startDay = startDate.getDate();
         }
-        if (i == endMonth && year == endDate.year) {
-          endDay = endDate.date;
+        if (month == endMonth && year == endDate.getFullYear()) {
+          endDay = endDate.getDate();
         }
 
-        for (var j = startDay; j <= endDay; j++) {
-          if (dates[j] && Object.keys(dates[j]).length > 0) {
+        for (var day = startDay; day <= endDay; day++) {
+          if (! (day in dayPrice)) {
+            continue;
+          }
+
+          if (dayPrice[day] && Object.keys(dayPrice[day]).length > 0) {
             return true;
           }
         }
       }
     }
+    return false;
   })
 };
 
-productApi.parseDate = (dateString, dateObject) => {
+productApi.parseDate = (dateString) => {
   var re = /([0-9]+)年([0-9]+)月([0-9]+)日/;
   var match = dateString.match(re);
   if (match.length == 4) {
-    dateObject.year = match[1];
-    dateObject.month = match[2] - 1;
-    dateObject.date = match[3];
+    return new Date(match[1], match[2] - 1, match[3]);
   }
+
+  return null;
 };
 
 productApi.getResponsibles = (products) => {

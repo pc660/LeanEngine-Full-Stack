@@ -19,7 +19,7 @@ var calendarConfig = {
       {type: "number", name: 'minimumPeople', value: '最低成团人数'},
       {type: "number", name: 'reservedPeopleNumber', value: '占位数'},
       {type: "number", name: 'paidPeopleNumber', value: '签约数'},
-      {type: "number", name: 'restPeopleNumbner', value: '余位'},
+      {type: "number", name: 'restPeopleNumber', value: '余位'},
     ]
   }
 };

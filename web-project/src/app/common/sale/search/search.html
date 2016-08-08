@@ -58,7 +58,8 @@
     <td>
       <div class="selectable">
         <span class="unlimited" ng-class="{'selected-tag': index['供应商'] == -1}" ng-click="pick('供应商', -1)">不限</span>
-        <span class="unlimited" ng-class="{'selected-tag': $index==index['供应商']}" ng-click="pick('供应商', $index)" ng-repeat="provider in tags['供应商'] track by $index">{{ provider }}</span>
+        <span class="unlimited" ng-class="{'selected-tag': $index==index['供应商']}" ng-click="pick('供应商', $index)"
+              ng-repeat="provider in tags['供应商'] track by $index">{{ provider }}</span>
       </div>
     </td>
   </tr>
@@ -103,7 +104,7 @@
          target="_blank"
          ui-sref="sale.show-product({productId: '{{product.objectId}}' })"
          ui-sref-opts="{ absolute: true }">
-         <span ng-repeat="prefix in product.prefixArray">
+         <span ng-repeat="prefix in product.prefixArray track by $index">
            <span>[</span>
            <span>{{ prefix }}</span>
            <span>]</span>
@@ -127,6 +128,10 @@
         <span>
           门市价
           <em><span class="large">{{ product.latestAdultCompanySalePrice }}</span></em>
+        </span>
+        <span>
+          同行价
+          <em><span class="large">{{ product.latestAdultCompanyCompetitorPrice }}</span></em>
         </span>
       </div>
       <div>

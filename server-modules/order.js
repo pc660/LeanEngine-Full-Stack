@@ -203,15 +203,24 @@ orderApi.cancel = (req, res) => {
             res.send(404);
             return;
         }
-        var totalNumber = order.adult + order.child;
-        price.restPeopleNumbner = price.restPeopleNumbner + totalNumber;
+        tool.l(price);
+        var totalNumber = result.get("adult") + order.get("child");
+        tool.l(totalNumber);
+        price.restPeopleNumber = price.restPeopleNumber + totalNumber;
         // Currently we assume all people paid.
         if (order.get("status") == config.orderStatus.UNPAID) {
-            price.reservedPeopleNumber = price.reservedPeopleNumber + totalNumber;
+            price.reservedPeopleNumber = price.reservedPeopleNumber - totalNumber;
         } else {
-            price.paidPeopleNumber = price.paidPeopleNumber + totalNumber;
+            price.paidPeopleNumber = price.paidPeopleNumber - totalNumber;
+        }
+        if (price.restPeopleNumber > price.totalPeopleNumber) {
+            price.restPeopleNumber = price.totalPeopleNumbder;
+            tool.l("sever error in order cancel, debug");
         }
         product.set("price", priceMap);
+        tool.l(priceMap);
+        tool.l(price);
+
         product.save();
         order.destroy().then(function() {
             res.send();

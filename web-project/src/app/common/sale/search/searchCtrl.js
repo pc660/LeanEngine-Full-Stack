@@ -71,6 +71,11 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
     }
 
     $log.log(query);
+    // Set start date.
+    if (!query.startDate) {
+      var date = new Date();
+      query.startDate = date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + (date.getDate()) + "日";
+    }
 
     productFac.searchProduct(query).then(function(results) {
       $scope.products = results.products;

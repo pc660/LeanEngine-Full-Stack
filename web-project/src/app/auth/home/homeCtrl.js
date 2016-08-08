@@ -14,4 +14,12 @@ export default (authFac, $log, lcConfig,  $state, $scope, $window, commonSer, he
   } else {
     $scope.admin = false;
   }
+
+  $scope.logout = () => {
+    authFac.logout().then(function() {
+      $state.go("login");
+    }, function() {
+      $state.go("login");
+    });
+  };
 };

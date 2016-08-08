@@ -218,16 +218,27 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
 
       scope.setEvents = () => {
         $log.log("set events");
+        $log.log(scope.model);
         for (var year in scope.model) {
+          $log.log("getting year");
           var monthEvents = scope.model[year];
-          for (var i = 0; i < monthEvents.length; i++) {
+          $log.log(monthEvents);
+          for (var i = 0; i < 12; i++) {
+            $log.log(i)
+            if (! (i in monthEvents)) {
+              continue;
+            }
+            $log.log("getting date");
             var dayEvents = monthEvents[i];
-            for (var j = 0; j < dayEvents.length; j++) {
+            for (var j = 1; j <= 31; j++) {
+              // TOO HACKY!
+              if (! (j in dayEvents)) {
+                continue;
+              }
               var event = dayEvents[j];
+              scope.allEvents[year][i][j] = {};
               if (event) {
-                $log.log(event);
-                var test = scope.allEvents[year][i][j];
-                scope.allEvents[year][i][j] = event;
+                scope.allEvents[year][i][j - 1] = event;
               }
             }
           }

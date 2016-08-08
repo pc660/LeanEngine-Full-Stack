@@ -1218,9 +1218,9 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t tal:content="string:早餐：${self.itRow.food.breakfast}">早餐：{{ itinerary.food.breakfast }}</w:t>
-                                <w:t tal:content="string:午餐：${self.itRow.food.lunch}">午餐：{{ itinerary.food.lunch }}</w:t>
-                                <w:t tal:content="string:晚餐：${self.itRow.food.dinner}">晚餐：{{ itinerary.food.dinner }}</w:t>
+                                <w:t tal:content="string:早餐：${self.itRow.food.morning}">早餐 自理</w:t>
+                                <w:t tal:content="string:午餐：${self.itRow.food.noon}">午餐：自理</w:t>
+                                <w:t tal:content="string:晚餐：${self.itRow.food.evening}">晚餐：自理</w:t>
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
                                 <w:br/>
