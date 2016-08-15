@@ -11,14 +11,20 @@
       <md-button ng-click="allOrder()" class="md-primary">
         全部订单
       </md-button>
-      <md-button ng-click="unpaidOrder()" class="md-primary">
-        待付款订单
+      <md-button ng-click="unpaidOrderUnverified()" class="md-primary">
+        待付款订单(等待确认)
+      </md-button>
+      <md-button ng-click="unpaidOrderVerified()" class="md-primary">
+        待付款订单(已确认)
       </md-button>
       <md-button ng-click="paidOrder()" class="md-primary">
-        已付款订单
+        已付款订单(等待确认)
       </md-button>
       <md-button ng-click="finishedOrder()" class="md-primary">
         已完成订单
+      </md-button>
+      <md-button ng-if="admin" ng-click="getRevoke()" class="md-primary">
+        申请退款订单
       </md-button>
     </div>
   </md-sidenav>
@@ -59,12 +65,18 @@
           <td>
             <div class="status">
               <p>
-                <strong ng-if="order.status == 1">未付款</strong>
-                <strong ng-if="order.status == 2">已付款</strong>
-                <strong ng-if="order.status == 3">已完成</strong>
+                <strong ng-if="order.status == 1">未付款(等待确认)</strong>
+                <strong ng-if="order.status == 2">未付款(已确认)</strong>
+                <strong ng-if="order.status == 3">已付款(等待确认)</strong>
+                <strong ng-if="order.status == 4">已完成</strong>
+                <strong ng-if="order.status == 5">申请退款</strong>
+                <strong ng-if="order.status == 6">申请取消</strong>
               </p>
-              <md-button ng-if="!admin && order.status == 1" ng-click="paid(order.objectId);" class="md-raised md-primary">确认付款</md-button>
-              <md-button ng-if="!admin && order.status == 2" class="md-raised md-primary">确认交易完成</md-button>
+              <md-button ng-if="(admin || organizer) && order.status == 1" ng-click="verifyUnpaid(order.objectId);" class="md-raised md-primary">审核通过</md-button>
+              <md-button ng-if="(!admin && !organizer) && order.status == 2" ng-click="paid(order.objectId);" class="md-raised md-primary">确认付款</md-button>
+              <md-button ng-if="(admin || organizer) && order.status == 3" ng-click="verifyPaid(order.objectId);" class="md-raised md-primary">确认交易完成</md-button>
+              <md-button ng-if="(admin || organizer) && order.status == 5" ng-click="confirmRevoke(order.objectId);" class="md-raised md-primary">确认退款</md-button>
+              <md-button ng-if="(admin || organizer) && order.status == 6" ng-click="confirmRevoke(order.objectId);" class="md-raised md-primary">确认取消订单</md-button>
             </div>
           </td>
           <td>
@@ -79,7 +91,10 @@
                  ui-sref-opts="{ absolute: true }">显示详情</a>
               <a href="{{ order.fileUrl }}" download>查看确认单</a>
               <a ng-if="!admin" ng-click="printReceipt();">打印发票</a>
-              <a ng-if="!admin" ng-click="cancelOrder(order.objectId);">取消订单</a>
+              <a ng-if="!admin && order.status == 1" ng-click="cancelOrder(order.objectId);">取消订单</a>
+              <a ng-if="!admin && order.status == 2" ng-click="applyCancel(order.objectId);">申请取消订单</a>
+              <a ng-if="!admin && (order.status == 3 || order.status == 4 || order.status == 5)"
+                 ng-click="applyRevoke(order.objectId);">申请退款</a>
             </div>
           </td>
         </tr>

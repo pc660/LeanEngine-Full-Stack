@@ -1,6 +1,6 @@
 <div class="address" layout="row" ayout-align='start center'>
   <div layout="row"  layout-align='start center'>
-    <div>省份:</div>
+    <div class="label">省份:</div>
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
                  ng-model="$parent.province">
@@ -9,10 +9,10 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <p ng-if="!isEditing">{{ province }}</p>
+    <p class="value" ng-if="!isEditing">{{ province }}</p>
   </div>
   <div layout-align='start center' layout="row">
-    <div>城市:</div>
+    <div class="label">城市:</div>
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
                  ng-model="$parent.city">
@@ -21,10 +21,10 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <p ng-if="!isEditing">{{ city }}</p>
+    <p class="value" ng-if="!isEditing">{{ city }}</p>
   </div>
   <div layout-align='start center' layout="row" ng-if="showCounty">
-    <div>区县:</div>
+    <div  class="label">区县:</div>
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
                  ng-model="$parent.county">
@@ -33,10 +33,10 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <p ng-if="!isEditing">{{ county }}</p>
+    <p class="value" ng-if="!isEditing">{{ county }}</p>
   </div>
   <div layout="row" layout-align='start center' ng-if="showCounty">
-    <div class="margin">地址:</div>
+    <div class="margin label">地址:</div>
     <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" name="address" type="text" ng-model="detail">
     <div ng-if="!isEditing">
       {{ detail }}

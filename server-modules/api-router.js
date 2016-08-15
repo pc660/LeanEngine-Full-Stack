@@ -32,12 +32,13 @@ router.get('/hello', hello.hello);
 router.get('/auth/test', isLoggedIn, auth.test);
 router.post('/auth/register', auth.register);
 router.post('/auth/logout', auth.logout);
+router.post('/auth/changePass', auth.changePass);
 router.post('/provider/add', provider.add);
 router.post('/provider/uploadfile', multipartyMiddleware, provider.uploadfile);
 router.post('/provider/get',  provider.get);
 router.post('/provider/get-policy',  provider.getReturnPolicy);
 router.post('/provider/search',  provider.search);
-
+router.post('/provider/delete',  provider.delete);
 
 //route product
 router.post('/product/add', product.add);
@@ -60,6 +61,9 @@ router.post('/order/getAll', order.getAll);
 router.post('/order/get', order.get);
 router.post('/order/update', order.update);
 router.post('/order/cancel', order.cancel);
+router.post('/order/revoke', order.revoke);
+router.post('/order/getRevoke', order.getRevoke);
+router.post('/order/verify', order.verify);
 
 // router user.
 router.post('/user/get',  user.get);

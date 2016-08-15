@@ -1,0 +1,22 @@
+<div class="section">
+  <md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="我的账号">
+        <table>
+          <tr>
+            <td>用户名</td>
+            <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+            <td>密码</td>
+            <td>
+              <md-button ng-click="changePass();" class="md-raised md-primary">
+                更改密码
+              </md-button>
+            </td>
+          </tr>
+        </table>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+</div>

@@ -5,6 +5,7 @@
     <th>公司名称</th>
     <th>营业执照</th>
     <th>详情</th>
+    <th>操作</th>
   </tr>
   <tr ng-repeat="provider in providers">
     <td>{{ provider.objectId }}</td>
@@ -15,6 +16,9 @@
       <a target="_blank"
         ui-sref="home.show-provider-detail({providerId: '{{provider.objectId}}' })"
         ui-sref-opts="{ absolute: true }">显示详情</a>
+    </td>
+    <td>
+      <a ng-click="delete(provider);">删除</a>
     </td>
   </tr>
 </table>

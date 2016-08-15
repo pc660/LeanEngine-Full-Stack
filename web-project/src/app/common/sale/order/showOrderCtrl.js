@@ -1,4 +1,4 @@
-export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orderFac, productFac, userFac) => {
+export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orderFac, productFac, userFac, lcConfig) => {
   'ngInject';
 
   $scope.admin = false;
@@ -29,8 +29,14 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
     });
   };
 
-  $scope.unpaidOrder = () => {
-    orderFac.getUnpaidOrder($scope.admin).then(function(results) {
+  $scope.unpaidOrderUnverified = () => {
+    orderFac.getUnpaidOrder($scope.admin, false).then(function(results) {
+      $scope.setOrder(results);
+    });
+  };
+
+  $scope.unpaidOrderVerified = () => {
+    orderFac.getUnpaidOrder($scope.admin, true).then(function(results) {
       $scope.setOrder(results);
     });
   };
@@ -74,5 +80,44 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
   $scope.showContact = (order) => {
     $log.log(order);
     userFac.showContact(order);
+  };
+
+  $scope.applyRevoke = (orderId) => {
+    orderFac.revokeOrder(orderId, lcConfig.orderStatus.REVOKE).then(function(result) {
+      SweetAlert.swal("订单申请退款成功", "请稍后与分销商确认", "success");
+    }, function(error){
+
+    });
+  };
+
+  $scope.applyCancel = (orderId) => {
+    orderFac.revokeOrder(orderId, lcConfig.orderStatus.CANCEL).then(function(result) {
+      SweetAlert.swal("订单取消成功", "请稍后与分销商确认", "success");
+    }, function(error){
+
+    });
+  };
+
+  $scope.getRevoke = () => {
+    orderFac.getRevoke().then(function(results) {
+      $log.log(results);
+      $scope.setOrder(results);
+    });
+  };
+
+  $scope.confirmRevoke = (orderId) => {
+    $scope.cancelOrder(orderId);
+  };
+
+  $scope.verifyUnpaid = (orderId) => {
+    orderFac.verify(orderId, lcConfig.orderStatus.UNPAID_VERIFIED).then(function(results) {
+      SweetAlert.swal("订单预审成功", "请通知分销商付款", "success");
+    });
+  };
+
+  $scope.verifyPaid = (orderId) => {
+    orderFac.verify(orderId, lcConfig.orderStatus.FINISHED).then(function(results) {
+      SweetAlert.swal("订单已经完成", "请刷新网页", "success");
+    });
   };
 };

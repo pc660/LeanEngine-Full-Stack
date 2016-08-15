@@ -13,6 +13,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   service.files = {};
   service.getContactList = getContactList;
   service.getMyProvider = getMyProvider;
+  service.deleteProvider = deleteProvider;
   return service;
 
   /**
@@ -90,5 +91,9 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
 
   function getContactList(providerId) {
     return $http.post('/api/user/getContactList', {providerId: providerId});
+  }
+
+  function deleteProvider(providerId) {
+    return $http.post('/api/provider/delete', {providerId: providerId});
   }
 };

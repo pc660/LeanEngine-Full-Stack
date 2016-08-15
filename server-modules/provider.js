@@ -3,6 +3,7 @@
 const AV = require('leanengine');
 const tool = require('./tool');
 const fs = require('fs');
+const config = require('./config');
 let providerApi = {};
 
 var LIMIT = 50;
@@ -243,6 +244,26 @@ providerApi.uploadfile = (req, res) => {
     // set http code accordingly.
     // This is too fragile and not acceptable.
   });
+};
+
+providerApi.delete = (req, res) => {
+  tool.l("provider.delete");
+  var provider = AV.Object.createWithoutData("Provider", req.body.providerId);
+  // Check if the provider has any products.
+  var query = new AV.Query("Product");
+  query.equalTo("provider", provider);
+  query.equalTo("status", config.productStatus.VERIFIED);
+  query.find().then(function(results) {
+    if (results.length > 0) {
+      res.send(404);
+    } else {
+      provider.destroy().then(function() {
+        res.send();
+      }, function(error) {
+        res.send(404);
+      });
+    }
+  })
 };
 
 providerApi.search = (req, res) => {

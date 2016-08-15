@@ -22,6 +22,13 @@ var formConfig = {
       {type: "number", name: 'emergentValue', key: '预警值'},
       {type: "number", name: 'airticketEmergentValue', key: '机票预警值'},
     ],
+    "库存管理": [
+      {type: "number", name: 'totalPeople', value: '入库数'},
+      {type: "number", name: 'minimumPeople', value: '最低成团人数'},
+      {type: "number", name: 'reservedPeopleNumber', value: '占位数'},
+      {type: "number", name: 'paidPeopleNumber', value: '签约数'},
+      {type: "number", name: 'restPeopleNumber', value: '余位'},
+    ]
   }
 };
 

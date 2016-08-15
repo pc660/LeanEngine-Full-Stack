@@ -29,6 +29,7 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
   };
 
   $scope.setDayContent = (date) => {
+    $log.log("set date content");
     return productFac.setDayContent(date, $scope.product);
   };
 
@@ -53,4 +54,11 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
       }, function(error) {
       });
   }
+
+
+  $scope.setStorageContent = (date) => {
+    $log.log("setStorageContent now");
+    return "<div>123</div>"
+    //return productFac.setStorageContent(date, $scope.product);
+  };
 };

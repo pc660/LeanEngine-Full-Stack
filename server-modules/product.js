@@ -47,6 +47,7 @@ function setProduct(productAV, product) {
   productAV.set("priceExclude", product.priceExclude);
   productAV.set("selfPaid", product.selfPaid);
   productAV.set("visaInfo", product.visaInfo);
+  productAV.set("shoppingInfo", product.shoppingInfo);
   productAV.set("reserveInfo", product.reserveInfo);
   productAV.set("restriction", product.restriction);
   productAV.set("reminder", product.reminder);
@@ -140,6 +141,8 @@ productApi.constructItinerayParams = (product) => {
   params.visaInfo = product.visaInfo;
   params.reserveInfo = product.reserveInfo;
   params.restriction = product.restriction;
+
+  params.account = product.pickedProvider.companyname;
   return params;
 };
 
@@ -147,24 +150,32 @@ productApi.constructItinerayParams = (product) => {
 // TODO: Maybe use different prices.
 productApi.parsePriceMap = (priceMap, duration) => {
   var priceArray = [];
+  tool.l(priceMap);
   for (var year in priceMap) {
     var yearEvents = priceMap[year];
     for (var month in yearEvents) {
       var monthEvents = yearEvents[month];
       for (var day in monthEvents) {
         var price = monthEvents[day];
-        if (price) {
+        tool.l("testing");
+        tool.l(price);
+        if (price && Object.keys(price).length > 0) {
+          tool.l(year);
+          tool.l(month);
+          tool.l(day);
           var priceObject = {};
-          var dayNumber = day + 1;
-          var date = new Date(year, month, day + 1);
-          var startDate = year + "年" + month + "月" + dayNumber + "日";
-          var endDate = new Date(year, month, day + 1);
-          endDate.setDate(endDate.getDate() + duration);
-          var endDate = year + "年" + month + "月" + endDate.getDate() + "日";
+          var date = new Date(year, month, day);
+          tool.l(date);
+          var startDate = year + "年" + (parseInt(month) + 1) + "月" + day + "日";
+          tool.l(startDate);
+          var endDate = new Date(year, month, day);
+          endDate.setDate(endDate.getDate() + parseInt(duration));
+          var endDate = year + "年" + (parseInt(month) + 1) + "月" + endDate.getDate() + "日";
           priceObject.startDate = startDate;
           priceObject.endDate = endDate;
           priceObject.adultCompanySalePrice = price.adultCompanySalePrice;
           priceObject.childCompanySalePrice = price.childCompanySalePrice;
+          tool.l(priceObject);
           priceArray.push(priceObject);
         }
       }
@@ -221,6 +232,7 @@ productApi.get = (req, res) => {
      var product = results[0];
      // Fetch other information.
      tool.l(product.get("contact"));
+     tool.l(product.get("price"));
      res.send({product: product, provider: product.get("provider"),
        contact: product.get("contact"), platformcontact: product.get("platformcontact"),
        responsible:  product.get("responsible")});
@@ -544,10 +556,14 @@ function setDefaultPriceMap(priceMap) {
     for (var month in priceMap[year]) {
       for (var day in priceMap[year][month]) {
         var event = priceMap[year][month][day];
-        if (event) {
+        tool.l("event!!!");
+        tool.l(Object.keys(event));
+        if (Object.keys(event).length > 3) {
           event.reservedPeopleNumber = 0;
           event.paidPeopleNumber = 0;
-          event.restPeopleNumbner = event.totalPeople;
+          event.restPeopleNumber = event.totalPeople;
+        } else {
+          delete priceMap[year][month][day];
         }
       }
     }
@@ -560,12 +576,16 @@ function generateItinerary(params, productResult) {
       if (typeof object[property] === 'string') {
         object[property] = object[property].replaceAll("\n", "<w:br/>");
       }
-      var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");
-      var filename = params.id + "_行程" + ".doc";
-      var file = new AV.File(filename, toUTF8Array(result));
-      productResult.set("itineraryFile", file);
-      productResult.save();
     });
+
+    tool.l(params);
+
+    tool.l(params);
+    var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");
+    var filename = params.id + "_行程" + ".doc";
+    var file = new AV.File(filename, toUTF8Array(result));
+    productResult.set("itineraryFile", file);
+    productResult.save();
   });
 };
 

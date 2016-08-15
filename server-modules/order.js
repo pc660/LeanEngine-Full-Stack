@@ -28,10 +28,11 @@ orderApi.get = (req, res) => {
 orderApi.getAll = (req, res) => {
     tool.l("orderApi.getAll");
     var user = req.user;
+    var level = user.get("level");
     // TODO: Uncomment this.
     if (!user) {
-        //res.send(404);
-        //return;
+        res.send(404);
+        return;
     }
 
     var query = new AV.Query('Order');
@@ -39,6 +40,15 @@ orderApi.getAll = (req, res) => {
     if (req.body.status) {
         query.equalTo("status", parseInt(req.body.status));
     }
+    //
+    if (level == config.userLevel.SALE) {
+        query.equalTo("createdBy", req.user);
+    } else if (level == config.userLevel.ORGANIZER) {
+        query.equalTo("responsible", req.user);
+    } else if (level == config.userLevel.PROVIDER) {
+        query.equalTo("provider", req.user);
+    }
+
     query.descending("createdAt");
     query.find().then(function(results) {
         tool.l("successfully get " + results.length + " results");
@@ -132,12 +142,13 @@ orderApi.add = (req, res) => {
     orderAV.set("contactname", order.contactname);
     orderAV.set("cellphone", order.cellphone);
     orderAV.set("email", order.email);
+    orderAV.set("createdBy", req.user);
 
     // TODO: Maybe we should store customer info. Now we just store an array.
     orderAV.set("customers", order.customers);
     var product = AV.Object.createWithoutData('Product', order.productId);
     orderAV.set("product", product);
-    orderAV.set("status", config.orderStatus.UNPAID);
+    orderAV.set("status", config.orderStatus.UNPAID_UNVERIFIED);
     // Need to update the product storage.
     // Maybe we shouln't store all the data in the price.
     product.fetch().then(function(productResult) {
@@ -148,11 +159,16 @@ orderApi.add = (req, res) => {
             return;
         }
         var totalNumber = order.adult + order.child;
-        price.restPeopleNumbner = price.restPeopleNumbner - totalNumber;
+        tool.l(totalNumber);
+        tool.l(price.restPeopleNumbner);
+        price.restPeopleNumber = price.restPeopleNumber - totalNumber;
         // Currently we assume all people paid.
         price.reservedPeopleNumber = price.reservedPeopleNumber + totalNumber;
-
+        tool.l(price.reservedPeopleNumber);
         productResult.set("price", priceMap);
+        var responsible = productResult.get("responsible");
+        orderAV.set("responsible", responsible);
+        orderAV.set("provider", productResult.get("createdBy"));
         productResult.save();
 
         orderAV.save().then(function(orderResult) {
@@ -192,6 +208,22 @@ orderApi.add = (req, res) => {
     })
 };
 
+orderApi.revoke = (req, res) => {
+    tool.l("order.revoke");
+    var order = AV.Object.createWithoutData('Order', req.body.id);
+    order.fetch({include: "product"}, null).then(function(result) {
+        var product = result.get("product");
+        var responsible = product.get("responsible");
+        order.set("status", req.body.status);
+        order.set("responsible", responsible);
+        order.save().then(function() {
+            res.send();
+        }, function(error) {
+
+        })
+    });
+};
+
 orderApi.cancel = (req, res) => {
     var order = AV.Object.createWithoutData('Order', req.body.id);
     order.fetch({include: "product"}, null).then(function(result) {
@@ -208,7 +240,8 @@ orderApi.cancel = (req, res) => {
         tool.l(totalNumber);
         price.restPeopleNumber = price.restPeopleNumber + totalNumber;
         // Currently we assume all people paid.
-        if (order.get("status") == config.orderStatus.UNPAID) {
+        if (order.get("status") == config.orderStatus.UNPAID_UNVERIFIED
+            || order.get("status") == config.orderStatus.UNPAID_VERIFIED) {
             price.reservedPeopleNumber = price.reservedPeopleNumber - totalNumber;
         } else {
             price.paidPeopleNumber = price.paidPeopleNumber - totalNumber;
@@ -218,15 +251,49 @@ orderApi.cancel = (req, res) => {
             tool.l("sever error in order cancel, debug");
         }
         product.set("price", priceMap);
-        tool.l(priceMap);
-        tool.l(price);
-
         product.save();
         order.destroy().then(function() {
             res.send();
             return;
         });
     });
+};
+
+orderApi.getRevoke = (req, res) => {
+    tool.l("get Revoke");
+    var user = req.user;
+    if (!user) {
+        res.send(404);
+        return;
+    }
+
+    var query = new AV.Query('Order');
+    query.include("product.fullName", "product.prefix");
+    query.equalTo("status", config.orderStatus.REVOKE);
+    query.equalTo("responsible", user);
+    query.find().then(function(results) {
+        tool.l("find results " + results.length);
+        var product = results.map(function(order) {
+            return order.get("product");
+        })
+        res.send({order: results, product: product});
+    }, function(error) {
+        tool.l(error);
+        res.send(error);
+    })
+};
+
+orderApi.verify = (req, res) => {
+    tool.l("order.verify");
+    var order = AV.Object.createWithoutData('Order', req.body.id);
+    tool.l(req.body.status);
+    order.set("status", parseInt(req.body.status));
+    order.save().then(function(results) {
+        tool.l(results);
+        res.send();
+    }, function(error) {
+        tool.l(error);
+    })
 };
 
 module.exports = orderApi;

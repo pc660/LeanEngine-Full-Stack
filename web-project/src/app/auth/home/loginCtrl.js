@@ -6,6 +6,7 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
   $scope.levels = [
     {level: 2, value: "供应商"},
     {level: 1, value:  "分销商"},
+    {level: 3, value:  "计调员"},
   ];
 
   function loginSuccess() {
@@ -26,7 +27,7 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
 
   $scope.register = () => {
     $log.log($scope.level);
-    authFac.register($scope.username, $scope.password, $scope.level).then(function() {
+    authFac.register($scope.username, $scope.password, $scope.level, $scope.email, $scope.contactname).then(function() {
       SweetAlert.swal("账号注册成功", "请保存这条信息,并告知对方.账号: " + $scope.username + " 密码: " + $scope.password, "success");
     });
   };
@@ -49,6 +50,10 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
             $location.path("/admin");
             break;
           }
+          case lcConfig.userLevel.ORGANIZER: {
+            $location.path("/admin");
+            break;
+          }
           default: {
             $log.log("Unknown user, should not happen!!");
             break;
@@ -57,7 +62,7 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
       })
       .error(function(response) {
         // TODO: Use a nicer UI and translate..
-        $window.alert("login failed");
+        $window.alert("用户名密码错误!-");
       });
   };
 };

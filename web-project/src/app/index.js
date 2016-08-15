@@ -69,6 +69,7 @@ import reserveFormCtrl from './common/sale/search/directives/reserve/reserveForm
 import addOrderCtrl from './common/sale/order/addOrderCtrl.js';
 import showOrderCtrl from './common/sale/order/showOrderCtrl.js';
 import showOrderDetailCtrl from './common/sale/order/showOrderDetailCtrl.js';
+import saleAccountCtrl from './common/sale/account/accountCtrl.js';
 
 import formCtrl from './common/directives/form/formCtrl.js';
 
@@ -155,6 +156,8 @@ angular.module('webProject',
   .controller('showOrderCtrl', showOrderCtrl)
   .controller('showOrderDetailCtrl', showOrderDetailCtrl)
   .controller('formCtrl', formCtrl)
+  .controller('saleAccountCtrl', saleAccountCtrl)
+
 
   // factory
   .factory('authFac', authFac)

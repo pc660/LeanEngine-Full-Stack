@@ -1,12 +1,14 @@
-export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, formConfig, providerFac, SweetAlert) => {
+export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, orderFac, formConfig, providerFac, SweetAlert) => {
   'ngInject';
-  $log.log('init my account');
   $scope.admin = false;
+  $scope.changePass = false;
   if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
     $scope.admin = true;
   } else {
     $scope.admin = false;
   }
+
+  $scope.isProvider = (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER);
 
   if ($scope.$parent.unfinished) {
     $scope.unfinished = "(有未处理产品)";
@@ -25,15 +27,19 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
     $log.log("success");
     $scope.fetchedProvider = true;
     // There should be only one provider.
-    $scope.provider = result;
+    $scope.provider = result.provider;
+    $scope.contactList = result.contacts;
     $log.log(result);
-    $scope.$broadcast("addressUpdate", {address: $scope.provider.address});
-    providerFac.getContactList($scope.provider.objectId).then(function(results) {
-      $scope.contactList = results;
-    });
+
   }, function (error) {
     $scope.fetchedProvider = true;
   });
+
+  $scope.$watch("showProvider", function(value) {
+    if ($scope.provider) {
+      $scope.$broadcast("addressUpdate", {address: $scope.provider.address});
+    }
+  })
 
   $scope.showUnverified = () => {
     $scope.unverified = true;
@@ -170,5 +176,21 @@ export default (authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $wi
   $scope.editProduct = (index) => {
     var product = $scope.products[index];
     $state.go("home.edit-product", {productId: product.objectId});
+  };
+
+  $scope.changePass = () => {
+    authFac.changePass().then(function() {
+      SweetAlert.swal("请到您的邮箱中接受重置密码的邮件");
+    })
+  };
+
+  $scope.showRevokeOrder = () => {
+    orderFac.getRevoke().then(function() {
+
+    })
+  };
+
+  $scope.showMyOrder = () => {
+
   };
 };

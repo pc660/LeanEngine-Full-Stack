@@ -13,7 +13,8 @@
     </div>
     <div class="product-metadata">
       <span>
-        <label>{{ product.start.city }}出发</label>
+        <label ng-if="product.start.city != '市辖区'">{{ product.start.city }}出发</label>
+        <label ng-if="product.start.city == '市辖区'">{{ product.start.province }}出发</label>
         线路编号:{{ product.objectId }}
       </span>
     </div>
@@ -153,6 +154,11 @@
     <md-tab label="签证信息">
       <div class="visa-info">
         <div template key="visaInfo"></div>
+      </div>
+    </md-tab>
+    <md-tab label="购物信息">
+      <div class="visa-info">
+        <div template key="shoppingInfo"></div>
       </div>
     </md-tab>
     <md-tab label="预订须知">

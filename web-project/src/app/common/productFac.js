@@ -20,6 +20,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.convertProductPrefix = convertProductPrefix;
   service.setDayContent = setDayContent;
   service.getPrice = getPrice;
+  service.setStorageContent = setStorageContent;
   return service;
 
   function uploadProduct(product) {
@@ -58,7 +59,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   // User a const value maybe.
   function getInternalUsers() {
     $log.log("get internal users");
-    return $http.post('/api/user/get', {query: {level : 0}});
+    return $http.post('/api/user/get', {query: {level : [0, 3]}});
   }
 
   function getUnVerifiedProducts() {
@@ -190,5 +191,30 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     price = price[month] || {};
     price = price[day] || {};
     return price;
+  }
+
+  function setStorageContent(date, product) {
+    if (!product.price) {
+      return "<div></div>";
+    }
+
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+    var price = getPrice(year, month, day, product);
+    if (price && Object.keys(price).length > 3) {
+      var content = {};
+      content["最小成团人数"] = "¥" + price.minimumPeople || "";
+      content["占位数"] = "¥" + price.reservedPeopleNumber || "";
+      content["签约数"] = "¥" + price.paidPeopleNumber || "";
+      content["余位"] = price.restPeopleNumber || "";
+      // Construct the content.
+      var htmlString = "";
+      for (var key in content) {
+        htmlString = htmlString + '<div>' + key + ": " + content[key] + '</div>';
+      }
+      return htmlString;
+    }
+    return "<div></div>";
   }
 };

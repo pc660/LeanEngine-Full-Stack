@@ -10,7 +10,7 @@
           <tr>
             <td>密码</td>
             <td>
-              <md-button class="md-raised md-primary">
+              <md-button ng-click="changePass();" class="md-raised md-primary">
                 更改密码
               </md-button>
             </td>
@@ -31,6 +31,9 @@
               </md-button>
               <md-button ng-if="admin" ng-click="showUnverified()" class="md-primary">
                 需要我审核的产品
+              </md-button>
+              <md-button ng-if="admin" ng-click="showRevokeOrder()" class="md-primary">
+                申请退款的订单
               </md-button>
             </div>
           </md-sidenav>
@@ -77,7 +80,7 @@
           </md-content>
         </section>
       </md-tab>
-      <md-tab label="供应商管理">
+      <md-tab ng-if="isProvider" label="供应商管理">
         <section layout="row" flex>
           <md-sidenav
             class="md-sidenav-left shadow"
@@ -123,7 +126,7 @@
             <div class="submit">
               <md-button ng-if="showContactList" ng-click="addContact();" class="md-raised md-primary">添加商户联系人</md-button>
             </div>
-            <table ng-if="showProvider">
+            <table ng-show="showProvider">
               <tbody>
                 <tr>
                   <td colspan="2" class="title">
@@ -149,7 +152,22 @@
                 <tr>
                   <td>地址</td>
                   <td>
-                    <address show-county=true is-editing="false" ng-model="provider.address"></address>
+                    <div layout="row">
+                      <span>省:</span>
+                      <span>{{ provider.address.province }}</span>
+                    </div>
+                    <div layout="row">
+                      <span>市:</span>
+                      <span>{{ provider.address.city }}</span>
+                    </div>
+                    <div layout="row" ng-if="provider.address.county">
+                      <span>区:</span>
+                      <span>{{ provider.address.county }}</span>
+                    </div>
+                    <div layout="row" ng-if="provider.address.detail">
+                      <span>地址:</span>
+                      <span>{{ provider.address.detail }}</span>
+                    </div>
                   </td>
                 </tr>
                 <tr>
@@ -218,7 +236,30 @@
                     加返政策
                   </td>
                   <td>
-                    <return-policy is-editing='false' ng-model="provider.returnPolicy"></return-policy>
+                    <div layout="row">
+                      <div>
+                        全年总人数:
+                        <p>{{ provider.returnPolicy.returnTotalPeople }}</p>
+                        (人)
+                      </div>
+                      <div>
+                        加返
+                        <p>{{ provider.returnPolicy.returnMoneyEachPeople }}</p>
+                        (元/人)
+                      </div>
+                    </div>
+                    <div layout="row">
+                      <div>
+                        全年销售额:
+                        <p>{{ provider.returnPolicy.returnTotalRevenue }}</p>
+                        (元)
+                      </div>
+                      <div>
+                        加返
+                        <p>{{ provider.returnPolicy.returnMoneyRevenue }}</p>
+                        (元)
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </tbody>

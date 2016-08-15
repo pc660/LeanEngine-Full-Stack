@@ -19,6 +19,7 @@ export default (
   service.register = register;
   service.logout = logout;
   service.cookie = null;
+  service.changePass = changePass;
   return service;
 
   function getUserLevel() {
@@ -48,13 +49,17 @@ export default (
                       { username: username, password: password });
   }
 
-  function register(username, password, level) {
+  function register(username, password, level, email, contactname ) {
     $log.log(level);
     return $http.post('/api/auth/register',
-                      { username: username, password: password, level: level});
+                      { username: username, password: password, level: level, email: email, contactname: contactname});
   }
 
   function logout() {
     return $http.post('/api/auth/logout');
+  }
+
+  function changePass() {
+    return $http.post('/api/auth/changePass');
   }
 };

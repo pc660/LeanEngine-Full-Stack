@@ -302,6 +302,10 @@
             <label>签证信息</label>
             <textarea class="msd-elastic: \n\n;" ng-model="product.visaInfo"></textarea>
           </div>
+          <div class="extra-item" layout="column">
+            <label>购物信息</label>
+            <textarea class="msd-elastic: \n\n;" ng-model="product.shoppingInfo"></textarea>
+          </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">
           <div class="product-calendar" layout="row">
@@ -332,7 +336,7 @@
         </div>
       </md-tab>
       <md-tab class="tab-button" ng-if="!isEditing" label="库存管理">
-        <calendar class="inventory-calendar" ng-model="product.storage" data="库存管理"></calendar>
+        <calendar class="inventory-calendar" ng-model="product.price" data="库存管理"></calendar>
       </md-tab>
     </md-tabs>
     <input type="hidden" name="costprice" value="{{ price }}">

@@ -10,9 +10,12 @@ const PROVIDER_LEVLE = 1;
 userApi.get = (req, res) => {
     tool.l("userApi.get");
     var query = new AV.Query('_User');
-    var level = req.body.query.level;
+    var levelList = req.body.query.level;
     query.select(["contactname", "objectId"])
-    query.equalTo('level', level);
+    //query.equalTo('level', level);
+    for (var i = 0; i < levelList.length; i++) {
+        query.equalTo('level', levelList[i]);
+    }
     query.find().then(function(results) {
         tool.l("get user success");
         tool.l(results.length);
@@ -77,6 +80,7 @@ userApi.getContactList = (req, res) => {
     var providerId = req.body.providerId;
     var query = new AV.Query("Contact");
     var provider = AV.Object.createWithoutData("Provider", providerId);
+    tool.l(providerId);
     query.equalTo("provider", provider);
     query.find().then(function(results) {
         res.send(results);

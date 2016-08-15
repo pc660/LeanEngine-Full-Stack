@@ -82,7 +82,8 @@
       {{ customer.birthDate }}
     </td>
     <td>
-      无
+      <p ng-if="customer.needShare">需要拼房</p>
+      <p ng-if="customer.needVisa">需要签证</p>
     </td>
   </tr>
 </table>

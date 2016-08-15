@@ -33,10 +33,21 @@ let config = {
     VERIFIED: 3,
   },
 
+  userLevel: {
+    UNKNOWN: -1,
+    ADMIN: 0,
+    SALE: 1,
+    PROVIDER: 2,
+    ORGANIZER: 3,
+  },
+
   orderStatus: {
-    UNPAID: 1,
-    PAID: 2,
-    FINISHED: 3,
+    UNPAID_UNVERIFIED: 1,
+    UNPAID_VERIFIED: 2,
+    PAID: 3,
+    FINISHED: 4,
+    REVOKE: 5,
+    CANCEL: 6,
   }
 };
 

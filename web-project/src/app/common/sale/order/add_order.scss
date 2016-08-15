@@ -7,6 +7,12 @@
 .customers {
   min-width: 800px;
   min-height: 500px;
+  td {
+    padding: 10px;
+  }
+  input {
+    max-width: 150px;
+  }
   .extra {
     div {
       width: 150px;

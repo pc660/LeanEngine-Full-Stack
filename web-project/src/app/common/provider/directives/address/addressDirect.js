@@ -19,6 +19,8 @@ export default ($log, $rootScope, $state, $window, cityData) => {
         scope.city = parameter.address.city;
         scope.county = parameter.address.county;
         scope.detail = parameter.address.detail;
+        $log.log("getting address");
+        $log.log(parameter.address);
         scope.provinceListener();
         scope.cityListener();
         scope.countyListener();

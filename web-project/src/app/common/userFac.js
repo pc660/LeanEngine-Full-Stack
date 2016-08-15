@@ -27,6 +27,8 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   function addContact(contactList, providerId) {
+    var items = angular.copy(formConfig.data["商户联系人"])
+    $log.log(items);
     var modalInstance = $uibModal.open({
       animation: true,
       templateUrl: 'app/common/directives/form/form.html',
@@ -36,7 +38,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
         // {key: name, type: type}
         data: function () {
           var title = "添加商户人信息";
-          return {"title": title, "items": formConfig.data["商户联系人"], "editable": true};
+          return {"title": title, "items": items, "editable": true};
         }
       }
     });

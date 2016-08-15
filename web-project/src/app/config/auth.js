@@ -12,7 +12,7 @@ const authenticate = (authFac, $location, $rootScope, $log, lcConfig, $state, $w
       return;
     }
 
-    if (toState.authenticate !==  authFac.getUserLevel()) {
+    if (!toState.authenticate.includes(authFac.getUserLevel())) {
       $log.log("level not allowed");
       // TODO: Show alert.
       $location.path("/login");

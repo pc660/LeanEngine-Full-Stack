@@ -2,6 +2,7 @@ export default ($scope, $log, $window, $uibModalInstance, data) => {
   'ngInject';
 
 
+  $log.log(data.items);
    $scope.items = data.items;
    $scope.title = data.title;
    $scope.editable = data.editable;

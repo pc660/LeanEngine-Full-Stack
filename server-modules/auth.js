@@ -31,11 +31,15 @@ pub.register = (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var level = req.body.level;
+  var email = req.body.email;
+  var contactname = req.body.email;
   var user = new AV.User();
   tool.l(req.body.password);
   user.set('username', username);
   user.set('password', password);
   user.set("level", level);
+  user.setEmail(email);
+  user.set("contactname", contactname);
   user.signUp().then(function(user) {
     tool.l('success')
     res.send({
@@ -48,6 +52,15 @@ pub.register = (req, res) => {
         message: error.message      
       });
     });
-}
+};
 
+pub.changePass = (req, res) => {
+  tool.l("auth.changePass");
+  AV.User.requestPasswordReset(req.user.get("email")).then(function (success) {
+    tool.l(success);
+    res.send();
+  }, function (error) {
+    tool.l(error);
+  });
+};
 module.exports = pub;

@@ -64,6 +64,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
 
   $scope.submitProduct = () => {
     $log.log($scope.product);
+
     productFac.uploadProduct($scope.product)
     .then(function(result) {
       $log.log("upload product success");
@@ -128,8 +129,10 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
   };
 
   $scope.setDayContent = (date) => {
+    $log.log("setDayContent");
     return productFac.setDayContent(date, $scope.product);
   };
+
 
   $scope.setPrice = () => {
     var year = $scope.currentPrice.year;

@@ -9,6 +9,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getOrder = getOrder;
   service.orderGetPaid = orderGetPaid;
   service.cancelOrder = cancelOrder;
+  service.revokeOrder = revokeOrder;
+  service.getRevoke = getRevoke;
+  service.verify = verify;
   return service;
 
   function submitOrder(order, customers) {
@@ -24,8 +27,12 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     return $http.post('/api/order/getAll', {admin: admin});
   }
 
-  function getUnpaidOrder(admin) {
-    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.UNPAID, admin: admin});
+  function getUnpaidOrder(admin, verified) {
+    if (verified) {
+      return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.UNPAID_VERIFIED, admin: admin});
+    }
+
+    return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.UNPAID_UNVERIFIED, admin: admin});
   }
 
   function getPaidOrder(admin) {
@@ -42,5 +49,17 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function cancelOrder(orderId) {
     return $http.post('/api/order/cancel', {id: orderId});
+  }
+
+  function revokeOrder(orderId, status) {
+    return $http.post('/api/order/revoke', {id: orderId, status: status});
+  }
+
+  function getRevoke() {
+    return $http.post('/api/order/getRevoke');
+  }
+
+  function verify(orderId, status) {
+    return $http.post('/api/order/verify', {id: orderId, status: status});
   }
 };

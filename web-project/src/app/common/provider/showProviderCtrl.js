@@ -1,9 +1,9 @@
-export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, lcConfig, $window, fileFac) => {
+export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, lcConfig, $window, fileFac, SweetAlert) => {
   'ngInject';
   $scope.providers = [];
   var PER_PAGE = 50;
   // get the first page index.
-  getProvider(0); 
+  getProvider(0);
   function getProvider(index) {
     providerFac.getProvider({"index": index})
     .then(function(results) {
@@ -12,20 +12,14 @@ export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, l
         $scope.providers = providers;
         $log.log($scope.providers);
       }
-      // Check number.
-      var length = parseInt(results.count / PER_PAGE + 1);
-      $scope.pages = new Array(length);
-      for (var i = 0; i < length; i++) {
-        $scope.pages[i] = i + 1;
-      }
     }, function(error) {
     });
-  } 
+  }
 
   $scope.$on("previous", function(index) {
     getProvider(index);
   });
-  
+
   $scope.$on("next", function(index) {
     getProvider(index);
   });
@@ -33,5 +27,13 @@ export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, l
   $scope.$on("change", function(index) {
     getProvider(index);
   });
+
+  $scope.delete = (provider) => {
+    providerFac.deleteProvider(provider.objectId).then(function() {
+      SweetAlert.swal("删除成功!", "success");
+    }, function(error) {
+      SweetAlert.swal("无法删除,请下架所有产品");
+    });
+  };
 };
 

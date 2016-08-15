@@ -654,7 +654,7 @@
                                     <w:rFonts w:hint="fareast"/>
                                     <w:kern w:val="2"/>
                                 </w:rPr>
-                                <w:t tal:content="string:联系人：${self.contact}">联系人：{{ contact }}</w:t>
+                                <w:t tal:content="string:联系人：请输入联系人">联系人：{{ contact }}</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -681,7 +681,7 @@
                                     <w:rFonts w:hint="fareast"/>
                                     <w:kern w:val="2"/>
                                 </w:rPr>
-                                <w:t tal:content="string:联系电话：${self.tel}">联系电话：{{ tel }}</w:t>
+                                <w:t tal:content="string:联系电话：请输入联系电话">联系电话：{{ tel }}</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
