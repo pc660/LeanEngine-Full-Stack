@@ -35,6 +35,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.pickedProvider = result.provider;
       $scope.product.contact = result.contact;
+      $log.log(result);
       providerFac.getContactList($scope.product.pickedProvider.objectId).then(function(contactList) {
         $scope.product.pickedProvider.contactList = contactList;
       });
@@ -70,6 +71,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
       $log.log("upload product success");
         SweetAlert.swal("发布成功", " 请到我的账号中我发布的产品去查看更新.", "success");
     }, function(error) {
+        SweetAlert.swal("发布失败", " 请重新登陆.", "error ");
     });
   };
 
@@ -132,7 +134,6 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
     $log.log("setDayContent");
     return productFac.setDayContent(date, $scope.product);
   };
-
 
   $scope.setPrice = () => {
     var year = $scope.currentPrice.year;

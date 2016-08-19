@@ -6,6 +6,9 @@ export default (SweetAlert, $state, $log, $scope, $document, $timeout, lcConfig,
     $scope.confirmed = false;
     if ($state.params.provider) {
       $scope.provider = $state.params.provider;
+      $log.log($scope.provider.start);
+      $log.log($scope.provider.destination);
+      $log.log($scope.provider);
     }
 
     $scope.upload = (file) => {

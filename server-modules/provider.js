@@ -23,8 +23,6 @@ providerApi.add = (req, res) => {
     res.status(404).send();
     return;
   }
-  //user = AV.User.current();
-  tool.l(AV.User.current());
   // TODOw: maybe we can use a for loop?
   //var user = new AV.User();
   //user.set('username', provider.username);
@@ -35,6 +33,9 @@ providerApi.add = (req, res) => {
   contactAV.set('homephone', provider.homephone);
   contactAV.set('qqnumber', provider.qqnumber);
   contactAV.set('wechat', provider.wechat);
+  if (provider.objectId) {
+    contactAV = null;
+  }
   providerApi.addProvider(provider, res, user, contactAV);
 };
 
@@ -80,10 +81,16 @@ function returnBusinessScope(body, provider) {
   return businessScope;
 }
 
-
 providerApi.addProvider = (provider, res, user, contact) => {
   tool.l('provider.addProvider');
-  var providerAV = AV.Object.new('Provider');
+  var providerAV;
+  var isNew = true;
+  if (provider.objectId) {
+    providerAV = AV.Object.createWithoutData("Provider", provider.objectId);
+    isNew = false;
+  } else {
+    providerAV = AV.Object.new('Provider');
+  }
   // 设置地址
   providerAV.set('address', provider.address);
 
@@ -104,17 +111,20 @@ providerApi.addProvider = (provider, res, user, contact) => {
   providerAV.set('returnPolicy', provider.returnPolicy);
 
   // Find the files.
+
   var filename = provider.licenseFilename;
   if (!filename) {
     providerAV.save().then(function (provider) {
-      res.send(provider.id);
-      user.set("provider", provider);
-      user.save();
-      contact.set("provider", provider);
-      contact.save().then(function() {
-        tool.l("contact success");
-        return;
-      });
+      res.send();
+      if (isNew) {
+        user.set("provider", provider);
+        user.save();
+      }
+      if (contact) {
+        contact.set("provider", provider);
+        contact.save();
+      }
+      return;
     }, function(error) {
       tool.l(error);
     });
@@ -130,21 +140,27 @@ providerApi.addProvider = (provider, res, user, contact) => {
     }
     providerAV.save().then(function(provider) {
       tool.l("success");
-      res.send(provider.id);
-      user.set("provider", provider);
-      user.save().then(function() {
-        tool.l("user success");
-      }, function(error) {
-        tool.l(error);
-      });
-      contact.set("provider", provider);
-      contact.save().then(function() {
-        tool.l("contact success");
-        return;
-      });
+      res.send();
+      if (isNew) {
+        tool.l("setting user");
+        user.set("provider", provider);
+        user.save();
+      }
+      if (contact) {
+        tool.l("setting contact");
+        contact.set("provider", provider);
+        contact.save().then(function() {
+          tool.l("contact success");
+          return;
+        });
+      }
+      return;
+    }, function(error) {
+      tool.l(error);
     })
 
   }, function(response) {
+    tool.l(response);
   });
 };
 

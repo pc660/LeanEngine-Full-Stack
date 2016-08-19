@@ -29,10 +29,10 @@
               <md-button ng-click="showMyProducts()" class="md-primary">
                 我发布的产品
               </md-button>
-              <md-button ng-if="admin" ng-click="showUnverified()" class="md-primary">
+              <md-button ng-if="level == 0 || level == 3" ng-click="showUnverified()" class="md-primary">
                 需要我审核的产品
               </md-button>
-              <md-button ng-if="admin" ng-click="showRevokeOrder()" class="md-primary">
+              <md-button ng-if="level == 0 || level == 3" ng-click="showRevokeOrder()" class="md-primary">
                 申请退款的订单
               </md-button>
             </div>

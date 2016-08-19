@@ -1,12 +1,7 @@
 export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, orderFac, formConfig, providerFac, SweetAlert) => {
   'ngInject';
-  $scope.admin = false;
   $scope.changePass = false;
-  if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
-    $scope.admin = true;
-  } else {
-    $scope.admin = false;
-  }
+  $scope.level = authFac.getUserLevel();
 
   $scope.isProvider = (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER);
 
@@ -30,11 +25,11 @@ export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, l
     $scope.provider = result.provider;
     $scope.contactList = result.contacts;
     $log.log(result);
-
+    $log.log($scope.provider);
   }, function (error) {
     $scope.fetchedProvider = true;
   });
-
+  
   $scope.$watch("showProvider", function(value) {
     if ($scope.provider) {
       $scope.$broadcast("addressUpdate", {address: $scope.provider.address});

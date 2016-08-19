@@ -52,7 +52,8 @@ export default (
   function register(username, password, level, email, contactname ) {
     $log.log(level);
     return $http.post('/api/auth/register',
-                      { username: username, password: password, level: level, email: email, contactname: contactname});
+                      { username: username, password: password, level: level, email: email, contactname: contactname,
+                        cellphone: cellphone});
   }
 
   function logout() {

@@ -18,9 +18,11 @@ orderApi.get = (req, res) => {
         return;
     }
     var order = AV.Object.createWithoutData('Order', req.body.id);
-    order.fetch().then(function(result) {
-        res.send(result);
+    order.fetch({ include: "product.platformcontact"}, null).then(function(result) {
+        res.send({order: result, platformcontact: result.get("product").get("platformcontact")});
         return;
+    }, function(error) {
+        tool.l(error);
     })
 };
 
@@ -184,7 +186,6 @@ orderApi.add = (req, res) => {
                 order: order,
                 productName: productResult.get("fullName"),
                 orderId: orderResult.id,
-
             });
 
             var objectId = orderResult.id;

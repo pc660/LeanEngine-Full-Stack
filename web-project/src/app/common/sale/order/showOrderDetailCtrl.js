@@ -3,8 +3,9 @@
  */
 export default (SweetAlert, $log, $scope, $state, $window, orderFac, productFac) => {
   'ngInject';
-  orderFac.getOrder($state.params.orderId).then(function(order) {
-    $scope.order = order;
+  orderFac.getOrder($state.params.orderId).then(function(result) {
+    $scope.order = result.order;
+    $scope.order.product.platformcontact = result.platformcontact;
     $log.log($scope.order);
   });
 };

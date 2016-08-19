@@ -21,9 +21,12 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
       // TODO: Model should be the same type.
       // Now we take into an array and convert to an object.
       scope.$watch("model", function() {
-        if (scope.isEditing || !scope.model || Object.keys(scope.model).length === 0) {
+        if(Object.prototype.toString.call(scope.model) !== '[object Array]' ) {
+          $log.log("array");
           return;
         }
+
+        $log.log("changing model");
         for (var i = 0; i < scope.options.length; i++) {
           var option = scope.options[i];
           // If option is contained in the model.

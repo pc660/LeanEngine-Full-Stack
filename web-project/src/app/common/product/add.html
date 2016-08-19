@@ -120,8 +120,8 @@
               <td>酒店标准</td>
               <td>
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-if="isEditing" ng-model="product.hotelStandard">
-                    <md-option ng-selected="$first" ng-value="hotel" ng-repeat="hotel in hotels">
+                  <md-select ng-selected="product.hotelStandard != 'undefined' && $first" ng-if="isEditing" ng-model="product.hotelStandard">
+                    <md-option ng-value="hotel" ng-repeat="hotel in hotels">
                       {{hotel}}
                     </md-option>
                   </md-select>
@@ -133,13 +133,13 @@
               <td>交通方式</td>
               <td>
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-if="isEditing" ng-model="product.transportStandard">
-                    <md-option ng-selected="$first" ng-value="transport" ng-repeat="transport in transports">
+                  <md-select ng-selected="product.transportStandard != 'undefined' && $first" ng-if="isEditing" ng-model="product.transportStandard">
+                    <md-option ng-value="transport" ng-repeat="transport in transports">
                       {{transport}}
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <p ng-if="!isEditing">{{ product.transportStandard }}</p>
+                <p ng-if="!isEditing">{{ product.tranxsportStandard }}</p>
               </td>
             </tr>
             <tr>
@@ -190,8 +190,8 @@
               <td>类型</td>
               <td>
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-model="product.type">
-                    <md-option ng-selected="$first" ng-value="type" ng-repeat="type in types">
+                  <md-select ng-selected="product.type != 'undefined' && $first" ng-model="product.type">
+                    <md-option ng-value="type" ng-repeat="type in types">
                       {{type}}
                     </md-option>
                   </md-select>
@@ -204,7 +204,7 @@
               <td>
                 <md-input-container ng-if="isEditing">
                   <md-select ng-model="product.area">
-                    <md-option ng-selected="$first" ng-value="area" ng-repeat="area in areas">
+                    <md-option ng-selected="product.area != 'undefined' && $first" ng-value="area" ng-repeat="area in areas">
                       {{area}}
                     </md-option>
                   </md-select>
@@ -227,44 +227,45 @@
             </tr>
           </table>
         </md-tab>
-        <md-tab class="tab-button" ng-if="!isEditing" label="行程表">
+        <!--md-tab class="tab-button" ng-if="!isEditing" label="行程表">
           <a  target="_self" href="{{ fileUrl }}" download="行程.doc">下载</a>
-        </md-tab>
-        <md-tab class="tab-button" ng-if="isEditing" label="行程信息">
+        </md-tab-->
+        <md-tab class="tab-button" label="行程信息">
           <div ng-repeat="itineraryItem in product.itinerary track by $index" class="itinery">
             <div class="item">
               <label>第{{ $index + 1 }}天:</label>
-              <input type="text" ng-model="itineraryItem.title">
+              <input ng-disabled="!isEditing" type="text" ng-model="itineraryItem.title">
               <span>请填写行程信息如: 上海-北京</span>
             </div>
             <div class="item">
               <label>参考航班/列车班次</label>
-              <input type="text" ng-model="itineraryItem.flight">
+              <input ng-disabled="!isEditing" type="text" ng-model="itineraryItem.flight">
             </div>
             <div class="item">
               <label>住宿信息</label>
-              <input type="text" ng-model="itineraryItem.hotelDetail">
+              <input ng-disabled="!isEditing" type="text" ng-model="itineraryItem.hotelDetail">
               <span>或同级</span>
-              <md-input-container>
+              <md-input-container ng-if="isEditing">
                 <md-select ng-model="itineraryItem.hotel">
                   <md-option ng-selected="$first" ng-value="hotel" ng-repeat="hotel in hotels">
                     {{hotel}}
                   </md-option>
                 </md-select>
               </md-input-container>
+              <p ng-if="!isEditing">{{ itineraryItem.hotel }}</p>
             </div>
             <div class="item">
               <label>餐饮信息</label>
-              <input type="checkbox" ng-model="morning">早
-              <input type="text" ng-disabled="!morning" ng-model="itineraryItem.food.morning">
-              <input type="checkbox" ng-model="noon">中
-              <input type="text" ng-disabled="!noon" ng-model="itineraryItem.food.noon">
-              <input type="checkbox" ng-model="evening">晚
-              <input type="text" ng-disabled="!evening" ng-model="itineraryItem.food.evening">
+              <input ng-disabled="!isEditing" type="checkbox" ng-model="itineraryItem.food.hasmorning">早
+              <input ng-disabled="!isEditing" type="text" ng-disabled="!itineraryItem.food.hasmorning" ng-model="itineraryItem.food.morning">
+              <input ng-disabled="!isEditing" type="checkbox" ng-model="itineraryItem.food.hasnoon">中
+              <input ng-disabled="!isEditing" type="text" ng-disabled="!itineraryItem.food.hasnoon" ng-model="itineraryItem.food.noon">
+              <input ng-disabled="!isEditing" type="checkbox" ng-model="itineraryItem.food.hasevening">晚
+              <input ng-disabled="!isEditing" type="text" ng-disabled="!itineraryItem.food.hasevening" ng-model="itineraryItem.food.evening">
             </div>
             <div class="item" layout="column">
               <label>详细描述: </label>
-              <textarea class="msd-elastic: \n\n;" ng-model="itineraryItem.detail"></textarea>
+              <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="itineraryItem.detail"></textarea>
             </div>
             <hr>
           </div>
@@ -272,19 +273,19 @@
         <md-tab class="tab-button" ng-if="isEditing" label="其他信息">
           <div class="extra-item" layout="column">
             <label>线路特色</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.description"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.description"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>费用包含</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.priceInclude"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.priceInclude"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>费用不含</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.priceExclude"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.priceExclude"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>自费项目</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.selfPaid"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.selfPaid"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>预定须知</label>
@@ -292,19 +293,19 @@
           </div>
           <div class="extra-item" layout="column">
             <label>收客限制</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.restriction"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.restriction"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>温馨提示</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.reminder"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.reminder"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>签证信息</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.visaInfo"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.visaInfo"></textarea>
           </div>
           <div class="extra-item" layout="column">
             <label>购物信息</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.shoppingInfo"></textarea>
+            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.shoppingInfo"></textarea>
           </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">

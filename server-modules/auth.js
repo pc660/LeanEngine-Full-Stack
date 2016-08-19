@@ -33,6 +33,7 @@ pub.register = (req, res) => {
   var level = req.body.level;
   var email = req.body.email;
   var contactname = req.body.email;
+  var cellphone = req.body.cellphone;
   var user = new AV.User();
   tool.l(req.body.password);
   user.set('username', username);
@@ -40,6 +41,7 @@ pub.register = (req, res) => {
   user.set("level", level);
   user.setEmail(email);
   user.set("contactname", contactname);
+  user.set("cellphone", cellphone);
   user.signUp().then(function(user) {
     tool.l('success')
     res.send({

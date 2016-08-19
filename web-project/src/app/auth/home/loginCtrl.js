@@ -27,7 +27,7 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
 
   $scope.register = () => {
     $log.log($scope.level);
-    authFac.register($scope.username, $scope.password, $scope.level, $scope.email, $scope.contactname).then(function() {
+    authFac.register($scope.username, $scope.password, $scope.level, $scope.email, $scope.contactname, $scope.cellphone).then(function() {
       SweetAlert.swal("账号注册成功", "请保存这条信息,并告知对方.账号: " + $scope.username + " 密码: " + $scope.password, "success");
     });
   };

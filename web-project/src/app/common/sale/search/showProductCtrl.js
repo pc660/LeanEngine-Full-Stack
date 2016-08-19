@@ -12,7 +12,8 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
         $scope.product.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
       }
       productFac.getLatestTrip($scope.product);
-      $log.log($scope.product);
+      $scope.product.platformcontact = result.platformcontact;
+      $log.log(result);
       // Set the current Date.
       $scope.$broadcast("updateMaterialCalendar");
       $scope.$broadcast("updateTemplate", {params: $scope.product});
@@ -99,14 +100,15 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     var month = date.getMonth();
     var day = date.getDate();
     // Check if date in price map.
-    $log.log("getting product");
-    $log.log($scope.product);
     var price = productFac.getPrice(year, month, day, $scope.product);
     if (price) {
+      $log.log(price);
       if (price.adultCompanySalePrice) {
         var adultCompanySalePrice = price.adultCompanySalePrice;
+        var adultCompanyCompetitorPrice = price.adultCompanyCompetitorPrice;
         $scope.priceMap[date] = price;
-        return '<p class="cal-price">' + "￥" + adultCompanySalePrice + "</p>";
+        return '<p class="cal-price">' + "销售价: ￥" + adultCompanySalePrice + "</p>" +
+          '<p class="cal-price next">' + "同行价: ￥" + adultCompanyCompetitorPrice + "</p>";
       }
     }
     return "<p></p>";

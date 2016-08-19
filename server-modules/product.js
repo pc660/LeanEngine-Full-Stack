@@ -36,7 +36,6 @@ function setProduct(productAV, product) {
   productAV.set('duration', product.duration);
   productAV.set('hotelDuration', product.hotelDuration);
 
-  tool.l(product.pickedProvider.objectId);
   var provider = AV.Object.createWithoutData('Provider', product.pickedProvider.objectId);
   productAV.set('provider', provider);
 
@@ -71,8 +70,11 @@ function setProduct(productAV, product) {
 
 productApi.add = (req, res) => {
   tool.l('product.add');
-  tool.l(req.body.product);
   var user = req.user;
+  //if (!user) {
+  //  res.send(404);
+  //  return;
+  //}
   var product = req.body.product;
   var productAV = {};
   if (product.objectId) {
@@ -97,8 +99,7 @@ productApi.add = (req, res) => {
       // This is a probably a huge project.
       var params = productApi.constructItinerayParams(product);
       params.id = productResult.id;
-      tool.l("getting params");
-      tool.l(params);
+
       generateItinerary(params, productResult);
   }, function(error) {
     // 失败
@@ -132,8 +133,29 @@ productApi.constructItinerayParams = (product) => {
   params.title = product.productName;
   params.description = product.description;
   params.itinerary = product.itinerary;
-  for (var i = 0; i < params.itinerary; i++) {
+  tool.l("getting iteriner");
+  tool.l( product.itinerary);
+  for (var i = 0; i < params.itinerary.length; i++) {
     params.itinerary[i].index = i + 1;
+    if (!params.itinerary[i].food) {
+      params.itinerary[i].food = {};
+    }
+    if (!params.itinerary[i].food.hasmorning) {
+      params.itinerary[i].food.morning = "无";
+    } else {
+      params.itinerary[i].food.morning = params.itinerary[i].food.morning || "提供"
+    }
+    if (!params.itinerary[i].food.hasnoon) {
+      params.itinerary[i].food.noon = "无";
+    } else {
+      params.itinerary[i].food.noon = params.itinerary[i].food.noon || "提供"
+    }
+    if (!params.itinerary[i].food.hasevening) {
+      params.itinerary[i].food.evening = "无";
+    } else {
+      params.itinerary[i].food.evening = params.itinerary[i].food.evening || "提供"
+    }
+    tool.l(params.itinerary[i].food);
   }
   params.priceInclude = product.priceInclude;
   params.priceExclude = product.priceExclude;
@@ -577,8 +599,6 @@ function generateItinerary(params, productResult) {
         object[property] = object[property].replaceAll("\n", "<w:br/>");
       }
     });
-
-    tool.l(params);
 
     tool.l(params);
     var result = tal.process(data, params).replaceAll("&lt;","<").replaceAll("&gt;", ">");

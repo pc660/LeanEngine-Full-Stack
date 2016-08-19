@@ -89,7 +89,6 @@
                  target="_blank"
                  ui-sref="home.show-order-detail({orderId: '{{order.objectId}}' })"
                  ui-sref-opts="{ absolute: true }">显示详情</a>
-              <a href="{{ order.fileUrl }}" download>查看确认单</a>
               <a ng-if="!admin" ng-click="printReceipt();">打印发票</a>
               <a ng-if="!admin && order.status == 1" ng-click="cancelOrder(order.objectId);">取消订单</a>
               <a ng-if="!admin && order.status == 2" ng-click="applyCancel(order.objectId);">申请取消订单</a>

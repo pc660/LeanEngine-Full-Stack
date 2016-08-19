@@ -1218,9 +1218,9 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t tal:content="string:早餐：${self.itRow.food.morning}">早餐 自理</w:t>
-                                <w:t tal:content="string:午餐：${self.itRow.food.noon}">午餐：自理</w:t>
-                                <w:t tal:content="string:晚餐：${self.itRow.food.evening}">晚餐：自理</w:t>
+                                <w:t tal:content="string:早餐：${self.itRow.food.morning}, ">早餐 自理</w:t>
+                                <w:t tal:content="string:午餐：${self.itRow.food.noon}, ">午餐：自理</w:t>
+                                <w:t tal:content="string:晚餐：${self.itRow.food.evening}  ">晚餐：自理</w:t>
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
                                 <w:br/>
@@ -1237,7 +1237,9 @@
                                 <w:rPr>
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
-                                <w:t tal:content="self.itRow.hotel">{{ itinerary.hotel }}</w:t>
+                                <w:t tal:content="self.itRow.hotelDetail">{{ itinerary.hotelDetail }}</w:t>
+                                <w:t tal:content="string: 或同级: ${self.itRow.hotel}">或同级 {{ itinerary.hotel }}</w:t>
+                              
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
                                 <w:br/>
