@@ -33,8 +33,11 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
       SweetAlert.swal("请完善注册信息!", "", "warning");
       return;
     }
+    $log.log($scope.cellphone);
     authFac.register($scope.username, $scope.password, $scope.level, $scope.email, $scope.contactname, $scope.cellphone).then(function() {
       SweetAlert.swal("账号注册成功", "请保存这条信息,并告知对方.账号: " + $scope.username + " 密码: " + $scope.password, "success");
+    }, function(error) {
+      SweetAlert.swal("注册失败", "请查看注册信息是否正确(邮箱)", "warning");
     });
   };
 

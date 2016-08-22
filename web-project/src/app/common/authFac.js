@@ -49,7 +49,7 @@ export default (
                       { username: username, password: password });
   }
 
-  function register(username, password, level, email, contactname ) {
+  function register(username, password, level, email, contactname, cellphone) {
     $log.log(level);
     return $http.post('/api/auth/register',
                       { username: username, password: password, level: level, email: email, contactname: contactname,

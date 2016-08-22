@@ -49,10 +49,7 @@ pub.register = (req, res) => {
     });
     }, function(error) {
       tool.l('error')
-      res.send({
-        code: error.code,
-        message: error.message      
-      });
+      res.send(404);
     });
 };
 
