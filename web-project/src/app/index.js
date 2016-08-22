@@ -72,7 +72,7 @@ import showOrderDetailCtrl from './common/sale/order/showOrderDetailCtrl.js';
 import saleAccountCtrl from './common/sale/account/accountCtrl.js';
 
 import formCtrl from './common/directives/form/formCtrl.js';
-
+import applyRevokeCtrl from './common/sale/order/applyRevokeCtrl.js';
 
 // factory
 import authFac from './common/authFac';
@@ -157,6 +157,8 @@ angular.module('webProject',
   .controller('showOrderDetailCtrl', showOrderDetailCtrl)
   .controller('formCtrl', formCtrl)
   .controller('saleAccountCtrl', saleAccountCtrl)
+
+  .controller('applyRevokeCtrl', applyRevokeCtrl)
 
 
   // factory

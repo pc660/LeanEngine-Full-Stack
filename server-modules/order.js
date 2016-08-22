@@ -40,6 +40,7 @@ orderApi.getAll = (req, res) => {
     var query = new AV.Query('Order');
     query.include("product.fullName", "product.prefix");
     if (req.body.status) {
+        tool.l(req.body.status);
         query.equalTo("status", parseInt(req.body.status));
     }
     //
@@ -54,7 +55,6 @@ orderApi.getAll = (req, res) => {
     query.descending("createdAt");
     query.find().then(function(results) {
         tool.l("successfully get " + results.length + " results");
-        tool.l(results);
         var product = results.map(function(order) {
             return order.get("product");
         })
@@ -215,7 +215,8 @@ orderApi.revoke = (req, res) => {
     order.fetch({include: "product"}, null).then(function(result) {
         var product = result.get("product");
         var responsible = product.get("responsible");
-        order.set("status", req.body.status);
+        order.set("status", config.orderStatus.REVOKE);
+        order.set("revoke", req.body.revoke);
         order.set("responsible", responsible);
         order.save().then(function() {
             res.send();
@@ -253,7 +254,8 @@ orderApi.cancel = (req, res) => {
         }
         product.set("price", priceMap);
         product.save();
-        order.destroy().then(function() {
+        order.set("status", config.orderStatus.CANCELLED);
+        order.save().then(function() {
             res.send();
             return;
         });
@@ -290,11 +292,27 @@ orderApi.verify = (req, res) => {
     tool.l(req.body.status);
     order.set("status", parseInt(req.body.status));
     order.save().then(function(results) {
-        tool.l(results);
         res.send();
     }, function(error) {
         tool.l(error);
     })
 };
+
+// TODO: Revisit this.
+/*
+orderApi.search = (req, res) => {
+    tool.l("order.search");
+    var query = new AV.Query('Customer');
+    var params = req.body.query;
+    if (params.orderId) {
+        var id = params.orderId;
+        var order = AV.Object.createWithoutData('Order', id);
+        order.fetch().then(function(result) {
+            tool.l(results);
+            res.send([result]);
+        })
+        return;
+    }
+};*/
 
 module.exports = orderApi;

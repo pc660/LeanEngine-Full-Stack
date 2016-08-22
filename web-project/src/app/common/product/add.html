@@ -203,8 +203,9 @@
               <td>大区</td>
               <td>
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-model="product.area">
-                    <md-option ng-selected="product.area != 'undefined' && $first" ng-value="area" ng-repeat="area in areas">
+                  <md-select ng-model="product.area"
+                             ng-selected="product.area != 'undefined' && $first">
+                    <md-option ng-value="area" ng-repeat="area in areas">
                       {{area}}
                     </md-option>
                   </md-select>

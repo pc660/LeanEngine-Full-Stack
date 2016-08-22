@@ -1,0 +1,40 @@
+<!-- TODO refactor this! -->
+<div>
+  <div class="modal-header">
+    <h3 class="modal-title">申请退款</h3>
+  </div>
+  <div class="modal-body">
+    <ul>
+      <li>
+        <div class="item">
+          <div class="key">
+            退款原因
+          </div>
+          <div class="value">
+            <textarea ng-model="revoke.reason"></textarea>
+          </div>
+        </div>
+        <div class="item">
+          <div class="key">
+            申请人
+          </div>
+          <div class="value">
+            <input ng-model="revoke.person">
+          </div>
+        </div>
+        <div class="item">
+          <div class="key">
+            手机
+          </div>
+          <div class="value">
+            <input ng-model="revoke.phone">
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="revokeOrder(revoke);">确认</button>
+    <button class="btn btn-warning" type="button" ng-click="cancelRevoke()">取消</button>
+  </div>
+</div>

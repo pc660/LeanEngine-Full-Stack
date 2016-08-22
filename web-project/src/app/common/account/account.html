@@ -32,6 +32,9 @@
               <md-button ng-if="level == 0 || level == 3" ng-click="showUnverified()" class="md-primary">
                 需要我审核的产品
               </md-button>
+              <md-button ng-if="level == 0 || level == 3" ng-click="showVerified()" class="md-primary">
+                我审核过的产品
+              </md-button>
               <md-button ng-if="level == 0 || level == 3" ng-click="showRevokeOrder()" class="md-primary">
                 申请退款的订单
               </md-button>
@@ -138,7 +141,7 @@
                     品牌名称
                   </td>
                   <td>
-                    {{ provider.nickname }}
+                    {{ currentProvider.nickname }}
                   </td>
                 </tr>
                 <tr>
@@ -146,7 +149,7 @@
                     公司名称
                   </td>
                   <td>
-                    {{ provider.companyname }}
+                    {{ currentProvider.companyname }}
                   </td>
                 </tr>
                 <tr>
@@ -154,26 +157,26 @@
                   <td>
                     <div layout="row">
                       <span>省:</span>
-                      <span>{{ provider.address.province }}</span>
+                      <span>{{ currentProvider.address.province }}</span>
                     </div>
                     <div layout="row">
                       <span>市:</span>
-                      <span>{{ provider.address.city }}</span>
+                      <span>{{ currentProvider.address.city }}</span>
                     </div>
                     <div layout="row" ng-if="provider.address.county">
                       <span>区:</span>
-                      <span>{{ provider.address.county }}</span>
+                      <span>{{ currentProvider.address.county }}</span>
                     </div>
                     <div layout="row" ng-if="provider.address.detail">
                       <span>地址:</span>
-                      <span>{{ provider.address.detail }}</span>
+                      <span>{{ currentProvider.address.detail }}</span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td>营业执照</td>
                   <td>
-                    <a href="#">显示证书</a>
+                    <a href="{{ provider.fileUrl }}">显示证书</a>
                   </td>
                 </tr>
                 <tr>
@@ -186,7 +189,7 @@
                     主营目的地
                   </td>
                   <td>
-                    <multi-choice is-editing="false" type="主营目的地" ng-model="provider.destination"></multi-choice>
+                    <multi-choice is-editing="false" type="主营目的地" ng-if="testing1" ng-model="testing1"></multi-choice>
                   </td>
                 </tr>
                 <tr>
@@ -194,7 +197,7 @@
                     主营口岸
                   </td>
                   <td>
-                    <multi-choice is-editing="false" type="主营口岸" ng-model="provider.start" other="true"></multi-choice>
+                    <multi-choice is-editing="false" type="主营口岸" ng-if="testing2" ng-model="testing2" other="true"></multi-choice>
                   </td>
                 </tr>
                 <tr>
@@ -207,7 +210,7 @@
                     航班资源
                   </td>
                   <td>
-                    <textarea ng-disabled="true" class="msd-elastic" ng-model="provider.flightResource"></textarea>
+                    <textarea ng-disabled="true" class="msd-elastic" ng-model="currentProvider.flightResource"></textarea>
                   </td>
                 </tr>
                 <tr>
@@ -215,7 +218,7 @@
                     收客情况
                   </td>
                   <td>
-                    <textarea ng-disabled="true" class="msd-elastic" ng-model="provider.customerResource"></textarea>
+                    <textarea ng-disabled="true" class="msd-elastic" ng-model="currentProvider.customerResource"></textarea>
                   </td>
                 </tr>
                 <tr>
@@ -223,7 +226,7 @@
                     产品优势
                   </td>
                   <td>
-                    <textarea ng-disabled="true" class="msd-elastic" ng-model="provider.productResource"></textarea>
+                    <textarea ng-disabled="true" class="msd-elastic" ng-model="currentProvider.productResource"></textarea>
                   </td>
                 </tr>
                 <tr>
@@ -239,24 +242,24 @@
                     <div layout="row">
                       <div>
                         全年总人数:
-                        <p>{{ provider.returnPolicy.returnTotalPeople }}</p>
+                        <p>{{ currentProvider.returnPolicy.returnTotalPeople }}</p>
                         (人)
                       </div>
                       <div>
                         加返
-                        <p>{{ provider.returnPolicy.returnMoneyEachPeople }}</p>
+                        <p>{{ currentProvider.returnPolicy.returnMoneyEachPeople }}</p>
                         (元/人)
                       </div>
                     </div>
                     <div layout="row">
                       <div>
                         全年销售额:
-                        <p>{{ provider.returnPolicy.returnTotalRevenue }}</p>
+                        <p>{{ currentProvider.returnPolicy.returnTotalRevenue }}</p>
                         (元)
                       </div>
                       <div>
                         加返
-                        <p>{{ provider.returnPolicy.returnMoneyRevenue }}</p>
+                        <p>{{ currentProvider.returnPolicy.returnMoneyRevenue }}</p>
                         (元)
                       </div>
                     </div>

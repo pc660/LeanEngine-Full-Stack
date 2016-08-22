@@ -48,6 +48,8 @@ let config = {
     FINISHED: 4,
     REVOKE: 5,
     CANCEL: 6,
+    CANCELLED: 7,
+    PAID_VERIFIED: 8,
   }
 };
 

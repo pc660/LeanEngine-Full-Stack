@@ -21,8 +21,10 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
       // TODO: Model should be the same type.
       // Now we take into an array and convert to an object.
       scope.$watch("model", function() {
+        $log.log("watching ");
+        $log.log(scope.model);
         if(Object.prototype.toString.call(scope.model) !== '[object Array]' ) {
-          $log.log("array");
+          $log.log("not array");
           return;
         }
 
@@ -35,7 +37,7 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
           }
         }
         $log.log(scope.options);
-        optionsListener();
+        //optionsListener();
       }, true);
 
       var optionsListener = scope.$watch("options",  function(options) {

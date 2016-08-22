@@ -79,11 +79,11 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
 
     productFac.searchProduct(query).then(function(results) {
       $scope.products = results.products;
-      $scope.products.map(function(product) {
+      $scope.products = $scope.products.filter(function(product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
-        productFac.getLatestTrip(product);
         $log.log(product);
         product.fileUrl = $sce.trustAsResourceUrl(product.itineraryFile.url);
+        return productFac.getLatestTrip(product);
       });
       for (var i = 0; i < $scope.products.length; i++) {
         $scope.products[i].provider = results.providers[i];

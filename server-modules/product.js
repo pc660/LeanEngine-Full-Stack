@@ -392,7 +392,7 @@ productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
   startDate.setDate(startDate.getDate() + stopDay);
   if (minDate) {
     var minParsedDate = productApi.parseDate(minDate);
-    minParsedDate.setDate(minParsedDate.getDate() + stopDay);
+    minParsedDate.setDate(minParsedDate.getDate());
     if (minParsedDate - startDate > 0) {
       startDate = minParsedDate;
     }
@@ -401,7 +401,7 @@ productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
   var endDate = new Date(2050, 1, 1);
   if (maxDate) {
     var maxParsedDate = productApi.parseDate(maxDate);
-    maxParsedDate.setDate(maxParsedDate.getDate() + stopDay);
+    maxParsedDate.setDate(maxParsedDate.getDate());
     if (maxParsedDate - endDate < 0) {
       endDate = maxParsedDate;
     }

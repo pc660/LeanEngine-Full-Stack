@@ -8,6 +8,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.addContact = addContact;
   service.getProvider = getProvider;
   service.showContact = showContact;
+  service.getSaleusers = getSaleusers;
   return service;
 
   function getCurrentUserInfo() {
@@ -93,5 +94,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function getProvider() {
     return $http.post('/api/user/getProvider');
+  }
+
+  // User a const value maybe.
+  function getSaleusers() {
+    return $http.post('/api/user/get', {query: {level : [1]}});
   }
 };

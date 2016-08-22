@@ -103,4 +103,21 @@
       <p ng-if="customer.needVisa">需要签证</p>
     </td>
   </tr>
+  <tr ng-if="order.revoke">
+    <td colspan="99" class="title">
+      退款信息
+    </td>
+  </tr>
+  <tr ng-if="order.revoke">
+    <td>退款理由</td>
+    <td colspan="99">{{ order.revoke.reason }}</td>
+  </tr>
+  <tr ng-if="order.revoke">
+    <td>申请人</td>
+    <td colspan="99">{{ order.revoke.person }}</td>
+  </tr>
+  <tr ng-if="order.revoke">
+    <td>手机</td>
+    <td colspan="99">{{ order.revoke.phone }}</td>
+  </tr>
 </table>

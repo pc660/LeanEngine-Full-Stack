@@ -21,6 +21,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.setDayContent = setDayContent;
   service.getPrice = getPrice;
   service.setStorageContent = setStorageContent;
+  service.parseDate = parseDate;
   return service;
 
   function uploadProduct(product) {
@@ -99,20 +100,41 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     $log.log("getLatestTrip");
     var price = product.price;
     var date = new Date();
+    date.setDate(date.getDate() + product.stopDay);
     var year = date.getFullYear();
     var month = date.getMonth();
     var day = date.getDate();
+    removeExpiredPrice(product);
     for (var i = 0; i < Object.keys(price).length; i++) {
       var event = findNextInOneYear(price, year + i, month, day);
-      if (event) {
+      if (event && Object.keys(event).length > 1) {
         product.latestDate = event.date;
         product.latestAdultCompanySalePrice = event.event.adultCompanySalePrice;
         product.latestAdultCompanyCompetitorPrice = event.event.adultCompanyCompetitorPrice;
         product.latestAdultCompanyPrice = event.event.adultCompanyPrice;
         product.latestChildCompanySalePrice = event.event.childCompanySalePrice;
+        return true;
       } else {
         month = 0;
         day = 1;
+      }
+    }
+    return false;
+  }
+
+  function removeExpiredPrice(product) {
+    var date = new Date();
+    date.setDate(date.getDate() + product.stopDay);
+    for (var year in product.price) {
+      for (var month in product.price[year]) {
+        for (var day in product.price[year][month]) {
+          var newDate = new Date(year, month, day);
+          $log.log(newDate);
+          $log.log(date);
+          if (newDate - date < 0) {
+            delete product.price[year][month][day];
+          }
+        }
       }
     }
   }
@@ -216,5 +238,15 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
       return htmlString;
     }
     return "<div></div>";
+  }
+
+  function parseDate(dateString) {
+    var re = /([0-9]+)年([0-9]+)月([0-9]+)日/;
+    var match = dateString.match(re);
+    if (match.length == 4) {
+      return new Date(match[1], match[2] - 1, match[3]);
+    }
+
+    return null;
   }
 };

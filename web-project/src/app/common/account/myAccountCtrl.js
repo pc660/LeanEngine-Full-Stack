@@ -1,8 +1,7 @@
-export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, orderFac, formConfig, providerFac, SweetAlert) => {
+export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, orderFac, formConfig, providerFac, SweetAlert) => {
   'ngInject';
   $scope.changePass = false;
   $scope.level = authFac.getUserLevel();
-
   $scope.isProvider = (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER);
 
   if ($scope.$parent.unfinished) {
@@ -25,11 +24,12 @@ export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, l
     $scope.provider = result.provider;
     $scope.contactList = result.contacts;
     $log.log(result);
+    $log.log("getting result");
     $log.log($scope.provider);
   }, function (error) {
     $scope.fetchedProvider = true;
   });
-  
+
   $scope.$watch("showProvider", function(value) {
     if ($scope.provider) {
       $scope.$broadcast("addressUpdate", {address: $scope.provider.address});
@@ -41,6 +41,20 @@ export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, l
     var query = {};
     query.myResponsible = true;
     query.status = lcConfig.productStatus.UNVERIFIED;
+    productFac.searchProduct(query).then(function(results) {
+      $scope.products = results.products;
+      for (var i = 0; i < $scope.products.length; i++) {
+        $scope.products[i].responsible = results.responsible[i];
+      }
+    }, function(error) {
+    });
+  };
+
+  $scope.showVerified = () => {
+    $scope.unverified = true;
+    var query = {};
+    query.myResponsible = true;
+    query.status = lcConfig.productStatus.VERIFIED;
     productFac.searchProduct(query).then(function(results) {
       $scope.products = results.products;
       for (var i = 0; i < $scope.products.length; i++) {
@@ -124,10 +138,17 @@ export default ($rootScope, authFac, $log, $state, $scope, $uibModal, userFac, l
     userFac.addContact($scope.contactList, $scope.provider.objectId);
   };
 
+  // TODO: FUCK THIS BITCH CODE. REWRITE!!!!
   $scope.showMyProvider = () => {
     $scope.products = [];
     $scope.showProvider = true;
     $scope.showContactList = false;
+    $log.log($scope.provider);
+    $scope.currentProvider = $scope.provider;
+    $scope.testing1 = angular.copy($scope.provider.destination);
+    $log.log($scope.testing1);
+    $scope.testing2 = angular.copy($scope.provider.start);
+    $scope.provider.fileUrl = $sce.trustAsResourceUrl($scope.provider.licenseFile.url);
   };
 
   $scope.showMyContactList = () => {

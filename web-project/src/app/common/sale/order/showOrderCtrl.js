@@ -1,10 +1,56 @@
-export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orderFac, productFac, userFac, lcConfig) => {
+export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibModal, orderFac, productFac, userFac, lcConfig) => {
   'ngInject';
 
-  $scope.admin = false;
-  if ($state.is('home.show-orders')) {
-    $scope.admin = true;
-  }
+  $scope.level = authFac.getUserLevel();
+  $scope.admin = ($scope.level == lcConfig.orderStatus.ADMIN);
+  // Init.
+  userFac.getSaleusers().then(function(results) {
+    $scope.saleList = results;
+  })
+
+  $scope.search = () => {
+    var query = $scope.query;
+    // TODO: have to fix this. Do a real query.
+    /*
+    orderFac.search(query).then(function(results) {
+      $scope.setOrder(results);
+    })*/
+    if (!query) {
+      return;
+    }
+    $log.log(query);
+    $scope.orders = $scope.oldOrders.filter(function(order) {
+      $log.log(order);
+      if (query.orderId) {
+        return order.objectId == query.orderId;
+      }
+      var match = true;
+      var date = productFac.parseDate(order.startDate);
+      if (query.startDate) {
+        var queryDate = productFac.parseDate(query.startDate);
+        if (queryDate > date) {
+          match = false;
+        }
+      }
+      if (query.endDate) {
+        var queryDate = productFac.parseDate(query.endDate);
+        if (queryDate < date) {
+          match = false;
+        }
+      }
+      if (query.sale) {
+        if (order.createdBy.objectId !== query.sale) {
+          match = false;
+        }
+      }
+      if (query.productName) {
+        if (order.product && !order.product.fullName.includes(query.productName)) {
+          match = false;
+        }
+      }
+      return match;
+    })
+  };
 
   $scope.setOrder = (results) => {
     $scope.orders = results.order;
@@ -15,12 +61,16 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
         $scope.orders[i].product = product;
       }
     }
-    $scope.orders.map(function(order) {
+    $scope.orders.forEach(function(order) {
       if (order.confirmFile) {
         order.fileUrl = $sce.trustAsResourceUrl(order.confirmFile.url);
         $log.log(order.fileUrl);
       }
     });
+
+    $log.log($scope.orders);
+    // TODO: Remove this.
+    $scope.oldOrders = $scope.orders;
   }
 
   $scope.allOrder = () => {
@@ -43,6 +93,12 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
 
   $scope.paidOrder = () => {
     orderFac.getPaidOrder($scope.admin).then(function(results) {
+      $scope.setOrder(results);
+    });
+  };
+
+  $scope.paidVerifiedOrder = () => {
+    orderFac.getPaidVerifiedOrder($scope.admin).then(function(results) {
       $scope.setOrder(results);
     });
   };
@@ -83,12 +139,41 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
   };
 
   $scope.applyRevoke = (orderId) => {
+
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'app/common/sale/order/apply_revoke.html',
+      controller: 'applyRevokeCtrl',
+      resolve: {
+        data: function() {
+          return {"orderId": orderId};
+        }
+      }
+    });
+
+    modalInstance.result.then(function (items) {
+      $log.log("return");
+    }, function () {
+      $log.log("return error");
+    });
+
+
+    /*
     orderFac.revokeOrder(orderId, lcConfig.orderStatus.REVOKE).then(function(result) {
       SweetAlert.swal("订单申请退款成功", "请稍后与分销商确认", "success");
     }, function(error){
 
-    });
+    });*/
   };
+
+  /*
+  $scope.cancelRevoke = () => {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.revokeOrder = (revoke) => {
+    $uibModalInstance.close();
+  };*/
 
   $scope.applyCancel = (orderId) => {
     orderFac.revokeOrder(orderId, lcConfig.orderStatus.CANCEL).then(function(result) {
@@ -99,7 +184,7 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
   };
 
   $scope.getRevoke = () => {
-    orderFac.getRevoke().then(function(results) {
+    orderFac.getRevoke($scope.admin).then(function(results) {
       $log.log(results);
       $scope.setOrder(results);
     });
@@ -116,8 +201,21 @@ export default (SweetAlert, $log, $scope, $state, $window, $sce, $uibModal, orde
   };
 
   $scope.verifyPaid = (orderId) => {
+    orderFac.verify(orderId, lcConfig.orderStatus.PAID_VERIFIED).then(function(results) {
+      SweetAlert.swal("订单付款审核通过", "请刷新网页", "success");
+    });
+  };
+
+  $scope.verifyFinished = (orderId) => {
     orderFac.verify(orderId, lcConfig.orderStatus.FINISHED).then(function(results) {
       SweetAlert.swal("订单已经完成", "请刷新网页", "success");
+    });
+  };
+
+  $scope.getCancel = () => {
+    orderFac.getCancel($scope.admin).then(function(results) {
+      $log.log(results);
+      $scope.setOrder(results);
     });
   };
 };

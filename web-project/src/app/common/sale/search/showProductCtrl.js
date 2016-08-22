@@ -11,14 +11,13 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
       if ($scope.product.itineraryFile) {
         $scope.product.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
       }
-      productFac.getLatestTrip($scope.product);
       $scope.product.platformcontact = result.platformcontact;
+      productFac.getLatestTrip($scope.product);
+      $log.log("getting result");
       $log.log(result);
       // Set the current Date.
       $scope.$broadcast("updateMaterialCalendar");
       $scope.$broadcast("updateTemplate", {params: $scope.product});
-      //var date = new Date();
-      //$scope.updateMonthContent({year: date.getFullYear(), month: date.getMonth()});
     }, function(error) {
       // TODO: handle failure.
     });
