@@ -1,4 +1,4 @@
-export default (SweetAlert, $state, $log, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
+export default (SweetAlert, $state, $log,$rootScope, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
   'ngInject';
     var url = lcConfig.apiHost + "/api/provider/add";
     $scope.addUrl = url;
@@ -6,9 +6,11 @@ export default (SweetAlert, $state, $log, $scope, $document, $timeout, lcConfig,
     $scope.confirmed = false;
     if ($state.params.provider) {
       $scope.provider = $state.params.provider;
+      $log.log("getting provider");
       $log.log($scope.provider.start);
       $log.log($scope.provider.destination);
-      $log.log($scope.provider);
+      $log.log($scope.provider.address);
+      $rootScope.$broadcast("addressUpdate", {address: $scope.provider.address});
     }
 
     $scope.upload = (file) => {

@@ -112,7 +112,8 @@
         <span>{{product.productName}}</span>
       </a>
       <div class="metadata">
-        <span>出发地: {{ product.start.city }}</span>
+        <span ng-if="product.start.city == '市辖区'">出发地: {{ product.start.province }}</span>
+        <span ng-if="product.start.city != '市辖区'">出发地: {{ product.start.city }}</span>
         <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span>
         <span>最近班期：
           <em>{{ product.latestDate }}</em>

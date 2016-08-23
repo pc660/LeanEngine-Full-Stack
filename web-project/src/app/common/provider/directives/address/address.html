@@ -4,7 +4,7 @@
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
                  ng-model="$parent.province">
-        <md-option ng-selected="$first" ng-value="province" ng-repeat="province in provinces">
+        <md-option  ng-value="province.name" ng-repeat="province in provinces">
           {{province.name}}
         </md-option>
       </md-select>
@@ -16,28 +16,28 @@
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
                  ng-model="$parent.city">
-        <md-option ng-selected="$first" ng-value="city" ng-repeat="city in cities">
+        <md-option  ng-value="city.name" ng-repeat="city in cities">
           {{city.name}}
         </md-option>
       </md-select>
     </md-input-container>
     <p class="value" ng-if="!isEditing">{{ city }}</p>
   </div>
-  <div layout-align='start center' layout="row" ng-if="showCounty">
+  <div layout-align='start center' layout="row" ng-show="showCounty">
     <div  class="label">区县:</div>
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
                  ng-model="$parent.county">
-        <md-option ng-selected="$first" ng-value="county" ng-repeat="county in counties">
+        <md-option  ng-value="county.name" ng-repeat="county in counties">
           {{county.name}}
         </md-option>
       </md-select>
     </md-input-container>
     <p class="value" ng-if="!isEditing">{{ county }}</p>
   </div>
-  <div layout="row" layout-align='start center' ng-if="showCounty">
+  <div layout="row" layout-align='start center' ng-show="showCounty">
     <div class="margin label">地址:</div>
-    <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" name="address" type="text" ng-model="detail">
+    <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" name="address" type="text" ng-model="$parent.detail">
     <div ng-if="!isEditing">
       {{ detail }}
     </div>
