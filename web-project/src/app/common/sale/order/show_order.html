@@ -124,7 +124,9 @@
           </td>
           <td>
             <div class="detail">
-              <p><strong>￥{{ order.totalPrice }}</strong></p>
+              <p ng-if="level != 3">结算价<strong>￥{{ order.adult * order.price.adultCompanyPrice + order.child * order.price.childCompanyPrice }}</strong></p>
+              <p ng-if="level != 2">销售价<strong>￥{{ order.adult * order.price.adultCompanySalePrice + order.child * order.price.childCompanySalePrice }}</strong></p>
+              <p ng-if="level != 2">同行价<strong>￥{{ order.adult * order.price.adultCompanyCompetitorPrice + order.child * order.price.childCompanyCompetitorPrice }}</strong></p>
               <div>
                 成人：{{ order.adult }}人 儿童：{{ order.child }}人
               </div>

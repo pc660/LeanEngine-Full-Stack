@@ -176,7 +176,7 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   };*/
 
   $scope.applyCancel = (orderId) => {
-    orderFac.revokeOrder(orderId, lcConfig.orderStatus.CANCEL).then(function(result) {
+    orderFac.cancelUnpaidOrder(orderId, {reason: "未付款请求取消"}).then(function(result) {
       SweetAlert.swal("订单取消成功", "请稍后与分销商确认", "success");
     }, function(error){
 

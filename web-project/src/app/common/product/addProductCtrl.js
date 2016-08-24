@@ -68,8 +68,17 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
 
     productFac.uploadProduct($scope.product)
     .then(function(result) {
-      $log.log("upload product success");
-        SweetAlert.swal("发布成功", " 请到我的账号中我发布的产品去查看更新.", "success");
+        $log.log("upload product success");
+        SweetAlert.swal({
+            title: "发布成功",
+            text: "请到我的账号中我发布的产品去查看更新.",
+            type: "success",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确认",
+            closeOnConfirm: true},
+          function(){
+            $state.go('home');
+          });
     }, function(error) {
         SweetAlert.swal("发布失败", " 请重新登陆.", "error ");
     });

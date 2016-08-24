@@ -49,6 +49,7 @@ router.post('/product/getUnverified', product.getUnverified);
 router.post('/product/hasUnfinished', product.hasUnfinished);
 router.post('/product/verify', product.verify);
 router.post('/product/getProductsCount', product.getProductsCount);
+router.post('/product/delete', product.delete);
 
 router.post('/product/getAll', product.getAll);
 router.post('/product/get', product.get);

@@ -627,7 +627,7 @@
                                     <w:rFonts w:hint="fareast"/>
                                     <w:kern w:val="2"/>
                                 </w:rPr>
-                                <w:t tal:content="string:旅行社：${self.account}">旅行社：{{ account }}</w:t>
+                                <w:t tal:content="string:旅行社: 请输入旅行社">旅行社：{{ account }}</w:t>
                             </w:r>
                         </w:p>
                     </w:tc>
@@ -1470,6 +1470,76 @@
                         </w:p>
                     </w:tc>
                 </w:tr>
+                <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
+                    <w:tc>
+                        <w:tcPr>
+                            <w:tcW w:w="8359" w:type="dxa"/>
+                            <w:gridSpan w:val="8"/>
+                            <w:tcBorders>
+                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:bottom w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                            </w:tcBorders>
+                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+                            <w:vAlign w:val="center"/>
+                        </w:tcPr>
+                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
+                            <w:pPr>
+                                <w:spacing w:before-lines="50" w:before="120" w:line="360" w:line-rule="auto"/>
+                                <w:jc w:val="center"/>
+                                <w:rPr>
+                                    <w:b/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
+                                </w:rPr>
+                            </w:pPr>
+                            <w:r wsp:rsidRPr="0047193A">
+                                <w:rPr>
+                                    <w:rFonts w:hint="fareast"/>
+                                    <w:b/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
+                                </w:rPr>
+                                <w:t>【购物信息】</w:t>
+                            </w:r>
+                        </w:p>
+                    </w:tc>
+                </w:tr>
+                <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
+                    <w:tc>
+                        <w:tcPr>
+                            <w:tcW w:w="8359" w:type="dxa"/>
+                            <w:gridSpan w:val="8"/>
+                            <w:tcBorders>
+                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:bottom w:val="single" w:sz="12" wx:bdrwidth="30" w:space="0" w:color="auto"/>
+                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                            </w:tcBorders>
+                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+                            <w:vAlign w:val="center"/>
+                        </w:tcPr>
+                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
+                            <w:pPr>
+                                <w:spacing w:before-lines="50" w:before="120" w:line="360" w:line-rule="auto"/>
+                                <w:rPr>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
+                                </w:rPr>
+                            </w:pPr>
+                            <w:r wsp:rsidRPr="0047193A">
+                                <w:rPr>
+                                    <w:rFonts w:hint="fareast"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
+                                </w:rPr>
+                                <w:t tal:content="self.shoppingInfo">{{ product.shoppingInfo }}</w:t>
+                            </w:r>
+                        </w:p>
+                    </w:tc>
+                </w:tr>
+
                 <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
                     <w:tc>
                         <w:tcPr>

@@ -209,4 +209,11 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
   $scope.showMyOrder = () => {
 
   };
+
+  $scope.deleteProduct = (index) => {
+    var product = $scope.products[index];
+    productFac.deleteProduct(product.objectId).then(function(value) {
+      SweetAlert.swal("删除成功", "请刷新网页", "success");
+    });
+  };
 };

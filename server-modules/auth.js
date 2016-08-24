@@ -32,7 +32,7 @@ pub.register = (req, res) => {
   var password = req.body.password;
   var level = req.body.level;
   var email = req.body.email;
-  var contactname = req.body.email;
+  var contactname = req.body.contactname;
   var cellphone = req.body.cellphone;
   var user = new AV.User();
   tool.l(req.body.password);

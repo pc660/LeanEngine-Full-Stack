@@ -26,8 +26,14 @@ export default ($log, $rootScope, $state, $window, cityData) => {
       scope.counties = scope.cities[0].county;
 
       scope.provinceListener = scope.$watch("province", function(province) {
+        if (!province) {
+          return;
+        }
         scope.address.province = province;
         var index = scope.findProvinceIndex(province);
+        if (index < 1) {
+          return;
+        }
         scope.cities = cityData.province[index].city;
         // If there is no cities in the province, then we should reset the county.
         if (scope.cities === undefined) {
@@ -37,17 +43,29 @@ export default ($log, $rootScope, $state, $window, cityData) => {
       });
 
       scope.cityListener = scope.$watch("city", function(city) {
+        if (!city) {
+          return;
+        }
         scope.address.city = city;
         var index = scope.findCityIndex(city);
+        if (index < 1) {
+          return;
+        }
         scope.counties = scope.cities[index].county;
       });
 
       scope.countyListener = scope.$watch("county", function(county) {
+        if (county) {
+          return;
+        }
         $log.log(county);
         scope.address.county = county;
       });
 
       scope.$watch("detail", function(detail) {
+        if (detail) {
+          return;
+        }
         scope.address.detail = detail;
       });
 

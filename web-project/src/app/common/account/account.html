@@ -73,6 +73,7 @@
                 </td>
                 <td>
                   <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>
+                  <md-button class="md-raised md-primary" ng-click="deleteProduct($index);" ng-if="product.status == 1">删除产品</md-button>
                   <md-button class="md-raised md-primary" ng-click="editProduct($index);" ng-if="product.status == 1">修改</md-button>
                   <md-button class="md-raised md-primary" ng-click="editProduct($index);" ng-if="product.status == 2 && !unverified">修改</md-button>
                   <md-button class="md-raised md-primary" ng-click="verify($index);" ng-if="product.status == 2 && unverified">通过审核</md-button>

@@ -163,6 +163,7 @@ productApi.constructItinerayParams = (product) => {
   params.visaInfo = product.visaInfo;
   params.reserveInfo = product.reserveInfo;
   params.restriction = product.restriction;
+  params.shoppingInfo = product.shoppingInfo;
 
   params.account = product.pickedProvider.companyname;
   return params;
@@ -560,6 +561,17 @@ productApi.verify = (req, res) => {
   });
 };
 
+productApi.delete = (req, res) => {
+  tool.l("product.delete");
+  var product = AV.Object.createWithoutData('Product', req.body.productId);
+  product.destroy().then(function() {
+    res.send();
+  }, function(error) {
+    res.send(404);
+  })
+
+};
+
 productApi.getProductsCount = (req, res) => {
   tool.l('product.getProductsCount');
 
@@ -658,5 +670,7 @@ function toUTF8Array(str) {
   }
   return utf8;
 }
+
+
 
 module.exports = productApi;

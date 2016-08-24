@@ -9,7 +9,11 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   $scope.reserve = $state.params.reserve;
   $scope.product = $state.params.product;
   var productId = $state.params.productId;
-  $scope.order = $scope.reserve;
+  $scope.order.price = $scope.reserve.price;
+  $scope.order.date = $scope.reserve.date;
+  $scope.order.adult = $scope.reserve.adult || 0;
+  $scope.order.child = $scope.reserve.child || 0;
+  $log.log($scope.reserve);
   $log.log("get scope order");
   $log.log($scope.order);
   if (!$scope.order) {
@@ -53,8 +57,8 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
 
   $scope.updateTotalPrice = () => {
     if ($scope.order) {
-      $scope.order.totalPrice = $scope.order.adult * $scope.order.adultCompanySalePrice +
-        $scope.order.child * $scope.order.childCompanySalePrice;
+      $scope.order.totalPrice = $scope.order.adult * $scope.order.price.adultCompanySalePrice +
+        $scope.order.child * $scope.order.price.childCompanySalePrice;
       $log.log($scope.order);
     } else {
       $scope.order = {};

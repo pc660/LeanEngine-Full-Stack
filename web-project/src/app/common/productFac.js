@@ -22,6 +22,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getPrice = getPrice;
   service.setStorageContent = setStorageContent;
   service.parseDate = parseDate;
+  service.deleteProduct = deleteProduct;
   return service;
 
   function uploadProduct(product) {
@@ -248,5 +249,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     }
 
     return null;
+  }
+
+  function deleteProduct (productId) {
+    return $http.post('/api/product/delete', {productId: productId});
   }
 };

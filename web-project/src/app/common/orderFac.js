@@ -15,6 +15,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.search = search;
   service.getCancel = getCancel;
   service.getPaidVerifiedOrder = getPaidVerifiedOrder;
+  service.cancelUnpaidOrder = cancelUnpaidOrder;
   return service;
 
   function submitOrder(order, customers) {
@@ -56,6 +57,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function cancelOrder(orderId) {
     return $http.post('/api/order/cancel', {id: orderId});
+  }
+
+  function cancelUnpaidOrder(orderId) {
+    return $http.post('/api/order/update', {id: orderId, status: lcConfig.orderStatus.CANCEL});
   }
 
   function revokeOrder(orderId, revoke) {

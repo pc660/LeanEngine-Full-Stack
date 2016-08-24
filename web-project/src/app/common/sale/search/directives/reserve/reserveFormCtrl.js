@@ -6,7 +6,6 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
   $scope.reserve = {};
   $scope.reserve.adult = adult;
   $scope.reserve.child = child;
-  $log.log(results);
   // Init.
   var keys = Object.keys(results);
   keys.sort();
@@ -17,8 +16,9 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
     var date = new Date(key);
     var dateString = date.getFullYear() + "年" + (date.getMonth() + 1)+ "月" + date.getDate() + "日";
     object.date = dateString;
-    object.adultCompanySalePrice = results[key].adultCompanySalePrice;
-    object.childCompanySalePrice = results[key].childCompanySalePrice;
+    object.price = results[key];
+    $log.log("price arrya");
+    $log.log(object);
     return object;
   });
   //$scope.reserve.date = $scope.priceArray[0].date;
@@ -40,8 +40,8 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
         result = $scope.priceArray[i];
       }
     }
-    $scope.reserve.adultCompanySalePrice = result.adultCompanySalePrice;
-    $scope.reserve.childCompanySalePrice = result.childCompanySalePrice;
+    $scope.reserve.price = result.price;
+    $log.log($scope.reserve);
     $uibModalInstance.close($scope.reserve);
   };
 };
