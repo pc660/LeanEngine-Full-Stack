@@ -14,7 +14,8 @@
   <div layout-align='start center' layout="row">
     <div class="label">城市:</div>
     <md-input-container>
-      <md-select class="margin" ng-if="isEditing"
+      <md-select class="margin"
+                 ng-if="isEditing"
                  ng-model="$parent.city">
         <md-option  ng-value="city.name" ng-repeat="city in cities">
           {{city.name}}
@@ -23,7 +24,7 @@
     </md-input-container>
     <p class="value" ng-if="!isEditing">{{ city }}</p>
   </div>
-  <div layout-align='start center' layout="row" ng-show="showCounty">
+  <!--div layout-align='start center' layout="row" ng-show="showCounty">
     <div  class="label">区县:</div>
     <md-input-container>
       <md-select class="margin" ng-if="isEditing"
@@ -34,8 +35,8 @@
       </md-select>
     </md-input-container>
     <p class="value" ng-if="!isEditing">{{ county }}</p>
-  </div>
-  <div layout="row" layout-align='start center' ng-show="showCounty">
+  </div-->
+  <div layout="row" layout-align='start center'>
     <div class="margin label">地址:</div>
     <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" name="address" type="text" ng-model="$parent.detail">
     <div ng-if="!isEditing">

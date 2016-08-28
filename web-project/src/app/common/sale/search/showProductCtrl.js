@@ -65,6 +65,7 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
 
 
   $scope.openReserveForm = (adult, child, date) => {
+    var price = $scope.priceMap[date];
     // Show the model with the result.
     var modalInstance = $uibModal.open({
       animation: true,
@@ -86,7 +87,6 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
       }
     });
     modalInstance.result.then(function (reserve) {
-      $log.log();
       $state.go('sale.add-order', {productId: $scope.product.objectId, product: $scope.product, reserve: reserve});
     }, function () {
     });
@@ -103,11 +103,10 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     if (price) {
       $log.log(price);
       if (price.adultCompanySalePrice) {
-        var adultCompanySalePrice = price.adultCompanySalePrice;
-        var adultCompanyCompetitorPrice = price.adultCompanyCompetitorPrice;
         $scope.priceMap[date] = price;
-        return '<p class="cal-price">' + "销售价: ￥" + adultCompanySalePrice + "</p>" +
-          '<p class="cal-price next">' + "同行价: ￥" + adultCompanyCompetitorPrice + "</p>";
+        return '<p class="cal-price">' + "销售价: ￥" + price.adultCompanySalePrice + "</p>" +
+          '<p class="cal-price next">' + "同行价: ￥" + price.adultCompanyCompetitorPrice + "</p>" +
+          '<p class="cal-price second">' + "余位: " + price.restPeopleNumber + "</p>";
       }
     }
     return "<p></p>";

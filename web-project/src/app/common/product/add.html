@@ -139,7 +139,7 @@
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <p ng-if="!isEditing">{{ product.tranxsportStandard }}</p>
+                <p ng-if="!isEditing">{{ product.transportStandard }}</p>
               </td>
             </tr>
             <tr>
@@ -183,7 +183,12 @@
             <tr>
               <td>出发地</td>
               <td>
-                <address is-editing="isEditing" show-county="false" ng-model="product.start"></address>
+                <address ng-if="isEditing" is-editing="isEditing" show-county="false" ng-model="product.start"></address>
+                <div ng-if="!isEditing">
+                  <p>{{ product.start.province }}</p>
+                  <p ng-if="product.start.city != '市辖区'">{{ product.start.city }}</p>
+                  <p>{{ product.start.detail }}</p>
+                </div>
               </td>
             </tr>
             <tr>
@@ -245,15 +250,6 @@
             <div class="item">
               <label>住宿信息</label>
               <input ng-disabled="!isEditing" type="text" ng-model="itineraryItem.hotelDetail">
-              <span>或同级</span>
-              <md-input-container ng-if="isEditing">
-                <md-select ng-model="itineraryItem.hotel">
-                  <md-option ng-selected="$first" ng-value="hotel" ng-repeat="hotel in hotels">
-                    {{hotel}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <p ng-if="!isEditing">{{ itineraryItem.hotel }}</p>
             </div>
             <div class="item">
               <label>餐饮信息</label>

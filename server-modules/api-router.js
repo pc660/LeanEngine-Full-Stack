@@ -86,9 +86,7 @@ router.post('/auth/authenticate', passport.authenticate('login', { failWithError
   }, function(err, req, res, next) {
     tool.l(err);
     tool.l("login failed");
-    res.status(401).send({
-      message: 'login failed'
-    });
+    res.status(404).send(error);
   });
 
 function isLoggedIn(req, res, next) {

@@ -11,10 +11,6 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   $scope.search = () => {
     var query = $scope.query;
     // TODO: have to fix this. Do a real query.
-    /*
-    orderFac.search(query).then(function(results) {
-      $scope.setOrder(results);
-    })*/
     if (!query) {
       return;
     }
@@ -53,13 +49,17 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   };
 
   $scope.setOrder = (results) => {
+    $log.log(results);
     $scope.orders = results.order;
     for (var i = 0; i < $scope.orders.length; i++) {
       var product = results.product[i];
+      var provider = results.provider[i];
       if (product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
         $scope.orders[i].product = product;
+        $scope.orders[i].provider = provider;
       }
+
     }
     $scope.orders.forEach(function(order) {
       if (order.confirmFile) {
@@ -109,13 +109,14 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     });
   };
 
-  $scope.showDetail = (orderId) => {
-    $state.go('sale.show-order-detail', {orderId: orderId });
+  $scope.showDetail = (order) => {
+    $state.go('sale.show-order-detail', {orderId: orderId, isEditign: false});
   };
 
-  $scope.paid = (orderId) => {
-    orderFac.orderGetPaid(orderId).then(function() {
-      SweetAlert.swal("订单付款成功成功", "订单编号: " + orderId, "success");
+  $scope.paid = (order) => {
+    orderFac.update(order, lcConfig.orderStatus.PAID).then(function(result) {
+      SweetAlert.swal("订单付款成功成功", "success");
+      order.status = result.status;
     });
   };
 
@@ -125,21 +126,23 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   $scope.printReceipt = () => {
   };
 
-  $scope.cancelOrder = (orderId) => {
+  $scope.cancelOrder = (order) => {
+    $log.log(order);
+    var orderId = order.objectId;
     orderFac.cancelOrder(orderId).then(function(result) {
-      SweetAlert.swal("订单取消成功", "请稍后与平台确认", "success");
+      SweetAlert.swal("订单取消成功", "请稍后与分销商确认", "success");
+      order.status = result.status;
     }, function(error){
 
     });
   };
 
   $scope.showContact = (order) => {
-    $log.log(order);
     userFac.showContact(order);
   };
 
-  $scope.applyRevoke = (orderId) => {
-
+  $scope.applyRevoke = (order) => {
+    var orderId = order.objectId;
     var modalInstance = $uibModal.open({
       animation: true,
       templateUrl: 'app/common/sale/order/apply_revoke.html',
@@ -156,28 +159,13 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     }, function () {
       $log.log("return error");
     });
-
-
-    /*
-    orderFac.revokeOrder(orderId, lcConfig.orderStatus.REVOKE).then(function(result) {
-      SweetAlert.swal("订单申请退款成功", "请稍后与分销商确认", "success");
-    }, function(error){
-
-    });*/
   };
 
-  /*
-  $scope.cancelRevoke = () => {
-    $uibModalInstance.dismiss('cancel');
-  };
-
-  $scope.revokeOrder = (revoke) => {
-    $uibModalInstance.close();
-  };*/
-
-  $scope.applyCancel = (orderId) => {
+  $scope.applyCancel = (order) => {
+    var orderId = order.objectId;
     orderFac.cancelUnpaidOrder(orderId, {reason: "未付款请求取消"}).then(function(result) {
-      SweetAlert.swal("订单取消成功", "请稍后与分销商确认", "success");
+      SweetAlert.swal("订单取消成功", "请稍后与平台方确认", "success");
+      order.status = result.status;
     }, function(error){
 
     });
@@ -190,25 +178,28 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     });
   };
 
-  $scope.confirmRevoke = (orderId) => {
-    $scope.cancelOrder(orderId);
+  $scope.confirmRevoke = (order) => {
+    $scope.cancelOrder(order);
   };
 
-  $scope.verifyUnpaid = (orderId) => {
-    orderFac.verify(orderId, lcConfig.orderStatus.UNPAID_VERIFIED).then(function(results) {
+  $scope.verifyUnpaid = (order) => {
+    orderFac.update(order, lcConfig.orderStatus.UNPAID_VERIFIED).then(function(result) {
       SweetAlert.swal("订单预审成功", "请通知分销商付款", "success");
+      order.status = result.status;
     });
   };
 
-  $scope.verifyPaid = (orderId) => {
-    orderFac.verify(orderId, lcConfig.orderStatus.PAID_VERIFIED).then(function(results) {
+  $scope.verifyPaid = (order) => {
+    orderFac.update(order, lcConfig.orderStatus.PAID_VERIFIED).then(function(result) {
       SweetAlert.swal("订单付款审核通过", "请刷新网页", "success");
+      order.status = result.status;
     });
   };
 
-  $scope.verifyFinished = (orderId) => {
-    orderFac.verify(orderId, lcConfig.orderStatus.FINISHED).then(function(results) {
+  $scope.verifyFinished = (order) => {
+    orderFac.update(order, lcConfig.orderStatus.FINISHED).then(function(result) {
       SweetAlert.swal("订单已经完成", "请刷新网页", "success");
+      order.status = result.status;
     });
   };
 
@@ -217,5 +208,9 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
       $log.log(results);
       $scope.setOrder(results);
     });
+  };
+
+  $scope.editOrder = (orderId) => {
+    $state.go('sale.show-order-detail', {orderId: orderId, isEditing: true});
   };
 };

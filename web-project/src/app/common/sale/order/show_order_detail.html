@@ -23,15 +23,15 @@
   </tr>
   <tr>
     <td>姓名</td>
-    <td colspan="99">{{ order.product.platformcontact.contactname }}</td>
+    <td colspan="99">{{ product.platformcontact.contactname }}</td>
   </tr>
   <tr>
     <td>电话</td>
-    <td colspan="99">{{ order.product.platformcontact.cellphone }}</td>
+    <td colspan="99">{{ product.platformcontact.cellphone }}</td>
   </tr>
   <tr>
     <td>邮箱</td>
-    <td colspan="99">{{ order.product.platformcontact.email }}</td>
+    <td colspan="99">{{ product.platformcontact.email }}</td>
   </tr>
   <tr>
     <td colspan="99" class="title">
@@ -49,8 +49,8 @@
     <td>{{ order.objectId }}</td>
     <td>
       <p>
-        <span ng-repeat="prefix in order.product.prefixArray">[{{ prefix }}]</span>
-        {{ order.product.fullName }}
+        <span ng-repeat="prefix in product.prefixArray">[{{ prefix }}]</span>
+        {{ product.fullName }}
       </p>
     </td>
     <td>上海</td>
@@ -60,9 +60,11 @@
       <span>儿童: {{ order.child }}人</span>
     </td>
     <td>
-      <p ng-if="level != 3">结算价<strong>￥{{ order.adult * order.price.adultCompanyPrice + order.child * order.price.childCompanyPrice }}</strong></p>
-      <p ng-if="level != 2">销售价<strong>￥{{ order.adult * order.price.adultCompanySalePrice + order.child * order.price.childCompanySalePrice }}</strong></p>
-      <p ng-if="level != 2">同行价<strong>￥{{ order.adult * order.price.adultCompanyCompetitorPrice + order.child * order.price.childCompanyCompetitorPrice }}</strong></p>
+      <p ng-if="level == 3 || level == 0 || level == 2">结算价<strong>￥{{ order.adult * order.price.adultCompanyPrice + order.child * order.price.childCompanyPrice }}</strong></p>
+      <br>
+      <p ng-if="level == 3 || level == 0 || level == 1">销售价<strong>￥{{ order.adult * order.price.adultCompanySalePrice + order.child * order.price.childCompanySalePrice }}</strong></p>
+      <br>
+      <p ng-if="level == 3 || level == 2 || level == 1">同行价<strong>￥{{ order.adult * order.price.adultCompanyCompetitorPrice + order.child * order.price.childCompanyCompetitorPrice }}</strong></p>
     </td>
   </tr>
   <tr>
@@ -71,21 +73,24 @@
     </td>
   </tr>
   <tr>
-    <td>姓名</td>
-    <td>客户类型</td>
-    <td>证件类型</td>
-    <td>证件号码</td>
-    <td>性别</td>
-    <td>出生日期</td>
-    <td>备注信息</td>
+    <th>姓名</th>
+    <th>类型</th>
+    <th>性别</th>
+    <th>证件类型</th>
+    <th>证件号码</th>
+    <th>手机</th>
+    <th>出生日期</th>
+    <th>备注</th>
   </tr>
-  <tr ng-repeat="customer in order.customers">
+  <tr ng-if="!isEditing" ng-repeat="customer in order.customers">
     <td>
-      <span>{{ customer.name }}</span>
-      <span>手机：{{ customer.cellphone }}</span>
+      {{ customer.name }}
     </td>
     <td>
       {{ customer.type }}
+    </td>
+    <td>
+      {{ customer.sex }}
     </td>
     <td>
       {{ customer.license }}
@@ -94,7 +99,7 @@
       {{ customer.licenseNumber }}
     </td>
     <td>
-      {{ customer.sex }}
+      {{ customer.cellphone }}
     </td>
     <td>
       {{ customer.birthDate }}
@@ -102,6 +107,66 @@
     <td>
       <p ng-if="customer.needShare">需要拼房</p>
       <p ng-if="customer.needVisa">需要签证</p>
+    </td>
+  </tr>
+  <tr ng-if="isEditing" ng-repeat="customer in order.customers">
+    <td><input type="text" ng-model="customer.name"></td>
+    <td>
+      <md-input-container>
+        <md-select ng-model="customer.type">
+          <md-option ng-value="type"
+                     ng-repeat="type in types">
+            {{ type }}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </td>
+    <td>
+      <md-input-container>
+        <md-select ng-model="customer.sex">
+          <md-option ng-value="sex"
+                     ng-repeat="sex in sexList">
+            {{ sex }}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </td>
+    <td>
+      <md-input-container>
+        <md-select ng-model="customer.license">
+          <md-option ng-value="license"
+                     ng-repeat="license in licenseList">
+            {{ license }}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </td>
+    <td>
+      <input type="text" ng-model="customer.licenseNumber">
+    </td>
+    <td>
+      <input type="text" ng-model="customer.cellphone">
+    </td>
+    <td class="birthDate">
+      <input
+        ng-model="customer.birthDate"
+        type="text"
+        data-date-type="string"
+        data-model-date-format="mediumDate"
+        bs-datepicker
+        data-date-format="mediumDate"
+        container="body"
+        data-autoclose="true">
+    </td>
+    <td class="extra">
+      <div>
+        <input type="checkbox" ng-model="customer.needVisa">
+        需要办签
+      </div>
+      <div>
+        <input type="checkbox" ng-model="customer.needShare">
+        需要拼房
+      </div>
     </td>
   </tr>
   <tr ng-if="order.revoke">
@@ -122,3 +187,8 @@
     <td colspan="99">{{ order.revoke.phone }}</td>
   </tr>
 </table>
+<div ng-if="isEditing" class="center">
+  <md-button class="md-raised md-primary" ng-click="changeOrder();">
+    修改订单
+  </md-button>
+</div>

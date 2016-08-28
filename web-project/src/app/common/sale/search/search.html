@@ -53,16 +53,7 @@
       </div>
     </td>
   </tr>
-  <tr>
-    <td>供应商</td>
-    <td>
-      <div class="selectable">
-        <span class="unlimited" ng-class="{'selected-tag': index['供应商'] == -1}" ng-click="pick('供应商', -1)">不限</span>
-        <span class="unlimited" ng-class="{'selected-tag': $index==index['供应商']}" ng-click="pick('供应商', $index)"
-              ng-repeat="provider in tags['供应商'] track by $index">{{ provider }}</span>
-      </div>
-    </td>
-  </tr>
+k
   <tr class="selectable">
     <td>酒店星级</td>
     <td>
@@ -121,7 +112,6 @@
       </div>
       <div class="metadata">
         <span>线路编号：{{ product.objectId }}</span>
-        <span>供应商：{{ product.provider.companyname }}</span>
       </div>
     </div>
     <div class="right">

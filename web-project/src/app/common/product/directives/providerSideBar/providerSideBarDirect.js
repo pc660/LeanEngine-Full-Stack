@@ -29,8 +29,8 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
       scope.getProviderList = () => {
         var query = {};
         var level = authFac.getUserLevel();
-        // ADMIN
-        if (level === 0) {
+        // ADMIN or 计调员.
+        if (level === 0 || level == 3) {
           providerFac.getProvider(query)
             .then(function(results) {
               for (var i = 0; i < results.providers.length; i++) {

@@ -73,6 +73,9 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
     orderFac.submitOrder($scope.order, $scope.reserve).then(function(result) {
       $log.log("success");
       SweetAlert.swal("订单成功", "订单编号: " + result.objectId + " 请及时联系平台负责人确认订单情况.", "success");
+      $state.go("sale");
+    }, function(error) {
+      SweetAlert.swal("订单添加失败", "请联系计调员确认是否有余位", "warning");
     });
   };
 };

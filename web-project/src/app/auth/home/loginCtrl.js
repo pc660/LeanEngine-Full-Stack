@@ -1,5 +1,5 @@
 
-export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSer, helloSer, authFac) => {
+export default (SweetAlert, errorFac, lcConfig, $location, $scope, $window, $log, commonSer, helloSer, authFac) => {
   'ngInject';
 
   $log.log("getting levels");
@@ -37,7 +37,8 @@ export default (SweetAlert, lcConfig, $location, $scope, $window, $log, commonSe
     authFac.register($scope.username, $scope.password, $scope.level, $scope.email, $scope.contactname, $scope.cellphone).then(function() {
       SweetAlert.swal("账号注册成功", "请保存这条信息,并告知对方.账号: " + $scope.username + " 密码: " + $scope.password, "success");
     }, function(error) {
-      SweetAlert.swal("注册失败", "请查看注册信息是否正确(邮箱)", "warning");
+      $log.log(error.code);
+      SweetAlert.swal("注册失败", "错误信息: " + errorFac.getErrorMessage(error.code), "warning");
     });
   };
 

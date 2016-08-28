@@ -1238,8 +1238,6 @@
                                     <wx:font wx:val="宋体"/>
                                 </w:rPr>
                                 <w:t tal:content="self.itRow.hotelDetail">{{ itinerary.hotelDetail }}</w:t>
-                                <w:t tal:content="string: 或同级: ${self.itRow.hotel}">或同级 {{ itinerary.hotel }}</w:t>
-                              
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
                                 <w:br/>

@@ -84,6 +84,7 @@ import customerFac from './common/customerFac';
 import userFac from './common/userFac';
 import orderFac from './common/orderFac';
 import testFac from './test/testFac';
+import errorFac from './common/errorFac';
 
 // Testing util
 import fakeDataFac from './test/addFakeDataFac';
@@ -170,6 +171,8 @@ angular.module('webProject',
   .factory('customerFac', customerFac)
   .factory('userFac', userFac)
   .factory('orderFac', orderFac)
+  .factory('errorFac', errorFac)
+
   // testing
   .factory('fakeDataFac', fakeDataFac)
   .factory('testFac', testFac)

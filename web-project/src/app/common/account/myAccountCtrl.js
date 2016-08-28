@@ -45,6 +45,8 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
       $scope.products = results.products;
       for (var i = 0; i < $scope.products.length; i++) {
         $scope.products[i].responsible = results.responsible[i];
+        productFac.getLatestTrip($scope.products[i]);
+        $log.log($scope.products[i]);
       }
     }, function(error) {
     });
@@ -59,6 +61,7 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
       $scope.products = results.products;
       for (var i = 0; i < $scope.products.length; i++) {
         $scope.products[i].responsible = results.responsible[i];
+        productFac.getLatestTrip($scope.products[i]);
       }
     }, function(error) {
     });

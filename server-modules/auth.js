@@ -44,12 +44,10 @@ pub.register = (req, res) => {
   user.set("cellphone", cellphone);
   user.signUp().then(function(user) {
     tool.l('success')
-    res.send({
-      code: "200"
-    });
+    res.send();
     }, function(error) {
-      tool.l('error')
-      res.send(404);
+      tool.l(error);
+      res.status(404).send(error);
     });
 };
 

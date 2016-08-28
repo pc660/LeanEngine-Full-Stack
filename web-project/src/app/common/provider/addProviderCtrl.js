@@ -35,6 +35,7 @@ export default (SweetAlert, $state, $log,$rootScope, $scope, $document, $timeout
       $log.log($scope.provider);
       providerFac.upload($scope.provider).then(function(result) {
         SweetAlert.swal("注册商添加成功", " 请到我的账号中我发布的产品去查看更新.", "success");
+        $state.go("home");
       }, function(error) {
 
       });

@@ -75,6 +75,9 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       url: '/show-order-detail/:orderId',
       templateUrl: 'app/common/sale/order/show_order_detail.html',
       controller: 'showOrderDetailCtrl',
+      params: {
+        isEditing: false,
+      },
       authenticate: [lcConfig.userLevel.SALE],
     })
     .state('sale.show-itinerary', {

@@ -13,9 +13,8 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
       $scope.product.contact = result.contact;
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.prefixArray = productFac.convertProductPrefix(result.product.prefix);
-      $scope.$broadcast("calendarUpdate", {price: $scope.product.price});
-      $scope.$broadcast("addressUpdate", {address: $scope.product.start});
       $scope.$broadcast("updateMaterialCalendar");
+      $log.log("get product detail");
       $log.log($scope.product);
       $scope.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
     }, function(error) {
@@ -29,7 +28,6 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
   };
 
   $scope.setDayContent = (date) => {
-    $log.log("set date content");
     return productFac.setDayContent(date, $scope.product);
   };
 
@@ -50,15 +48,7 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
     providerFac.getReturnPolicyDetail(id)
       .then(function(result) {
         $scope.pickedProviders[index].returnPolicy = providerFac.util.getReturnPolicy(result);
-        $log.log(result);
       }, function(error) {
       });
   }
-
-
-  $scope.setStorageContent = (date) => {
-    $log.log("setStorageContent now");
-    return "<div>123</div>"
-    //return productFac.setStorageContent(date, $scope.product);
-  };
 };

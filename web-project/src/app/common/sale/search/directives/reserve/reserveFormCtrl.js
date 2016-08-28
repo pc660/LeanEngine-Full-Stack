@@ -40,6 +40,12 @@ export default (SweetAlert, $scope, $log, $window, $uibModalInstance, results, a
         result = $scope.priceArray[i];
       }
     }
+
+    if (result.price.restPeopleNumber < $scope.reserve.adult + $scope.reserve.child) {
+      SweetAlert.swal("产品没有余位", "请联系计调", "warning");
+      return;
+    }
+
     $scope.reserve.price = result.price;
     $log.log($scope.reserve);
     $uibModalInstance.close($scope.reserve);

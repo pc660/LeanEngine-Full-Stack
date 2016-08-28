@@ -197,18 +197,18 @@ providerApi.get = (req, res) => {
   var body = req.body;
   var queryParameters = body.query;
   var query = new AV.Query('Provider');
-  query.limit(LIMIT);
-  /*
+  /*query.limit(LIMIT);
+
   if (queryParameters.index !== undefined) {
     var index = parseInt(queryParameters.index);
     query.skip(index * LIMIT);
     delete queryParameters.index;
-  }
+  }*/
 
   for (var key in queryParameters) {
     tool.l(key);
     query.equalTo(key, queryParameters[key]);
-  }*/
+  }
 
   query.find().then(function(results) {
     tool.l('Successfully retrieved ' + results.length + ' posts.');

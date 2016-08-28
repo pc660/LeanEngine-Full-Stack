@@ -7,15 +7,15 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getPaidOrder = getPaidOrder;
   service.getFinishedOrder = getFinishedOrder;
   service.getOrder = getOrder;
-  service.orderGetPaid = orderGetPaid;
   service.cancelOrder = cancelOrder;
   service.revokeOrder = revokeOrder;
   service.getRevoke = getRevoke;
-  service.verify = verify;
+  service.update = update;
   service.search = search;
   service.getCancel = getCancel;
   service.getPaidVerifiedOrder = getPaidVerifiedOrder;
   service.cancelUnpaidOrder = cancelUnpaidOrder;
+  service.updateCustomerInfo = updateCustomerInfo;
   return service;
 
   function submitOrder(order, customers) {
@@ -23,8 +23,8 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     return $http.post('/api/order/add', {order: order, customers: customers});
   }
 
-  function orderGetPaid(orderId) {
-    return $http.post('/api/order/update', {orderId: orderId, status: lcConfig.orderStatus.PAID});
+  function updateCustomerInfo(order) {
+    return $http.post('/api/order/update', {id: order.objectId, customers: order.customers});
   }
 
   function getAllOrder(admin) {
@@ -71,8 +71,8 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     return $http.post('/api/order/getAll', {status: lcConfig.orderStatus.REVOKE, admin: admin});
   }
 
-  function verify(orderId, status) {
-    return $http.post('/api/order/verify', {id: orderId, status: status});
+  function update(order, status) {
+    return $http.post('/api/order/update', {id: order.objectId, status: status});
   }
 
   function search(query) {

@@ -34,7 +34,12 @@
             <tr>
               <td>地址</td>
               <td>
-                <address show-county=true is-editing="isEditing" ng-model="provider.address"></address>
+                <address ng-if="isEditing" is-editing="isEditing" ng-model="provider.address"></address>
+                <div ng-if="!isEditing">
+                  <p>{{ provider.address.province }}</p>
+                  <p ng-if="provider.address.city != '市辖区'">{{ provider.address.city }}</p>
+                  <p>{{ provider.address.detail }}</p>
+                </div>
               </td>
             </tr>
             <!--<tr provider-address></tr>-->
@@ -52,84 +57,92 @@
                 </div>
               </td>
             </tr>
-            <tr ng-if="!provider.objectId">
+            <tr ng-if="!provider.objectId && isEditing">
               <td colspan="2" class="title">
                 联系信息
               </td>
             </tr>
-            <tr ng-if="!provider.objectId">
+            <tr ng-if="!provider.objectId && isEditing">
               <td>
                 姓名
               </td>
               <td>
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.contactname"></text-field>
-                <div ng-if="!isEditing && !showing">
-                  {{ provider.contactname }}
-                </div>
-                <md-select ng-show=!isEditing && showing"" ng-model="contactperson">
-                  <md-option ng-selected="$first" ng-value="contact" ng-repeat="contact in contactList">
+                <md-select ng-if="!isEditing" ng-model="contactperson">
+                  <md-option  ng-selected="$first" ng-value="contact" ng-repeat="contact in contactList">
                     {{contact.contactname}}
                   </md-option>
                 </md-select>
               </td>
             </tr>
-            <tr ng-if="!provider.objectId">
+            <tr ng-if="!provider.objectId && isEditing">
               <td>
                 座机
               </td>
               <td>
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.homephone"></text-field>
                 <div ng-if="!isEditing">
-                  {{ provider.homephone }}
-                </div>
-                <div ng-if="!isEditing" && showing>
                   {{ contactperson.homephone }}
                 </div>
               </td>
             </tr>
-            <tr ng-if="!provider.objectId">
+            <tr ng-if="!provider.objectId && isEditing">
               <td>
                 手机
               </td>
               <td>
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.cellphone"></text-field>
                 <div ng-if="!isEditing">
-                  {{ provider.cellphone }}
-                </div>
-                <div ng-if="!isEditing" && showing>
                   {{ contactperson.cellphone }}
                 </div>
               </td>
             </tr>
-            <tr ng-if="!provider.objectId">
+            <tr ng-if="!provider.objectId && isEditing">
               <td>
                 QQ号
               </td>
               <td>
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.qqnumber"></text-field>
                 <div ng-if="!isEditing">
-                  {{ provider.qqnumber }}
-                </div>
-                <div ng-if="!isEditing" && showing>
                   {{ contactperson.qqnumber }}
                 </div>
               </td>
             </tr>
-            <tr ng-if="!provider.objectId">
+            <tr ng-if="!provider.objectId && isEditing"q>
               <td>
                 微信号
               </td>
               <td>
                 <text-field ng-if="isEditing" is-editing="isEditing" ng-model="provider.wechat"></text-field>
                 <div ng-if="!isEditing">
-                  {{ provider.wechat }}
-                </div>
-                <div ng-if="!isEditing" && showing>
                   {{ contactperson.wechat }}
                 </div>
               </td>
             </tr>
           </tbody>
+        </table>
+        <table ng-if="!isEditing">
+          <tr>
+            <td colspan="99" class="title">
+              联系信息
+            </td>
+          </tr>
+          <tr>
+            <th>姓名</th>
+            <th>手机</th>
+            <th>座机</th>
+            <th>职位</th>
+            <th>QQ</th>
+            <th>微信</th>
+          </tr>
+          <tr ng-repeat="contact in contactList">
+            <td>{{ contact.contactname }}</td>
+            <td>{{ contact.cellphone }}</td>
+            <td>{{ contact.homephone }}</td>
+            <td>{{ contact.position }}</td>
+            <td>{{ contact.qqnumber }}</td>
+            <td>{{ contact.wechat }}</td>
+          </tr>
         </table>
         <div class="submit">
           <md-button class="md-raised md-primary" ng-if="!confirmed" ng-click="confirm();">

@@ -18,6 +18,7 @@ export default ($log, $scope, $state, $window, lcConfig, productFac) => {
       $scope.products.forEach(function(product, index) {
         product.responsible.contactname = results.contactname[index];
         productFac.getLatestTrip(product);
+        $log.log(product);
       });
     }, function(error) {
     });
