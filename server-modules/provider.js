@@ -204,6 +204,9 @@ providerApi.get = (req, res) => {
     query.skip(index * LIMIT);
     delete queryParameters.index;
   }*/
+  if (queryParameters.index !== undefined) {
+    delete queryParameters.index;
+  }
 
   for (var key in queryParameters) {
     tool.l(key);
