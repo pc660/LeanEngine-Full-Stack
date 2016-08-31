@@ -34,12 +34,8 @@
             <tr>
               <td>地址</td>
               <td>
-                <address ng-if="isEditing" is-editing="isEditing" ng-model="provider.address"></address>
-                <div ng-if="!isEditing">
-                  <p>{{ provider.address.province }}</p>
-                  <p ng-if="provider.address.city != '市辖区'">{{ provider.address.city }}</p>
-                  <p>{{ provider.address.detail }}</p>
-                </div>
+                <input ng-if="isEditing" type="text" ng-model="provider.address">
+                <p ng-if="!isEditing">{{ provider.address }}</p>
               </td>
             </tr>
             <!--<tr provider-address></tr>-->

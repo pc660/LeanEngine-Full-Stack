@@ -2,6 +2,7 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
+  $log.log("fucking doing this");
   $scope.isEditing = false;
   $scope.product = {};
   productFac.getProductDetail($stateParams.productId)
@@ -14,8 +15,6 @@ export default ($sce, $log, $scope, $window, $stateParams, productFac, providerF
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.prefixArray = productFac.convertProductPrefix(result.product.prefix);
       $scope.$broadcast("updateMaterialCalendar");
-      $log.log("get product detail");
-      $log.log($scope.product);
       $scope.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);
     }, function(error) {
       // TODO: handle failure.

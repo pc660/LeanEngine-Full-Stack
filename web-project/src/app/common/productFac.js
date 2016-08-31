@@ -99,6 +99,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function getLatestTrip(product) {
     $log.log("getLatestTrip");
+    $log.log(product);
     var price = product.price;
     var date = new Date();
     date.setDate(date.getDate() + product.stopDay);
@@ -188,10 +189,13 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     var month = date.getMonth();
     var day = date.getDate();
     var price = getPrice(year, month, day, product);
+    $log.log(year);
+    $log.log(month);
+    $log.log(day);
+    $log.log("=======");
+    $log.log(date);
+    $log.log(price);
     if (price && Object.keys(price).length > 3) {
-      $log.log("updating price");
-      $log.log(price);
-      $log.log(Object.keys(price).length);
       var content = {};
       content["同行"] = "¥" + price.adultCompanyCompetitorPrice || "";
       content["销售"] = "¥" + price.adultCompanySalePrice || "";
@@ -208,7 +212,8 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   function getPrice(year, month, day, product) {
-
+    $log.log("get product in price");
+    $log.log(product);
     var price = product.price || {};
     price = price[year] || {};
     price = price[month] || {};

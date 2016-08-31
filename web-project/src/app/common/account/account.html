@@ -156,22 +156,7 @@
                 <tr>
                   <td>地址</td>
                   <td>
-                    <div layout="row">
-                      <span>省:</span>
-                      <span>{{ currentProvider.address.province }}</span>
-                    </div>
-                    <div layout="row">
-                      <span>市:</span>
-                      <span>{{ currentProvider.address.city }}</span>
-                    </div>
-                    <div layout="row" ng-if="provider.address.county">
-                      <span>区:</span>
-                      <span>{{ currentProvider.address.county }}</span>
-                    </div>
-                    <div layout="row" ng-if="provider.address.detail">
-                      <span>地址:</span>
-                      <span>{{ currentProvider.address.detail }}</span>
-                    </div>
+                    {{ provider.address }}
                   </td>
                 </tr>
                 <tr>

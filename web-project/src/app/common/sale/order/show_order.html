@@ -116,7 +116,17 @@
           <td>
             <div>
               <div>订单来源： {{ order.contactname }}</div>
-              <a>
+              <a ng-if="level == 1"
+                 target="_blank"
+                 ui-sref="sale.show-product({productId: '{{order.product.objectId}}' })"
+                 ui-sref-opts="{ absolute: true }">
+                <span ng-repeat="prefix in order.product.prefixArray track by $index">[{{ prefix }}]</span>
+                {{ order.product.fullName }}
+              </a>
+              <a ng-if="level != 1"
+                 target="_blank"
+                 ui-sref="home.show-product-detail({productId: '{{order.product.objectId}}' })"
+                 ui-sref-opts="{ absolute: true }">
                 <span ng-repeat="prefix in order.product.prefixArray track by $index">[{{ prefix }}]</span>
                 {{ order.product.fullName }}
               </a>

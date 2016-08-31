@@ -12,10 +12,10 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
     require: "ngModel",
     link: function(scope, element, attr, ctrl) {
       scope.$watch("model", function(value) {
-        $log.log("value updates");
-        $log.log(scope.model);
+        // Copy the model first.
+        var newModel = angular.copy(scope.model);
         if (scope.model) {
-          scope.setEvents();
+          scope.setEvents(newModel);
           // Set the right events.
         }
       });
@@ -179,15 +179,6 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
         scope.allDayEvents[index] = {};
       };
 
-      // TODO: This performance might be bad. I don't know.
-      scope.$watch("allEvents", function(value) {
-        scope.model = value;
-      }, true);
-
-      scope.$on("calendarUpdate", function(event, parameter) {
-        scope.allEvents = parameter.price;
-        scope.init();
-      });
       /**
       * Create an empty event from titles.
       * The title should have the following format.
@@ -216,19 +207,16 @@ export default ($rootScope, $uibModal, $log, $state, $window, calendarConfig) =>
         return days[index];
       }
 
-      scope.setEvents = () => {
-        $log.log("set events");
-        $log.log(scope.model);
-        for (var year in scope.model) {
+      scope.setEvents = (newModel) => {
+        for (var year in newModel) {
           $log.log("getting year");
-          var monthEvents = scope.model[year];
+          var monthEvents = newModel[year];
           $log.log(monthEvents);
           for (var i = 0; i < 12; i++) {
             $log.log(i)
             if (! (i in monthEvents)) {
               continue;
             }
-            $log.log("getting date");
             var dayEvents = monthEvents[i];
             for (var j = 1; j <= 31; j++) {
               // TOO HACKY!
