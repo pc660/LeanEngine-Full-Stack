@@ -1,5 +1,7 @@
-var Globals = {
+const AV = require('leanengine');
+
+var global = {
   "usersMap": {},
 }
 
-module.exports = Globals;
+module.exports = global;

@@ -6,6 +6,7 @@ var swig  = require('swig');
 const AV = require('leanengine');
 const tool = require('./tool');
 var productApi = {};
+const global = require('./global');
 const config = require('./config');
 const userApi = require('./user');
 const tal = require('template-tal');
@@ -70,25 +71,26 @@ function setProduct(productAV, product) {
 
 productApi.add = (req, res) => {
   tool.l('product.add');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.add");
+  log.set("data", {"product": req.body.product});
+  log.set("user", req.user);
+  log.save();
   var user = req.user;
-  //if (!user) {
-  //  res.send(404);
-  //  return;
-  //}
+  if (!user) {
+    tool.e("user is undefined when product.add");
+    res.send(404);
+    return;
+  }
   var product = req.body.product;
   var productAV = {};
   if (product.objectId) {
-    tool.l("existing product");
     var productAV =  AV.Object.createWithoutData('Product', product.objectId);
   } else {
-    tool.l("new product");
     var productAV = AV.Object.new('Product');
     productAV.set("createdBy",  user);
   }
-  // TODO: Maybe we should use a for loop.
   setProduct(productAV, product);
-
-  tool.l("save");
 
   productAV.save().then(function(productResult) {
       tool.l("success");
@@ -102,13 +104,7 @@ productApi.add = (req, res) => {
 
       generateItinerary(params, productResult);
   }, function(error) {
-    // 失败
-    tool.l(error);
-      tool.l("fail");
-      res.send({
-        message: error.message,
-        code: error.code,
-      });
+      res.send(error);
     });
 };
 
@@ -173,24 +169,16 @@ productApi.constructItinerayParams = (product) => {
 // TODO: Maybe use different prices.
 productApi.parsePriceMap = (priceMap, duration) => {
   var priceArray = [];
-  tool.l(priceMap);
   for (var year in priceMap) {
     var yearEvents = priceMap[year];
     for (var month in yearEvents) {
       var monthEvents = yearEvents[month];
       for (var day in monthEvents) {
         var price = monthEvents[day];
-        tool.l("testing");
-        tool.l(price);
         if (price && Object.keys(price).length > 0) {
-          tool.l(year);
-          tool.l(month);
-          tool.l(day);
           var priceObject = {};
           var date = new Date(year, month, day);
-          tool.l(date);
           var startDate = year + "年" + (parseInt(month) + 1) + "月" + day + "日";
-          tool.l(startDate);
           var endDate = new Date(year, month, day);
           endDate.setDate(endDate.getDate() + parseInt(duration));
           var endDate = year + "年" + (parseInt(month) + 1) + "月" + endDate.getDate() + "日";
@@ -198,22 +186,24 @@ productApi.parsePriceMap = (priceMap, duration) => {
           priceObject.endDate = endDate;
           priceObject.adultCompanySalePrice = price.adultCompanySalePrice;
           priceObject.childCompanySalePrice = price.childCompanySalePrice;
-          tool.l(priceObject);
           priceArray.push(priceObject);
         }
       }
     }
   }
-  tool.l(priceArray);
   return priceArray;
 };
 
 productApi.getAll = (req, res) => {
   tool.l('product.getAll');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.getAll");
+  log.set("data", {"status": req.body.status});
+  log.set("user", req.user);
+  log.save();
   var query = new AV.Query('Product');
   var status = req.body.status;
 
-  tool.l(status);
   if (status) {
     switch(status) {
       case 1:
@@ -238,12 +228,17 @@ productApi.getAll = (req, res) => {
     });
     res.send({products: products, contactname: contactname});
     }, function(error) {
-      console.log('Error: ' + error.code + ' ' + error.message);
+      res.send(error);
     });
 };
 
 productApi.get = (req, res) => {
   tool.l('product.get');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.get");
+  log.set("data", {"id": req.body.id});
+  log.set("user", req.user);
+  log.save();
   var product = AV.Object.new('Product');
   product.id = req.body.id;
   var query = new AV.Query('Product');
@@ -254,8 +249,6 @@ productApi.get = (req, res) => {
    if (results.length == 1) {
      var product = results[0];
      // Fetch other information.
-     tool.l(product.get("contact"));
-     tool.l(product.get("price"));
      res.send({product: product, provider: product.get("provider"),
        contact: product.get("contact"), platformcontact: product.get("platformcontact"),
        responsible:  product.get("responsible")});
@@ -268,16 +261,21 @@ productApi.get = (req, res) => {
 
 productApi.search = (req, res) => {
   tool.l('product.search');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.search");
+  log.set("data", {"query": req.body.query});
+  log.set("user", req.user);
+  log.save();
   var query = new AV.Query('Product');
   var params = req.body.query;
   // Must login and do stuff.
   tool.l(params);
   // TODO: uncomment this.
   var user = userApi.getCurrentUser(req);
-  /*if (!user) {
+  if (!user) {
    res.status(404).send();
    return;
-   }*/
+   }
 
   // Some special handling for search params.
   if (params.self) {
@@ -290,7 +288,6 @@ productApi.search = (req, res) => {
 
   // Check all query parameters.
   for (var key in params) {
-    tool.l(key);
     switch (key) {
       case "hotelStandard":
         query.equalTo("hotelStandard", params["hotelStandard"]);
@@ -331,7 +328,6 @@ productApi.search = (req, res) => {
   // TODO: add start date.
   // TODO: add days.
   Promise.all(queries).then(function (results) {
-    tool.l(results[0].length);
     var searchResultSet = {};
     // If there is no search query.
     if (results.length > 1) {
@@ -347,7 +343,6 @@ productApi.search = (req, res) => {
       }
       return false;
     });
-    tool.l('Successfully retrieved ' + products.length);
     // Need to check min date and max date.
     if (params.startDate || params.endDate) {
       var filterProducts = [];
@@ -361,7 +356,6 @@ productApi.search = (req, res) => {
     }
 
     if (params.start) {
-      tool.l("start");
       filterProducts = [];
       products.forEach(function (product) {
         var start = product.get("start");
@@ -472,18 +466,21 @@ productApi.getResponsibles = (products) => {
 // Add a user to the product.
 productApi.signin = (req, res) => {
   tool.l('product.signin');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.signin");
+  log.set("data", {"query": req.body.query});
+  log.set("user", req.user);
+  log.save();
   var query = new AV.Query('Customer');
   var params = JSON.parse(req.body.query);
   query.equalTo("identifier", params.identifier);
   var customer;
-  tool.l(params);
   query.find().then(function(results) {
     tool.l("query get success");
     // Check if the user already signin.
     for (var i = 0; i < results.length; i++) {
       var customer = results[i];
       if (customer.productid == params.productId) {
-        tool.l("duplicate productId");
         res.status(409).send(); 
         return;
       }
@@ -498,14 +495,12 @@ productApi.signin = (req, res) => {
     customer.set('phone', params.phone);
     customer.set('price', params.price);
     customer.save().then(function(response) {
-      tool.l("customer success");
       res.send(customer);
     }, function(error) {
-      tool.l("customer fail");
       res.status(error.code).send();
     });
   }, function(error) {
-    tool.l("fail");
+    res.send(error);
   });
   // We need to check whether there are multiple users.
 };
@@ -513,6 +508,10 @@ productApi.signin = (req, res) => {
 productApi.getUnverified = (req, res) => {
   // Check if user logged in.
   tool.l("product.getUnverified");
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.getUnverified");
+  log.set("user", req.user);
+  log.save();
   var user = req.user;
   if (user === undefined) {
     res.status(404).send();
@@ -528,6 +527,10 @@ productApi.getUnverified = (req, res) => {
 
 productApi.hasUnfinished = (req, res) => {
   tool.l("product.hasUnfinished");
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.hasUnfinished");
+  log.set("user", req.user);
+  log.save();
   var user = req.user;
   tool.l(user);
   if (user === undefined) {
@@ -549,6 +552,11 @@ productApi.hasUnfinished = (req, res) => {
 
 productApi.verify = (req, res) => {
   tool.l("product.verify");
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.verify");
+  log.set("data", {id: req.body.objectId});
+  log.set("user", req.user);
+  log.save();
   var id = req.body.objectId;
   tool.l(id);
   var status = req.body.status;
@@ -563,6 +571,11 @@ productApi.verify = (req, res) => {
 
 productApi.delete = (req, res) => {
   tool.l("product.delete");
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.delete");
+  log.set("data", {id: req.body.productId});
+  log.set("user", req.user);
+  log.save();
   var product = AV.Object.createWithoutData('Product', req.body.productId);
   product.destroy().then(function() {
     res.send();
@@ -574,7 +587,10 @@ productApi.delete = (req, res) => {
 
 productApi.getProductsCount = (req, res) => {
   tool.l('product.getProductsCount');
-
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.getProductsCount");
+  log.set("user", req.user);
+  log.save();
   var all = req.body.all;
   // Execute three queries.
   var query1 = new AV.Query('Product').equalTo("status", config.productStatus.UNPOSTED).count();

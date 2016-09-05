@@ -143,7 +143,7 @@
           </span>
         </div>
         <div class="detail">
-          <div template key="priceInclude"></div>
+          {{ product.priceInclude }}
         </div>
       </div>
       <div class="tab-item">
@@ -153,23 +153,23 @@
           </span>
         </div>
         <div class="detail">
-          <div template key="priceExclude"></div>
+          {{ product.priceExclude }}
         </div>
       </div>
     </md-tab>
     <md-tab label="签证信息">
       <div class="visa-info">
-        <div template key="visaInfo"></div>
+        {{ product.visaInfo }}
       </div>
     </md-tab>
     <md-tab label="温馨提示">
       <div class="visa-info">
-        <div template key="reminder"></div>
+        {{ product.reminder }}
       </div>
     </md-tab>
     <md-tab label="购物信息">
       <div class="visa-info">
-        <div template key="shoppingInfo"></div>
+        {{ product.shoppingInfo }}
       </div>
     </md-tab>
     <md-tab label="预订须知">

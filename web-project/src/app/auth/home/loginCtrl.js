@@ -25,6 +25,15 @@ export default (SweetAlert, errorFac, lcConfig, $location, $scope, $window, $log
     authFac.logout();
   };
 
+  $scope.clear = () => {
+    $scope.email = "";
+    $scope.username = "";
+    $scope.password = "";
+    $scope.contactname = "";
+    $scope.cellphone = "";
+    $scope.level = 1;
+  };
+
   $scope.register = () => {
     $log.log($scope.level);
     $log.log($scope.email);
@@ -36,9 +45,11 @@ export default (SweetAlert, errorFac, lcConfig, $location, $scope, $window, $log
     $log.log($scope.cellphone);
     authFac.register($scope.username, $scope.password, $scope.level, $scope.email, $scope.contactname, $scope.cellphone).then(function() {
       SweetAlert.swal("账号注册成功", "请保存这条信息,并告知对方.账号: " + $scope.username + " 密码: " + $scope.password, "success");
+      $scope.clear();
     }, function(error) {
       $log.log(error.code);
       SweetAlert.swal("注册失败", "错误信息: " + errorFac.getErrorMessage(error.code), "warning");
+      $scope.clear();
     });
   };
 

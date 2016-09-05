@@ -12,7 +12,11 @@
 let pub = {};
 
 pub.l = (msg) => {
-  console.log('\n\n', msg, '\n\n');
+  console.log(msg, '  timestamp: ', new Date().getTime(), '  timestring: ', new Date(), '\n');
+};
+
+pub.e = (msg) => {
+  console.error(msg, '  timestamp: ', new Date().getTime(), '  timestring: ', new Date(), '\n');
 };
 
 pub.fail = (res, err) => {
@@ -20,6 +24,10 @@ pub.fail = (res, err) => {
     err: err.status,
     msg: err.msg
   });
+};
+
+pub.getLog = () => {
+
 };
 
 /**

@@ -12,8 +12,10 @@ export default () => {
     switch(code) {
       case 125:
             return "邮箱不正确";
+      case 202:
+            return "用户名已经被占用";
       case 203:
-            return "用户名或邮箱已经被注册";
+            return "电子邮箱地址已经被占用";
     }
     return "";
   }

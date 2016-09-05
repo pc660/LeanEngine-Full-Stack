@@ -12,15 +12,17 @@ var LIMIT = 50;
 
 orderApi.get = (req, res) => {
     tool.l("orderApi.get");
-    // TODO Check current user?
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.get");
+    log.set("data", {id: req.body.id});
+    log.set("user", req.user);
+    log.save();
     if (!req.body.id) {
         res.send(404);
         return;
     }
     var order = AV.Object.createWithoutData('Order', req.body.id);
     order.fetch({ include: "product.platformcontact"}, null).then(function(result) {
-        tool.l(result.get("product").get("fullName"));
-        tool.l(result.get("product").get("prefix"));
         var product = {};
         product.fullName = result.get("product").get("fullName");
         product.prefix = result.get("product").get("prefix");
@@ -34,10 +36,16 @@ orderApi.get = (req, res) => {
 
 orderApi.getAll = (req, res) => {
     tool.l("orderApi.getAll");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.getAll");
+    log.set("data", {status: req.body.status});
+    log.set("user", req.user);
+    log.save();
     var user = req.user;
     var level = user.get("level");
     // TODO: Uncomment this.
     if (!user) {
+        tool.e("user undefined when orderApi.getAll");
         res.send(404);
         return;
     }
@@ -45,7 +53,6 @@ orderApi.getAll = (req, res) => {
     var query = new AV.Query('Order');
     query.include("product.fullName", "product.prefix", "provider.provider");
     if (req.body.status) {
-        tool.l(req.body.status);
         query.equalTo("status", parseInt(req.body.status));
     }
     //
@@ -54,17 +61,16 @@ orderApi.getAll = (req, res) => {
     } else if (level == config.userLevel.ORGANIZER) {
         query.equalTo("responsible", req.user);
     } else if (level == config.userLevel.PROVIDER) {
-        query.equalTo("provider", req.user);
+        query.equalTo("provider", req.user.get("provider"));
     }
 
     query.descending("createdAt");
     query.find().then(function(results) {
-        tool.l("successfully get " + results.length + " results");
         var product = results.map(function(order) {
             return order.get("product");
         })
         var provider = results.map(function(order) {
-            return order.get("provider").get("provider");
+            return order.get("provider");
         })
         res.send({order: results, product: product, provider: provider});
         return;
@@ -73,6 +79,11 @@ orderApi.getAll = (req, res) => {
 
 orderApi.update = (req, res) => {
     tool.l("order.update");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.update");
+    log.set("data", {id: req.body.id, status: req.body.status});
+    log.set("user", req.user);
+    log.save();
     var order = AV.Object.createWithoutData('Order', req.body.id);
     var paid = false;
     if (req.body.status) {
@@ -102,47 +113,19 @@ orderApi.update = (req, res) => {
     })
 }
 
-/*
-orderApi.orderGetPaid = (orderId, res) => {
-    var order = AV.Object.createWithoutData('Order', orderId);
-    order.set("status", config.orderStatus.PAID);
-    order.save().then(function(result) {
-        res.send();
-        // Need to update the price map.
-        order.fetch().then(function(result) {
-            var product = result.get("product");
-            product.fetch().then(function(productResult) {
-                var priceMap = productResult.get("price");
-                var price = orderApi.getPrice(priceMap, result.get("startDate"));
-                if (!price) {
-                    res.send(404);
-                    return;
-                }
-                var totalNumber = result.get("adult") + result.get("child");
-                price.reservedPeopleNumber = price.reservedPeopleNumber - totalNumber;
-                price.paidPeopleNumber = price.paidPeopleNumber + totalNumber;
-                product.set("priceMap", priceMap);
-                product.save();
-            })
-        })
-    })
-}*/
-
 orderApi.getPrice = (priceMap, orderDate) => {
     var re = /([0-9]+)年([0-9]+)月([0-9]+)日/
     var parts = orderDate.match(re);
     if (parts.length !== 4) {
-        tool.l("error! find malformat date" + order.date);
+        tool.e("error! find malformat date" + order.date);
     }
     var year = parts[1];
     var month = parts[2];
     var day = parts[3];
-    tool.l(priceMap);
+
     // Check year month day in priceMap.
     // Need to check rest
-    tool.l(month);
     if (priceMap[year] && priceMap[year][month - 1] && priceMap[year][month - 1][day]) {
-        tool.l("find the right date");
         var object = priceMap[year][month - 1][day];
         if (!object.restPeopleNumber > 0) {
             object.restPeopleNumber = object.totalPeople;
@@ -160,6 +143,11 @@ orderApi.getPrice = (priceMap, orderDate) => {
 
 orderApi.add = (req, res) => {
     tool.l("orderApi.add");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.add");
+    log.set("data", {order: req.body.order});
+    log.set("user", req.user);
+    log.save();
     var order = req.body.order;
     //var customers = req.body.customers;
     var orderAV = AV.Object.new('Order');
@@ -186,31 +174,30 @@ orderApi.add = (req, res) => {
         var priceMap = productResult.get('price');
         var price = orderApi.getPrice(priceMap, order.date);
         if (!price) {
+            tool.l("do not find the right price. date: " + order.date);
             res.send(404);
             return;
         }
         var totalNumber = order.adult + order.child;
-        tool.l(totalNumber);
-        tool.l(price.restPeopleNumbner);
         // cnanot reserve.
         if (price.restPeopleNumber < totalNumber) {
+            tool.l("cannot reserve. date: " + order.date + " id: " + productResult.get("objectId"));
             res.send(404);
             return;
         }
         price.restPeopleNumber = price.restPeopleNumber - totalNumber;
         // Currently we assume all people paid.
         price.reservedPeopleNumber = price.reservedPeopleNumber + totalNumber;
-        tool.l(price.reservedPeopleNumber);
         productResult.set("price", priceMap);
         var responsible = productResult.get("responsible");
         orderAV.set("responsible", responsible);
-        orderAV.set("provider", productResult.get("createdBy"));
+        orderAV.set("productCreator", productResult.get("createdBy"));
+        orderAV.set("provider", productResult.get("provider"));
         productResult.save();
 
         orderAV.save().then(function(orderResult) {
             tool.l("successfully save order");
             res.send(orderResult);
-            tool.l(order);
             // TODO: Maybe set another parameters.
             // TODO: Hacky!
             order.adultTotalPrice = order.adult * order.adultCompanySalePrice;
@@ -236,15 +223,20 @@ orderApi.add = (req, res) => {
             });
             return;
         }, function(error) {
-            tool.l(error);
+            res.status(404).send(error);
         });
     }, function(error) {
-        tool.l(error);
+        res.status(404).send(error);
     })
 };
 
 orderApi.revoke = (req, res) => {
     tool.l("order.revoke");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.revoke");
+    log.set("data", {id: req.body.id});
+    log.set("user", req.user);
+    log.save();
     var order = AV.Object.createWithoutData('Order', req.body.id);
     order.fetch({include: "product"}, null).then(function(result) {
         tool.l("getting results");
@@ -265,6 +257,11 @@ orderApi.revoke = (req, res) => {
 
 orderApi.cancel = (req, res) => {
     tool.l("order.cancel");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.cancel");
+    log.set("data", {id: req.body.id});
+    log.set("user", req.user);
+    log.save();
     var order = AV.Object.createWithoutData('Order', req.body.id);
     order.fetch({include: "product"}, null).then(function(result) {
         // Have to update product.
@@ -326,6 +323,11 @@ orderApi.getRevoke = (req, res) => {
 
 orderApi.verify = (req, res) => {
     tool.l("order.verify");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.verify");
+    log.set("data", {id: req.body.id});
+    log.set("user", req.user);
+    log.save();
     var order = AV.Object.createWithoutData('Order', req.body.id);
     tool.l(req.body.status);
     order.set("status", parseInt(req.body.status));

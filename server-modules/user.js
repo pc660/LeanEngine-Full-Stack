@@ -9,6 +9,11 @@ const PROVIDER_LEVLE = 1;
 
 userApi.get = (req, res) => {
     tool.l("userApi.get");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.get");
+    log.set("data", {query: req.body.query});
+    log.set("user", req.user);
+    log.save();
     var query = new AV.Query('_User');
     var levelList = req.body.query.level;
     query.select(["contactname", "objectId"])
@@ -17,12 +22,9 @@ userApi.get = (req, res) => {
         query.equalTo('level', levelList[i]);
     }
     query.find().then(function(results) {
-        tool.l("get user success");
-        tool.l(results.length);
-        tool.l(results);
         res.send(results);
     }, function(error) {
-        tool.l(error);
+        tool.e(error);
     });
 }
 
@@ -36,7 +38,12 @@ userApi.getCurrentUserInfo = (req, res) => {
 }
 
 userApi.addContactList = (req, res) => {
-    tool.l("userApi.addContactList")
+    tool.l("userApi.addContactList");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.addContactList");
+    log.set("data", {contact: req.body.contact});
+    log.set("user", req.user);
+    log.save();
     var contact = req.body.contact;
     var contactAV = AV.Object.new('Contact');
     userApi.setContact(contactAV, contact);
@@ -62,25 +69,33 @@ userApi.setContact = (contactAV, contact) => {
 
 userApi.editContactList = (req, res) => {
     tool.l("userApi.editContactList");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.editContactList");
+    log.set("data", {contact: req.body.contact});
+    log.set("user", req.user);
+    log.save();
     var contact = req.body.contact;
-    tool.l(contact);
     var contactAV = AV.Object.createWithoutData("Contact", contact.objectId);
     userApi.setContact(contactAV, contact);
     contactAV.save().then(function(contact) {
         tool.l("success")
         res.send();
     }, function(error) {
-        tool.l(error)
-        res.status(404).send();
+        tool.e(error)
+        res.status(404).send(error);
     });
 }
 
 userApi.getContactList = (req, res) => {
     tool.l("userApi.getContactList");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.getContactList");
+    log.set("data", {id: req.body.providerId});
+    log.set("user", req.user);
+    log.save();
     var providerId = req.body.providerId;
     var query = new AV.Query("Contact");
     var provider = AV.Object.createWithoutData("Provider", providerId);
-    tool.l(providerId);
     query.equalTo("provider", provider);
     query.find().then(function(results) {
         res.send(results);
@@ -90,7 +105,12 @@ userApi.getContactList = (req, res) => {
 }
 
 userApi.deleteContactList = (req, res) => {
-    tool.l("userApi.deleteContactList") ;
+    tool.l("userApi.deleteContactList");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.deleteContactList");
+    log.set("data", {contactId: req.body.contactId});
+    log.set("user", req.user);
+    log.save();
     var contactId = req.body.contactId;
     var contact = AV.Object.createWithoutData("Contact", contactId);
     contact.destroy().then(function(success) {
@@ -109,6 +129,10 @@ userApi.getCurrentUser = (req) => {
 
 userApi.getProvider = (req, res) => {
     tool.l("userapi.getProvider");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.getProvider");
+    log.set("user", req.user);
+    log.save();
     var user = userApi.getCurrentUser(req);
     tool.l(user);
     if (!user) {

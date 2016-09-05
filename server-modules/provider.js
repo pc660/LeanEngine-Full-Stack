@@ -9,21 +9,28 @@ let providerApi = {};
 var LIMIT = 50;
 
 providerApi.add = (req, res) => {
+
   tool.l('provider.add');
-  // TODO: now we use a fake data to create a provider.
-  // First we create a user for the provider.
-  tool.l(req.body.provider);
+  // Error checking.
   var provider = req.body.provider;
   if (provider === undefined) {
+    tool.e('no provider info when provider.add');
     res.status(404).send();
     return;
   }
   var user = req.user;
   if (!user && !user.isCurrent()) {
+    tool.e('user is undefined or not current when provider.add ');
     res.status(404).send();
     return;
   }
-  // TODOw: maybe we can use a for loop?
+
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "provider.add");
+  log.set("data", {provider: req.body.provider});
+  log.set("user", req.user);
+  log.save();
+  // TODO: maybe we can use a for loop?
   //var user = new AV.User();
   //user.set('username', provider.username);
   //user.set('password', provider.password);
@@ -142,15 +149,12 @@ providerApi.addProvider = (provider, res, user, contact) => {
       tool.l("success");
       res.send();
       if (isNew) {
-        tool.l("setting user");
         user.set("provider", provider);
         user.save();
       }
       if (contact) {
-        tool.l("setting contact");
         contact.set("provider", provider);
         contact.save().then(function() {
-          tool.l("contact success");
           return;
         });
       }
@@ -197,6 +201,11 @@ providerApi.get = (req, res) => {
   var body = req.body;
   var queryParameters = body.query;
   var query = new AV.Query('Provider');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "provider.get");
+  log.set("data", {query: body.query});
+  log.set("user", req.user);
+  log.save();
   /*query.limit(LIMIT);
 
   if (queryParameters.index !== undefined) {
@@ -214,7 +223,6 @@ providerApi.get = (req, res) => {
   }
 
   query.find().then(function(results) {
-    tool.l('Successfully retrieved ' + results.length + ' posts.');
     // 处理返回的结果数据
     // Extract user contact information.
     // For each result, we need to retrieve the contact list.
@@ -230,18 +238,22 @@ providerApi.get = (req, res) => {
       return;
     });
   }, function(error) {
-    tool.l('Error: ' + error.code + ' ' + error.message);
+    tool.e('Error: ' + error.code + ' ' + error.message + ' when provider.get');
   });
   
 };
 
 // Now we only support upload one file.
 providerApi.uploadfile = (req, res) => {
-  tool.l("uploadfile");
+  tool.l("provider.uploadfile");
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "provider.uploadfile");
+  log.set("user", req.user);
+  log.save();
   var file = req.files.file;
   tool.l(req.files);
   if (!file) {
-    tool.l("find no files");
+    tool.e("find no files when provider.uploadfile");
     res.send();
   }
 
@@ -255,18 +267,19 @@ providerApi.uploadfile = (req, res) => {
   fs.readFile(path, function (err, data) {
     var avFile = new AV.File(req.body.filename, data);
     avFile.save().then(function(obj) {
-      tool.l("upload success");
       res.send();
     }, function(err) {
     });
-    // TODO: Fix the http response logic.
-    // set http code accordingly.
-    // This is too fragile and not acceptable.
   });
 };
 
 providerApi.delete = (req, res) => {
   tool.l("provider.delete");
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "provider.delete");
+  log.set("data", {"provider": req.body.providerId});
+  log.set("user", req.user);
+  log.save();
   var provider = AV.Object.createWithoutData("Provider", req.body.providerId);
   // Check if the provider has any products.
   var query = new AV.Query("Product");
@@ -274,6 +287,7 @@ providerApi.delete = (req, res) => {
   query.equalTo("status", config.productStatus.VERIFIED);
   query.find().then(function(results) {
     if (results.length > 0) {
+      tool.e("Have verified products when provider.delete");
       res.send(404);
     } else {
       provider.destroy().then(function() {
@@ -287,37 +301,27 @@ providerApi.delete = (req, res) => {
 
 providerApi.search = (req, res) => {
   tool.l('provider.search');
-  tool.l(req.body.query);
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "provider.search");
+  log.set("data", {"query": req.body.query, "select": req.body.select});
+  log.set("user", req.user);
+  log.save();
   var query = req.body.query;
   var select = req.body.select;
   var mainQuery = new AV.Query('Provider');
-  tool.l(select);
   if (select && select.length > 0) {
     mainQuery.select(select);
   }
   if (query.self) {
     var user = req.user;
     if (!user) {
+      tool.e("user is undefined when provider.search")
       res.status(404).send();
       return;
     }
     var provider = user.get("provider");
-    //mainQuery.equalTo("user", user);
   }
 
-  /*if (query.keyword) {
-    var nicknameQuery = new AV.Query('Provider');
-    nicknameQuery.contains('nickname', keyword);
-    var capitalQuery = new AV.Query('Provider');
-    capitalQuery.contains("capital", keyword);
-    mainQuery = AV.Query.or(nicknameQuery, capitalQuery);
-  }
-  if (query.mainDestination) {
-    mainQuery.contains('mainDestination', query.mainDestination);
-  }
-  if (query.servingType) {
-    mainQuery.equalTo(query.servingType, true);
-  }*/
   mainQuery.find().then(function(results) {
     tool.l('Successfully retrieved ' + results.length + ' results.');
     res.send(results);

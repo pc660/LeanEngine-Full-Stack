@@ -178,6 +178,13 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     });
   };
 
+  $scope.getCanceling = () => {
+    orderFac.getCanceling($scope.admin).then(function(results) {
+      $log.log(results);
+      $scope.setOrder(results);
+    });
+  }
+
   $scope.confirmRevoke = (order) => {
     $scope.cancelOrder(order);
   };
