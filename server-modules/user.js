@@ -51,7 +51,7 @@ userApi.addContactList = (req, res) => {
     contactAV.set("provider", provider);
     contactAV.save().then(function(contact) {
         tool.l("success")
-        res.send();
+        res.send(contact);
     }, function(error) {
         tool.l(error)
        res.status(404).send();

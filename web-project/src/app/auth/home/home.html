@@ -9,7 +9,7 @@
         <li ng-if="level == 0"><a ui-sref=".show-orders">订单管理</a></li>
         <li ng-if="level == 2"><a ui-sref=".show-orders">订单管理</a></li>
         <li ng-if="level == 3"><a ui-sref=".show-orders">订单审核</a></li>
-        <li ng-if="level == 0"><a ui-sref=".add-provider-account">添加账号</a></li>
+        <li ng-if="level == 0"><a id="add-account" ui-sref=".add-provider-account">添加账号</a></li>
         <li ng-class="{'unfinished':unfinished}">
             <span class="dot"></span>
             <a ui-sref=".my-account">我的账号</a>

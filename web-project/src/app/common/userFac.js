@@ -46,8 +46,8 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
     modalInstance.result.then(function (items) {
       var contact = convertItemsToContact(items, providerId);
-      addContactList(contact).then(function() {
-        contactList.push(contact);
+      addContactList(contact).then(function(result) {
+        contactList.push(result);
       });
     }, function () {
     });

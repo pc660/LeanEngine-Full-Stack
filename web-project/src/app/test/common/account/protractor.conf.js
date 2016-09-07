@@ -16,6 +16,10 @@ exports.config = {
 
   jasmineNodeOpts: {
     defaultTimeoutInterval: 30000
-  }
+  },
+
+  onPrepare: function() {
+    browser.manage().timeouts().setScriptTimeout(60000);
+  },
 
 };
