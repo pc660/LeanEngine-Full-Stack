@@ -2,7 +2,9 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   'ngInject';
 
   $scope.level = authFac.getUserLevel();
+  $scope.orderStatus = lcConfig.orderStatus;
   $scope.admin = ($scope.level == lcConfig.orderStatus.ADMIN);
+  $scope.isLoading = false;
   // Init.
   userFac.getSaleusers().then(function(results) {
     $scope.saleList = results;
@@ -73,39 +75,15 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     $scope.oldOrders = $scope.orders;
   }
 
-  $scope.allOrder = () => {
-    orderFac.getAllOrder($scope.admin).then(function(results) {
+  $scope.allOrder = (status) => {
+    // Clean up the orders first because we are getting the new ones.
+    $scope.orders = [];
+    $scope.isLoading = true;
+    $scope.currentStatus = status;
+    orderFac.getAllOrder(status, $scope.currentPage - 1).then(function(results) {
       $scope.setOrder(results);
-    });
-  };
-
-  $scope.unpaidOrderUnverified = () => {
-    orderFac.getUnpaidOrder($scope.admin, false).then(function(results) {
-      $scope.setOrder(results);
-    });
-  };
-
-  $scope.unpaidOrderVerified = () => {
-    orderFac.getUnpaidOrder($scope.admin, true).then(function(results) {
-      $scope.setOrder(results);
-    });
-  };
-
-  $scope.paidOrder = () => {
-    orderFac.getPaidOrder($scope.admin).then(function(results) {
-      $scope.setOrder(results);
-    });
-  };
-
-  $scope.paidVerifiedOrder = () => {
-    orderFac.getPaidVerifiedOrder($scope.admin).then(function(results) {
-      $scope.setOrder(results);
-    });
-  };
-
-  $scope.finishedOrder = () => {
-    orderFac.getFinishedOrder($scope.admin).then(function(results) {
-      $scope.setOrder(results);
+      $scope.totalOrders = results.count;
+      $scope.isLoading = false;
     });
   };
 
@@ -115,7 +93,7 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
 
   $scope.paid = (order) => {
     orderFac.update(order, lcConfig.orderStatus.PAID).then(function(result) {
-      SweetAlert.swal("订单付款成功成功", "success");
+      SweetAlert.swal("订单付款成功", "success");
       order.status = result.status;
     });
   };
@@ -171,20 +149,6 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     });
   };
 
-  $scope.getRevoke = () => {
-    orderFac.getRevoke($scope.admin).then(function(results) {
-      $log.log(results);
-      $scope.setOrder(results);
-    });
-  };
-
-  $scope.getCanceling = () => {
-    orderFac.getCanceling($scope.admin).then(function(results) {
-      $log.log(results);
-      $scope.setOrder(results);
-    });
-  }
-
   $scope.confirmRevoke = (order) => {
     $scope.cancelOrder(order);
   };
@@ -210,14 +174,12 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     });
   };
 
-  $scope.getCancel = () => {
-    orderFac.getCancel($scope.admin).then(function(results) {
-      $log.log(results);
-      $scope.setOrder(results);
-    });
-  };
-
   $scope.editOrder = (orderId) => {
     $state.go('sale.show-order-detail', {orderId: orderId, isEditing: true});
+  };
+
+  $scope.pageChanged = () => {
+    $log.log($scope.currentPage);
+    $scope.allOrder($scope.currentStatus);
   };
 };

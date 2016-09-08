@@ -11,28 +11,28 @@
       <md-button ng-click="allOrder()" class="md-primary">
         全部订单
       </md-button>
-      <md-button ng-click="unpaidOrderUnverified()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.UNPAID_UNVERIFIED)" class="md-primary">
         未付款订单(等待计调确认)
       </md-button>
-      <md-button ng-click="unpaidOrderVerified()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.UNPAID_VERIFIED)" class="md-primary">
         未付款订单(计调已经确认)
       </md-button>
-      <md-button ng-click="paidOrder()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.PAID)" class="md-primary">
         已付款订单(等待计调确认)
       </md-button>
-      <md-button ng-click="paidVerifiedOrder()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.PAID_VERIFIED)" class="md-primary">
         已付款订单(等待供应商确认)
       </md-button>
-      <md-button ng-click="finishedOrder()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.FINISHED)" class="md-primary">
         已完成订单
       </md-button>
-      <md-button ng-click="getRevoke()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.REVOKE)" class="md-primary">
         申请退款订单
       </md-button>
-      <md-button ng-click="getCanceling()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.CANCEL)" class="md-primary">
         申请取消订单
       </md-button>
-      <md-button ng-click="getCancel()" class="md-primary">
+      <md-button ng-click="allOrder(orderStatus.CANCELLED)" class="md-primary">
         已取消订单
       </md-button>
     </div>
@@ -103,6 +103,7 @@
         </td>
       </tr>
     </table>
+    <p ng-if="isLoading">正在加载...请稍等</p>
     <table class="order">
       <tbody ng-repeat="order in orders">
         <tr>
@@ -190,5 +191,6 @@
         </tr>
       </tbody>
     </table>
+    <ul uib-pagination total-items="totalOrders" items-per-page="10" ng-model="currentPage" ng-change="pageChanged()"></ul>
   </md-content>
 </div>

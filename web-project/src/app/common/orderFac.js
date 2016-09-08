@@ -28,9 +28,20 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     return $http.post('/api/order/update', {id: order.objectId, customers: order.customers});
   }
 
-  function getAllOrder(admin) {
-    return $http.post('/api/order/getAll', {admin: admin});
+  function getAllOrder(status, index) {
+    if (!index) {
+      index = 0;
+    }
+    if (!status) {
+      return $http.post('/api/order/getAll', {index: index});
+    } else {
+      return $http.post('/api/order/getAll', {status: status, index: index});
+    }
   }
+
+  /*function getAllOrder(admin) {
+    return $http.post('/api/order/getAll', {admin: admin});
+  }*/
 
   function getUnpaidOrder(admin, verified) {
     if (verified) {

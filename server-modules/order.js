@@ -42,15 +42,20 @@ orderApi.getAll = (req, res) => {
     log.set("user", req.user);
     log.save();
     var user = req.user;
-    var level = user.get("level");
-    // TODO: Uncomment this.
     if (!user) {
         tool.e("user undefined when orderApi.getAll");
         res.send(404);
         return;
     }
+    var level = user.get("level");
+    var index= req.body.index;
+    if (!index) {
+        index = 0;
+    }
 
     var query = new AV.Query('Order');
+    query.limit(config.items_per_page);
+    query.skip(index * config.items_per_page);
     query.include("product.fullName", "product.prefix", "provider.provider");
     if (req.body.status) {
         query.equalTo("status", parseInt(req.body.status));
@@ -62,19 +67,27 @@ orderApi.getAll = (req, res) => {
         query.equalTo("responsible", req.user);
     } else if (level == config.userLevel.PROVIDER) {
         query.equalTo("provider", req.user.get("provider"));
+    } else if (level != config.userLevel.ADMIN) {
+        tool.e("undefined user level in order.getAll");
+        res.status(404).send();
     }
 
     query.descending("createdAt");
-    query.find().then(function(results) {
-        var product = results.map(function(order) {
+
+    var promises = [query.find(), query.count()];
+    Promise.all(promises).then(function(results) {
+        var result = results[0];
+        var count = results[1];
+        var product = result.map(function(order) {
             return order.get("product");
         })
-        var provider = results.map(function(order) {
+        var provider = result.map(function(order) {
             return order.get("provider");
         })
-        res.send({order: results, product: product, provider: provider});
+        tool.l(count);
+        res.send({order: result, product: product, provider: provider, count: count});
         return;
-    })
+    });
 }
 
 orderApi.update = (req, res) => {
