@@ -160,6 +160,7 @@ productApi.constructItinerayParams = (product) => {
   params.reserveInfo = product.reserveInfo;
   params.restriction = product.restriction;
   params.shoppingInfo = product.shoppingInfo;
+  params.reminder = product.reminder;
 
   params.account = product.pickedProvider.companyname;
   return params;
@@ -621,6 +622,7 @@ function setDefaultPriceMap(priceMap) {
 };
 
 function generateItinerary(params, productResult) {
+  tool.l("generateItinerary");
   fs.readFile("server-modules/static/f05tal.doc","utf8", function(err, data) {
     recursiveIteration(params, function(object, property) {
       if (typeof object[property] === 'string') {

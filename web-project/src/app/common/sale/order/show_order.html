@@ -172,11 +172,11 @@
           </td>
           <td>
             <div class="operation">
-              <a ng-if="!admin"
+              <a ng-if="level == 1"
                  target="_blank"
                  ui-sref="sale.show-order-detail({orderId: '{{order.objectId}}' })"
                  ui-sref-opts="{ absolute: true }">显示详情</a>
-              <a ng-if="admin"
+              <a ng-if="level != 1"
                  target="_blank"
                  ui-sref="home.show-order-detail({orderId: '{{order.objectId}}' })"
                  ui-sref-opts="{ absolute: true }">显示详情</a>

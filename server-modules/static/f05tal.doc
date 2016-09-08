@@ -1702,6 +1702,90 @@
                                     <w:sz w:val="18"/>
                                     <w:sz-cs w:val="18"/>
                                 </w:rPr>
+                                <w:t>【温馨提示】</w:t>
+                            </w:r>
+                            <w:r wsp:rsidRPr="0047193A">
+                                <w:rPr>
+                                    <w:rFonts w:hint="fareast"/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
+                                </w:rPr>
+                                <w:t></w:t>
+                            </w:r>
+                        </w:p>
+                    </w:tc>
+                </w:tr>
+                <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
+                    <w:tc>
+                        <w:tcPr>
+                            <w:tcW w:w="8359" w:type="dxa"/>
+                            <w:gridSpan w:val="8"/>
+                            <w:tcBorders>
+                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:bottom w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                            </w:tcBorders>
+                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+                            <w:vAlign w:val="bottom"/>
+                        </w:tcPr>
+                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00D475B5">
+                            <w:pPr>
+                                <w:rPr>
+                                    <w:rFonts w:ascii="Times New Roman" w:fareast="Times New Roman" w:h-ansi="Times New Roman" w:cs="Times New Roman"/>
+                                    <wx:font wx:val="Times New Roman"/>
+                                    <w:sz w:val="20"/>
+                                    <w:sz-cs w:val="20"/>
+                                </w:rPr>
+                            </w:pPr>
+                            <w:r wsp:rsidRPr="0047193A">
+                                <w:rPr>
+                                    <w:rFonts w:ascii="Libian SC Regular" w:fareast="Times New Roman" w:h-ansi="Libian SC Regular" w:cs="Libian SC Regular"/>
+                                    <wx:font wx:val="Libian SC Regular"/>
+                                    <w:sz w:val="20"/>
+                                    <w:sz-cs w:val="20"/>
+                                </w:rPr>
+                                <w:t tal:content="self.reminder">{{ product.reminder }}</w:t>
+                            </w:r>
+                        </w:p>
+                        <w:p wsp:rsidR="00F47490" wsp:rsidRPr="0047193A" wsp:rsidRDefault="00F47490">
+                            <w:pPr>
+                                <w:rPr>
+                                    <w:rFonts w:ascii="Times New Roman" w:fareast="Times New Roman" w:h-ansi="Times New Roman" w:cs="Times New Roman"/>
+                                    <wx:font wx:val="Times New Roman"/>
+                                    <w:sz w:val="20"/>
+                                    <w:sz-cs w:val="20"/>
+                                </w:rPr>
+                            </w:pPr>
+                        </w:p>
+                    </w:tc>
+                </w:tr>
+                <w:tr wsp:rsidR="00F47490" wsp:rsidTr="0047193A">
+                    <w:tc>
+                        <w:tcPr>
+                            <w:tcW w:w="8359" w:type="dxa"/>
+                            <w:gridSpan w:val="8"/>
+                            <w:tcBorders>
+                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                                <w:bottom w:val="single" w:sz="12" wx:bdrwidth="30" w:space="0" w:color="auto"/>
+                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto"/>
+                            </w:tcBorders>
+                            <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+                            <w:vAlign w:val="bottom"/>
+                        </w:tcPr>
+                        <w:p wsp:rsidR="00F47490" wsp:rsidRDefault="00D475B5" wsp:rsidP="0047193A">
+                            <w:pPr>
+                                <w:spacing w:before-lines="50" w:before="120" w:line="360" w:line-rule="auto"/>
+                                <w:ind w:first-line-chars="1950" w:first-line="3798"/>
+                            </w:pPr>
+                            <w:r wsp:rsidRPr="0047193A">
+                                <w:rPr>
+                                    <w:rFonts w:hint="fareast"/>
+                                    <w:b/>
+                                    <w:sz w:val="18"/>
+                                    <w:sz-cs w:val="18"/>
+                                </w:rPr>
                                 <w:t>【收客限制】</w:t>
                             </w:r>
                             <w:r wsp:rsidRPr="0047193A">
