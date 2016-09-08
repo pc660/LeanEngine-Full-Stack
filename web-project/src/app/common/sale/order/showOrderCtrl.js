@@ -11,43 +11,7 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   })
 
   $scope.search = () => {
-    var query = $scope.query;
-    // TODO: have to fix this. Do a real query.
-    if (!query) {
-      return;
-    }
-    $log.log(query);
-    $scope.orders = $scope.oldOrders.filter(function(order) {
-      $log.log(order);
-      if (query.orderId) {
-        return order.objectId == query.orderId;
-      }
-      var match = true;
-      var date = productFac.parseDate(order.startDate);
-      if (query.startDate) {
-        var queryDate = productFac.parseDate(query.startDate);
-        if (queryDate > date) {
-          match = false;
-        }
-      }
-      if (query.endDate) {
-        var queryDate = productFac.parseDate(query.endDate);
-        if (queryDate < date) {
-          match = false;
-        }
-      }
-      if (query.sale) {
-        if (order.createdBy.objectId !== query.sale) {
-          match = false;
-        }
-      }
-      if (query.productName) {
-        if (order.product && !order.product.fullName.includes(query.productName)) {
-          match = false;
-        }
-      }
-      return match;
-    })
+    $scope.allOrder($scope.currentStatus);
   };
 
   $scope.setOrder = (results) => {
@@ -79,8 +43,12 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     // Clean up the orders first because we are getting the new ones.
     $scope.orders = [];
     $scope.isLoading = true;
+    if ($scope.currentStatus != status) {
+      // Clean query.
+      $scope.query = {};
+    }
     $scope.currentStatus = status;
-    orderFac.getAllOrder(status, $scope.currentPage - 1).then(function(results) {
+    orderFac.getAllOrder(status, $scope.currentPage - 1, $scope.query).then(function(results) {
       $scope.setOrder(results);
       $scope.totalOrders = results.count;
       $scope.isLoading = false;

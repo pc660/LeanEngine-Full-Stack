@@ -72,12 +72,39 @@ orderApi.getAll = (req, res) => {
         res.status(404).send();
     }
 
+    var params = req.body.query;
+    if (params) {
+        tool.l(params);
+        orderApi.setOrderQuery(query, params);
+    }
     query.descending("createdAt");
 
     var promises = [query.find(), query.count()];
     Promise.all(promises).then(function(results) {
         var result = results[0];
         var count = results[1];
+
+        result = result.filter(function(order) {
+            tool.l("getting order");
+            var date = parseDate(order.get("startDate"));
+            tool.l(date);
+            if (params.startDate) {
+                var queryDate = parseDate(params.startDate);
+                if (queryDate > date) {
+                    return false;
+                }
+            }
+            if (params.endDate) {
+                var queryDate = parseDate(params.endDate);
+                if (queryDate < date) {
+                    return false;
+                }
+            }
+            return true;
+        })
+
+        // Filter start date and end date.
+
         var product = result.map(function(order) {
             return order.get("product");
         })
@@ -87,6 +114,8 @@ orderApi.getAll = (req, res) => {
         tool.l(count);
         res.send({order: result, product: product, provider: provider, count: count});
         return;
+    }, function(error) {
+        tool.l(error);
     });
 }
 
@@ -351,21 +380,36 @@ orderApi.verify = (req, res) => {
     })
 };
 
-// TODO: Revisit this.
-
-orderApi.search = (req, res) => {
-    tool.l("order.search");
-    var query = new AV.Query('Customer');
-    var params = req.body.query;
+// Set query
+orderApi.setOrderQuery = (query, params) => {
+    tool.l("order.setOrderQuery");
     if (params.orderId) {
         var id = params.orderId;
-        var order = AV.Object.createWithoutData('Order', id);
-        order.fetch().then(function(result) {
-            tool.l(results);
-            res.send([result]);
-        })
+        query.equalTo("objectId", id);
         return;
     }
+
+    if (params.sale) {
+        var user = AV.Object.createWithoutData('_User', params.sale);
+        query.equalTo("createdBy", user);
+    }
+
+    if (params.productId) {
+        // Search for product name.
+        var product = AV.Object.createWithoutData('Product', params.productId);
+        query.equalTo("product", product);
+    }
 };
+
+// TODO: move to commone.
+function parseDate(dateString) {
+    var re = /([0-9]+)年([0-9]+)月([0-9]+)日/;
+    var match = dateString.match(re);
+    if (match.length == 4) {
+        return new Date(match[1], match[2] - 1, match[3]);
+    }
+
+    return null;
+}
 
 module.exports = orderApi;

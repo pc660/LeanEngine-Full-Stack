@@ -39,7 +39,7 @@
   </md-sidenav>
   <md-content layout-padding>
     <table class="search-option">
-      <caption>订单过滤</caption>
+      <caption>订单搜索</caption>
       <tr>
         <td>订单号</td>
         <td>
@@ -49,10 +49,10 @@
         </td>
       </tr>
       <tr>
-        <td>产品名称</td>
+        <td>产品编号</td>
         <td>
           <div>
-            <input ng-model="query.productName">
+            <input ng-model="query.productId">
           </div>
         </td>
       </tr>
@@ -99,7 +99,7 @@
       </tr>
       <tr>
         <td colspan="2">
-          <md-button class="md-raised md-primary" ng-click="search();">确认过滤</md-button>
+          <md-button class="md-raised md-primary" ng-click="search();">确认搜索</md-button>
         </td>
       </tr>
     </table>
