@@ -4,15 +4,15 @@
       预订信息
     </td>
   </tr>
-  <tr>
+  <tr ng-if="level != 2">
     <td>联系人</td>
     <td colspan="99">{{ order.contactname }}</td>
   </tr>
-  <tr>
+  <tr ng-if="level != 2">
     <td>联系方式</td>
     <td colspan="99">{{ order.cellphone }}</td>
   </tr>
-  <tr>
+  <tr ng-if="level != 2">
     <td>邮件</td>
     <td colspan="99">{{ order.email }}</td>
   </tr>
