@@ -32,7 +32,7 @@ const config = require('./config');
 // app.set('view engine', 'ejs');
 
 // TODO: Coment this in production
-AV._initialize("Dk6M8nJAQWwngq9VPjBV5oE6-gzGzoHsz", "p1VNltadO5zxcwzuJEDoBPAX", "3XFx9F7WKhKFxQRVKcnsOwtD");
+AV._initialize("ovrldBqcCfOp1Q6BLm4eqB9U-gzGzoHsz", "KSukweQ3OuW2temSfv0QW7fC", "0Ox35L7uDp4LUtb4cRmcW0hN");
 AV.Cloud.useMasterKey();
 
 app.use(express.static('public'));

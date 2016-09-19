@@ -3,8 +3,4 @@
     <input type="checkbox" ng-disabled="!isEditing" ng-model="option.state" checked="{{ option.state }}">
     <p> {{ option.value }} </p>
   </label>
-  <label ng-if='other'>
-    <input ng-if="isEditing" placeholder="请输入其他" type="text" ng-change="changeOther();" ng-model="otherText">
-    <p ng-if="!isEditing">{{ otherText }}</p>
-  </label>
 </div>

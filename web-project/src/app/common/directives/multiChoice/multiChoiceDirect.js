@@ -48,11 +48,6 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
           }
         }
       }, true);
-
-      // other text always is the last.
-      scope.changeOther = () => {
-        scope.model.other = scope.otherText;
-      };
     }
   };
 };

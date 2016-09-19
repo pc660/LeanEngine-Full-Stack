@@ -10,6 +10,7 @@ export default (authFac, $log, lcConfig,  $state, $scope, $window, commonSer, he
   // Need to get current user level.
   $log.log(authFac.getUserLevel());
   $scope.level = authFac.getUserLevel();
+  //username, password, level, email, contactname, cellphone
   /*
   if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
     $scope.admin = true;
