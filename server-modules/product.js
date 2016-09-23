@@ -272,7 +272,7 @@ productApi.search = (req, res) => {
   // Must login and do stuff.
   tool.l(params);
   // TODO: uncomment this.
-  var user = userApi.getCurrentUser(req);
+  var user = req.user;
   if (!user) {
    res.status(404).send();
    return;
@@ -328,7 +328,10 @@ productApi.search = (req, res) => {
 
   // TODO: add start date.
   // TODO: add days.
+  tool.l("doing query here");
   Promise.all(queries).then(function (results) {
+    tool.l("success!!!");
+    tool.l(results);
     var searchResultSet = {};
     // If there is no search query.
     if (results.length > 1) {
@@ -336,6 +339,7 @@ productApi.search = (req, res) => {
         searchResultSet[result.id] = true;
       });
     }
+
     var products = results[0].filter(function (product) {
       if (results.length > 1 && searchResultSet[product.id]) {
         return true;
@@ -344,17 +348,20 @@ productApi.search = (req, res) => {
       }
       return false;
     });
+
     // Need to check min date and max date.
     if (params.startDate || params.endDate) {
       var filterProducts = [];
       products.forEach(function (product) {
         var price = product.get("price");
         if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate, product.get("stopDay"))) {
+          tool.l("pushing ====================")
           filterProducts.push(product);
         }
       })
       products = filterProducts;
     }
+    tool.l("products length " + products.length);
 
     if (params.start) {
       filterProducts = [];
@@ -375,6 +382,7 @@ productApi.search = (req, res) => {
       return product.get("provider");
     });
 
+    tool.l(products.length);
     res.send({products: products, responsible: responsible, providers: providers});
     return;
   }, function (error) {
@@ -383,6 +391,8 @@ productApi.search = (req, res) => {
 };
 
 productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
+  tool.l("checkPriceWithinDate");
+  tool.l(priceMap);
   // Make the startDate as the current time + stopDay.
   var startDate = new Date();
   startDate.setDate(startDate.getDate() + stopDay);
@@ -404,6 +414,8 @@ productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
   }
 
   var years = Object.keys(priceMap).sort();
+  tool.l(startDate);
+  tool.l(endDate);
   return years.some(function(year) {
     if (year >= startDate.getFullYear() && year <= endDate.getFullYear()) {
       var monthPrice = priceMap[year];
@@ -436,7 +448,9 @@ productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
             continue;
           }
 
-          if (dayPrice[day] && Object.keys(dayPrice[day]).length > 0) {
+          if (dayPrice[day] && Object.keys(dayPrice[day]).length > 0)  {
+            tool.l("hey I get this");
+            tool.l(priceMap);
             return true;
           }
         }

@@ -9210,7 +9210,7 @@ return jQuery;
 }));
 
 /**
- * @license AngularJS v1.5.7
+ * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -9268,7 +9268,7 @@ function minErr(module, ErrorConstructor) {
       return match;
     });
 
-    message += '\nhttp://errors.angularjs.org/1.5.7/' +
+    message += '\nhttp://errors.angularjs.org/1.5.8/' +
       (module ? module + '/' : '') + code;
 
     for (i = SKIP_INDEXES, paramPrefix = '?'; i < templateArgs.length; i++, paramPrefix = '&') {
@@ -10032,7 +10032,13 @@ function arrayRemove(array, value) {
  * * If a destination is provided, all of its elements (for arrays) or properties (for objects)
  *   are deleted and then all elements/properties from the source are copied to it.
  * * If `source` is not an object or array (inc. `null` and `undefined`), `source` is returned.
- * * If `source` is identical to 'destination' an exception will be thrown.
+ * * If `source` is identical to `destination` an exception will be thrown.
+ *
+ * <br />
+ * <div class="alert alert-warning">
+ *   Only enumerable properties are taken into account. Non-enumerable properties (both on `source`
+ *   and on `destination`) will be ignored.
+ * </div>
  *
  * @param {*} source The source that will be used to make a copy.
  *                   Can be any type, including primitives, `null`, and `undefined`.
@@ -10041,41 +10047,42 @@ function arrayRemove(array, value) {
  * @returns {*} The copy or updated `destination`, if `destination` was specified.
  *
  * @example
- <example module="copyExample">
- <file name="index.html">
- <div ng-controller="ExampleController">
- <form novalidate class="simple-form">
- Name: <input type="text" ng-model="user.name" /><br />
- E-mail: <input type="email" ng-model="user.email" /><br />
- Gender: <input type="radio" ng-model="user.gender" value="male" />male
- <input type="radio" ng-model="user.gender" value="female" />female<br />
- <button ng-click="reset()">RESET</button>
- <button ng-click="update(user)">SAVE</button>
- </form>
- <pre>form = {{user | json}}</pre>
- <pre>master = {{master | json}}</pre>
- </div>
+  <example module="copyExample">
+    <file name="index.html">
+      <div ng-controller="ExampleController">
+        <form novalidate class="simple-form">
+          <label>Name: <input type="text" ng-model="user.name" /></label><br />
+          <label>Age:  <input type="number" ng-model="user.age" /></label><br />
+          Gender: <label><input type="radio" ng-model="user.gender" value="male" />male</label>
+                  <label><input type="radio" ng-model="user.gender" value="female" />female</label><br />
+          <button ng-click="reset()">RESET</button>
+          <button ng-click="update(user)">SAVE</button>
+        </form>
+        <pre>form = {{user | json}}</pre>
+        <pre>master = {{master | json}}</pre>
+      </div>
+    </file>
+    <file name="script.js">
+      // Module: copyExample
+      angular.
+        module('copyExample', []).
+        controller('ExampleController', ['$scope', function($scope) {
+          $scope.master = {};
 
- <script>
-  angular.module('copyExample', [])
-    .controller('ExampleController', ['$scope', function($scope) {
-      $scope.master= {};
+          $scope.reset = function() {
+            // Example with 1 argument
+            $scope.user = angular.copy($scope.master);
+          };
 
-      $scope.update = function(user) {
-        // Example with 1 argument
-        $scope.master= angular.copy(user);
-      };
+          $scope.update = function(user) {
+            // Example with 2 arguments
+            angular.copy(user, $scope.master);
+          };
 
-      $scope.reset = function() {
-        // Example with 2 arguments
-        angular.copy($scope.master, $scope.user);
-      };
-
-      $scope.reset();
-    }]);
- </script>
- </file>
- </example>
+          $scope.reset();
+        }]);
+    </file>
+  </example>
  */
 function copy(source, destination) {
   var stackSource = [];
@@ -10182,7 +10189,7 @@ function copy(source, destination) {
       case '[object Uint8ClampedArray]':
       case '[object Uint16Array]':
       case '[object Uint32Array]':
-        return new source.constructor(copyElement(source.buffer));
+        return new source.constructor(copyElement(source.buffer), source.byteOffset, source.length);
 
       case '[object ArrayBuffer]':
         //Support: IE10
@@ -11685,6 +11692,7 @@ function toDebugString(obj) {
   $HttpParamSerializerJQLikeProvider,
   $HttpBackendProvider,
   $xhrFactoryProvider,
+  $jsonpCallbacksProvider,
   $LocationProvider,
   $LogProvider,
   $ParseProvider,
@@ -11722,11 +11730,11 @@ function toDebugString(obj) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.5.7',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.5.8',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 5,
-  dot: 7,
-  codeName: 'hexagonal-circumvolution'
+  dot: 8,
+  codeName: 'arbitrary-fallbacks'
 };
 
 
@@ -11757,7 +11765,7 @@ function publishExternalAPI(angular) {
     'isDate': isDate,
     'lowercase': lowercase,
     'uppercase': uppercase,
-    'callbacks': {counter: 0},
+    'callbacks': {$$counter: 0},
     'getTestability': getTestability,
     '$$minErr': minErr,
     '$$csp': csp,
@@ -11846,6 +11854,7 @@ function publishExternalAPI(angular) {
         $httpParamSerializerJQLike: $HttpParamSerializerJQLikeProvider,
         $httpBackend: $HttpBackendProvider,
         $xhrFactory: $xhrFactoryProvider,
+        $jsonpCallbacks: $jsonpCallbacksProvider,
         $location: $LocationProvider,
         $log: $LogProvider,
         $parse: $ParseProvider,
@@ -12084,7 +12093,7 @@ function jqLiteBuildFragment(html, context) {
     nodes.push(context.createTextNode(html));
   } else {
     // Convert html into DOM nodes
-    tmp = tmp || fragment.appendChild(context.createElement("div"));
+    tmp = fragment.appendChild(context.createElement("div"));
     tag = (TAG_NAME_REGEXP.exec(html) || ["", ""])[1].toLowerCase();
     wrap = wrapMap[tag] || wrapMap._default;
     tmp.innerHTML = wrap[1] + html.replace(XHTML_TAG_REGEXP, "<$1></$2>") + wrap[2];
@@ -13897,10 +13906,10 @@ function createInjector(modulesToLoad, strictDi) {
       if (msie <= 11) {
         return false;
       }
-      // Workaround for MS Edge.
-      // Check https://connect.microsoft.com/IE/Feedback/Details/2211653
+      // Support: Edge 12-13 only
+      // See: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/6156135/
       return typeof func === 'function'
-        && /^(?:class\s|constructor\()/.test(stringifyFn(func));
+        && /^(?:class\b|constructor\()/.test(stringifyFn(func));
     }
 
     function invoke(fn, self, locals, serviceName) {
@@ -15932,8 +15941,9 @@ function $TemplateCacheProvider() {
  * There are many different options for a directive.
  *
  * The difference resides in the return value of the factory function.
- * You can either return a "Directive Definition Object" (see below) that defines the directive properties,
- * or just the `postLink` function (all other properties will have the default values).
+ * You can either return a {@link $compile#directive-definition-object Directive Definition Object (see below)}
+ * that defines the directive properties, or just the `postLink` function (all other properties will have
+ * the default values).
  *
  * <div class="alert alert-success">
  * **Best Practice:** It's recommended to use the "directive definition object" form.
@@ -15997,6 +16007,125 @@ function $TemplateCacheProvider() {
  *   });
  * ```
  *
+ * ### Life-cycle hooks
+ * Directive controllers can provide the following methods that are called by Angular at points in the life-cycle of the
+ * directive:
+ * * `$onInit()` - Called on each controller after all the controllers on an element have been constructed and
+ *   had their bindings initialized (and before the pre &amp; post linking functions for the directives on
+ *   this element). This is a good place to put initialization code for your controller.
+ * * `$onChanges(changesObj)` - Called whenever one-way (`<`) or interpolation (`@`) bindings are updated. The
+ *   `changesObj` is a hash whose keys are the names of the bound properties that have changed, and the values are an
+ *   object of the form `{ currentValue, previousValue, isFirstChange() }`. Use this hook to trigger updates within a
+ *   component such as cloning the bound value to prevent accidental mutation of the outer value.
+ * * `$doCheck()` - Called on each turn of the digest cycle. Provides an opportunity to detect and act on
+ *   changes. Any actions that you wish to take in response to the changes that you detect must be
+ *   invoked from this hook; implementing this has no effect on when `$onChanges` is called. For example, this hook
+ *   could be useful if you wish to perform a deep equality check, or to check a Date object, changes to which would not
+ *   be detected by Angular's change detector and thus not trigger `$onChanges`. This hook is invoked with no arguments;
+ *   if detecting changes, you must store the previous value(s) for comparison to the current values.
+ * * `$onDestroy()` - Called on a controller when its containing scope is destroyed. Use this hook for releasing
+ *   external resources, watches and event handlers. Note that components have their `$onDestroy()` hooks called in
+ *   the same order as the `$scope.$broadcast` events are triggered, which is top down. This means that parent
+ *   components will have their `$onDestroy()` hook called before child components.
+ * * `$postLink()` - Called after this controller's element and its children have been linked. Similar to the post-link
+ *   function this hook can be used to set up DOM event handlers and do direct DOM manipulation.
+ *   Note that child elements that contain `templateUrl` directives will not have been compiled and linked since
+ *   they are waiting for their template to load asynchronously and their own compilation and linking has been
+ *   suspended until that occurs.
+ *
+ * #### Comparison with Angular 2 life-cycle hooks
+ * Angular 2 also uses life-cycle hooks for its components. While the Angular 1 life-cycle hooks are similar there are
+ * some differences that you should be aware of, especially when it comes to moving your code from Angular 1 to Angular 2:
+ *
+ * * Angular 1 hooks are prefixed with `$`, such as `$onInit`. Angular 2 hooks are prefixed with `ng`, such as `ngOnInit`.
+ * * Angular 1 hooks can be defined on the controller prototype or added to the controller inside its constructor.
+ *   In Angular 2 you can only define hooks on the prototype of the Component class.
+ * * Due to the differences in change-detection, you may get many more calls to `$doCheck` in Angular 1 than you would to
+ *   `ngDoCheck` in Angular 2
+ * * Changes to the model inside `$doCheck` will trigger new turns of the digest loop, which will cause the changes to be
+ *   propagated throughout the application.
+ *   Angular 2 does not allow the `ngDoCheck` hook to trigger a change outside of the component. It will either throw an
+ *   error or do nothing depending upon the state of `enableProdMode()`.
+ *
+ * #### Life-cycle hook examples
+ *
+ * This example shows how you can check for mutations to a Date object even though the identity of the object
+ * has not changed.
+ *
+ * <example name="doCheckDateExample" module="do-check-module">
+ *   <file name="app.js">
+ *     angular.module('do-check-module', [])
+ *       .component('app', {
+ *         template:
+ *           'Month: <input ng-model="$ctrl.month" ng-change="$ctrl.updateDate()">' +
+ *           'Date: {{ $ctrl.date }}' +
+ *           '<test date="$ctrl.date"></test>',
+ *         controller: function() {
+ *           this.date = new Date();
+ *           this.month = this.date.getMonth();
+ *           this.updateDate = function() {
+ *             this.date.setMonth(this.month);
+ *           };
+ *         }
+ *       })
+ *       .component('test', {
+ *         bindings: { date: '<' },
+ *         template:
+ *           '<pre>{{ $ctrl.log | json }}</pre>',
+ *         controller: function() {
+ *           var previousValue;
+ *           this.log = [];
+ *           this.$doCheck = function() {
+ *             var currentValue = this.date && this.date.valueOf();
+ *             if (previousValue !== currentValue) {
+ *               this.log.push('doCheck: date mutated: ' + this.date);
+ *               previousValue = currentValue;
+ *             }
+ *           };
+ *         }
+ *       });
+ *   </file>
+ *   <file name="index.html">
+ *     <app></app>
+ *   </file>
+ * </example>
+ *
+ * This example show how you might use `$doCheck` to trigger changes in your component's inputs even if the
+ * actual identity of the component doesn't change. (Be aware that cloning and deep equality checks on large
+ * arrays or objects can have a negative impact on your application performance)
+ *
+ * <example name="doCheckArrayExample" module="do-check-module">
+ *   <file name="index.html">
+ *     <div ng-init="items = []">
+ *       <button ng-click="items.push(items.length)">Add Item</button>
+ *       <button ng-click="items = []">Reset Items</button>
+ *       <pre>{{ items }}</pre>
+ *       <test items="items"></test>
+ *     </div>
+ *   </file>
+ *   <file name="app.js">
+ *      angular.module('do-check-module', [])
+ *        .component('test', {
+ *          bindings: { items: '<' },
+ *          template:
+ *            '<pre>{{ $ctrl.log | json }}</pre>',
+ *          controller: function() {
+ *            this.log = [];
+ *
+ *            this.$doCheck = function() {
+ *              if (this.items_ref !== this.items) {
+ *                this.log.push('doCheck: items changed');
+ *                this.items_ref = this.items;
+ *              }
+ *              if (!angular.equals(this.items_clone, this.items)) {
+ *                this.log.push('doCheck: items mutated');
+ *                this.items_clone = angular.copy(this.items);
+ *              }
+ *            };
+ *          }
+ *        });
+ *   </file>
+ * </example>
  *
  *
  * ### Directive Definition Object
@@ -16171,25 +16300,6 @@ function $TemplateCacheProvider() {
  *      then the default translusion is provided.
  *    The `$transclude` function also has a method on it, `$transclude.isSlotFilled(slotName)`, which returns
  *    `true` if the specified slot contains content (i.e. one or more DOM nodes).
- *
- * The controller can provide the following methods that act as life-cycle hooks:
- * * `$onInit()` - Called on each controller after all the controllers on an element have been constructed and
- *   had their bindings initialized (and before the pre &amp; post linking functions for the directives on
- *   this element). This is a good place to put initialization code for your controller.
- * * `$onChanges(changesObj)` - Called whenever one-way (`<`) or interpolation (`@`) bindings are updated. The
- *   `changesObj` is a hash whose keys are the names of the bound properties that have changed, and the values are an
- *   object of the form `{ currentValue, previousValue, isFirstChange() }`. Use this hook to trigger updates within a
- *   component such as cloning the bound value to prevent accidental mutation of the outer value.
- * * `$onDestroy()` - Called on a controller when its containing scope is destroyed. Use this hook for releasing
- *   external resources, watches and event handlers. Note that components have their `$onDestroy()` hooks called in
- *   the same order as the `$scope.$broadcast` events are triggered, which is top down. This means that parent
- *   components will have their `$onDestroy()` hook called before child components.
- * * `$postLink()` - Called after this controller's element and its children have been linked. Similar to the post-link
- *   function this hook can be used to set up DOM event handlers and do direct DOM manipulation.
- *   Note that child elements that contain `templateUrl` directives will not have been compiled and linked since
- *   they are waiting for their template to load asynchronously and their own compilation and linking has been
- *   suspended until that occurs.
- *
  *
  * #### `require`
  * Require another directive and inject its controller as the fourth argument to the linking function. The
@@ -16388,8 +16498,8 @@ function $TemplateCacheProvider() {
  *     any other controller.
  *
  *   * `transcludeFn` - A transclude linking function pre-bound to the correct transclusion scope.
- *     This is the same as the `$transclude`
- *     parameter of directive controllers, see there for details.
+ *     This is the same as the `$transclude` parameter of directive controllers,
+ *     see {@link ng.$compile#-controller- the controller section for details}.
  *     `function([scope], cloneLinkingFn, futureParentElement)`.
  *
  * #### Pre-linking function
@@ -17844,24 +17954,30 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
           addTextInterpolateDirective(directives, node.nodeValue);
           break;
         case NODE_TYPE_COMMENT: /* Comment */
-          try {
-            match = COMMENT_DIRECTIVE_REGEXP.exec(node.nodeValue);
-            if (match) {
-              nName = directiveNormalize(match[1]);
-              if (addDirective(directives, nName, 'M', maxPriority, ignoreDirective)) {
-                attrs[nName] = trim(match[2]);
-              }
-            }
-          } catch (e) {
-            // turns out that under some circumstances IE9 throws errors when one attempts to read
-            // comment's node value.
-            // Just ignore it and continue. (Can't seem to reproduce in test case.)
-          }
+          collectCommentDirectives(node, directives, attrs, maxPriority, ignoreDirective);
           break;
       }
 
       directives.sort(byPriority);
       return directives;
+    }
+
+    function collectCommentDirectives(node, directives, attrs, maxPriority, ignoreDirective) {
+      // function created because of performance, try/catch disables
+      // the optimization of the whole function #14848
+      try {
+        var match = COMMENT_DIRECTIVE_REGEXP.exec(node.nodeValue);
+        if (match) {
+          var nName = directiveNormalize(match[1]);
+          if (addDirective(directives, nName, 'M', maxPriority, ignoreDirective)) {
+            attrs[nName] = trim(match[2]);
+          }
+        }
+      } catch (e) {
+        // turns out that under some circumstances IE9 throws errors when one attempts to read
+        // comment's node value.
+        // Just ignore it and continue. (Can't seem to reproduce in test case.)
+      }
     }
 
     /**
@@ -18391,6 +18507,10 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
             } catch (e) {
               $exceptionHandler(e);
             }
+          }
+          if (isFunction(controllerInstance.$doCheck)) {
+            controllerScope.$watch(function() { controllerInstance.$doCheck(); });
+            controllerInstance.$doCheck();
           }
           if (isFunction(controllerInstance.$onDestroy)) {
             controllerScope.$on('$destroy', function callOnDestroyHook() {
@@ -19038,7 +19158,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       forEach(bindings, function initializeBinding(definition, scopeName) {
         var attrName = definition.attrName,
         optional = definition.optional,
-        mode = definition.mode, // @, =, or &
+        mode = definition.mode, // @, =, <, or &
         lastValue,
         parentGet, parentSet, compare, removeWatch;
 
@@ -19536,7 +19656,7 @@ function $DocumentProvider() {
  *         logErrorsToBackend(exception, cause);
  *         $log.warn(exception, cause);
  *       };
- *     });
+ *     }]);
  * ```
  *
  * <hr />
@@ -19618,7 +19738,7 @@ function $HttpParamSerializerProvider() {
    * * `{'foo': 'bar'}` results in `foo=bar`
    * * `{'foo': Date.now()}` results in `foo=2015-04-01T09%3A50%3A49.262Z` (`toISOString()` and encoded representation of a Date object)
    * * `{'foo': ['bar', 'baz']}` results in `foo=bar&foo=baz` (repeated key for each array element)
-   * * `{'foo': {'bar':'baz'}}` results in `foo=%7B%22bar%22%3A%22baz%22%7D"` (stringified and encoded representation of an object)
+   * * `{'foo': {'bar':'baz'}}` results in `foo=%7B%22bar%22%3A%22baz%22%7D` (stringified and encoded representation of an object)
    *
    * Note that serializer will sort the request parameters alphabetically.
    * */
@@ -20169,7 +20289,7 @@ function $HttpProvider() {
      *
      * ### Overriding the Default Transformations Per Request
      *
-     * If you wish override the request/response transformations only for a single request then provide
+     * If you wish to override the request/response transformations only for a single request then provide
      * `transformRequest` and/or `transformResponse` properties on the configuration object passed
      * into `$http`.
      *
@@ -20212,7 +20332,7 @@ function $HttpProvider() {
      *   * cache a specific response - set config.cache value to TRUE or to a cache object
      *
      * If caching is enabled, but neither the default cache nor config.cache are set to a cache object,
-     * then the default `$cacheFactory($http)` object is used.
+     * then the default `$cacheFactory("$http")` object is used.
      *
      * The default cache value can be set by updating the
      * {@link ng.$http#defaults `$http.defaults.cache`} property or the
@@ -20540,48 +20660,25 @@ function $HttpProvider() {
       config.headers = mergeHeaders(requestConfig);
       config.method = uppercase(config.method);
       config.paramSerializer = isString(config.paramSerializer) ?
-        $injector.get(config.paramSerializer) : config.paramSerializer;
+          $injector.get(config.paramSerializer) : config.paramSerializer;
 
-      var serverRequest = function(config) {
-        var headers = config.headers;
-        var reqData = transformData(config.data, headersGetter(headers), undefined, config.transformRequest);
-
-        // strip content-type if data is undefined
-        if (isUndefined(reqData)) {
-          forEach(headers, function(value, header) {
-            if (lowercase(header) === 'content-type') {
-                delete headers[header];
-            }
-          });
-        }
-
-        if (isUndefined(config.withCredentials) && !isUndefined(defaults.withCredentials)) {
-          config.withCredentials = defaults.withCredentials;
-        }
-
-        // send request
-        return sendReq(config, reqData).then(transformResponse, transformResponse);
-      };
-
-      var chain = [serverRequest, undefined];
+      var requestInterceptors = [];
+      var responseInterceptors = [];
       var promise = $q.when(config);
 
       // apply interceptors
       forEach(reversedInterceptors, function(interceptor) {
         if (interceptor.request || interceptor.requestError) {
-          chain.unshift(interceptor.request, interceptor.requestError);
+          requestInterceptors.unshift(interceptor.request, interceptor.requestError);
         }
         if (interceptor.response || interceptor.responseError) {
-          chain.push(interceptor.response, interceptor.responseError);
+          responseInterceptors.push(interceptor.response, interceptor.responseError);
         }
       });
 
-      while (chain.length) {
-        var thenFn = chain.shift();
-        var rejectFn = chain.shift();
-
-        promise = promise.then(thenFn, rejectFn);
-      }
+      promise = chainInterceptors(promise, requestInterceptors);
+      promise = promise.then(serverRequest);
+      promise = chainInterceptors(promise, responseInterceptors);
 
       if (useLegacyPromise) {
         promise.success = function(fn) {
@@ -20608,14 +20705,18 @@ function $HttpProvider() {
 
       return promise;
 
-      function transformResponse(response) {
-        // make a copy since the response must be cacheable
-        var resp = extend({}, response);
-        resp.data = transformData(response.data, response.headers, response.status,
-                                  config.transformResponse);
-        return (isSuccess(response.status))
-          ? resp
-          : $q.reject(resp);
+
+      function chainInterceptors(promise, interceptors) {
+        for (var i = 0, ii = interceptors.length; i < ii;) {
+          var thenFn = interceptors[i++];
+          var rejectFn = interceptors[i++];
+
+          promise = promise.then(thenFn, rejectFn);
+        }
+
+        interceptors.length = 0;
+
+        return promise;
       }
 
       function executeHeaderFns(headers, config) {
@@ -20658,6 +20759,37 @@ function $HttpProvider() {
 
         // execute if header value is a function for merged headers
         return executeHeaderFns(reqHeaders, shallowCopy(config));
+      }
+
+      function serverRequest(config) {
+        var headers = config.headers;
+        var reqData = transformData(config.data, headersGetter(headers), undefined, config.transformRequest);
+
+        // strip content-type if data is undefined
+        if (isUndefined(reqData)) {
+          forEach(headers, function(value, header) {
+            if (lowercase(header) === 'content-type') {
+              delete headers[header];
+            }
+          });
+        }
+
+        if (isUndefined(config.withCredentials) && !isUndefined(defaults.withCredentials)) {
+          config.withCredentials = defaults.withCredentials;
+        }
+
+        // send request
+        return sendReq(config, reqData).then(transformResponse, transformResponse);
+      }
+
+      function transformResponse(response) {
+        // make a copy since the response must be cacheable
+        var resp = extend({}, response);
+        resp.data = transformData(response.data, response.headers, response.status,
+                                  config.transformResponse);
+        return (isSuccess(response.status))
+          ? resp
+          : $q.reject(resp);
       }
     }
 
@@ -20705,6 +20837,8 @@ function $HttpProvider() {
      *
      * @description
      * Shortcut method to perform `JSONP` request.
+     * If you would like to customise where and how the callbacks are stored then try overriding
+     * or decorating the {@link $jsonpCallbacks} service.
      *
      * @param {string} url Relative or absolute URL specifying the destination of the request.
      *                     The name of the callback should be the string `JSON_CALLBACK`.
@@ -20978,7 +21112,7 @@ function $xhrFactoryProvider() {
 /**
  * @ngdoc service
  * @name $httpBackend
- * @requires $window
+ * @requires $jsonpCallbacks
  * @requires $document
  * @requires $xhrFactory
  *
@@ -20993,8 +21127,8 @@ function $xhrFactoryProvider() {
  * $httpBackend} which can be trained with responses.
  */
 function $HttpBackendProvider() {
-  this.$get = ['$browser', '$window', '$document', '$xhrFactory', function($browser, $window, $document, $xhrFactory) {
-    return createHttpBackend($browser, $xhrFactory, $browser.defer, $window.angular.callbacks, $document[0]);
+  this.$get = ['$browser', '$jsonpCallbacks', '$document', '$xhrFactory', function($browser, $jsonpCallbacks, $document, $xhrFactory) {
+    return createHttpBackend($browser, $xhrFactory, $browser.defer, $jsonpCallbacks, $document[0]);
   }];
 }
 
@@ -21004,17 +21138,13 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
     $browser.$$incOutstandingRequestCount();
     url = url || $browser.url();
 
-    if (lowercase(method) == 'jsonp') {
-      var callbackId = '_' + (callbacks.counter++).toString(36);
-      callbacks[callbackId] = function(data) {
-        callbacks[callbackId].data = data;
-        callbacks[callbackId].called = true;
-      };
-
-      var jsonpDone = jsonpReq(url.replace('JSON_CALLBACK', 'angular.callbacks.' + callbackId),
-          callbackId, function(status, text) {
-        completeRequest(callback, status, callbacks[callbackId].data, "", text);
-        callbacks[callbackId] = noop;
+    if (lowercase(method) === 'jsonp') {
+      var callbackPath = callbacks.createCallback(url);
+      var jsonpDone = jsonpReq(url, callbackPath, function(status, text) {
+        // jsonpReq only ever sets status to 200 (OK), 404 (ERROR) or -1 (WAITING)
+        var response = (status === 200) && callbacks.getResponse(callbackPath);
+        completeRequest(callback, status, response, "", text);
+        callbacks.removeCallback(callbackPath);
       });
     } else {
 
@@ -21116,7 +21246,8 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
     }
   };
 
-  function jsonpReq(url, callbackId, done) {
+  function jsonpReq(url, callbackPath, done) {
+    url = url.replace('JSON_CALLBACK', callbackPath);
     // we can't use jQuery/jqLite here because jQuery does crazy stuff with script elements, e.g.:
     // - fetches local scripts via XHR and evals them
     // - adds and immediately removes script elements from the document
@@ -21134,7 +21265,7 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
       var text = "unknown";
 
       if (event) {
-        if (event.type === "load" && !callbacks[callbackId].called) {
+        if (event.type === "load" && !callbacks.wasCalled(callbackPath)) {
           event = { type: "error" };
         }
         text = event.type;
@@ -21333,7 +21464,7 @@ function $InterpolateProvider() {
      *
      * `allOrNothing` is useful for interpolating URLs. `ngSrc` and `ngSrcset` use this behavior.
      *
-     * ####Escaped Interpolation
+     * #### Escaped Interpolation
      * $interpolate provides a mechanism for escaping interpolation markers. Start and end markers
      * can be escaped by preceding each of their characters with a REVERSE SOLIDUS U+005C (backslash).
      * It will be rendered as a regular start/end marker, and will not be interpreted as an expression
@@ -21755,6 +21886,87 @@ function $IntervalProvider() {
     return interval;
   }];
 }
+
+/**
+ * @ngdoc service
+ * @name $jsonpCallbacks
+ * @requires $window
+ * @description
+ * This service handles the lifecycle of callbacks to handle JSONP requests.
+ * Override this service if you wish to customise where the callbacks are stored and
+ * how they vary compared to the requested url.
+ */
+var $jsonpCallbacksProvider = function() {
+  this.$get = ['$window', function($window) {
+    var callbacks = $window.angular.callbacks;
+    var callbackMap = {};
+
+    function createCallback(callbackId) {
+      var callback = function(data) {
+        callback.data = data;
+        callback.called = true;
+      };
+      callback.id = callbackId;
+      return callback;
+    }
+
+    return {
+      /**
+       * @ngdoc method
+       * @name $jsonpCallbacks#createCallback
+       * @param {string} url the url of the JSONP request
+       * @returns {string} the callback path to send to the server as part of the JSONP request
+       * @description
+       * {@link $httpBackend} calls this method to create a callback and get hold of the path to the callback
+       * to pass to the server, which will be used to call the callback with its payload in the JSONP response.
+       */
+      createCallback: function(url) {
+        var callbackId = '_' + (callbacks.$$counter++).toString(36);
+        var callbackPath = 'angular.callbacks.' + callbackId;
+        var callback = createCallback(callbackId);
+        callbackMap[callbackPath] = callbacks[callbackId] = callback;
+        return callbackPath;
+      },
+      /**
+       * @ngdoc method
+       * @name $jsonpCallbacks#wasCalled
+       * @param {string} callbackPath the path to the callback that was sent in the JSONP request
+       * @returns {boolean} whether the callback has been called, as a result of the JSONP response
+       * @description
+       * {@link $httpBackend} calls this method to find out whether the JSONP response actually called the
+       * callback that was passed in the request.
+       */
+      wasCalled: function(callbackPath) {
+        return callbackMap[callbackPath].called;
+      },
+      /**
+       * @ngdoc method
+       * @name $jsonpCallbacks#getResponse
+       * @param {string} callbackPath the path to the callback that was sent in the JSONP request
+       * @returns {*} the data received from the response via the registered callback
+       * @description
+       * {@link $httpBackend} calls this method to get hold of the data that was provided to the callback
+       * in the JSONP response.
+       */
+      getResponse: function(callbackPath) {
+        return callbackMap[callbackPath].data;
+      },
+      /**
+       * @ngdoc method
+       * @name $jsonpCallbacks#removeCallback
+       * @param {string} callbackPath the path to the callback that was sent in the JSONP request
+       * @description
+       * {@link $httpBackend} calls this method to remove the callback after the JSONP request has
+       * completed or timed-out.
+       */
+      removeCallback: function(callbackPath) {
+        var callback = callbackMap[callbackPath];
+        delete callbacks[callback.id];
+        delete callbackMap[callbackPath];
+      }
+    };
+  }];
+};
 
 /**
  * @ngdoc service
@@ -25201,7 +25413,7 @@ function $ParseProvider() {
  *
  * **Methods**
  *
- * - `then(successCallback, errorCallback, notifyCallback)` – regardless of when the promise was or
+ * - `then(successCallback, [errorCallback], [notifyCallback])` – regardless of when the promise was or
  *   will be resolved or rejected, `then` calls one of the success or error callbacks asynchronously
  *   as soon as the result is available. The callbacks are called with a single argument: the result
  *   or rejection reason. Additionally, the notify callback may be called zero or more times to
@@ -25212,7 +25424,8 @@ function $ParseProvider() {
  *   with the value which is resolved in that promise using
  *   [promise chaining](http://www.html5rocks.com/en/tutorials/es6/promises/#toc-promises-queues)).
  *   It also notifies via the return value of the `notifyCallback` method. The promise cannot be
- *   resolved or rejected from the notifyCallback method.
+ *   resolved or rejected from the notifyCallback method. The errorCallback and notifyCallback
+ *   arguments are optional.
  *
  * - `catch(errorCallback)` – shorthand for `promise.then(null, errorCallback)`
  *
@@ -25627,6 +25840,30 @@ function qFactory(nextTick, exceptionHandler) {
     return deferred.promise;
   }
 
+  /**
+   * @ngdoc method
+   * @name $q#race
+   * @kind function
+   *
+   * @description
+   * Returns a promise that resolves or rejects as soon as one of those promises
+   * resolves or rejects, with the value or reason from that promise.
+   *
+   * @param {Array.<Promise>|Object.<Promise>} promises An array or hash of promises.
+   * @returns {Promise} a promise that resolves or rejects as soon as one of the `promises`
+   * resolves or rejects, with the value or reason from that promise.
+   */
+
+  function race(promises) {
+    var deferred = defer();
+
+    forEach(promises, function(promise) {
+      when(promise).then(deferred.resolve, deferred.reject);
+    });
+
+    return deferred.promise;
+  }
+
   var $Q = function Q(resolver) {
     if (!isFunction(resolver)) {
       throw $qMinErr('norslvr', "Expected resolverFn, got '{0}'", resolver);
@@ -25656,6 +25893,7 @@ function qFactory(nextTick, exceptionHandler) {
   $Q.when = when;
   $Q.resolve = resolve;
   $Q.all = all;
+  $Q.race = race;
 
   return $Q;
 }
@@ -29007,10 +29245,11 @@ function $FilterProvider($provide) {
  *   - `Object`: A pattern object can be used to filter specific properties on objects contained
  *     by `array`. For example `{name:"M", phone:"1"}` predicate will return an array of items
  *     which have property `name` containing "M" and property `phone` containing "1". A special
- *     property name `$` can be used (as in `{$:"text"}`) to accept a match against any
- *     property of the object or its nested object properties. That's equivalent to the simple
- *     substring match with a `string` as described above. The predicate can be negated by prefixing
- *     the string with `!`.
+ *     property name (`$` by default) can be used (e.g. as in `{$: "text"}`) to accept a match
+ *     against any property of the object or its nested object properties. That's equivalent to the
+ *     simple substring match with a `string` as described above. The special property name can be
+ *     overwritten, using the `anyPropertyKey` parameter.
+ *     The predicate can be negated by prefixing the string with `!`.
  *     For example `{name: "!M"}` predicate will return an array of items which have property `name`
  *     not containing "M".
  *
@@ -29043,6 +29282,9 @@ function $FilterProvider($provide) {
  *
  *     Primitive values are converted to strings. Objects are not compared against primitives,
  *     unless they have a custom `toString` method (e.g. `Date` objects).
+ *
+ * @param {string=} anyPropertyKey The special property name that matches against any property.
+ *     By default `$`.
  *
  * @example
    <example>
@@ -29112,8 +29354,9 @@ function $FilterProvider($provide) {
      </file>
    </example>
  */
+
 function filterFilter() {
-  return function(array, expression, comparator) {
+  return function(array, expression, comparator, anyPropertyKey) {
     if (!isArrayLike(array)) {
       if (array == null) {
         return array;
@@ -29122,6 +29365,7 @@ function filterFilter() {
       }
     }
 
+    anyPropertyKey = anyPropertyKey || '$';
     var expressionType = getTypeForFilter(expression);
     var predicateFn;
     var matchAgainstAnyProp;
@@ -29138,7 +29382,7 @@ function filterFilter() {
         //jshint -W086
       case 'object':
         //jshint +W086
-        predicateFn = createPredicateFn(expression, comparator, matchAgainstAnyProp);
+        predicateFn = createPredicateFn(expression, comparator, anyPropertyKey, matchAgainstAnyProp);
         break;
       default:
         return array;
@@ -29149,8 +29393,8 @@ function filterFilter() {
 }
 
 // Helper functions for `filterFilter`
-function createPredicateFn(expression, comparator, matchAgainstAnyProp) {
-  var shouldMatchPrimitives = isObject(expression) && ('$' in expression);
+function createPredicateFn(expression, comparator, anyPropertyKey, matchAgainstAnyProp) {
+  var shouldMatchPrimitives = isObject(expression) && (anyPropertyKey in expression);
   var predicateFn;
 
   if (comparator === true) {
@@ -29178,25 +29422,25 @@ function createPredicateFn(expression, comparator, matchAgainstAnyProp) {
 
   predicateFn = function(item) {
     if (shouldMatchPrimitives && !isObject(item)) {
-      return deepCompare(item, expression.$, comparator, false);
+      return deepCompare(item, expression[anyPropertyKey], comparator, anyPropertyKey, false);
     }
-    return deepCompare(item, expression, comparator, matchAgainstAnyProp);
+    return deepCompare(item, expression, comparator, anyPropertyKey, matchAgainstAnyProp);
   };
 
   return predicateFn;
 }
 
-function deepCompare(actual, expected, comparator, matchAgainstAnyProp, dontMatchWholeObject) {
+function deepCompare(actual, expected, comparator, anyPropertyKey, matchAgainstAnyProp, dontMatchWholeObject) {
   var actualType = getTypeForFilter(actual);
   var expectedType = getTypeForFilter(expected);
 
   if ((expectedType === 'string') && (expected.charAt(0) === '!')) {
-    return !deepCompare(actual, expected.substring(1), comparator, matchAgainstAnyProp);
+    return !deepCompare(actual, expected.substring(1), comparator, anyPropertyKey, matchAgainstAnyProp);
   } else if (isArray(actual)) {
     // In case `actual` is an array, consider it a match
     // if ANY of it's items matches `expected`
     return actual.some(function(item) {
-      return deepCompare(item, expected, comparator, matchAgainstAnyProp);
+      return deepCompare(item, expected, comparator, anyPropertyKey, matchAgainstAnyProp);
     });
   }
 
@@ -29205,11 +29449,11 @@ function deepCompare(actual, expected, comparator, matchAgainstAnyProp, dontMatc
       var key;
       if (matchAgainstAnyProp) {
         for (key in actual) {
-          if ((key.charAt(0) !== '$') && deepCompare(actual[key], expected, comparator, true)) {
+          if ((key.charAt(0) !== '$') && deepCompare(actual[key], expected, comparator, anyPropertyKey, true)) {
             return true;
           }
         }
-        return dontMatchWholeObject ? false : deepCompare(actual, expected, comparator, false);
+        return dontMatchWholeObject ? false : deepCompare(actual, expected, comparator, anyPropertyKey, false);
       } else if (expectedType === 'object') {
         for (key in expected) {
           var expectedVal = expected[key];
@@ -29217,9 +29461,9 @@ function deepCompare(actual, expected, comparator, matchAgainstAnyProp, dontMatc
             continue;
           }
 
-          var matchAnyProperty = key === '$';
+          var matchAnyProperty = key === anyPropertyKey;
           var actualVal = matchAnyProperty ? actual : actual[key];
-          if (!deepCompare(actualVal, expectedVal, comparator, matchAnyProperty, matchAnyProperty)) {
+          if (!deepCompare(actualVal, expectedVal, comparator, anyPropertyKey, matchAnyProperty, matchAnyProperty)) {
             return false;
           }
         }
@@ -31049,9 +31293,11 @@ var htmlAnchorDirective = valueFn({
  *
  * @description
  *
- * Sets the `readOnly` attribute on the element, if the expression inside `ngReadonly` is truthy.
+ * Sets the `readonly` attribute on the element, if the expression inside `ngReadonly` is truthy.
+ * Note that `readonly` applies only to `input` elements with specific types. [See the input docs on
+ * MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-readonly) for more information.
  *
- * A special directive is necessary because we cannot use interpolation inside the `readOnly`
+ * A special directive is necessary because we cannot use interpolation inside the `readonly`
  * attribute. See the {@link guide/interpolation interpolation guide} for more info.
  *
  * @example
@@ -31088,6 +31334,13 @@ var htmlAnchorDirective = valueFn({
  * A special directive is necessary because we cannot use interpolation inside the `selected`
  * attribute. See the {@link guide/interpolation interpolation guide} for more info.
  *
+ * <div class="alert alert-warning">
+ *   **Note:** `ngSelected` does not interact with the `select` and `ngModel` directives, it only
+ *   sets the `selected` attribute on the element. If you are using `ngModel` on the select, you
+ *   should not use `ngSelected` on the options, as `ngModel` will set the select value and
+ *   selected options.
+ * </div>
+ *
  * @example
     <example>
       <file name="index.html">
@@ -31123,6 +31376,11 @@ var htmlAnchorDirective = valueFn({
  *
  * A special directive is necessary because we cannot use interpolation inside the `open`
  * attribute. See the {@link guide/interpolation interpolation guide} for more info.
+ *
+ * ## A note about browser compatibility
+ *
+ * Edge, Firefox, and Internet Explorer do not support the `details` element, it is
+ * recommended to use {@link ng.ngShow} and {@link ng.ngHide} instead.
  *
  * @example
      <example>
@@ -33201,7 +33459,7 @@ function numberInputType(scope, element, attr, ctrl, $sniffer, $browser) {
 
     attr.$observe('min', function(val) {
       if (isDefined(val) && !isNumber(val)) {
-        val = parseFloat(val, 10);
+        val = parseFloat(val);
       }
       minVal = isNumber(val) && !isNaN(val) ? val : undefined;
       // TODO(matsko): implement validateLater to reduce number of validations
@@ -33217,7 +33475,7 @@ function numberInputType(scope, element, attr, ctrl, $sniffer, $browser) {
 
     attr.$observe('max', function(val) {
       if (isDefined(val) && !isNumber(val)) {
-        val = parseFloat(val, 10);
+        val = parseFloat(val);
       }
       maxVal = isNumber(val) && !isNaN(val) ? val : undefined;
       // TODO(matsko): implement validateLater to reduce number of validations
@@ -34023,6 +34281,11 @@ function classDirective(name, selector) {
  *
  * When the expression changes, the previously added classes are removed and only then are the
  * new classes added.
+ *
+ * @knownIssue
+ * You should not use {@link guide/interpolation interpolation} in the value of the `class`
+ * attribute, when using the `ngClass` directive on the same element.
+ * See {@link guide/interpolation#known-issues here} for more info.
  *
  * @animations
  * | Animation                        | Occurs                              |
@@ -37969,7 +38232,7 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
 
           for (var i = options.items.length - 1; i >= 0; i--) {
             var option = options.items[i];
-            if (option.group) {
+            if (isDefined(option.group)) {
               jqLiteRemove(option.element.parentNode);
             } else {
               jqLiteRemove(option.element);
@@ -38001,7 +38264,8 @@ var ngOptionsDirective = ['$compile', '$document', '$parse', function($compile, 
               listFragment.appendChild(groupElement);
 
               // Update the label on the group element
-              groupElement.label = option.group;
+              // "null" is special cased because of Safari
+              groupElement.label = option.group === null ? 'null' : option.group;
 
               // Store it for use later
               groupElementMap[option.group] = groupElement;
@@ -39186,6 +39450,11 @@ var ngHideDirective = ['$animate', function($animate) {
  * @description
  * The `ngStyle` directive allows you to set CSS style on an HTML element conditionally.
  *
+ * @knownIssue
+ * You should not use {@link guide/interpolation interpolation} in the value of the `style`
+ * attribute, when using the `ngStyle` directive on the same element.
+ * See {@link guide/interpolation#known-issues here} for more info.
+ *
  * @element ANY
  * @param {expression} ngStyle
  *
@@ -39597,37 +39866,63 @@ var ngSwitchDefaultDirective = ngDirective({
  * </example>
  */
 var ngTranscludeMinErr = minErr('ngTransclude');
-var ngTranscludeDirective = ngDirective({
-  restrict: 'EAC',
-  link: function($scope, $element, $attrs, controller, $transclude) {
+var ngTranscludeDirective = ['$compile', function($compile) {
+  return {
+    restrict: 'EAC',
+    terminal: true,
+    compile: function ngTranscludeCompile(tElement) {
 
-    if ($attrs.ngTransclude === $attrs.$attr.ngTransclude) {
-      // If the attribute is of the form: `ng-transclude="ng-transclude"`
-      // then treat it like the default
-      $attrs.ngTransclude = '';
+      // Remove and cache any original content to act as a fallback
+      var fallbackLinkFn = $compile(tElement.contents());
+      tElement.empty();
+
+      return function ngTranscludePostLink($scope, $element, $attrs, controller, $transclude) {
+
+        if (!$transclude) {
+          throw ngTranscludeMinErr('orphan',
+          'Illegal use of ngTransclude directive in the template! ' +
+          'No parent directive that requires a transclusion found. ' +
+          'Element: {0}',
+          startingTag($element));
+        }
+
+
+        // If the attribute is of the form: `ng-transclude="ng-transclude"` then treat it like the default
+        if ($attrs.ngTransclude === $attrs.$attr.ngTransclude) {
+          $attrs.ngTransclude = '';
+        }
+        var slotName = $attrs.ngTransclude || $attrs.ngTranscludeSlot;
+
+        // If the slot is required and no transclusion content is provided then this call will throw an error
+        $transclude(ngTranscludeCloneAttachFn, null, slotName);
+
+        // If the slot is optional and no transclusion content is provided then use the fallback content
+        if (slotName && !$transclude.isSlotFilled(slotName)) {
+          useFallbackContent();
+        }
+
+        function ngTranscludeCloneAttachFn(clone, transcludedScope) {
+          if (clone.length) {
+            $element.append(clone);
+          } else {
+            useFallbackContent();
+            // There is nothing linked against the transcluded scope since no content was available,
+            // so it should be safe to clean up the generated scope.
+            transcludedScope.$destroy();
+          }
+        }
+
+        function useFallbackContent() {
+          // Since this is the fallback content rather than the transcluded content,
+          // we link against the scope of this directive rather than the transcluded scope
+          fallbackLinkFn($scope, function(clone) {
+            $element.append(clone);
+          });
+        }
+      };
     }
-
-    function ngTranscludeCloneAttachFn(clone) {
-      if (clone.length) {
-        $element.empty();
-        $element.append(clone);
-      }
-    }
-
-    if (!$transclude) {
-      throw ngTranscludeMinErr('orphan',
-       'Illegal use of ngTransclude directive in the template! ' +
-       'No parent directive that requires a transclusion found. ' +
-       'Element: {0}',
-       startingTag($element));
-    }
-
-    // If there is no slot name defined or the slot name is not optional
-    // then transclude the slot
-    var slotName = $attrs.ngTransclude || $attrs.ngTranscludeSlot;
-    $transclude(ngTranscludeCloneAttachFn, null, slotName);
-  }
-});
+  };
+}];
 
 /**
  * @ngdoc directive
@@ -40728,19 +41023,28 @@ angular.module('oitozero.ngSweetAlert', [])
 				swal( title, message, 'warning' );
 			});
 		},
-		info: function(title, message) {	
+		info: function(title, message) {
 			$rootScope.$evalAsync(function(){
 				swal( title, message, 'info' );
 			});
+		},
+		showInputError: function(message) {
+			$rootScope.$evalAsync(function(){
+				swal.showInputError( message );
+			});
+		},
+		close: function() {
+			$rootScope.$evalAsync(function(){
+				swal.close();
+			});
 		}
 	};
-	
+
 	return self;
 }]);
 
-(function(){"use strict";!function(){var a;a=angular.module("ng.ueditor",[]),a.directive("ueditor",[function(){return{restrict:"C",require:"ngModel",scope:{config:"=",ready:"="},link:function(a,b,c,d){var e,f;f=!1,new(e=function(){function e(){this.bindRender(),this.initEditor()}return e.prototype.initEditor=function(){var e,g,h;return h=this,"undefined"==typeof UE?void console.error("Please import the local resources of ueditor!"):(e=a.config?a.config:{},g=c.id?c.id:"_editor"+Date.now(),b[0].id=g,this.editor=new UE.ui.Editor(e),this.editor.render(g),this.editor.ready(function(){h.editorReady=!0,h.editor.addListener("contentChange",function(){d.$setViewValue(h.editor.getContent()),f||a.$$phase||a.$apply(),f=!1}),h.modelContent&&h.modelContent.length>0&&h.setEditorContent(),"function"==typeof a.ready&&a.ready(h.editor),a.$on("$destroy",function(){!c.id&&UE.delEditor&&UE.delEditor(g)})}))},e.prototype.setEditorContent=function(a){null==a&&(a=this.modelContent),this.editor&&this.editorReady&&this.editor.setContent(a)},e.prototype.bindRender=function(){var a;a=this,d.$render=function(){a.modelContent=d.$isEmpty(d.$viewValue)?"":d.$viewValue,f=!0,a.setEditorContent()}},e}())}}}])}()}).call(this);
 /**
- * @license AngularJS v1.4.9
+ * @license AngularJS v1.4.12
  * (c) 2010-2015 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -40767,6 +41071,7 @@ var ADD_CLASS_SUFFIX = '-add';
 var REMOVE_CLASS_SUFFIX = '-remove';
 var EVENT_CLASS_PREFIX = 'ng-';
 var ACTIVE_CLASS_SUFFIX = '-active';
+var PREPARE_CLASS_SUFFIX = '-prepare';
 
 var NG_ANIMATE_CLASSNAME = 'ng-animate';
 var NG_ANIMATE_CHILDREN_DATA = '$$ngAnimateChildren';
@@ -40872,7 +41177,7 @@ function stripCommentsFromElement(element) {
   if (element instanceof jqLite) {
     switch (element.length) {
       case 0:
-        return [];
+        return element;
         break;
 
       case 1:
@@ -40963,7 +41268,10 @@ function applyAnimationToStyles(element, options) {
   }
 }
 
-function mergeAnimationOptions(element, target, newOptions) {
+function mergeAnimationDetails(element, oldAnimation, newAnimation) {
+  var target = oldAnimation.options || {};
+  var newOptions = newAnimation.options || {};
+
   var toAdd = (target.addClass || '') + ' ' + (newOptions.addClass || '');
   var toRemove = (target.removeClass || '') + ' ' + (newOptions.removeClass || '');
   var classes = resolveElementClasses(element.attr('class'), toAdd, toRemove);
@@ -40994,6 +41302,9 @@ function mergeAnimationOptions(element, target, newOptions) {
   } else {
     target.removeClass = null;
   }
+
+  oldAnimation.addClass = target.addClass;
+  oldAnimation.removeClass = target.removeClass;
 
   return target;
 }
@@ -41165,16 +41476,101 @@ var $$rAFSchedulerFactory = ['$$rAF', function($$rAF) {
   }
 }];
 
-var $$AnimateChildrenDirective = [function() {
-  return function(scope, element, attrs) {
-    var val = attrs.ngAnimateChildren;
-    if (angular.isString(val) && val.length === 0) { //empty attribute
-      element.data(NG_ANIMATE_CHILDREN_DATA, true);
-    } else {
-      attrs.$observe('ngAnimateChildren', function(value) {
+/**
+ * @ngdoc directive
+ * @name ngAnimateChildren
+ * @restrict AE
+ * @element ANY
+ *
+ * @description
+ *
+ * ngAnimateChildren allows you to specify that children of this element should animate even if any
+ * of the children's parents are currently animating. By default, when an element has an active `enter`, `leave`, or `move`
+ * (structural) animation, child elements that also have an active structural animation are not animated.
+ *
+ * Note that even if `ngAnimteChildren` is set, no child animations will run when the parent element is removed from the DOM (`leave` animation).
+ *
+ *
+ * @param {string} ngAnimateChildren If the value is empty, `true` or `on`,
+ *     then child animations are allowed. If the value is `false`, child animations are not allowed.
+ *
+ * @example
+ * <example module="ngAnimateChildren" name="ngAnimateChildren" deps="angular-animate.js" animations="true">
+     <file name="index.html">
+       <div ng-controller="mainController as main">
+         <label>Show container? <input type="checkbox" ng-model="main.enterElement" /></label>
+         <label>Animate children? <input type="checkbox" ng-model="main.animateChildren" /></label>
+         <hr>
+         <div ng-animate-children="{{main.animateChildren}}">
+           <div ng-if="main.enterElement" class="container">
+             List of items:
+             <div ng-repeat="item in [0, 1, 2, 3]" class="item">Item {{item}}</div>
+           </div>
+         </div>
+       </div>
+     </file>
+     <file name="animations.css">
+
+      .container.ng-enter,
+      .container.ng-leave {
+        transition: all ease 1.5s;
+      }
+
+      .container.ng-enter,
+      .container.ng-leave-active {
+        opacity: 0;
+      }
+
+      .container.ng-leave,
+      .container.ng-enter-active {
+        opacity: 1;
+      }
+
+      .item {
+        background: firebrick;
+        color: #FFF;
+        margin-bottom: 10px;
+      }
+
+      .item.ng-enter,
+      .item.ng-leave {
+        transition: transform 1.5s ease;
+      }
+
+      .item.ng-enter {
+        transform: translateX(50px);
+      }
+
+      .item.ng-enter-active {
+        transform: translateX(0);
+      }
+    </file>
+    <file name="script.js">
+      angular.module('ngAnimateChildren', ['ngAnimate'])
+        .controller('mainController', function() {
+          this.animateChildren = false;
+          this.enterElement = false;
+        });
+    </file>
+  </example>
+ */
+var $$AnimateChildrenDirective = ['$interpolate', function($interpolate) {
+  return {
+    link: function(scope, element, attrs) {
+      var val = attrs.ngAnimateChildren;
+      if (angular.isString(val) && val.length === 0) { //empty attribute
+        element.data(NG_ANIMATE_CHILDREN_DATA, true);
+      } else {
+        // Interpolate and set the value, so that it is available to
+        // animations that run right after compilation
+        setData($interpolate(val)(scope));
+        attrs.$observe('ngAnimateChildren', setData);
+      }
+
+      function setData(value) {
         value = value === 'on' || value === 'true';
         element.data(NG_ANIMATE_CHILDREN_DATA, value);
-      });
+      }
     }
   };
 }];
@@ -41933,6 +42329,13 @@ var $AnimateCssProvider = ['$animateProvider', function($animateProvider) {
         if (events && events.length) {
           // Remove the transitionend / animationend listener(s)
           element.off(events.join(' '), onAnimationProgress);
+        }
+
+        //Cancel the fallback closing timeout and remove the timer data
+        var animationTimerData = element.data(ANIMATE_TIMER_KEY);
+        if (animationTimerData) {
+          $timeout.cancel(animationTimerData[0].timer);
+          element.removeData(ANIMATE_TIMER_KEY);
         }
 
         // if the preparation function fails then the promise is not setup
@@ -42827,22 +43230,21 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
     });
   }
 
-  function hasAnimationClasses(options, and) {
-    options = options || {};
-    var a = (options.addClass || '').length > 0;
-    var b = (options.removeClass || '').length > 0;
+  function hasAnimationClasses(animation, and) {
+    var a = (animation.addClass || '').length > 0;
+    var b = (animation.removeClass || '').length > 0;
     return and ? a && b : a || b;
   }
 
   rules.join.push(function(element, newAnimation, currentAnimation) {
     // if the new animation is class-based then we can just tack that on
-    return !newAnimation.structural && hasAnimationClasses(newAnimation.options);
+    return !newAnimation.structural && hasAnimationClasses(newAnimation);
   });
 
   rules.skip.push(function(element, newAnimation, currentAnimation) {
     // there is no need to animate anything if no classes are being added and
     // there is no structural animation that will be triggered
-    return !newAnimation.structural && !hasAnimationClasses(newAnimation.options);
+    return !newAnimation.structural && !hasAnimationClasses(newAnimation);
   });
 
   rules.skip.push(function(element, newAnimation, currentAnimation) {
@@ -42868,19 +43270,17 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
   });
 
   rules.cancel.push(function(element, newAnimation, currentAnimation) {
-
-
-    var nA = newAnimation.options.addClass;
-    var nR = newAnimation.options.removeClass;
-    var cA = currentAnimation.options.addClass;
-    var cR = currentAnimation.options.removeClass;
+    var nA = newAnimation.addClass;
+    var nR = newAnimation.removeClass;
+    var cA = currentAnimation.addClass;
+    var cR = currentAnimation.removeClass;
 
     // early detection to save the global CPU shortage :)
     if ((isUndefined(nA) && isUndefined(nR)) || (isUndefined(cA) && isUndefined(cR))) {
       return false;
     }
 
-    return (hasMatchingClasses(nA, cR)) || (hasMatchingClasses(nR, cA));
+    return hasMatchingClasses(nA, cR) || hasMatchingClasses(nR, cA);
   });
 
   this.$get = ['$$rAF', '$rootScope', '$rootElement', '$document', '$$HashMap',
@@ -42891,6 +43291,9 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
     var activeAnimationsLookup = new $$HashMap();
     var disabledElementsLookup = new $$HashMap();
     var animationsEnabled = null;
+    // $document might be mocked out in tests and won't include a real document.
+    // Providing an empty object with hidden = true will prevent animations from running
+    var rawDocument = $document[0] || {hidden: true};
 
     function postDigestTaskFactory() {
       var postDigestCalled = false;
@@ -42952,8 +43355,8 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
     var applyAnimationClasses = applyAnimationClassesFactory($$jqLite);
 
-    function normalizeAnimationOptions(element, options) {
-      return mergeAnimationOptions(element, options, {});
+    function normalizeAnimationDetails(element, animation) {
+      return mergeAnimationDetails(element, animation, {});
     }
 
     // IE9-11 has no method "contains" in SVG element and in Node.prototype. Bug #10259.
@@ -43119,12 +43522,14 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
       var isStructural = ['enter', 'move', 'leave'].indexOf(event) >= 0;
 
+      var documentHidden = rawDocument.hidden;
+
       // this is a hard disable of all animations for the application or on
       // the element itself, therefore  there is no need to continue further
       // past this point if not enabled
       // Animations are also disabled if the document is currently hidden (page is not visible
       // to the user), because browsers slow down or do not flush calls to requestAnimationFrame
-      var skipAnimations = !animationsEnabled || $document[0].hidden || disabledElementsLookup.get(node);
+      var skipAnimations = !animationsEnabled || documentHidden || disabledElementsLookup.get(node);
       var existingAnimation = (!skipAnimations && activeAnimationsLookup.get(node)) || {};
       var hasExistingAnimation = !!existingAnimation.state;
 
@@ -43135,7 +43540,10 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
       }
 
       if (skipAnimations) {
+        // Callbacks should fire even if the document is hidden (regression fix for issue #14120)
+        if (documentHidden) notifyProgress(runner, event, 'start');
         close();
+        if (documentHidden) notifyProgress(runner, event, 'close');
         return runner;
       }
 
@@ -43147,6 +43555,8 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
         structural: isStructural,
         element: element,
         event: event,
+        addClass: options.addClass,
+        removeClass: options.removeClass,
         close: close,
         options: options,
         runner: runner
@@ -43159,11 +43569,10 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
             close();
             return runner;
           } else {
-            mergeAnimationOptions(element, existingAnimation.options, options);
+            mergeAnimationDetails(element, existingAnimation, newAnimation);
             return existingAnimation.runner;
           }
         }
-
         var cancelAnimationFlag = isAllowed('cancel', element, newAnimation, existingAnimation);
         if (cancelAnimationFlag) {
           if (existingAnimation.state === RUNNING_STATE) {
@@ -43178,7 +43587,8 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
             existingAnimation.close();
           } else {
             // this will merge the new animation options into existing animation options
-            mergeAnimationOptions(element, existingAnimation.options, newAnimation.options);
+            mergeAnimationDetails(element, existingAnimation, newAnimation);
+
             return existingAnimation.runner;
           }
         } else {
@@ -43188,12 +43598,12 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
           var joinAnimationFlag = isAllowed('join', element, newAnimation, existingAnimation);
           if (joinAnimationFlag) {
             if (existingAnimation.state === RUNNING_STATE) {
-              normalizeAnimationOptions(element, options);
+              normalizeAnimationDetails(element, newAnimation);
             } else {
               applyGeneratedPreparationClasses(element, isStructural ? event : null, options);
 
               event = newAnimation.event = existingAnimation.event;
-              options = mergeAnimationOptions(element, existingAnimation.options, newAnimation.options);
+              options = mergeAnimationDetails(element, existingAnimation, newAnimation);
 
               //we return the same runner since only the option values of this animation will
               //be fed into the `existingAnimation`.
@@ -43204,7 +43614,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
       } else {
         // normalization in this case means that it removes redundant CSS classes that
         // already exist (addClass) or do not exist (removeClass) on the element
-        normalizeAnimationOptions(element, options);
+        normalizeAnimationDetails(element, newAnimation);
       }
 
       // when the options are merged and cleaned up we may end up not having to do
@@ -43214,7 +43624,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
       if (!isValidAnimation) {
         // animate (from/to) can be quickly checked first, otherwise we check if any classes are present
         isValidAnimation = (newAnimation.event === 'animate' && Object.keys(newAnimation.options.to || {}).length > 0)
-                            || hasAnimationClasses(newAnimation.options);
+                            || hasAnimationClasses(newAnimation);
       }
 
       if (!isValidAnimation) {
@@ -43244,7 +43654,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
         var isValidAnimation = parentElement.length > 0
                                 && (animationDetails.event === 'animate'
                                     || animationDetails.structural
-                                    || hasAnimationClasses(animationDetails.options));
+                                    || hasAnimationClasses(animationDetails));
 
         // this means that the previous animation was cancelled
         // even if the follow-up animation is the same event
@@ -43276,12 +43686,17 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
         // this combined multiple class to addClass / removeClass into a setClass event
         // so long as a structural event did not take over the animation
-        event = !animationDetails.structural && hasAnimationClasses(animationDetails.options, true)
+        event = !animationDetails.structural && hasAnimationClasses(animationDetails, true)
             ? 'setClass'
             : animationDetails.event;
 
         markElementAnimationState(element, RUNNING_STATE);
         var realRunner = $$animation(element, event, animationDetails.options);
+
+        // this will update the runner's flow-control events based on
+        // the `realRunner` object.
+        runner.setHost(realRunner);
+        notifyProgress(runner, event, 'start', {});
 
         realRunner.done(function(status) {
           close(!status);
@@ -43291,11 +43706,6 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
           }
           notifyProgress(runner, event, 'close', {});
         });
-
-        // this will update the runner's flow-control events based on
-        // the `realRunner` object.
-        runner.setHost(realRunner);
-        notifyProgress(runner, event, 'start', {});
       });
 
       return runner;
@@ -43364,37 +43774,38 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
      * d) the element is not a child of the $rootElement
      */
     function areAnimationsAllowed(element, parentElement, event) {
-      var bodyElement = jqLite($document[0].body);
+      var bodyElement = jqLite(rawDocument.body);
       var bodyElementDetected = isMatchingElement(element, bodyElement) || element[0].nodeName === 'HTML';
       var rootElementDetected = isMatchingElement(element, $rootElement);
       var parentAnimationDetected = false;
       var animateChildren;
       var elementDisabled = disabledElementsLookup.get(getDomNode(element));
 
-      var parentHost = element.data(NG_ANIMATE_PIN_DATA);
+      var parentHost = jqLite.data(element[0], NG_ANIMATE_PIN_DATA);
       if (parentHost) {
         parentElement = parentHost;
       }
 
-      while (parentElement && parentElement.length) {
+      parentElement = getDomNode(parentElement);
+
+      while (parentElement) {
         if (!rootElementDetected) {
           // angular doesn't want to attempt to animate elements outside of the application
           // therefore we need to ensure that the rootElement is an ancestor of the current element
           rootElementDetected = isMatchingElement(parentElement, $rootElement);
         }
 
-        var parentNode = parentElement[0];
-        if (parentNode.nodeType !== ELEMENT_NODE) {
+        if (parentElement.nodeType !== ELEMENT_NODE) {
           // no point in inspecting the #document element
           break;
         }
 
-        var details = activeAnimationsLookup.get(parentNode) || {};
+        var details = activeAnimationsLookup.get(parentElement) || {};
         // either an enter, leave or move animation will commence
         // therefore we can't allow any animations to take place
         // but if a parent animation is class-based then that's ok
         if (!parentAnimationDetected) {
-          var parentElementDisabled = disabledElementsLookup.get(parentNode);
+          var parentElementDisabled = disabledElementsLookup.get(parentElement);
 
           if (parentElementDisabled === true && elementDisabled !== false) {
             // disable animations if the user hasn't explicitly enabled animations on the
@@ -43409,7 +43820,7 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
         }
 
         if (isUndefined(animateChildren) || animateChildren === true) {
-          var value = parentElement.data(NG_ANIMATE_CHILDREN_DATA);
+          var value = jqLite.data(parentElement, NG_ANIMATE_CHILDREN_DATA);
           if (isDefined(value)) {
             animateChildren = value;
           }
@@ -43432,15 +43843,15 @@ var $$AnimateQueueProvider = ['$animateProvider', function($animateProvider) {
 
         if (!rootElementDetected) {
           // If no rootElement is detected, check if the parentElement is pinned to another element
-          parentHost = parentElement.data(NG_ANIMATE_PIN_DATA);
+          parentHost = jqLite.data(parentElement, NG_ANIMATE_PIN_DATA);
           if (parentHost) {
             // The pin target element becomes the next parent element
-            parentElement = parentHost;
+            parentElement = getDomNode(parentHost);
             continue;
           }
         }
 
-        parentElement = parentElement.parent();
+        parentElement = parentElement.parentNode;
       }
 
       var allowAnimation = (!parentAnimationDetected || animateChildren) && elementDisabled !== true;
@@ -43596,6 +44007,12 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
       if (tempClasses) {
         classes += ' ' + tempClasses;
         options.tempClasses = null;
+      }
+
+      var prepareClassName;
+      if (isStructural) {
+        prepareClassName = 'ng-' + event + PREPARE_CLASS_SUFFIX;
+        $$jqLite.addClass(element, prepareClassName);
       }
 
       animationQueue.push({
@@ -43819,6 +44236,10 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
         element.addClass(NG_ANIMATE_CLASSNAME);
         if (tempClasses) {
           $$jqLite.addClass(element, tempClasses);
+        }
+        if (prepareClassName) {
+          $$jqLite.removeClass(element, prepareClassName);
+          prepareClassName = null;
         }
       }
 
@@ -44113,6 +44534,34 @@ var $$AnimationProvider = ['$animateProvider', function($animateProvider) {
  * (Note that the `ng-animate` CSS class is reserved and it cannot be applied on an element directly since ngAnimate will always remove
  * the CSS class once an animation has completed.)
  *
+ *
+ * ### The `ng-[event]-prepare` class
+ *
+ * This is a special class that can be used to prevent unwanted flickering / flash of content before
+ * the actual animation starts. The class is added as soon as an animation is initialized, but removed
+ * before the actual animation starts (after waiting for a $digest).
+ * It is also only added for *structural* animations (`enter`, `move`, and `leave`).
+ *
+ * In practice, flickering can appear when nesting elements with structural animations such as `ngIf`
+ * into elements that have class-based animations such as `ngClass`.
+ *
+ * ```html
+ * <div ng-class="{red: myProp}">
+ *   <div ng-class="{blue: myProp}">
+ *     <div class="message" ng-if="myProp"></div>
+ *   </div>
+ * </div>
+ * ```
+ *
+ * It is possible that during the `enter` animation, the `.message` div will be briefly visible before it starts animating.
+ * In that case, you can add styles to the CSS that make sure the element stays hidden before the animation starts:
+ *
+ * ```css
+ * .message.ng-enter-prepare {
+ *   opacity: 0;
+ * }
+ *
+ * ```
  *
  * ## JavaScript-based Animations
  *
@@ -44614,11 +45063,11 @@ angular.module('ngAnimate', [])
 })(window, window.angular);
 
 /**
- * @license AngularJS v1.4.9
- * (c) 2010-2015 Google, Inc. http://angularjs.org
+ * @license AngularJS v1.5.8
+ * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {'use strict';
+(function(window, angular) {'use strict';
 
 /**
  * @ngdoc module
@@ -44636,24 +45085,29 @@ angular.module('ngAnimate', [])
  *
  * For ngAria to do its magic, simply include the module `ngAria` as a dependency. The following
  * directives are supported:
- * `ngModel`, `ngDisabled`, `ngShow`, `ngHide`, `ngClick`, `ngDblClick`, and `ngMessages`.
+ * `ngModel`, `ngChecked`, `ngReadonly`, `ngRequired`, `ngValue`, `ngDisabled`, `ngShow`, `ngHide`, `ngClick`,
+ * `ngDblClick`, and `ngMessages`.
  *
  * Below is a more detailed breakdown of the attributes handled by ngAria:
  *
  * | Directive                                   | Supported Attributes                                                                   |
  * |---------------------------------------------|----------------------------------------------------------------------------------------|
+ * | {@link ng.directive:ngModel ngModel}        | aria-checked, aria-valuemin, aria-valuemax, aria-valuenow, aria-invalid, aria-required, input roles |
  * | {@link ng.directive:ngDisabled ngDisabled}  | aria-disabled                                                                          |
+ * | {@link ng.directive:ngRequired ngRequired}  | aria-required
+ * | {@link ng.directive:ngChecked ngChecked}    | aria-checked
+ * | {@link ng.directive:ngReadonly ngReadonly}  | aria-readonly                                                                          |
+ * | {@link ng.directive:ngValue ngValue}        | aria-checked                                                                           |
  * | {@link ng.directive:ngShow ngShow}          | aria-hidden                                                                            |
  * | {@link ng.directive:ngHide ngHide}          | aria-hidden                                                                            |
  * | {@link ng.directive:ngDblclick ngDblclick}  | tabindex                                                                               |
  * | {@link module:ngMessages ngMessages}        | aria-live                                                                              |
- * | {@link ng.directive:ngModel ngModel}        | aria-checked, aria-valuemin, aria-valuemax, aria-valuenow, aria-invalid, aria-required, input roles |
- * | {@link ng.directive:ngClick ngClick}        | tabindex, keypress event, button role                                                               |
+ * | {@link ng.directive:ngClick ngClick}        | tabindex, keypress event, button role                                                  |
  *
  * Find out more information about each directive by reading the
  * {@link guide/accessibility ngAria Developer Guide}.
  *
- * ##Example
+ * ## Example
  * Using ngDisabled with ngAria:
  * ```html
  * <md-checkbox ng-disabled="disabled">
@@ -44663,7 +45117,7 @@ angular.module('ngAnimate', [])
  * <md-checkbox ng-disabled="disabled" aria-disabled="true">
  * ```
  *
- * ##Disabling Attributes
+ * ## Disabling Attributes
  * It's possible to disable individual attributes added by ngAria with the
  * {@link ngAria.$ariaProvider#config config} method. For more details, see the
  * {@link guide/accessibility Developer Guide}.
@@ -44707,10 +45161,10 @@ function $AriaProvider() {
   var config = {
     ariaHidden: true,
     ariaChecked: true,
+    ariaReadonly: true,
     ariaDisabled: true,
     ariaRequired: true,
     ariaInvalid: true,
-    ariaMultiline: true,
     ariaValue: true,
     tabindex: true,
     bindKeypress: true,
@@ -44725,14 +45179,14 @@ function $AriaProvider() {
    *
    *  - **ariaHidden** – `{boolean}` – Enables/disables aria-hidden tags
    *  - **ariaChecked** – `{boolean}` – Enables/disables aria-checked tags
+   *  - **ariaReadonly** – `{boolean}` – Enables/disables aria-readonly tags
    *  - **ariaDisabled** – `{boolean}` – Enables/disables aria-disabled tags
    *  - **ariaRequired** – `{boolean}` – Enables/disables aria-required tags
    *  - **ariaInvalid** – `{boolean}` – Enables/disables aria-invalid tags
-   *  - **ariaMultiline** – `{boolean}` – Enables/disables aria-multiline tags
    *  - **ariaValue** – `{boolean}` – Enables/disables aria-valuemin, aria-valuemax and aria-valuenow tags
    *  - **tabindex** – `{boolean}` – Enables/disables tabindex tags
-   *  - **bindKeypress** – `{boolean}` – Enables/disables keypress event binding on `&lt;div&gt;` and
-   *    `&lt;li&gt;` elements with ng-click
+   *  - **bindKeypress** – `{boolean}` – Enables/disables keypress event binding on `div` and
+   *    `li` elements with ng-click
    *  - **bindRoleForClick** – `{boolean}` – Adds role=button to non-interactive elements like `div`
    *    using ng-click, making them more accessible to users of assistive technologies
    *
@@ -44771,15 +45225,15 @@ function $AriaProvider() {
    *
    *```js
    * ngAriaModule.directive('ngDisabled', ['$aria', function($aria) {
-   *   return $aria.$$watchExpr('ngDisabled', 'aria-disabled');
+   *   return $aria.$$watchExpr('ngDisabled', 'aria-disabled', nodeBlackList, false);
    * }])
    *```
    * Shown above, the ngAria module creates a directive with the same signature as the
    * traditional `ng-disabled` directive. But this ngAria version is dedicated to
-   * solely managing accessibility attributes. The internal `$aria` service is used to watch the
-   * boolean attribute `ngDisabled`. If it has not been explicitly set by the developer,
-   * `aria-disabled` is injected as an attribute with its value synchronized to the value in
-   * `ngDisabled`.
+   * solely managing accessibility attributes on custom elements. The internal `$aria` service is
+   * used to watch the boolean attribute `ngDisabled`. If it has not been explicitly set by the
+   * developer, `aria-disabled` is injected as an attribute with its value synchronized to the
+   * value in `ngDisabled`.
    *
    * Because ngAria hooks into the `ng-disabled` directive, developers do not have to do
    * anything to enable this feature. The `aria-disabled` attribute is automatically managed
@@ -44787,12 +45241,16 @@ function $AriaProvider() {
    *
    * The full list of directives that interface with ngAria:
    * * **ngModel**
+   * * **ngChecked**
+   * * **ngReadonly**
+   * * **ngRequired**
+   * * **ngDisabled**
+   * * **ngValue**
    * * **ngShow**
    * * **ngHide**
    * * **ngClick**
    * * **ngDblclick**
    * * **ngMessages**
-   * * **ngDisabled**
    *
    * Read the {@link guide/accessibility ngAria Developer Guide} for a thorough explanation of each
    * directive.
@@ -44818,13 +45276,28 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
 .directive('ngHide', ['$aria', function($aria) {
   return $aria.$$watchExpr('ngHide', 'aria-hidden', [], false);
 }])
+.directive('ngValue', ['$aria', function($aria) {
+  return $aria.$$watchExpr('ngValue', 'aria-checked', nodeBlackList, false);
+}])
+.directive('ngChecked', ['$aria', function($aria) {
+  return $aria.$$watchExpr('ngChecked', 'aria-checked', nodeBlackList, false);
+}])
+.directive('ngReadonly', ['$aria', function($aria) {
+  return $aria.$$watchExpr('ngReadonly', 'aria-readonly', nodeBlackList, false);
+}])
+.directive('ngRequired', ['$aria', function($aria) {
+  return $aria.$$watchExpr('ngRequired', 'aria-required', nodeBlackList, false);
+}])
 .directive('ngModel', ['$aria', function($aria) {
 
-  function shouldAttachAttr(attr, normalizedAttr, elem) {
-    return $aria.config(normalizedAttr) && !elem.attr(attr);
+  function shouldAttachAttr(attr, normalizedAttr, elem, allowBlacklistEls) {
+    return $aria.config(normalizedAttr) && !elem.attr(attr) && (allowBlacklistEls || !isNodeOneOf(elem, nodeBlackList));
   }
 
   function shouldAttachRole(role, elem) {
+    // if element does not have role attribute
+    // AND element type is equal to role (if custom element has a type equaling shape) <-- remove?
+    // AND element is not INPUT
     return !elem.attr('role') && (elem.attr('type') === role) && (elem[0].nodeName !== 'INPUT');
   }
 
@@ -44834,20 +45307,19 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
 
     return ((type || role) === 'checkbox' || role === 'menuitemcheckbox') ? 'checkbox' :
            ((type || role) === 'radio'    || role === 'menuitemradio') ? 'radio' :
-           (type === 'range'              || role === 'progressbar' || role === 'slider') ? 'range' :
-           (type || role) === 'textbox'   || elem[0].nodeName === 'TEXTAREA' ? 'multiline' : '';
+           (type === 'range'              || role === 'progressbar' || role === 'slider') ? 'range' : '';
   }
 
   return {
     restrict: 'A',
-    require: '?ngModel',
+    require: 'ngModel',
     priority: 200, //Make sure watches are fired after any other directives that affect the ngModel value
     compile: function(elem, attr) {
       var shape = getShape(attr, elem);
 
       return {
         pre: function(scope, elem, attr, ngModel) {
-          if (shape === 'checkbox' && attr.type !== 'checkbox') {
+          if (shape === 'checkbox') {
             //Use the input[checkbox] $isEmpty implementation for elements with checkbox roles
             ngModel.$isEmpty = function(value) {
               return value === false;
@@ -44855,29 +45327,18 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
           }
         },
         post: function(scope, elem, attr, ngModel) {
-          var needsTabIndex = shouldAttachAttr('tabindex', 'tabindex', elem)
-                                && !isNodeOneOf(elem, nodeBlackList);
+          var needsTabIndex = shouldAttachAttr('tabindex', 'tabindex', elem, false);
 
           function ngAriaWatchModelValue() {
             return ngModel.$modelValue;
           }
 
-          function getRadioReaction() {
-            if (needsTabIndex) {
-              needsTabIndex = false;
-              return function ngAriaRadioReaction(newVal) {
-                var boolVal = (attr.value == ngModel.$viewValue);
-                elem.attr('aria-checked', boolVal);
-                elem.attr('tabindex', 0 - !boolVal);
-              };
-            } else {
-              return function ngAriaRadioReaction(newVal) {
-                elem.attr('aria-checked', (attr.value == ngModel.$viewValue));
-              };
-            }
+          function getRadioReaction(newVal) {
+            var boolVal = (attr.value == ngModel.$viewValue);
+            elem.attr('aria-checked', boolVal);
           }
 
-          function ngAriaCheckboxReaction() {
+          function getCheckboxReaction() {
             elem.attr('aria-checked', !ngModel.$isEmpty(ngModel.$viewValue));
           }
 
@@ -44887,9 +45348,9 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
               if (shouldAttachRole(shape, elem)) {
                 elem.attr('role', shape);
               }
-              if (shouldAttachAttr('aria-checked', 'ariaChecked', elem)) {
+              if (shouldAttachAttr('aria-checked', 'ariaChecked', elem, false)) {
                 scope.$watch(ngAriaWatchModelValue, shape === 'radio' ?
-                    getRadioReaction() : ngAriaCheckboxReaction);
+                    getRadioReaction : getCheckboxReaction);
               }
               if (needsTabIndex) {
                 elem.attr('tabindex', 0);
@@ -44926,22 +45387,17 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
                 elem.attr('tabindex', 0);
               }
               break;
-            case 'multiline':
-              if (shouldAttachAttr('aria-multiline', 'ariaMultiline', elem)) {
-                elem.attr('aria-multiline', true);
-              }
-              break;
           }
 
-          if (ngModel.$validators.required && shouldAttachAttr('aria-required', 'ariaRequired', elem)) {
-            scope.$watch(function ngAriaRequiredWatch() {
-              return ngModel.$error.required;
-            }, function ngAriaRequiredReaction(newVal) {
-              elem.attr('aria-required', !!newVal);
+          if (!attr.hasOwnProperty('ngRequired') && ngModel.$validators.required
+            && shouldAttachAttr('aria-required', 'ariaRequired', elem, false)) {
+            // ngModel.$error.required is undefined on custom controls
+            attr.$observe('required', function() {
+              elem.attr('aria-required', !!attr['required']);
             });
           }
 
-          if (shouldAttachAttr('aria-invalid', 'ariaInvalid', elem)) {
+          if (shouldAttachAttr('aria-invalid', 'ariaInvalid', elem, true)) {
             scope.$watch(function ngAriaInvalidWatch() {
               return ngModel.$invalid;
             }, function ngAriaInvalidReaction(newVal) {
@@ -44954,7 +45410,7 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
   };
 }])
 .directive('ngDisabled', ['$aria', function($aria) {
-  return $aria.$$watchExpr('ngDisabled', 'aria-disabled', []);
+  return $aria.$$watchExpr('ngDisabled', 'aria-disabled', nodeBlackList, false);
 }])
 .directive('ngMessages', function() {
   return {
@@ -67608,7 +68064,7 @@ angular.module("material.core").constant("$MD_THEME_CSS", "md-autocomplete.md-TH
 
 })(window, window.angular);
 /**
- * @license AngularJS v1.5.7
+ * @license AngularJS v1.5.8
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -67626,6 +68082,14 @@ angular.module("material.core").constant("$MD_THEME_CSS", "md-autocomplete.md-TH
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 var $sanitizeMinErr = angular.$$minErr('$sanitize');
+var bind;
+var extend;
+var forEach;
+var isDefined;
+var lowercase;
+var noop;
+var htmlParser;
+var htmlSanitizeWriter;
 
 /**
  * @ngdoc module
@@ -67758,7 +68222,7 @@ function $SanitizeProvider() {
 
   this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
     if (svgEnabled) {
-      angular.extend(validElements, svgElements);
+      extend(validElements, svgElements);
     }
     return function(html) {
       var buf = [];
@@ -67801,333 +68265,343 @@ function $SanitizeProvider() {
    *    without an argument or self for chaining otherwise.
    */
   this.enableSvg = function(enableSvg) {
-    if (angular.isDefined(enableSvg)) {
+    if (isDefined(enableSvg)) {
       svgEnabled = enableSvg;
       return this;
     } else {
       return svgEnabled;
     }
   };
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  // Private stuff
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  bind = angular.bind;
+  extend = angular.extend;
+  forEach = angular.forEach;
+  isDefined = angular.isDefined;
+  lowercase = angular.lowercase;
+  noop = angular.noop;
+
+  htmlParser = htmlParserImpl;
+  htmlSanitizeWriter = htmlSanitizeWriterImpl;
+
+  // Regular Expressions for parsing tags and attributes
+  var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+    // Match everything outside of normal chars and " (quote character)
+    NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
+
+
+  // Good source of info about elements and attributes
+  // http://dev.w3.org/html5/spec/Overview.html#semantics
+  // http://simon.html5.org/html-elements
+
+  // Safe Void Elements - HTML5
+  // http://dev.w3.org/html5/spec/Overview.html#void-elements
+  var voidElements = toMap("area,br,col,hr,img,wbr");
+
+  // Elements that you can, intentionally, leave open (and which close themselves)
+  // http://dev.w3.org/html5/spec/Overview.html#optional-tags
+  var optionalEndTagBlockElements = toMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+      optionalEndTagInlineElements = toMap("rp,rt"),
+      optionalEndTagElements = extend({},
+                                              optionalEndTagInlineElements,
+                                              optionalEndTagBlockElements);
+
+  // Safe Block Elements - HTML5
+  var blockElements = extend({}, optionalEndTagBlockElements, toMap("address,article," +
+          "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+          "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,section,table,ul"));
+
+  // Inline Elements - HTML5
+  var inlineElements = extend({}, optionalEndTagInlineElements, toMap("a,abbr,acronym,b," +
+          "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+          "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+  // SVG Elements
+  // https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
+  // Note: the elements animate,animateColor,animateMotion,animateTransform,set are intentionally omitted.
+  // They can potentially allow for arbitrary javascript to be executed. See #11290
+  var svgElements = toMap("circle,defs,desc,ellipse,font-face,font-face-name,font-face-src,g,glyph," +
+          "hkern,image,linearGradient,line,marker,metadata,missing-glyph,mpath,path,polygon,polyline," +
+          "radialGradient,rect,stop,svg,switch,text,title,tspan");
+
+  // Blocked Elements (will be stripped)
+  var blockedElements = toMap("script,style");
+
+  var validElements = extend({},
+                                     voidElements,
+                                     blockElements,
+                                     inlineElements,
+                                     optionalEndTagElements);
+
+  //Attributes that have href and hence need to be sanitized
+  var uriAttrs = toMap("background,cite,href,longdesc,src,xlink:href");
+
+  var htmlAttrs = toMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+      'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
+      'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
+      'scope,scrolling,shape,size,span,start,summary,tabindex,target,title,type,' +
+      'valign,value,vspace,width');
+
+  // SVG attributes (without "id" and "name" attributes)
+  // https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
+  var svgAttrs = toMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
+      'baseProfile,bbox,begin,by,calcMode,cap-height,class,color,color-rendering,content,' +
+      'cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,font-size,font-stretch,' +
+      'font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,gradientUnits,hanging,' +
+      'height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,keySplines,keyTimes,lang,' +
+      'marker-end,marker-mid,marker-start,markerHeight,markerUnits,markerWidth,mathematical,' +
+      'max,min,offset,opacity,orient,origin,overline-position,overline-thickness,panose-1,' +
+      'path,pathLength,points,preserveAspectRatio,r,refX,refY,repeatCount,repeatDur,' +
+      'requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,stemv,stop-color,' +
+      'stop-opacity,strikethrough-position,strikethrough-thickness,stroke,stroke-dasharray,' +
+      'stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,stroke-opacity,' +
+      'stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,underline-position,' +
+      'underline-thickness,unicode,unicode-range,units-per-em,values,version,viewBox,visibility,' +
+      'width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,xlink:show,xlink:title,' +
+      'xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,zoomAndPan', true);
+
+  var validAttrs = extend({},
+                                  uriAttrs,
+                                  svgAttrs,
+                                  htmlAttrs);
+
+  function toMap(str, lowercaseKeys) {
+    var obj = {}, items = str.split(','), i;
+    for (i = 0; i < items.length; i++) {
+      obj[lowercaseKeys ? lowercase(items[i]) : items[i]] = true;
+    }
+    return obj;
+  }
+
+  var inertBodyElement;
+  (function(window) {
+    var doc;
+    if (window.document && window.document.implementation) {
+      doc = window.document.implementation.createHTMLDocument("inert");
+    } else {
+      throw $sanitizeMinErr('noinert', "Can't create an inert html document");
+    }
+    var docElement = doc.documentElement || doc.getDocumentElement();
+    var bodyElements = docElement.getElementsByTagName('body');
+
+    // usually there should be only one body element in the document, but IE doesn't have any, so we need to create one
+    if (bodyElements.length === 1) {
+      inertBodyElement = bodyElements[0];
+    } else {
+      var html = doc.createElement('html');
+      inertBodyElement = doc.createElement('body');
+      html.appendChild(inertBodyElement);
+      doc.appendChild(html);
+    }
+  })(window);
+
+  /**
+   * @example
+   * htmlParser(htmlString, {
+   *     start: function(tag, attrs) {},
+   *     end: function(tag) {},
+   *     chars: function(text) {},
+   *     comment: function(text) {}
+   * });
+   *
+   * @param {string} html string
+   * @param {object} handler
+   */
+  function htmlParserImpl(html, handler) {
+    if (html === null || html === undefined) {
+      html = '';
+    } else if (typeof html !== 'string') {
+      html = '' + html;
+    }
+    inertBodyElement.innerHTML = html;
+
+    //mXSS protection
+    var mXSSAttempts = 5;
+    do {
+      if (mXSSAttempts === 0) {
+        throw $sanitizeMinErr('uinput', "Failed to sanitize html because the input is unstable");
+      }
+      mXSSAttempts--;
+
+      // strip custom-namespaced attributes on IE<=11
+      if (window.document.documentMode) {
+        stripCustomNsAttrs(inertBodyElement);
+      }
+      html = inertBodyElement.innerHTML; //trigger mXSS
+      inertBodyElement.innerHTML = html;
+    } while (html !== inertBodyElement.innerHTML);
+
+    var node = inertBodyElement.firstChild;
+    while (node) {
+      switch (node.nodeType) {
+        case 1: // ELEMENT_NODE
+          handler.start(node.nodeName.toLowerCase(), attrToMap(node.attributes));
+          break;
+        case 3: // TEXT NODE
+          handler.chars(node.textContent);
+          break;
+      }
+
+      var nextNode;
+      if (!(nextNode = node.firstChild)) {
+      if (node.nodeType == 1) {
+          handler.end(node.nodeName.toLowerCase());
+        }
+        nextNode = node.nextSibling;
+        if (!nextNode) {
+          while (nextNode == null) {
+            node = node.parentNode;
+            if (node === inertBodyElement) break;
+            nextNode = node.nextSibling;
+          if (node.nodeType == 1) {
+              handler.end(node.nodeName.toLowerCase());
+            }
+          }
+        }
+      }
+      node = nextNode;
+    }
+
+    while (node = inertBodyElement.firstChild) {
+      inertBodyElement.removeChild(node);
+    }
+  }
+
+  function attrToMap(attrs) {
+    var map = {};
+    for (var i = 0, ii = attrs.length; i < ii; i++) {
+      var attr = attrs[i];
+      map[attr.name] = attr.value;
+    }
+    return map;
+  }
+
+
+  /**
+   * Escapes all potentially dangerous characters, so that the
+   * resulting string can be safely inserted into attribute or
+   * element text.
+   * @param value
+   * @returns {string} escaped text
+   */
+  function encodeEntities(value) {
+    return value.
+      replace(/&/g, '&amp;').
+      replace(SURROGATE_PAIR_REGEXP, function(value) {
+        var hi = value.charCodeAt(0);
+        var low = value.charCodeAt(1);
+        return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+      }).
+      replace(NON_ALPHANUMERIC_REGEXP, function(value) {
+        return '&#' + value.charCodeAt(0) + ';';
+      }).
+      replace(/</g, '&lt;').
+      replace(/>/g, '&gt;');
+  }
+
+  /**
+   * create an HTML/XML writer which writes to buffer
+   * @param {Array} buf use buf.join('') to get out sanitized html string
+   * @returns {object} in the form of {
+   *     start: function(tag, attrs) {},
+   *     end: function(tag) {},
+   *     chars: function(text) {},
+   *     comment: function(text) {}
+   * }
+   */
+  function htmlSanitizeWriterImpl(buf, uriValidator) {
+    var ignoreCurrentElement = false;
+    var out = bind(buf, buf.push);
+    return {
+      start: function(tag, attrs) {
+        tag = lowercase(tag);
+        if (!ignoreCurrentElement && blockedElements[tag]) {
+          ignoreCurrentElement = tag;
+        }
+        if (!ignoreCurrentElement && validElements[tag] === true) {
+          out('<');
+          out(tag);
+          forEach(attrs, function(value, key) {
+            var lkey = lowercase(key);
+            var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
+            if (validAttrs[lkey] === true &&
+              (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+              out(' ');
+              out(key);
+              out('="');
+              out(encodeEntities(value));
+              out('"');
+            }
+          });
+          out('>');
+        }
+      },
+      end: function(tag) {
+        tag = lowercase(tag);
+        if (!ignoreCurrentElement && validElements[tag] === true && voidElements[tag] !== true) {
+          out('</');
+          out(tag);
+          out('>');
+        }
+        if (tag == ignoreCurrentElement) {
+          ignoreCurrentElement = false;
+        }
+      },
+      chars: function(chars) {
+        if (!ignoreCurrentElement) {
+          out(encodeEntities(chars));
+        }
+      }
+    };
+  }
+
+
+  /**
+   * When IE9-11 comes across an unknown namespaced attribute e.g. 'xlink:foo' it adds 'xmlns:ns1' attribute to declare
+   * ns1 namespace and prefixes the attribute with 'ns1' (e.g. 'ns1:xlink:foo'). This is undesirable since we don't want
+   * to allow any of these custom attributes. This method strips them all.
+   *
+   * @param node Root element to process
+   */
+  function stripCustomNsAttrs(node) {
+    if (node.nodeType === window.Node.ELEMENT_NODE) {
+      var attrs = node.attributes;
+      for (var i = 0, l = attrs.length; i < l; i++) {
+        var attrNode = attrs[i];
+        var attrName = attrNode.name.toLowerCase();
+        if (attrName === 'xmlns:ns1' || attrName.lastIndexOf('ns1:', 0) === 0) {
+          node.removeAttributeNode(attrNode);
+          i--;
+          l--;
+        }
+      }
+    }
+
+    var nextNode = node.firstChild;
+    if (nextNode) {
+      stripCustomNsAttrs(nextNode);
+    }
+
+    nextNode = node.nextSibling;
+    if (nextNode) {
+      stripCustomNsAttrs(nextNode);
+    }
+  }
 }
 
 function sanitizeText(chars) {
   var buf = [];
-  var writer = htmlSanitizeWriter(buf, angular.noop);
+  var writer = htmlSanitizeWriter(buf, noop);
   writer.chars(chars);
   return buf.join('');
 }
 
 
-// Regular Expressions for parsing tags and attributes
-var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-  // Match everything outside of normal chars and " (quote character)
-  NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
-
-
-// Good source of info about elements and attributes
-// http://dev.w3.org/html5/spec/Overview.html#semantics
-// http://simon.html5.org/html-elements
-
-// Safe Void Elements - HTML5
-// http://dev.w3.org/html5/spec/Overview.html#void-elements
-var voidElements = toMap("area,br,col,hr,img,wbr");
-
-// Elements that you can, intentionally, leave open (and which close themselves)
-// http://dev.w3.org/html5/spec/Overview.html#optional-tags
-var optionalEndTagBlockElements = toMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
-    optionalEndTagInlineElements = toMap("rp,rt"),
-    optionalEndTagElements = angular.extend({},
-                                            optionalEndTagInlineElements,
-                                            optionalEndTagBlockElements);
-
-// Safe Block Elements - HTML5
-var blockElements = angular.extend({}, optionalEndTagBlockElements, toMap("address,article," +
-        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
-        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,section,table,ul"));
-
-// Inline Elements - HTML5
-var inlineElements = angular.extend({}, optionalEndTagInlineElements, toMap("a,abbr,acronym,b," +
-        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
-        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
-
-// SVG Elements
-// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
-// Note: the elements animate,animateColor,animateMotion,animateTransform,set are intentionally omitted.
-// They can potentially allow for arbitrary javascript to be executed. See #11290
-var svgElements = toMap("circle,defs,desc,ellipse,font-face,font-face-name,font-face-src,g,glyph," +
-        "hkern,image,linearGradient,line,marker,metadata,missing-glyph,mpath,path,polygon,polyline," +
-        "radialGradient,rect,stop,svg,switch,text,title,tspan");
-
-// Blocked Elements (will be stripped)
-var blockedElements = toMap("script,style");
-
-var validElements = angular.extend({},
-                                   voidElements,
-                                   blockElements,
-                                   inlineElements,
-                                   optionalEndTagElements);
-
-//Attributes that have href and hence need to be sanitized
-var uriAttrs = toMap("background,cite,href,longdesc,src,xlink:href");
-
-var htmlAttrs = toMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
-    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
-    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
-    'scope,scrolling,shape,size,span,start,summary,tabindex,target,title,type,' +
-    'valign,value,vspace,width');
-
-// SVG attributes (without "id" and "name" attributes)
-// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
-var svgAttrs = toMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
-    'baseProfile,bbox,begin,by,calcMode,cap-height,class,color,color-rendering,content,' +
-    'cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,font-size,font-stretch,' +
-    'font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,gradientUnits,hanging,' +
-    'height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,keySplines,keyTimes,lang,' +
-    'marker-end,marker-mid,marker-start,markerHeight,markerUnits,markerWidth,mathematical,' +
-    'max,min,offset,opacity,orient,origin,overline-position,overline-thickness,panose-1,' +
-    'path,pathLength,points,preserveAspectRatio,r,refX,refY,repeatCount,repeatDur,' +
-    'requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,stemv,stop-color,' +
-    'stop-opacity,strikethrough-position,strikethrough-thickness,stroke,stroke-dasharray,' +
-    'stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,stroke-opacity,' +
-    'stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,underline-position,' +
-    'underline-thickness,unicode,unicode-range,units-per-em,values,version,viewBox,visibility,' +
-    'width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,xlink:show,xlink:title,' +
-    'xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,zoomAndPan', true);
-
-var validAttrs = angular.extend({},
-                                uriAttrs,
-                                svgAttrs,
-                                htmlAttrs);
-
-function toMap(str, lowercaseKeys) {
-  var obj = {}, items = str.split(','), i;
-  for (i = 0; i < items.length; i++) {
-    obj[lowercaseKeys ? angular.lowercase(items[i]) : items[i]] = true;
-  }
-  return obj;
-}
-
-var inertBodyElement;
-(function(window) {
-  var doc;
-  if (window.document && window.document.implementation) {
-    doc = window.document.implementation.createHTMLDocument("inert");
-  } else {
-    throw $sanitizeMinErr('noinert', "Can't create an inert html document");
-  }
-  var docElement = doc.documentElement || doc.getDocumentElement();
-  var bodyElements = docElement.getElementsByTagName('body');
-
-  // usually there should be only one body element in the document, but IE doesn't have any, so we need to create one
-  if (bodyElements.length === 1) {
-    inertBodyElement = bodyElements[0];
-  } else {
-    var html = doc.createElement('html');
-    inertBodyElement = doc.createElement('body');
-    html.appendChild(inertBodyElement);
-    doc.appendChild(html);
-  }
-})(window);
-
-/**
- * @example
- * htmlParser(htmlString, {
- *     start: function(tag, attrs) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * });
- *
- * @param {string} html string
- * @param {object} handler
- */
-function htmlParser(html, handler) {
-  if (html === null || html === undefined) {
-    html = '';
-  } else if (typeof html !== 'string') {
-    html = '' + html;
-  }
-  inertBodyElement.innerHTML = html;
-
-  //mXSS protection
-  var mXSSAttempts = 5;
-  do {
-    if (mXSSAttempts === 0) {
-      throw $sanitizeMinErr('uinput', "Failed to sanitize html because the input is unstable");
-    }
-    mXSSAttempts--;
-
-    // strip custom-namespaced attributes on IE<=11
-    if (window.document.documentMode) {
-      stripCustomNsAttrs(inertBodyElement);
-    }
-    html = inertBodyElement.innerHTML; //trigger mXSS
-    inertBodyElement.innerHTML = html;
-  } while (html !== inertBodyElement.innerHTML);
-
-  var node = inertBodyElement.firstChild;
-  while (node) {
-    switch (node.nodeType) {
-      case 1: // ELEMENT_NODE
-        handler.start(node.nodeName.toLowerCase(), attrToMap(node.attributes));
-        break;
-      case 3: // TEXT NODE
-        handler.chars(node.textContent);
-        break;
-    }
-
-    var nextNode;
-    if (!(nextNode = node.firstChild)) {
-      if (node.nodeType == 1) {
-        handler.end(node.nodeName.toLowerCase());
-      }
-      nextNode = node.nextSibling;
-      if (!nextNode) {
-        while (nextNode == null) {
-          node = node.parentNode;
-          if (node === inertBodyElement) break;
-          nextNode = node.nextSibling;
-          if (node.nodeType == 1) {
-            handler.end(node.nodeName.toLowerCase());
-          }
-        }
-      }
-    }
-    node = nextNode;
-  }
-
-  while (node = inertBodyElement.firstChild) {
-    inertBodyElement.removeChild(node);
-  }
-}
-
-function attrToMap(attrs) {
-  var map = {};
-  for (var i = 0, ii = attrs.length; i < ii; i++) {
-    var attr = attrs[i];
-    map[attr.name] = attr.value;
-  }
-  return map;
-}
-
-
-/**
- * Escapes all potentially dangerous characters, so that the
- * resulting string can be safely inserted into attribute or
- * element text.
- * @param value
- * @returns {string} escaped text
- */
-function encodeEntities(value) {
-  return value.
-    replace(/&/g, '&amp;').
-    replace(SURROGATE_PAIR_REGEXP, function(value) {
-      var hi = value.charCodeAt(0);
-      var low = value.charCodeAt(1);
-      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
-    }).
-    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
-      return '&#' + value.charCodeAt(0) + ';';
-    }).
-    replace(/</g, '&lt;').
-    replace(/>/g, '&gt;');
-}
-
-/**
- * create an HTML/XML writer which writes to buffer
- * @param {Array} buf use buf.join('') to get out sanitized html string
- * @returns {object} in the form of {
- *     start: function(tag, attrs) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * }
- */
-function htmlSanitizeWriter(buf, uriValidator) {
-  var ignoreCurrentElement = false;
-  var out = angular.bind(buf, buf.push);
-  return {
-    start: function(tag, attrs) {
-      tag = angular.lowercase(tag);
-      if (!ignoreCurrentElement && blockedElements[tag]) {
-        ignoreCurrentElement = tag;
-      }
-      if (!ignoreCurrentElement && validElements[tag] === true) {
-        out('<');
-        out(tag);
-        angular.forEach(attrs, function(value, key) {
-          var lkey=angular.lowercase(key);
-          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
-          if (validAttrs[lkey] === true &&
-            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
-            out(' ');
-            out(key);
-            out('="');
-            out(encodeEntities(value));
-            out('"');
-          }
-        });
-        out('>');
-      }
-    },
-    end: function(tag) {
-      tag = angular.lowercase(tag);
-      if (!ignoreCurrentElement && validElements[tag] === true && voidElements[tag] !== true) {
-        out('</');
-        out(tag);
-        out('>');
-      }
-      if (tag == ignoreCurrentElement) {
-        ignoreCurrentElement = false;
-      }
-    },
-    chars: function(chars) {
-      if (!ignoreCurrentElement) {
-        out(encodeEntities(chars));
-      }
-    }
-  };
-}
-
-
-/**
- * When IE9-11 comes across an unknown namespaced attribute e.g. 'xlink:foo' it adds 'xmlns:ns1' attribute to declare
- * ns1 namespace and prefixes the attribute with 'ns1' (e.g. 'ns1:xlink:foo'). This is undesirable since we don't want
- * to allow any of these custom attributes. This method strips them all.
- *
- * @param node Root element to process
- */
-function stripCustomNsAttrs(node) {
-  if (node.nodeType === window.Node.ELEMENT_NODE) {
-    var attrs = node.attributes;
-    for (var i = 0, l = attrs.length; i < l; i++) {
-      var attrNode = attrs[i];
-      var attrName = attrNode.name.toLowerCase();
-      if (attrName === 'xmlns:ns1' || attrName.lastIndexOf('ns1:', 0) === 0) {
-        node.removeAttributeNode(attrNode);
-        i--;
-        l--;
-      }
-    }
-  }
-
-  var nextNode = node.firstChild;
-  if (nextNode) {
-    stripCustomNsAttrs(nextNode);
-  }
-
-  nextNode = node.nextSibling;
-  if (nextNode) {
-    stripCustomNsAttrs(nextNode);
-  }
-}
-
-
-
 // define ngSanitize module and register $sanitize service
 angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
-
-/* global sanitizeText: false */
 
 /**
  * @ngdoc filter
@@ -68262,6 +68736,9 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
       MAILTO_REGEXP = /^mailto:/i;
 
   var linkyMinErr = angular.$$minErr('linky');
+  var isDefined = angular.isDefined;
+  var isFunction = angular.isFunction;
+  var isObject = angular.isObject;
   var isString = angular.isString;
 
   return function(text, target, attributes) {
@@ -68269,8 +68746,8 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
     if (!isString(text)) throw linkyMinErr('notstring', 'Expected string but received: {0}', text);
 
     var attributesFn =
-      angular.isFunction(attributes) ? attributes :
-      angular.isObject(attributes) ? function getAttributesObject() {return attributes;} :
+      isFunction(attributes) ? attributes :
+      isObject(attributes) ? function getAttributesObject() {return attributes;} :
       function getEmptyAttributesObject() {return {};};
 
     var match;
@@ -68308,7 +68785,7 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
         html.push(key + '="' + linkAttributes[key] + '" ');
       }
 
-      if (angular.isDefined(target) && !('target' in linkAttributes)) {
+      if (isDefined(target) && !('target' in linkAttributes)) {
         html.push('target="',
                   target,
                   '" ');
@@ -68452,7 +68929,7 @@ angular.module("materialCalendar").service("MaterialCalendarData", [function () 
 
 angular.module("materialCalendar").directive("calendarMd", ["$compile", "$parse", "$http", "$q", "materialCalendar.Calendar", "MaterialCalendarData", function ($compile, $parse, $http, $q, Calendar, CalendarData) {
 
-    var defaultTemplate = "<md-content layout='column' layout-fill md-swipe-left='next()' md-swipe-right='prev()'><md-toolbar><div class='md-toolbar-tools' layout='row'><md-button class='md-icon-button' ng-click='prev()' aria-label='Previous month'><md-tooltip ng-if='::tooltips()'>Previous month</md-tooltip>&laquo;</md-button><div flex></div><h2 class='calendar-md-title'><span>{{ calendar.start | date:titleFormat:timezone }}</span></h2><div flex></div><md-button class='md-icon-button' ng-click='next()' aria-label='Next month'><md-tooltip ng-if='::tooltips()'>Next month</md-tooltip>&raquo;</md-button></div></md-toolbar><!-- agenda view --><md-content ng-if='weekLayout === columnWeekLayout' class='agenda'><div ng-repeat='week in calendar.weeks track by $index'><div ng-if='sameMonth(day)' ng-class='{&quot;disabled&quot; : isDisabled(day), active: active === day }' ng-click='handleDayClick(day)' ng-repeat='day in week' layout><md-tooltip ng-if='::tooltips()'>{{ day | date:dayTooltipFormat:timezone }}</md-tooltip><div>{{ day | date:dayFormat:timezone }}</div><div flex ng-bind-html='dataService.data[dayKey(day)]'></div></div></div></md-content><!-- calendar view --><md-content ng-if='weekLayout !== columnWeekLayout' flex layout='column' class='calendar'><div layout='row' class='subheader'><div layout-padding class='subheader-day' flex ng-repeat='day in calendar.weeks[0]'><md-tooltip ng-if='::tooltips()'>{{ day | date:dayLabelTooltipFormat }}</md-tooltip>{{ day | date:dayLabelFormat }}</div></div><div ng-if='week.length' ng-repeat='week in calendar.weeks track by $index' flex layout='row'><div class='container' tabindex='{{ sameMonth(day) ? (day | date:dayFormat:timezone) : 0 }}' ng-repeat='day in week track by $index' ng-click='handleDayClick(day)' flex layout layout-padding ng-class='{&quot;disabled&quot; : isDisabled(day), &quot;active&quot;: isActive(day), &quot;md-whiteframe-12dp&quot;: hover || focus }' ng-focus='focus = true;' ng-blur='focus = false;' ng-mouseleave='hover = false' ng-mouseenter='hover = true'><md-tooltip ng-if='::tooltips()'>{{ day | date:dayTooltipFormat }}</md-tooltip><div>{{ day | date:dayFormat }}</div><div flex ng-bind-html='dataService.data[dayKey(day)]'></div></div></div></md-content></md-content>";
+    var defaultTemplate = "<md-content layout='column' layout-fill md-swipe-left='next()' md-swipe-right='prev()'><md-toolbar><div class='md-toolbar-tools' layout='row'><md-button class='md-icon-button' ng-click='prev()' aria-label='Previous month'><md-tooltip ng-if='::tooltips()'>Previous month</md-tooltip>&laquo;</md-button><div flex></div><h2 class='calendar-md-title'><span>{{ calendar.start | date:titleFormat:timezone }}</span></h2><div flex></div><md-button class='md-icon-button' ng-click='next()' aria-label='Next month'><md-tooltip ng-if='::tooltips()'>Next month</md-tooltip>&raquo;</md-button></div></md-toolbar><!-- agenda view --><md-content ng-if='weekLayout === columnWeekLayout' class='agenda'><div ng-repeat='week in calendar.weeks track by $index'><div ng-if='sameMonth(day)' ng-class='{&quot;disabled&quot; : isDisabled(day), active: active === day }' ng-click='handleDayClick(day)' ng-repeat='day in week' layout><md-tooltip ng-if='::tooltips()'>{{ day | date:dayTooltipFormat:timezone }}</md-tooltip><div>{{ day | date:dayFormat:timezone }}</div><div flex ng-bind-html='dataService.data[dayKey(day)]'></div></div></div></md-content><!-- calendar view --><md-content ng-if='weekLayout !== columnWeekLayout' flex layout='column' class='calendar'><div layout='row' class='subheader'><div layout-padding class='subheader-day' flex ng-repeat='day in calendar.weeks[0]'><md-tooltip ng-if='::tooltips()'>{{ day | date:dayLabelTooltipFormat }}</md-tooltip>{{ day | date:dayLabelFormat }}</div></div><div ng-if='week.length' ng-repeat='week in calendar.weeks track by $index' flex layout='row'><div tabindex='{{ sameMonth(day) ? (day | date:dayFormat:timezone) : 0 }}' ng-repeat='day in week track by $index' ng-click='handleDayClick(day)' flex layout layout-padding ng-class='{&quot;disabled&quot; : isDisabled(day), &quot;active&quot;: isActive(day), &quot;md-whiteframe-12dp&quot;: hover || focus }' ng-focus='focus = true;' ng-blur='focus = false;' ng-mouseleave='hover = false' ng-mouseenter='hover = true'><md-tooltip ng-if='::tooltips()'>{{ day | date:dayTooltipFormat }}</md-tooltip><div>{{ day | date:dayFormat }}</div><div flex ng-bind-html='dataService.data[dayKey(day)]'></div></div></div></md-content></md-content>";
 
     var injectCss = function () {
         var styleId = "calendarMdCss";
@@ -68534,10 +69011,6 @@ angular.module("materialCalendar").directive("calendarMd", ["$compile", "$parse"
                 if ($scope.disableFutureSelection && date > new Date()) { return true; }
                 return !$scope.sameMonth(date);
             };
-
-            $scope.$on("updateMaterialCalendar", function() {
-              setData();
-            });
 
             $scope.calendarDirection = $scope.calendarDirection || "horizontal";
 
@@ -68722,12769 +69195,6 @@ angular.module("materialCalendar").directive("calendarMd", ["$compile", "$parse"
 
 }]);
 
-/**
- * Rangy, a cross-browser JavaScript range and selection library
- * https://github.com/timdown/rangy
- *
- * Copyright 2015, Tim Down
- * Licensed under the MIT license.
- * Version: 1.3.0
- * Build date: 10 May 2015
- */
-
-(function(factory, root) {
-    if (typeof define == "function" && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(factory);
-    } else if (typeof module != "undefined" && typeof exports == "object") {
-        // Node/CommonJS style
-        module.exports = factory();
-    } else {
-        // No AMD or CommonJS support so we place Rangy in (probably) the global variable
-        root.rangy = factory();
-    }
-})(function() {
-
-    var OBJECT = "object", FUNCTION = "function", UNDEFINED = "undefined";
-
-    // Minimal set of properties required for DOM Level 2 Range compliance. Comparison constants such as START_TO_START
-    // are omitted because ranges in KHTML do not have them but otherwise work perfectly well. See issue 113.
-    var domRangeProperties = ["startContainer", "startOffset", "endContainer", "endOffset", "collapsed",
-        "commonAncestorContainer"];
-
-    // Minimal set of methods required for DOM Level 2 Range compliance
-    var domRangeMethods = ["setStart", "setStartBefore", "setStartAfter", "setEnd", "setEndBefore",
-        "setEndAfter", "collapse", "selectNode", "selectNodeContents", "compareBoundaryPoints", "deleteContents",
-        "extractContents", "cloneContents", "insertNode", "surroundContents", "cloneRange", "toString", "detach"];
-
-    var textRangeProperties = ["boundingHeight", "boundingLeft", "boundingTop", "boundingWidth", "htmlText", "text"];
-
-    // Subset of TextRange's full set of methods that we're interested in
-    var textRangeMethods = ["collapse", "compareEndPoints", "duplicate", "moveToElementText", "parentElement", "select",
-        "setEndPoint", "getBoundingClientRect"];
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // Trio of functions taken from Peter Michaux's article:
-    // http://peter.michaux.ca/articles/feature-detection-state-of-the-art-browser-scripting
-    function isHostMethod(o, p) {
-        var t = typeof o[p];
-        return t == FUNCTION || (!!(t == OBJECT && o[p])) || t == "unknown";
-    }
-
-    function isHostObject(o, p) {
-        return !!(typeof o[p] == OBJECT && o[p]);
-    }
-
-    function isHostProperty(o, p) {
-        return typeof o[p] != UNDEFINED;
-    }
-
-    // Creates a convenience function to save verbose repeated calls to tests functions
-    function createMultiplePropertyTest(testFunc) {
-        return function(o, props) {
-            var i = props.length;
-            while (i--) {
-                if (!testFunc(o, props[i])) {
-                    return false;
-                }
-            }
-            return true;
-        };
-    }
-
-    // Next trio of functions are a convenience to save verbose repeated calls to previous two functions
-    var areHostMethods = createMultiplePropertyTest(isHostMethod);
-    var areHostObjects = createMultiplePropertyTest(isHostObject);
-    var areHostProperties = createMultiplePropertyTest(isHostProperty);
-
-    function isTextRange(range) {
-        return range && areHostMethods(range, textRangeMethods) && areHostProperties(range, textRangeProperties);
-    }
-
-    function getBody(doc) {
-        return isHostObject(doc, "body") ? doc.body : doc.getElementsByTagName("body")[0];
-    }
-
-    var forEach = [].forEach ?
-        function(arr, func) {
-            arr.forEach(func);
-        } :
-        function(arr, func) {
-            for (var i = 0, len = arr.length; i < len; ++i) {
-                func(arr[i], i);
-            }
-        };
-
-    var modules = {};
-
-    var isBrowser = (typeof window != UNDEFINED && typeof document != UNDEFINED);
-
-    var util = {
-        isHostMethod: isHostMethod,
-        isHostObject: isHostObject,
-        isHostProperty: isHostProperty,
-        areHostMethods: areHostMethods,
-        areHostObjects: areHostObjects,
-        areHostProperties: areHostProperties,
-        isTextRange: isTextRange,
-        getBody: getBody,
-        forEach: forEach
-    };
-
-    var api = {
-        version: "1.3.0",
-        initialized: false,
-        isBrowser: isBrowser,
-        supported: true,
-        util: util,
-        features: {},
-        modules: modules,
-        config: {
-            alertOnFail: false,
-            alertOnWarn: false,
-            preferTextRange: false,
-            autoInitialize: (typeof rangyAutoInitialize == UNDEFINED) ? true : rangyAutoInitialize
-        }
-    };
-
-    function consoleLog(msg) {
-        if (typeof console != UNDEFINED && isHostMethod(console, "log")) {
-            console.log(msg);
-        }
-    }
-
-    function alertOrLog(msg, shouldAlert) {
-        if (isBrowser && shouldAlert) {
-            alert(msg);
-        } else  {
-            consoleLog(msg);
-        }
-    }
-
-    function fail(reason) {
-        api.initialized = true;
-        api.supported = false;
-        alertOrLog("Rangy is not supported in this environment. Reason: " + reason, api.config.alertOnFail);
-    }
-
-    api.fail = fail;
-
-    function warn(msg) {
-        alertOrLog("Rangy warning: " + msg, api.config.alertOnWarn);
-    }
-
-    api.warn = warn;
-
-    // Add utility extend() method
-    var extend;
-    if ({}.hasOwnProperty) {
-        util.extend = extend = function(obj, props, deep) {
-            var o, p;
-            for (var i in props) {
-                if (props.hasOwnProperty(i)) {
-                    o = obj[i];
-                    p = props[i];
-                    if (deep && o !== null && typeof o == "object" && p !== null && typeof p == "object") {
-                        extend(o, p, true);
-                    }
-                    obj[i] = p;
-                }
-            }
-            // Special case for toString, which does not show up in for...in loops in IE <= 8
-            if (props.hasOwnProperty("toString")) {
-                obj.toString = props.toString;
-            }
-            return obj;
-        };
-
-        util.createOptions = function(optionsParam, defaults) {
-            var options = {};
-            extend(options, defaults);
-            if (optionsParam) {
-                extend(options, optionsParam);
-            }
-            return options;
-        };
-    } else {
-        fail("hasOwnProperty not supported");
-    }
-
-    // Test whether we're in a browser and bail out if not
-    if (!isBrowser) {
-        fail("Rangy can only run in a browser");
-    }
-
-    // Test whether Array.prototype.slice can be relied on for NodeLists and use an alternative toArray() if not
-    (function() {
-        var toArray;
-
-        if (isBrowser) {
-            var el = document.createElement("div");
-            el.appendChild(document.createElement("span"));
-            var slice = [].slice;
-            try {
-                if (slice.call(el.childNodes, 0)[0].nodeType == 1) {
-                    toArray = function(arrayLike) {
-                        return slice.call(arrayLike, 0);
-                    };
-                }
-            } catch (e) {}
-        }
-
-        if (!toArray) {
-            toArray = function(arrayLike) {
-                var arr = [];
-                for (var i = 0, len = arrayLike.length; i < len; ++i) {
-                    arr[i] = arrayLike[i];
-                }
-                return arr;
-            };
-        }
-
-        util.toArray = toArray;
-    })();
-
-    // Very simple event handler wrapper function that doesn't attempt to solve issues such as "this" handling or
-    // normalization of event properties
-    var addListener;
-    if (isBrowser) {
-        if (isHostMethod(document, "addEventListener")) {
-            addListener = function(obj, eventType, listener) {
-                obj.addEventListener(eventType, listener, false);
-            };
-        } else if (isHostMethod(document, "attachEvent")) {
-            addListener = function(obj, eventType, listener) {
-                obj.attachEvent("on" + eventType, listener);
-            };
-        } else {
-            fail("Document does not have required addEventListener or attachEvent method");
-        }
-
-        util.addListener = addListener;
-    }
-
-    var initListeners = [];
-
-    function getErrorDesc(ex) {
-        return ex.message || ex.description || String(ex);
-    }
-
-    // Initialization
-    function init() {
-        if (!isBrowser || api.initialized) {
-            return;
-        }
-        var testRange;
-        var implementsDomRange = false, implementsTextRange = false;
-
-        // First, perform basic feature tests
-
-        if (isHostMethod(document, "createRange")) {
-            testRange = document.createRange();
-            if (areHostMethods(testRange, domRangeMethods) && areHostProperties(testRange, domRangeProperties)) {
-                implementsDomRange = true;
-            }
-        }
-
-        var body = getBody(document);
-        if (!body || body.nodeName.toLowerCase() != "body") {
-            fail("No body element found");
-            return;
-        }
-
-        if (body && isHostMethod(body, "createTextRange")) {
-            testRange = body.createTextRange();
-            if (isTextRange(testRange)) {
-                implementsTextRange = true;
-            }
-        }
-
-        if (!implementsDomRange && !implementsTextRange) {
-            fail("Neither Range nor TextRange are available");
-            return;
-        }
-
-        api.initialized = true;
-        api.features = {
-            implementsDomRange: implementsDomRange,
-            implementsTextRange: implementsTextRange
-        };
-
-        // Initialize modules
-        var module, errorMessage;
-        for (var moduleName in modules) {
-            if ( (module = modules[moduleName]) instanceof Module ) {
-                module.init(module, api);
-            }
-        }
-
-        // Call init listeners
-        for (var i = 0, len = initListeners.length; i < len; ++i) {
-            try {
-                initListeners[i](api);
-            } catch (ex) {
-                errorMessage = "Rangy init listener threw an exception. Continuing. Detail: " + getErrorDesc(ex);
-                consoleLog(errorMessage);
-            }
-        }
-    }
-
-    function deprecationNotice(deprecated, replacement, module) {
-        if (module) {
-            deprecated += " in module " + module.name;
-        }
-        api.warn("DEPRECATED: " + deprecated + " is deprecated. Please use " +
-        replacement + " instead.");
-    }
-
-    function createAliasForDeprecatedMethod(owner, deprecated, replacement, module) {
-        owner[deprecated] = function() {
-            deprecationNotice(deprecated, replacement, module);
-            return owner[replacement].apply(owner, util.toArray(arguments));
-        };
-    }
-
-    util.deprecationNotice = deprecationNotice;
-    util.createAliasForDeprecatedMethod = createAliasForDeprecatedMethod;
-
-    // Allow external scripts to initialize this library in case it's loaded after the document has loaded
-    api.init = init;
-
-    // Execute listener immediately if already initialized
-    api.addInitListener = function(listener) {
-        if (api.initialized) {
-            listener(api);
-        } else {
-            initListeners.push(listener);
-        }
-    };
-
-    var shimListeners = [];
-
-    api.addShimListener = function(listener) {
-        shimListeners.push(listener);
-    };
-
-    function shim(win) {
-        win = win || window;
-        init();
-
-        // Notify listeners
-        for (var i = 0, len = shimListeners.length; i < len; ++i) {
-            shimListeners[i](win);
-        }
-    }
-
-    if (isBrowser) {
-        api.shim = api.createMissingNativeApi = shim;
-        createAliasForDeprecatedMethod(api, "createMissingNativeApi", "shim");
-    }
-
-    function Module(name, dependencies, initializer) {
-        this.name = name;
-        this.dependencies = dependencies;
-        this.initialized = false;
-        this.supported = false;
-        this.initializer = initializer;
-    }
-
-    Module.prototype = {
-        init: function() {
-            var requiredModuleNames = this.dependencies || [];
-            for (var i = 0, len = requiredModuleNames.length, requiredModule, moduleName; i < len; ++i) {
-                moduleName = requiredModuleNames[i];
-
-                requiredModule = modules[moduleName];
-                if (!requiredModule || !(requiredModule instanceof Module)) {
-                    throw new Error("required module '" + moduleName + "' not found");
-                }
-
-                requiredModule.init();
-
-                if (!requiredModule.supported) {
-                    throw new Error("required module '" + moduleName + "' not supported");
-                }
-            }
-
-            // Now run initializer
-            this.initializer(this);
-        },
-
-        fail: function(reason) {
-            this.initialized = true;
-            this.supported = false;
-            throw new Error(reason);
-        },
-
-        warn: function(msg) {
-            api.warn("Module " + this.name + ": " + msg);
-        },
-
-        deprecationNotice: function(deprecated, replacement) {
-            api.warn("DEPRECATED: " + deprecated + " in module " + this.name + " is deprecated. Please use " +
-                replacement + " instead");
-        },
-
-        createError: function(msg) {
-            return new Error("Error in Rangy " + this.name + " module: " + msg);
-        }
-    };
-
-    function createModule(name, dependencies, initFunc) {
-        var newModule = new Module(name, dependencies, function(module) {
-            if (!module.initialized) {
-                module.initialized = true;
-                try {
-                    initFunc(api, module);
-                    module.supported = true;
-                } catch (ex) {
-                    var errorMessage = "Module '" + name + "' failed to load: " + getErrorDesc(ex);
-                    consoleLog(errorMessage);
-                    if (ex.stack) {
-                        consoleLog(ex.stack);
-                    }
-                }
-            }
-        });
-        modules[name] = newModule;
-        return newModule;
-    }
-
-    api.createModule = function(name) {
-        // Allow 2 or 3 arguments (second argument is an optional array of dependencies)
-        var initFunc, dependencies;
-        if (arguments.length == 2) {
-            initFunc = arguments[1];
-            dependencies = [];
-        } else {
-            initFunc = arguments[2];
-            dependencies = arguments[1];
-        }
-
-        var module = createModule(name, dependencies, initFunc);
-
-        // Initialize the module immediately if the core is already initialized
-        if (api.initialized && api.supported) {
-            module.init();
-        }
-    };
-
-    api.createCoreModule = function(name, dependencies, initFunc) {
-        createModule(name, dependencies, initFunc);
-    };
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // Ensure rangy.rangePrototype and rangy.selectionPrototype are available immediately
-
-    function RangePrototype() {}
-    api.RangePrototype = RangePrototype;
-    api.rangePrototype = new RangePrototype();
-
-    function SelectionPrototype() {}
-    api.selectionPrototype = new SelectionPrototype();
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // DOM utility methods used by Rangy
-    api.createCoreModule("DomUtil", [], function(api, module) {
-        var UNDEF = "undefined";
-        var util = api.util;
-        var getBody = util.getBody;
-
-        // Perform feature tests
-        if (!util.areHostMethods(document, ["createDocumentFragment", "createElement", "createTextNode"])) {
-            module.fail("document missing a Node creation method");
-        }
-
-        if (!util.isHostMethod(document, "getElementsByTagName")) {
-            module.fail("document missing getElementsByTagName method");
-        }
-
-        var el = document.createElement("div");
-        if (!util.areHostMethods(el, ["insertBefore", "appendChild", "cloneNode"] ||
-                !util.areHostObjects(el, ["previousSibling", "nextSibling", "childNodes", "parentNode"]))) {
-            module.fail("Incomplete Element implementation");
-        }
-
-        // innerHTML is required for Range's createContextualFragment method
-        if (!util.isHostProperty(el, "innerHTML")) {
-            module.fail("Element is missing innerHTML property");
-        }
-
-        var textNode = document.createTextNode("test");
-        if (!util.areHostMethods(textNode, ["splitText", "deleteData", "insertData", "appendData", "cloneNode"] ||
-                !util.areHostObjects(el, ["previousSibling", "nextSibling", "childNodes", "parentNode"]) ||
-                !util.areHostProperties(textNode, ["data"]))) {
-            module.fail("Incomplete Text Node implementation");
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Removed use of indexOf because of a bizarre bug in Opera that is thrown in one of the Acid3 tests. I haven't been
-        // able to replicate it outside of the test. The bug is that indexOf returns -1 when called on an Array that
-        // contains just the document as a single element and the value searched for is the document.
-        var arrayContains = /*Array.prototype.indexOf ?
-            function(arr, val) {
-                return arr.indexOf(val) > -1;
-            }:*/
-
-            function(arr, val) {
-                var i = arr.length;
-                while (i--) {
-                    if (arr[i] === val) {
-                        return true;
-                    }
-                }
-                return false;
-            };
-
-        // Opera 11 puts HTML elements in the null namespace, it seems, and IE 7 has undefined namespaceURI
-        function isHtmlNamespace(node) {
-            var ns;
-            return typeof node.namespaceURI == UNDEF || ((ns = node.namespaceURI) === null || ns == "http://www.w3.org/1999/xhtml");
-        }
-
-        function parentElement(node) {
-            var parent = node.parentNode;
-            return (parent.nodeType == 1) ? parent : null;
-        }
-
-        function getNodeIndex(node) {
-            var i = 0;
-            while( (node = node.previousSibling) ) {
-                ++i;
-            }
-            return i;
-        }
-
-        function getNodeLength(node) {
-            switch (node.nodeType) {
-                case 7:
-                case 10:
-                    return 0;
-                case 3:
-                case 8:
-                    return node.length;
-                default:
-                    return node.childNodes.length;
-            }
-        }
-
-        function getCommonAncestor(node1, node2) {
-            var ancestors = [], n;
-            for (n = node1; n; n = n.parentNode) {
-                ancestors.push(n);
-            }
-
-            for (n = node2; n; n = n.parentNode) {
-                if (arrayContains(ancestors, n)) {
-                    return n;
-                }
-            }
-
-            return null;
-        }
-
-        function isAncestorOf(ancestor, descendant, selfIsAncestor) {
-            var n = selfIsAncestor ? descendant : descendant.parentNode;
-            while (n) {
-                if (n === ancestor) {
-                    return true;
-                } else {
-                    n = n.parentNode;
-                }
-            }
-            return false;
-        }
-
-        function isOrIsAncestorOf(ancestor, descendant) {
-            return isAncestorOf(ancestor, descendant, true);
-        }
-
-        function getClosestAncestorIn(node, ancestor, selfIsAncestor) {
-            var p, n = selfIsAncestor ? node : node.parentNode;
-            while (n) {
-                p = n.parentNode;
-                if (p === ancestor) {
-                    return n;
-                }
-                n = p;
-            }
-            return null;
-        }
-
-        function isCharacterDataNode(node) {
-            var t = node.nodeType;
-            return t == 3 || t == 4 || t == 8 ; // Text, CDataSection or Comment
-        }
-
-        function isTextOrCommentNode(node) {
-            if (!node) {
-                return false;
-            }
-            var t = node.nodeType;
-            return t == 3 || t == 8 ; // Text or Comment
-        }
-
-        function insertAfter(node, precedingNode) {
-            var nextNode = precedingNode.nextSibling, parent = precedingNode.parentNode;
-            if (nextNode) {
-                parent.insertBefore(node, nextNode);
-            } else {
-                parent.appendChild(node);
-            }
-            return node;
-        }
-
-        // Note that we cannot use splitText() because it is bugridden in IE 9.
-        function splitDataNode(node, index, positionsToPreserve) {
-            var newNode = node.cloneNode(false);
-            newNode.deleteData(0, index);
-            node.deleteData(index, node.length - index);
-            insertAfter(newNode, node);
-
-            // Preserve positions
-            if (positionsToPreserve) {
-                for (var i = 0, position; position = positionsToPreserve[i++]; ) {
-                    // Handle case where position was inside the portion of node after the split point
-                    if (position.node == node && position.offset > index) {
-                        position.node = newNode;
-                        position.offset -= index;
-                    }
-                    // Handle the case where the position is a node offset within node's parent
-                    else if (position.node == node.parentNode && position.offset > getNodeIndex(node)) {
-                        ++position.offset;
-                    }
-                }
-            }
-            return newNode;
-        }
-
-        function getDocument(node) {
-            if (node.nodeType == 9) {
-                return node;
-            } else if (typeof node.ownerDocument != UNDEF) {
-                return node.ownerDocument;
-            } else if (typeof node.document != UNDEF) {
-                return node.document;
-            } else if (node.parentNode) {
-                return getDocument(node.parentNode);
-            } else {
-                throw module.createError("getDocument: no document found for node");
-            }
-        }
-
-        function getWindow(node) {
-            var doc = getDocument(node);
-            if (typeof doc.defaultView != UNDEF) {
-                return doc.defaultView;
-            } else if (typeof doc.parentWindow != UNDEF) {
-                return doc.parentWindow;
-            } else {
-                throw module.createError("Cannot get a window object for node");
-            }
-        }
-
-        function getIframeDocument(iframeEl) {
-            if (typeof iframeEl.contentDocument != UNDEF) {
-                return iframeEl.contentDocument;
-            } else if (typeof iframeEl.contentWindow != UNDEF) {
-                return iframeEl.contentWindow.document;
-            } else {
-                throw module.createError("getIframeDocument: No Document object found for iframe element");
-            }
-        }
-
-        function getIframeWindow(iframeEl) {
-            if (typeof iframeEl.contentWindow != UNDEF) {
-                return iframeEl.contentWindow;
-            } else if (typeof iframeEl.contentDocument != UNDEF) {
-                return iframeEl.contentDocument.defaultView;
-            } else {
-                throw module.createError("getIframeWindow: No Window object found for iframe element");
-            }
-        }
-
-        // This looks bad. Is it worth it?
-        function isWindow(obj) {
-            return obj && util.isHostMethod(obj, "setTimeout") && util.isHostObject(obj, "document");
-        }
-
-        function getContentDocument(obj, module, methodName) {
-            var doc;
-
-            if (!obj) {
-                doc = document;
-            }
-
-            // Test if a DOM node has been passed and obtain a document object for it if so
-            else if (util.isHostProperty(obj, "nodeType")) {
-                doc = (obj.nodeType == 1 && obj.tagName.toLowerCase() == "iframe") ?
-                    getIframeDocument(obj) : getDocument(obj);
-            }
-
-            // Test if the doc parameter appears to be a Window object
-            else if (isWindow(obj)) {
-                doc = obj.document;
-            }
-
-            if (!doc) {
-                throw module.createError(methodName + "(): Parameter must be a Window object or DOM node");
-            }
-
-            return doc;
-        }
-
-        function getRootContainer(node) {
-            var parent;
-            while ( (parent = node.parentNode) ) {
-                node = parent;
-            }
-            return node;
-        }
-
-        function comparePoints(nodeA, offsetA, nodeB, offsetB) {
-            // See http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level-2-Range-Comparing
-            var nodeC, root, childA, childB, n;
-            if (nodeA == nodeB) {
-                // Case 1: nodes are the same
-                return offsetA === offsetB ? 0 : (offsetA < offsetB) ? -1 : 1;
-            } else if ( (nodeC = getClosestAncestorIn(nodeB, nodeA, true)) ) {
-                // Case 2: node C (container B or an ancestor) is a child node of A
-                return offsetA <= getNodeIndex(nodeC) ? -1 : 1;
-            } else if ( (nodeC = getClosestAncestorIn(nodeA, nodeB, true)) ) {
-                // Case 3: node C (container A or an ancestor) is a child node of B
-                return getNodeIndex(nodeC) < offsetB  ? -1 : 1;
-            } else {
-                root = getCommonAncestor(nodeA, nodeB);
-                if (!root) {
-                    throw new Error("comparePoints error: nodes have no common ancestor");
-                }
-
-                // Case 4: containers are siblings or descendants of siblings
-                childA = (nodeA === root) ? root : getClosestAncestorIn(nodeA, root, true);
-                childB = (nodeB === root) ? root : getClosestAncestorIn(nodeB, root, true);
-
-                if (childA === childB) {
-                    // This shouldn't be possible
-                    throw module.createError("comparePoints got to case 4 and childA and childB are the same!");
-                } else {
-                    n = root.firstChild;
-                    while (n) {
-                        if (n === childA) {
-                            return -1;
-                        } else if (n === childB) {
-                            return 1;
-                        }
-                        n = n.nextSibling;
-                    }
-                }
-            }
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Test for IE's crash (IE 6/7) or exception (IE >= 8) when a reference to garbage-collected text node is queried
-        var crashyTextNodes = false;
-
-        function isBrokenNode(node) {
-            var n;
-            try {
-                n = node.parentNode;
-                return false;
-            } catch (e) {
-                return true;
-            }
-        }
-
-        (function() {
-            var el = document.createElement("b");
-            el.innerHTML = "1";
-            var textNode = el.firstChild;
-            el.innerHTML = "<br />";
-            crashyTextNodes = isBrokenNode(textNode);
-
-            api.features.crashyTextNodes = crashyTextNodes;
-        })();
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function inspectNode(node) {
-            if (!node) {
-                return "[No node]";
-            }
-            if (crashyTextNodes && isBrokenNode(node)) {
-                return "[Broken node]";
-            }
-            if (isCharacterDataNode(node)) {
-                return '"' + node.data + '"';
-            }
-            if (node.nodeType == 1) {
-                var idAttr = node.id ? ' id="' + node.id + '"' : "";
-                return "<" + node.nodeName + idAttr + ">[index:" + getNodeIndex(node) + ",length:" + node.childNodes.length + "][" + (node.innerHTML || "[innerHTML not supported]").slice(0, 25) + "]";
-            }
-            return node.nodeName;
-        }
-
-        function fragmentFromNodeChildren(node) {
-            var fragment = getDocument(node).createDocumentFragment(), child;
-            while ( (child = node.firstChild) ) {
-                fragment.appendChild(child);
-            }
-            return fragment;
-        }
-
-        var getComputedStyleProperty;
-        if (typeof window.getComputedStyle != UNDEF) {
-            getComputedStyleProperty = function(el, propName) {
-                return getWindow(el).getComputedStyle(el, null)[propName];
-            };
-        } else if (typeof document.documentElement.currentStyle != UNDEF) {
-            getComputedStyleProperty = function(el, propName) {
-                return el.currentStyle ? el.currentStyle[propName] : "";
-            };
-        } else {
-            module.fail("No means of obtaining computed style properties found");
-        }
-
-        function createTestElement(doc, html, contentEditable) {
-            var body = getBody(doc);
-            var el = doc.createElement("div");
-            el.contentEditable = "" + !!contentEditable;
-            if (html) {
-                el.innerHTML = html;
-            }
-
-            // Insert the test element at the start of the body to prevent scrolling to the bottom in iOS (issue #292)
-            var bodyFirstChild = body.firstChild;
-            if (bodyFirstChild) {
-                body.insertBefore(el, bodyFirstChild);
-            } else {
-                body.appendChild(el);
-            }
-
-            return el;
-        }
-
-        function removeNode(node) {
-            return node.parentNode.removeChild(node);
-        }
-
-        function NodeIterator(root) {
-            this.root = root;
-            this._next = root;
-        }
-
-        NodeIterator.prototype = {
-            _current: null,
-
-            hasNext: function() {
-                return !!this._next;
-            },
-
-            next: function() {
-                var n = this._current = this._next;
-                var child, next;
-                if (this._current) {
-                    child = n.firstChild;
-                    if (child) {
-                        this._next = child;
-                    } else {
-                        next = null;
-                        while ((n !== this.root) && !(next = n.nextSibling)) {
-                            n = n.parentNode;
-                        }
-                        this._next = next;
-                    }
-                }
-                return this._current;
-            },
-
-            detach: function() {
-                this._current = this._next = this.root = null;
-            }
-        };
-
-        function createIterator(root) {
-            return new NodeIterator(root);
-        }
-
-        function DomPosition(node, offset) {
-            this.node = node;
-            this.offset = offset;
-        }
-
-        DomPosition.prototype = {
-            equals: function(pos) {
-                return !!pos && this.node === pos.node && this.offset == pos.offset;
-            },
-
-            inspect: function() {
-                return "[DomPosition(" + inspectNode(this.node) + ":" + this.offset + ")]";
-            },
-
-            toString: function() {
-                return this.inspect();
-            }
-        };
-
-        function DOMException(codeName) {
-            this.code = this[codeName];
-            this.codeName = codeName;
-            this.message = "DOMException: " + this.codeName;
-        }
-
-        DOMException.prototype = {
-            INDEX_SIZE_ERR: 1,
-            HIERARCHY_REQUEST_ERR: 3,
-            WRONG_DOCUMENT_ERR: 4,
-            NO_MODIFICATION_ALLOWED_ERR: 7,
-            NOT_FOUND_ERR: 8,
-            NOT_SUPPORTED_ERR: 9,
-            INVALID_STATE_ERR: 11,
-            INVALID_NODE_TYPE_ERR: 24
-        };
-
-        DOMException.prototype.toString = function() {
-            return this.message;
-        };
-
-        api.dom = {
-            arrayContains: arrayContains,
-            isHtmlNamespace: isHtmlNamespace,
-            parentElement: parentElement,
-            getNodeIndex: getNodeIndex,
-            getNodeLength: getNodeLength,
-            getCommonAncestor: getCommonAncestor,
-            isAncestorOf: isAncestorOf,
-            isOrIsAncestorOf: isOrIsAncestorOf,
-            getClosestAncestorIn: getClosestAncestorIn,
-            isCharacterDataNode: isCharacterDataNode,
-            isTextOrCommentNode: isTextOrCommentNode,
-            insertAfter: insertAfter,
-            splitDataNode: splitDataNode,
-            getDocument: getDocument,
-            getWindow: getWindow,
-            getIframeWindow: getIframeWindow,
-            getIframeDocument: getIframeDocument,
-            getBody: getBody,
-            isWindow: isWindow,
-            getContentDocument: getContentDocument,
-            getRootContainer: getRootContainer,
-            comparePoints: comparePoints,
-            isBrokenNode: isBrokenNode,
-            inspectNode: inspectNode,
-            getComputedStyleProperty: getComputedStyleProperty,
-            createTestElement: createTestElement,
-            removeNode: removeNode,
-            fragmentFromNodeChildren: fragmentFromNodeChildren,
-            createIterator: createIterator,
-            DomPosition: DomPosition
-        };
-
-        api.DOMException = DOMException;
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // Pure JavaScript implementation of DOM Range
-    api.createCoreModule("DomRange", ["DomUtil"], function(api, module) {
-        var dom = api.dom;
-        var util = api.util;
-        var DomPosition = dom.DomPosition;
-        var DOMException = api.DOMException;
-
-        var isCharacterDataNode = dom.isCharacterDataNode;
-        var getNodeIndex = dom.getNodeIndex;
-        var isOrIsAncestorOf = dom.isOrIsAncestorOf;
-        var getDocument = dom.getDocument;
-        var comparePoints = dom.comparePoints;
-        var splitDataNode = dom.splitDataNode;
-        var getClosestAncestorIn = dom.getClosestAncestorIn;
-        var getNodeLength = dom.getNodeLength;
-        var arrayContains = dom.arrayContains;
-        var getRootContainer = dom.getRootContainer;
-        var crashyTextNodes = api.features.crashyTextNodes;
-
-        var removeNode = dom.removeNode;
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Utility functions
-
-        function isNonTextPartiallySelected(node, range) {
-            return (node.nodeType != 3) &&
-                   (isOrIsAncestorOf(node, range.startContainer) || isOrIsAncestorOf(node, range.endContainer));
-        }
-
-        function getRangeDocument(range) {
-            return range.document || getDocument(range.startContainer);
-        }
-
-        function getRangeRoot(range) {
-            return getRootContainer(range.startContainer);
-        }
-
-        function getBoundaryBeforeNode(node) {
-            return new DomPosition(node.parentNode, getNodeIndex(node));
-        }
-
-        function getBoundaryAfterNode(node) {
-            return new DomPosition(node.parentNode, getNodeIndex(node) + 1);
-        }
-
-        function insertNodeAtPosition(node, n, o) {
-            var firstNodeInserted = node.nodeType == 11 ? node.firstChild : node;
-            if (isCharacterDataNode(n)) {
-                if (o == n.length) {
-                    dom.insertAfter(node, n);
-                } else {
-                    n.parentNode.insertBefore(node, o == 0 ? n : splitDataNode(n, o));
-                }
-            } else if (o >= n.childNodes.length) {
-                n.appendChild(node);
-            } else {
-                n.insertBefore(node, n.childNodes[o]);
-            }
-            return firstNodeInserted;
-        }
-
-        function rangesIntersect(rangeA, rangeB, touchingIsIntersecting) {
-            assertRangeValid(rangeA);
-            assertRangeValid(rangeB);
-
-            if (getRangeDocument(rangeB) != getRangeDocument(rangeA)) {
-                throw new DOMException("WRONG_DOCUMENT_ERR");
-            }
-
-            var startComparison = comparePoints(rangeA.startContainer, rangeA.startOffset, rangeB.endContainer, rangeB.endOffset),
-                endComparison = comparePoints(rangeA.endContainer, rangeA.endOffset, rangeB.startContainer, rangeB.startOffset);
-
-            return touchingIsIntersecting ? startComparison <= 0 && endComparison >= 0 : startComparison < 0 && endComparison > 0;
-        }
-
-        function cloneSubtree(iterator) {
-            var partiallySelected;
-            for (var node, frag = getRangeDocument(iterator.range).createDocumentFragment(), subIterator; node = iterator.next(); ) {
-                partiallySelected = iterator.isPartiallySelectedSubtree();
-                node = node.cloneNode(!partiallySelected);
-                if (partiallySelected) {
-                    subIterator = iterator.getSubtreeIterator();
-                    node.appendChild(cloneSubtree(subIterator));
-                    subIterator.detach();
-                }
-
-                if (node.nodeType == 10) { // DocumentType
-                    throw new DOMException("HIERARCHY_REQUEST_ERR");
-                }
-                frag.appendChild(node);
-            }
-            return frag;
-        }
-
-        function iterateSubtree(rangeIterator, func, iteratorState) {
-            var it, n;
-            iteratorState = iteratorState || { stop: false };
-            for (var node, subRangeIterator; node = rangeIterator.next(); ) {
-                if (rangeIterator.isPartiallySelectedSubtree()) {
-                    if (func(node) === false) {
-                        iteratorState.stop = true;
-                        return;
-                    } else {
-                        // The node is partially selected by the Range, so we can use a new RangeIterator on the portion of
-                        // the node selected by the Range.
-                        subRangeIterator = rangeIterator.getSubtreeIterator();
-                        iterateSubtree(subRangeIterator, func, iteratorState);
-                        subRangeIterator.detach();
-                        if (iteratorState.stop) {
-                            return;
-                        }
-                    }
-                } else {
-                    // The whole node is selected, so we can use efficient DOM iteration to iterate over the node and its
-                    // descendants
-                    it = dom.createIterator(node);
-                    while ( (n = it.next()) ) {
-                        if (func(n) === false) {
-                            iteratorState.stop = true;
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        function deleteSubtree(iterator) {
-            var subIterator;
-            while (iterator.next()) {
-                if (iterator.isPartiallySelectedSubtree()) {
-                    subIterator = iterator.getSubtreeIterator();
-                    deleteSubtree(subIterator);
-                    subIterator.detach();
-                } else {
-                    iterator.remove();
-                }
-            }
-        }
-
-        function extractSubtree(iterator) {
-            for (var node, frag = getRangeDocument(iterator.range).createDocumentFragment(), subIterator; node = iterator.next(); ) {
-
-                if (iterator.isPartiallySelectedSubtree()) {
-                    node = node.cloneNode(false);
-                    subIterator = iterator.getSubtreeIterator();
-                    node.appendChild(extractSubtree(subIterator));
-                    subIterator.detach();
-                } else {
-                    iterator.remove();
-                }
-                if (node.nodeType == 10) { // DocumentType
-                    throw new DOMException("HIERARCHY_REQUEST_ERR");
-                }
-                frag.appendChild(node);
-            }
-            return frag;
-        }
-
-        function getNodesInRange(range, nodeTypes, filter) {
-            var filterNodeTypes = !!(nodeTypes && nodeTypes.length), regex;
-            var filterExists = !!filter;
-            if (filterNodeTypes) {
-                regex = new RegExp("^(" + nodeTypes.join("|") + ")$");
-            }
-
-            var nodes = [];
-            iterateSubtree(new RangeIterator(range, false), function(node) {
-                if (filterNodeTypes && !regex.test(node.nodeType)) {
-                    return;
-                }
-                if (filterExists && !filter(node)) {
-                    return;
-                }
-                // Don't include a boundary container if it is a character data node and the range does not contain any
-                // of its character data. See issue 190.
-                var sc = range.startContainer;
-                if (node == sc && isCharacterDataNode(sc) && range.startOffset == sc.length) {
-                    return;
-                }
-
-                var ec = range.endContainer;
-                if (node == ec && isCharacterDataNode(ec) && range.endOffset == 0) {
-                    return;
-                }
-
-                nodes.push(node);
-            });
-            return nodes;
-        }
-
-        function inspect(range) {
-            var name = (typeof range.getName == "undefined") ? "Range" : range.getName();
-            return "[" + name + "(" + dom.inspectNode(range.startContainer) + ":" + range.startOffset + ", " +
-                    dom.inspectNode(range.endContainer) + ":" + range.endOffset + ")]";
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // RangeIterator code partially borrows from IERange by Tim Ryan (http://github.com/timcameronryan/IERange)
-
-        function RangeIterator(range, clonePartiallySelectedTextNodes) {
-            this.range = range;
-            this.clonePartiallySelectedTextNodes = clonePartiallySelectedTextNodes;
-
-
-            if (!range.collapsed) {
-                this.sc = range.startContainer;
-                this.so = range.startOffset;
-                this.ec = range.endContainer;
-                this.eo = range.endOffset;
-                var root = range.commonAncestorContainer;
-
-                if (this.sc === this.ec && isCharacterDataNode(this.sc)) {
-                    this.isSingleCharacterDataNode = true;
-                    this._first = this._last = this._next = this.sc;
-                } else {
-                    this._first = this._next = (this.sc === root && !isCharacterDataNode(this.sc)) ?
-                        this.sc.childNodes[this.so] : getClosestAncestorIn(this.sc, root, true);
-                    this._last = (this.ec === root && !isCharacterDataNode(this.ec)) ?
-                        this.ec.childNodes[this.eo - 1] : getClosestAncestorIn(this.ec, root, true);
-                }
-            }
-        }
-
-        RangeIterator.prototype = {
-            _current: null,
-            _next: null,
-            _first: null,
-            _last: null,
-            isSingleCharacterDataNode: false,
-
-            reset: function() {
-                this._current = null;
-                this._next = this._first;
-            },
-
-            hasNext: function() {
-                return !!this._next;
-            },
-
-            next: function() {
-                // Move to next node
-                var current = this._current = this._next;
-                if (current) {
-                    this._next = (current !== this._last) ? current.nextSibling : null;
-
-                    // Check for partially selected text nodes
-                    if (isCharacterDataNode(current) && this.clonePartiallySelectedTextNodes) {
-                        if (current === this.ec) {
-                            (current = current.cloneNode(true)).deleteData(this.eo, current.length - this.eo);
-                        }
-                        if (this._current === this.sc) {
-                            (current = current.cloneNode(true)).deleteData(0, this.so);
-                        }
-                    }
-                }
-
-                return current;
-            },
-
-            remove: function() {
-                var current = this._current, start, end;
-
-                if (isCharacterDataNode(current) && (current === this.sc || current === this.ec)) {
-                    start = (current === this.sc) ? this.so : 0;
-                    end = (current === this.ec) ? this.eo : current.length;
-                    if (start != end) {
-                        current.deleteData(start, end - start);
-                    }
-                } else {
-                    if (current.parentNode) {
-                        removeNode(current);
-                    } else {
-                    }
-                }
-            },
-
-            // Checks if the current node is partially selected
-            isPartiallySelectedSubtree: function() {
-                var current = this._current;
-                return isNonTextPartiallySelected(current, this.range);
-            },
-
-            getSubtreeIterator: function() {
-                var subRange;
-                if (this.isSingleCharacterDataNode) {
-                    subRange = this.range.cloneRange();
-                    subRange.collapse(false);
-                } else {
-                    subRange = new Range(getRangeDocument(this.range));
-                    var current = this._current;
-                    var startContainer = current, startOffset = 0, endContainer = current, endOffset = getNodeLength(current);
-
-                    if (isOrIsAncestorOf(current, this.sc)) {
-                        startContainer = this.sc;
-                        startOffset = this.so;
-                    }
-                    if (isOrIsAncestorOf(current, this.ec)) {
-                        endContainer = this.ec;
-                        endOffset = this.eo;
-                    }
-
-                    updateBoundaries(subRange, startContainer, startOffset, endContainer, endOffset);
-                }
-                return new RangeIterator(subRange, this.clonePartiallySelectedTextNodes);
-            },
-
-            detach: function() {
-                this.range = this._current = this._next = this._first = this._last = this.sc = this.so = this.ec = this.eo = null;
-            }
-        };
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        var beforeAfterNodeTypes = [1, 3, 4, 5, 7, 8, 10];
-        var rootContainerNodeTypes = [2, 9, 11];
-        var readonlyNodeTypes = [5, 6, 10, 12];
-        var insertableNodeTypes = [1, 3, 4, 5, 7, 8, 10, 11];
-        var surroundNodeTypes = [1, 3, 4, 5, 7, 8];
-
-        function createAncestorFinder(nodeTypes) {
-            return function(node, selfIsAncestor) {
-                var t, n = selfIsAncestor ? node : node.parentNode;
-                while (n) {
-                    t = n.nodeType;
-                    if (arrayContains(nodeTypes, t)) {
-                        return n;
-                    }
-                    n = n.parentNode;
-                }
-                return null;
-            };
-        }
-
-        var getDocumentOrFragmentContainer = createAncestorFinder( [9, 11] );
-        var getReadonlyAncestor = createAncestorFinder(readonlyNodeTypes);
-        var getDocTypeNotationEntityAncestor = createAncestorFinder( [6, 10, 12] );
-
-        function assertNoDocTypeNotationEntityAncestor(node, allowSelf) {
-            if (getDocTypeNotationEntityAncestor(node, allowSelf)) {
-                throw new DOMException("INVALID_NODE_TYPE_ERR");
-            }
-        }
-
-        function assertValidNodeType(node, invalidTypes) {
-            if (!arrayContains(invalidTypes, node.nodeType)) {
-                throw new DOMException("INVALID_NODE_TYPE_ERR");
-            }
-        }
-
-        function assertValidOffset(node, offset) {
-            if (offset < 0 || offset > (isCharacterDataNode(node) ? node.length : node.childNodes.length)) {
-                throw new DOMException("INDEX_SIZE_ERR");
-            }
-        }
-
-        function assertSameDocumentOrFragment(node1, node2) {
-            if (getDocumentOrFragmentContainer(node1, true) !== getDocumentOrFragmentContainer(node2, true)) {
-                throw new DOMException("WRONG_DOCUMENT_ERR");
-            }
-        }
-
-        function assertNodeNotReadOnly(node) {
-            if (getReadonlyAncestor(node, true)) {
-                throw new DOMException("NO_MODIFICATION_ALLOWED_ERR");
-            }
-        }
-
-        function assertNode(node, codeName) {
-            if (!node) {
-                throw new DOMException(codeName);
-            }
-        }
-
-        function isValidOffset(node, offset) {
-            return offset <= (isCharacterDataNode(node) ? node.length : node.childNodes.length);
-        }
-
-        function isRangeValid(range) {
-            return (!!range.startContainer && !!range.endContainer &&
-                    !(crashyTextNodes && (dom.isBrokenNode(range.startContainer) || dom.isBrokenNode(range.endContainer))) &&
-                    getRootContainer(range.startContainer) == getRootContainer(range.endContainer) &&
-                    isValidOffset(range.startContainer, range.startOffset) &&
-                    isValidOffset(range.endContainer, range.endOffset));
-        }
-
-        function assertRangeValid(range) {
-            if (!isRangeValid(range)) {
-                throw new Error("Range error: Range is not valid. This usually happens after DOM mutation. Range: (" + range.inspect() + ")");
-            }
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Test the browser's innerHTML support to decide how to implement createContextualFragment
-        var styleEl = document.createElement("style");
-        var htmlParsingConforms = false;
-        try {
-            styleEl.innerHTML = "<b>x</b>";
-            htmlParsingConforms = (styleEl.firstChild.nodeType == 3); // Opera incorrectly creates an element node
-        } catch (e) {
-            // IE 6 and 7 throw
-        }
-
-        api.features.htmlParsingConforms = htmlParsingConforms;
-
-        var createContextualFragment = htmlParsingConforms ?
-
-            // Implementation as per HTML parsing spec, trusting in the browser's implementation of innerHTML. See
-            // discussion and base code for this implementation at issue 67.
-            // Spec: http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface
-            // Thanks to Aleks Williams.
-            function(fragmentStr) {
-                // "Let node the context object's start's node."
-                var node = this.startContainer;
-                var doc = getDocument(node);
-
-                // "If the context object's start's node is null, raise an INVALID_STATE_ERR
-                // exception and abort these steps."
-                if (!node) {
-                    throw new DOMException("INVALID_STATE_ERR");
-                }
-
-                // "Let element be as follows, depending on node's interface:"
-                // Document, Document Fragment: null
-                var el = null;
-
-                // "Element: node"
-                if (node.nodeType == 1) {
-                    el = node;
-
-                // "Text, Comment: node's parentElement"
-                } else if (isCharacterDataNode(node)) {
-                    el = dom.parentElement(node);
-                }
-
-                // "If either element is null or element's ownerDocument is an HTML document
-                // and element's local name is "html" and element's namespace is the HTML
-                // namespace"
-                if (el === null || (
-                    el.nodeName == "HTML" &&
-                    dom.isHtmlNamespace(getDocument(el).documentElement) &&
-                    dom.isHtmlNamespace(el)
-                )) {
-
-                // "let element be a new Element with "body" as its local name and the HTML
-                // namespace as its namespace.""
-                    el = doc.createElement("body");
-                } else {
-                    el = el.cloneNode(false);
-                }
-
-                // "If the node's document is an HTML document: Invoke the HTML fragment parsing algorithm."
-                // "If the node's document is an XML document: Invoke the XML fragment parsing algorithm."
-                // "In either case, the algorithm must be invoked with fragment as the input
-                // and element as the context element."
-                el.innerHTML = fragmentStr;
-
-                // "If this raises an exception, then abort these steps. Otherwise, let new
-                // children be the nodes returned."
-
-                // "Let fragment be a new DocumentFragment."
-                // "Append all new children to fragment."
-                // "Return fragment."
-                return dom.fragmentFromNodeChildren(el);
-            } :
-
-            // In this case, innerHTML cannot be trusted, so fall back to a simpler, non-conformant implementation that
-            // previous versions of Rangy used (with the exception of using a body element rather than a div)
-            function(fragmentStr) {
-                var doc = getRangeDocument(this);
-                var el = doc.createElement("body");
-                el.innerHTML = fragmentStr;
-
-                return dom.fragmentFromNodeChildren(el);
-            };
-
-        function splitRangeBoundaries(range, positionsToPreserve) {
-            assertRangeValid(range);
-
-            var sc = range.startContainer, so = range.startOffset, ec = range.endContainer, eo = range.endOffset;
-            var startEndSame = (sc === ec);
-
-            if (isCharacterDataNode(ec) && eo > 0 && eo < ec.length) {
-                splitDataNode(ec, eo, positionsToPreserve);
-            }
-
-            if (isCharacterDataNode(sc) && so > 0 && so < sc.length) {
-                sc = splitDataNode(sc, so, positionsToPreserve);
-                if (startEndSame) {
-                    eo -= so;
-                    ec = sc;
-                } else if (ec == sc.parentNode && eo >= getNodeIndex(sc)) {
-                    eo++;
-                }
-                so = 0;
-            }
-            range.setStartAndEnd(sc, so, ec, eo);
-        }
-
-        function rangeToHtml(range) {
-            assertRangeValid(range);
-            var container = range.commonAncestorContainer.parentNode.cloneNode(false);
-            container.appendChild( range.cloneContents() );
-            return container.innerHTML;
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        var rangeProperties = ["startContainer", "startOffset", "endContainer", "endOffset", "collapsed",
-            "commonAncestorContainer"];
-
-        var s2s = 0, s2e = 1, e2e = 2, e2s = 3;
-        var n_b = 0, n_a = 1, n_b_a = 2, n_i = 3;
-
-        util.extend(api.rangePrototype, {
-            compareBoundaryPoints: function(how, range) {
-                assertRangeValid(this);
-                assertSameDocumentOrFragment(this.startContainer, range.startContainer);
-
-                var nodeA, offsetA, nodeB, offsetB;
-                var prefixA = (how == e2s || how == s2s) ? "start" : "end";
-                var prefixB = (how == s2e || how == s2s) ? "start" : "end";
-                nodeA = this[prefixA + "Container"];
-                offsetA = this[prefixA + "Offset"];
-                nodeB = range[prefixB + "Container"];
-                offsetB = range[prefixB + "Offset"];
-                return comparePoints(nodeA, offsetA, nodeB, offsetB);
-            },
-
-            insertNode: function(node) {
-                assertRangeValid(this);
-                assertValidNodeType(node, insertableNodeTypes);
-                assertNodeNotReadOnly(this.startContainer);
-
-                if (isOrIsAncestorOf(node, this.startContainer)) {
-                    throw new DOMException("HIERARCHY_REQUEST_ERR");
-                }
-
-                // No check for whether the container of the start of the Range is of a type that does not allow
-                // children of the type of node: the browser's DOM implementation should do this for us when we attempt
-                // to add the node
-
-                var firstNodeInserted = insertNodeAtPosition(node, this.startContainer, this.startOffset);
-                this.setStartBefore(firstNodeInserted);
-            },
-
-            cloneContents: function() {
-                assertRangeValid(this);
-
-                var clone, frag;
-                if (this.collapsed) {
-                    return getRangeDocument(this).createDocumentFragment();
-                } else {
-                    if (this.startContainer === this.endContainer && isCharacterDataNode(this.startContainer)) {
-                        clone = this.startContainer.cloneNode(true);
-                        clone.data = clone.data.slice(this.startOffset, this.endOffset);
-                        frag = getRangeDocument(this).createDocumentFragment();
-                        frag.appendChild(clone);
-                        return frag;
-                    } else {
-                        var iterator = new RangeIterator(this, true);
-                        clone = cloneSubtree(iterator);
-                        iterator.detach();
-                    }
-                    return clone;
-                }
-            },
-
-            canSurroundContents: function() {
-                assertRangeValid(this);
-                assertNodeNotReadOnly(this.startContainer);
-                assertNodeNotReadOnly(this.endContainer);
-
-                // Check if the contents can be surrounded. Specifically, this means whether the range partially selects
-                // no non-text nodes.
-                var iterator = new RangeIterator(this, true);
-                var boundariesInvalid = (iterator._first && (isNonTextPartiallySelected(iterator._first, this)) ||
-                        (iterator._last && isNonTextPartiallySelected(iterator._last, this)));
-                iterator.detach();
-                return !boundariesInvalid;
-            },
-
-            surroundContents: function(node) {
-                assertValidNodeType(node, surroundNodeTypes);
-
-                if (!this.canSurroundContents()) {
-                    throw new DOMException("INVALID_STATE_ERR");
-                }
-
-                // Extract the contents
-                var content = this.extractContents();
-
-                // Clear the children of the node
-                if (node.hasChildNodes()) {
-                    while (node.lastChild) {
-                        node.removeChild(node.lastChild);
-                    }
-                }
-
-                // Insert the new node and add the extracted contents
-                insertNodeAtPosition(node, this.startContainer, this.startOffset);
-                node.appendChild(content);
-
-                this.selectNode(node);
-            },
-
-            cloneRange: function() {
-                assertRangeValid(this);
-                var range = new Range(getRangeDocument(this));
-                var i = rangeProperties.length, prop;
-                while (i--) {
-                    prop = rangeProperties[i];
-                    range[prop] = this[prop];
-                }
-                return range;
-            },
-
-            toString: function() {
-                assertRangeValid(this);
-                var sc = this.startContainer;
-                if (sc === this.endContainer && isCharacterDataNode(sc)) {
-                    return (sc.nodeType == 3 || sc.nodeType == 4) ? sc.data.slice(this.startOffset, this.endOffset) : "";
-                } else {
-                    var textParts = [], iterator = new RangeIterator(this, true);
-                    iterateSubtree(iterator, function(node) {
-                        // Accept only text or CDATA nodes, not comments
-                        if (node.nodeType == 3 || node.nodeType == 4) {
-                            textParts.push(node.data);
-                        }
-                    });
-                    iterator.detach();
-                    return textParts.join("");
-                }
-            },
-
-            // The methods below are all non-standard. The following batch were introduced by Mozilla but have since
-            // been removed from Mozilla.
-
-            compareNode: function(node) {
-                assertRangeValid(this);
-
-                var parent = node.parentNode;
-                var nodeIndex = getNodeIndex(node);
-
-                if (!parent) {
-                    throw new DOMException("NOT_FOUND_ERR");
-                }
-
-                var startComparison = this.comparePoint(parent, nodeIndex),
-                    endComparison = this.comparePoint(parent, nodeIndex + 1);
-
-                if (startComparison < 0) { // Node starts before
-                    return (endComparison > 0) ? n_b_a : n_b;
-                } else {
-                    return (endComparison > 0) ? n_a : n_i;
-                }
-            },
-
-            comparePoint: function(node, offset) {
-                assertRangeValid(this);
-                assertNode(node, "HIERARCHY_REQUEST_ERR");
-                assertSameDocumentOrFragment(node, this.startContainer);
-
-                if (comparePoints(node, offset, this.startContainer, this.startOffset) < 0) {
-                    return -1;
-                } else if (comparePoints(node, offset, this.endContainer, this.endOffset) > 0) {
-                    return 1;
-                }
-                return 0;
-            },
-
-            createContextualFragment: createContextualFragment,
-
-            toHtml: function() {
-                return rangeToHtml(this);
-            },
-
-            // touchingIsIntersecting determines whether this method considers a node that borders a range intersects
-            // with it (as in WebKit) or not (as in Gecko pre-1.9, and the default)
-            intersectsNode: function(node, touchingIsIntersecting) {
-                assertRangeValid(this);
-                if (getRootContainer(node) != getRangeRoot(this)) {
-                    return false;
-                }
-
-                var parent = node.parentNode, offset = getNodeIndex(node);
-                if (!parent) {
-                    return true;
-                }
-
-                var startComparison = comparePoints(parent, offset, this.endContainer, this.endOffset),
-                    endComparison = comparePoints(parent, offset + 1, this.startContainer, this.startOffset);
-
-                return touchingIsIntersecting ? startComparison <= 0 && endComparison >= 0 : startComparison < 0 && endComparison > 0;
-            },
-
-            isPointInRange: function(node, offset) {
-                assertRangeValid(this);
-                assertNode(node, "HIERARCHY_REQUEST_ERR");
-                assertSameDocumentOrFragment(node, this.startContainer);
-
-                return (comparePoints(node, offset, this.startContainer, this.startOffset) >= 0) &&
-                       (comparePoints(node, offset, this.endContainer, this.endOffset) <= 0);
-            },
-
-            // The methods below are non-standard and invented by me.
-
-            // Sharing a boundary start-to-end or end-to-start does not count as intersection.
-            intersectsRange: function(range) {
-                return rangesIntersect(this, range, false);
-            },
-
-            // Sharing a boundary start-to-end or end-to-start does count as intersection.
-            intersectsOrTouchesRange: function(range) {
-                return rangesIntersect(this, range, true);
-            },
-
-            intersection: function(range) {
-                if (this.intersectsRange(range)) {
-                    var startComparison = comparePoints(this.startContainer, this.startOffset, range.startContainer, range.startOffset),
-                        endComparison = comparePoints(this.endContainer, this.endOffset, range.endContainer, range.endOffset);
-
-                    var intersectionRange = this.cloneRange();
-                    if (startComparison == -1) {
-                        intersectionRange.setStart(range.startContainer, range.startOffset);
-                    }
-                    if (endComparison == 1) {
-                        intersectionRange.setEnd(range.endContainer, range.endOffset);
-                    }
-                    return intersectionRange;
-                }
-                return null;
-            },
-
-            union: function(range) {
-                if (this.intersectsOrTouchesRange(range)) {
-                    var unionRange = this.cloneRange();
-                    if (comparePoints(range.startContainer, range.startOffset, this.startContainer, this.startOffset) == -1) {
-                        unionRange.setStart(range.startContainer, range.startOffset);
-                    }
-                    if (comparePoints(range.endContainer, range.endOffset, this.endContainer, this.endOffset) == 1) {
-                        unionRange.setEnd(range.endContainer, range.endOffset);
-                    }
-                    return unionRange;
-                } else {
-                    throw new DOMException("Ranges do not intersect");
-                }
-            },
-
-            containsNode: function(node, allowPartial) {
-                if (allowPartial) {
-                    return this.intersectsNode(node, false);
-                } else {
-                    return this.compareNode(node) == n_i;
-                }
-            },
-
-            containsNodeContents: function(node) {
-                return this.comparePoint(node, 0) >= 0 && this.comparePoint(node, getNodeLength(node)) <= 0;
-            },
-
-            containsRange: function(range) {
-                var intersection = this.intersection(range);
-                return intersection !== null && range.equals(intersection);
-            },
-
-            containsNodeText: function(node) {
-                var nodeRange = this.cloneRange();
-                nodeRange.selectNode(node);
-                var textNodes = nodeRange.getNodes([3]);
-                if (textNodes.length > 0) {
-                    nodeRange.setStart(textNodes[0], 0);
-                    var lastTextNode = textNodes.pop();
-                    nodeRange.setEnd(lastTextNode, lastTextNode.length);
-                    return this.containsRange(nodeRange);
-                } else {
-                    return this.containsNodeContents(node);
-                }
-            },
-
-            getNodes: function(nodeTypes, filter) {
-                assertRangeValid(this);
-                return getNodesInRange(this, nodeTypes, filter);
-            },
-
-            getDocument: function() {
-                return getRangeDocument(this);
-            },
-
-            collapseBefore: function(node) {
-                this.setEndBefore(node);
-                this.collapse(false);
-            },
-
-            collapseAfter: function(node) {
-                this.setStartAfter(node);
-                this.collapse(true);
-            },
-
-            getBookmark: function(containerNode) {
-                var doc = getRangeDocument(this);
-                var preSelectionRange = api.createRange(doc);
-                containerNode = containerNode || dom.getBody(doc);
-                preSelectionRange.selectNodeContents(containerNode);
-                var range = this.intersection(preSelectionRange);
-                var start = 0, end = 0;
-                if (range) {
-                    preSelectionRange.setEnd(range.startContainer, range.startOffset);
-                    start = preSelectionRange.toString().length;
-                    end = start + range.toString().length;
-                }
-
-                return {
-                    start: start,
-                    end: end,
-                    containerNode: containerNode
-                };
-            },
-
-            moveToBookmark: function(bookmark) {
-                var containerNode = bookmark.containerNode;
-                var charIndex = 0;
-                this.setStart(containerNode, 0);
-                this.collapse(true);
-                var nodeStack = [containerNode], node, foundStart = false, stop = false;
-                var nextCharIndex, i, childNodes;
-
-                while (!stop && (node = nodeStack.pop())) {
-                    if (node.nodeType == 3) {
-                        nextCharIndex = charIndex + node.length;
-                        if (!foundStart && bookmark.start >= charIndex && bookmark.start <= nextCharIndex) {
-                            this.setStart(node, bookmark.start - charIndex);
-                            foundStart = true;
-                        }
-                        if (foundStart && bookmark.end >= charIndex && bookmark.end <= nextCharIndex) {
-                            this.setEnd(node, bookmark.end - charIndex);
-                            stop = true;
-                        }
-                        charIndex = nextCharIndex;
-                    } else {
-                        childNodes = node.childNodes;
-                        i = childNodes.length;
-                        while (i--) {
-                            nodeStack.push(childNodes[i]);
-                        }
-                    }
-                }
-            },
-
-            getName: function() {
-                return "DomRange";
-            },
-
-            equals: function(range) {
-                return Range.rangesEqual(this, range);
-            },
-
-            isValid: function() {
-                return isRangeValid(this);
-            },
-
-            inspect: function() {
-                return inspect(this);
-            },
-
-            detach: function() {
-                // In DOM4, detach() is now a no-op.
-            }
-        });
-
-        function copyComparisonConstantsToObject(obj) {
-            obj.START_TO_START = s2s;
-            obj.START_TO_END = s2e;
-            obj.END_TO_END = e2e;
-            obj.END_TO_START = e2s;
-
-            obj.NODE_BEFORE = n_b;
-            obj.NODE_AFTER = n_a;
-            obj.NODE_BEFORE_AND_AFTER = n_b_a;
-            obj.NODE_INSIDE = n_i;
-        }
-
-        function copyComparisonConstants(constructor) {
-            copyComparisonConstantsToObject(constructor);
-            copyComparisonConstantsToObject(constructor.prototype);
-        }
-
-        function createRangeContentRemover(remover, boundaryUpdater) {
-            return function() {
-                assertRangeValid(this);
-
-                var sc = this.startContainer, so = this.startOffset, root = this.commonAncestorContainer;
-
-                var iterator = new RangeIterator(this, true);
-
-                // Work out where to position the range after content removal
-                var node, boundary;
-                if (sc !== root) {
-                    node = getClosestAncestorIn(sc, root, true);
-                    boundary = getBoundaryAfterNode(node);
-                    sc = boundary.node;
-                    so = boundary.offset;
-                }
-
-                // Check none of the range is read-only
-                iterateSubtree(iterator, assertNodeNotReadOnly);
-
-                iterator.reset();
-
-                // Remove the content
-                var returnValue = remover(iterator);
-                iterator.detach();
-
-                // Move to the new position
-                boundaryUpdater(this, sc, so, sc, so);
-
-                return returnValue;
-            };
-        }
-
-        function createPrototypeRange(constructor, boundaryUpdater) {
-            function createBeforeAfterNodeSetter(isBefore, isStart) {
-                return function(node) {
-                    assertValidNodeType(node, beforeAfterNodeTypes);
-                    assertValidNodeType(getRootContainer(node), rootContainerNodeTypes);
-
-                    var boundary = (isBefore ? getBoundaryBeforeNode : getBoundaryAfterNode)(node);
-                    (isStart ? setRangeStart : setRangeEnd)(this, boundary.node, boundary.offset);
-                };
-            }
-
-            function setRangeStart(range, node, offset) {
-                var ec = range.endContainer, eo = range.endOffset;
-                if (node !== range.startContainer || offset !== range.startOffset) {
-                    // Check the root containers of the range and the new boundary, and also check whether the new boundary
-                    // is after the current end. In either case, collapse the range to the new position
-                    if (getRootContainer(node) != getRootContainer(ec) || comparePoints(node, offset, ec, eo) == 1) {
-                        ec = node;
-                        eo = offset;
-                    }
-                    boundaryUpdater(range, node, offset, ec, eo);
-                }
-            }
-
-            function setRangeEnd(range, node, offset) {
-                var sc = range.startContainer, so = range.startOffset;
-                if (node !== range.endContainer || offset !== range.endOffset) {
-                    // Check the root containers of the range and the new boundary, and also check whether the new boundary
-                    // is after the current end. In either case, collapse the range to the new position
-                    if (getRootContainer(node) != getRootContainer(sc) || comparePoints(node, offset, sc, so) == -1) {
-                        sc = node;
-                        so = offset;
-                    }
-                    boundaryUpdater(range, sc, so, node, offset);
-                }
-            }
-
-            // Set up inheritance
-            var F = function() {};
-            F.prototype = api.rangePrototype;
-            constructor.prototype = new F();
-
-            util.extend(constructor.prototype, {
-                setStart: function(node, offset) {
-                    assertNoDocTypeNotationEntityAncestor(node, true);
-                    assertValidOffset(node, offset);
-
-                    setRangeStart(this, node, offset);
-                },
-
-                setEnd: function(node, offset) {
-                    assertNoDocTypeNotationEntityAncestor(node, true);
-                    assertValidOffset(node, offset);
-
-                    setRangeEnd(this, node, offset);
-                },
-
-                /**
-                 * Convenience method to set a range's start and end boundaries. Overloaded as follows:
-                 * - Two parameters (node, offset) creates a collapsed range at that position
-                 * - Three parameters (node, startOffset, endOffset) creates a range contained with node starting at
-                 *   startOffset and ending at endOffset
-                 * - Four parameters (startNode, startOffset, endNode, endOffset) creates a range starting at startOffset in
-                 *   startNode and ending at endOffset in endNode
-                 */
-                setStartAndEnd: function() {
-                    var args = arguments;
-                    var sc = args[0], so = args[1], ec = sc, eo = so;
-
-                    switch (args.length) {
-                        case 3:
-                            eo = args[2];
-                            break;
-                        case 4:
-                            ec = args[2];
-                            eo = args[3];
-                            break;
-                    }
-
-                    boundaryUpdater(this, sc, so, ec, eo);
-                },
-
-                setBoundary: function(node, offset, isStart) {
-                    this["set" + (isStart ? "Start" : "End")](node, offset);
-                },
-
-                setStartBefore: createBeforeAfterNodeSetter(true, true),
-                setStartAfter: createBeforeAfterNodeSetter(false, true),
-                setEndBefore: createBeforeAfterNodeSetter(true, false),
-                setEndAfter: createBeforeAfterNodeSetter(false, false),
-
-                collapse: function(isStart) {
-                    assertRangeValid(this);
-                    if (isStart) {
-                        boundaryUpdater(this, this.startContainer, this.startOffset, this.startContainer, this.startOffset);
-                    } else {
-                        boundaryUpdater(this, this.endContainer, this.endOffset, this.endContainer, this.endOffset);
-                    }
-                },
-
-                selectNodeContents: function(node) {
-                    assertNoDocTypeNotationEntityAncestor(node, true);
-
-                    boundaryUpdater(this, node, 0, node, getNodeLength(node));
-                },
-
-                selectNode: function(node) {
-                    assertNoDocTypeNotationEntityAncestor(node, false);
-                    assertValidNodeType(node, beforeAfterNodeTypes);
-
-                    var start = getBoundaryBeforeNode(node), end = getBoundaryAfterNode(node);
-                    boundaryUpdater(this, start.node, start.offset, end.node, end.offset);
-                },
-
-                extractContents: createRangeContentRemover(extractSubtree, boundaryUpdater),
-
-                deleteContents: createRangeContentRemover(deleteSubtree, boundaryUpdater),
-
-                canSurroundContents: function() {
-                    assertRangeValid(this);
-                    assertNodeNotReadOnly(this.startContainer);
-                    assertNodeNotReadOnly(this.endContainer);
-
-                    // Check if the contents can be surrounded. Specifically, this means whether the range partially selects
-                    // no non-text nodes.
-                    var iterator = new RangeIterator(this, true);
-                    var boundariesInvalid = (iterator._first && isNonTextPartiallySelected(iterator._first, this) ||
-                            (iterator._last && isNonTextPartiallySelected(iterator._last, this)));
-                    iterator.detach();
-                    return !boundariesInvalid;
-                },
-
-                splitBoundaries: function() {
-                    splitRangeBoundaries(this);
-                },
-
-                splitBoundariesPreservingPositions: function(positionsToPreserve) {
-                    splitRangeBoundaries(this, positionsToPreserve);
-                },
-
-                normalizeBoundaries: function() {
-                    assertRangeValid(this);
-
-                    var sc = this.startContainer, so = this.startOffset, ec = this.endContainer, eo = this.endOffset;
-
-                    var mergeForward = function(node) {
-                        var sibling = node.nextSibling;
-                        if (sibling && sibling.nodeType == node.nodeType) {
-                            ec = node;
-                            eo = node.length;
-                            node.appendData(sibling.data);
-                            removeNode(sibling);
-                        }
-                    };
-
-                    var mergeBackward = function(node) {
-                        var sibling = node.previousSibling;
-                        if (sibling && sibling.nodeType == node.nodeType) {
-                            sc = node;
-                            var nodeLength = node.length;
-                            so = sibling.length;
-                            node.insertData(0, sibling.data);
-                            removeNode(sibling);
-                            if (sc == ec) {
-                                eo += so;
-                                ec = sc;
-                            } else if (ec == node.parentNode) {
-                                var nodeIndex = getNodeIndex(node);
-                                if (eo == nodeIndex) {
-                                    ec = node;
-                                    eo = nodeLength;
-                                } else if (eo > nodeIndex) {
-                                    eo--;
-                                }
-                            }
-                        }
-                    };
-
-                    var normalizeStart = true;
-                    var sibling;
-
-                    if (isCharacterDataNode(ec)) {
-                        if (eo == ec.length) {
-                            mergeForward(ec);
-                        } else if (eo == 0) {
-                            sibling = ec.previousSibling;
-                            if (sibling && sibling.nodeType == ec.nodeType) {
-                                eo = sibling.length;
-                                if (sc == ec) {
-                                    normalizeStart = false;
-                                }
-                                sibling.appendData(ec.data);
-                                removeNode(ec);
-                                ec = sibling;
-                            }
-                        }
-                    } else {
-                        if (eo > 0) {
-                            var endNode = ec.childNodes[eo - 1];
-                            if (endNode && isCharacterDataNode(endNode)) {
-                                mergeForward(endNode);
-                            }
-                        }
-                        normalizeStart = !this.collapsed;
-                    }
-
-                    if (normalizeStart) {
-                        if (isCharacterDataNode(sc)) {
-                            if (so == 0) {
-                                mergeBackward(sc);
-                            } else if (so == sc.length) {
-                                sibling = sc.nextSibling;
-                                if (sibling && sibling.nodeType == sc.nodeType) {
-                                    if (ec == sibling) {
-                                        ec = sc;
-                                        eo += sc.length;
-                                    }
-                                    sc.appendData(sibling.data);
-                                    removeNode(sibling);
-                                }
-                            }
-                        } else {
-                            if (so < sc.childNodes.length) {
-                                var startNode = sc.childNodes[so];
-                                if (startNode && isCharacterDataNode(startNode)) {
-                                    mergeBackward(startNode);
-                                }
-                            }
-                        }
-                    } else {
-                        sc = ec;
-                        so = eo;
-                    }
-
-                    boundaryUpdater(this, sc, so, ec, eo);
-                },
-
-                collapseToPoint: function(node, offset) {
-                    assertNoDocTypeNotationEntityAncestor(node, true);
-                    assertValidOffset(node, offset);
-                    this.setStartAndEnd(node, offset);
-                }
-            });
-
-            copyComparisonConstants(constructor);
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Updates commonAncestorContainer and collapsed after boundary change
-        function updateCollapsedAndCommonAncestor(range) {
-            range.collapsed = (range.startContainer === range.endContainer && range.startOffset === range.endOffset);
-            range.commonAncestorContainer = range.collapsed ?
-                range.startContainer : dom.getCommonAncestor(range.startContainer, range.endContainer);
-        }
-
-        function updateBoundaries(range, startContainer, startOffset, endContainer, endOffset) {
-            range.startContainer = startContainer;
-            range.startOffset = startOffset;
-            range.endContainer = endContainer;
-            range.endOffset = endOffset;
-            range.document = dom.getDocument(startContainer);
-
-            updateCollapsedAndCommonAncestor(range);
-        }
-
-        function Range(doc) {
-            this.startContainer = doc;
-            this.startOffset = 0;
-            this.endContainer = doc;
-            this.endOffset = 0;
-            this.document = doc;
-            updateCollapsedAndCommonAncestor(this);
-        }
-
-        createPrototypeRange(Range, updateBoundaries);
-
-        util.extend(Range, {
-            rangeProperties: rangeProperties,
-            RangeIterator: RangeIterator,
-            copyComparisonConstants: copyComparisonConstants,
-            createPrototypeRange: createPrototypeRange,
-            inspect: inspect,
-            toHtml: rangeToHtml,
-            getRangeDocument: getRangeDocument,
-            rangesEqual: function(r1, r2) {
-                return r1.startContainer === r2.startContainer &&
-                    r1.startOffset === r2.startOffset &&
-                    r1.endContainer === r2.endContainer &&
-                    r1.endOffset === r2.endOffset;
-            }
-        });
-
-        api.DomRange = Range;
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // Wrappers for the browser's native DOM Range and/or TextRange implementation
-    api.createCoreModule("WrappedRange", ["DomRange"], function(api, module) {
-        var WrappedRange, WrappedTextRange;
-        var dom = api.dom;
-        var util = api.util;
-        var DomPosition = dom.DomPosition;
-        var DomRange = api.DomRange;
-        var getBody = dom.getBody;
-        var getContentDocument = dom.getContentDocument;
-        var isCharacterDataNode = dom.isCharacterDataNode;
-
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        if (api.features.implementsDomRange) {
-            // This is a wrapper around the browser's native DOM Range. It has two aims:
-            // - Provide workarounds for specific browser bugs
-            // - provide convenient extensions, which are inherited from Rangy's DomRange
-
-            (function() {
-                var rangeProto;
-                var rangeProperties = DomRange.rangeProperties;
-
-                function updateRangeProperties(range) {
-                    var i = rangeProperties.length, prop;
-                    while (i--) {
-                        prop = rangeProperties[i];
-                        range[prop] = range.nativeRange[prop];
-                    }
-                    // Fix for broken collapsed property in IE 9.
-                    range.collapsed = (range.startContainer === range.endContainer && range.startOffset === range.endOffset);
-                }
-
-                function updateNativeRange(range, startContainer, startOffset, endContainer, endOffset) {
-                    var startMoved = (range.startContainer !== startContainer || range.startOffset != startOffset);
-                    var endMoved = (range.endContainer !== endContainer || range.endOffset != endOffset);
-                    var nativeRangeDifferent = !range.equals(range.nativeRange);
-
-                    // Always set both boundaries for the benefit of IE9 (see issue 35)
-                    if (startMoved || endMoved || nativeRangeDifferent) {
-                        range.setEnd(endContainer, endOffset);
-                        range.setStart(startContainer, startOffset);
-                    }
-                }
-
-                var createBeforeAfterNodeSetter;
-
-                WrappedRange = function(range) {
-                    if (!range) {
-                        throw module.createError("WrappedRange: Range must be specified");
-                    }
-                    this.nativeRange = range;
-                    updateRangeProperties(this);
-                };
-
-                DomRange.createPrototypeRange(WrappedRange, updateNativeRange);
-
-                rangeProto = WrappedRange.prototype;
-
-                rangeProto.selectNode = function(node) {
-                    this.nativeRange.selectNode(node);
-                    updateRangeProperties(this);
-                };
-
-                rangeProto.cloneContents = function() {
-                    return this.nativeRange.cloneContents();
-                };
-
-                // Due to a long-standing Firefox bug that I have not been able to find a reliable way to detect,
-                // insertNode() is never delegated to the native range.
-
-                rangeProto.surroundContents = function(node) {
-                    this.nativeRange.surroundContents(node);
-                    updateRangeProperties(this);
-                };
-
-                rangeProto.collapse = function(isStart) {
-                    this.nativeRange.collapse(isStart);
-                    updateRangeProperties(this);
-                };
-
-                rangeProto.cloneRange = function() {
-                    return new WrappedRange(this.nativeRange.cloneRange());
-                };
-
-                rangeProto.refresh = function() {
-                    updateRangeProperties(this);
-                };
-
-                rangeProto.toString = function() {
-                    return this.nativeRange.toString();
-                };
-
-                // Create test range and node for feature detection
-
-                var testTextNode = document.createTextNode("test");
-                getBody(document).appendChild(testTextNode);
-                var range = document.createRange();
-
-                /*--------------------------------------------------------------------------------------------------------*/
-
-                // Test for Firefox 2 bug that prevents moving the start of a Range to a point after its current end and
-                // correct for it
-
-                range.setStart(testTextNode, 0);
-                range.setEnd(testTextNode, 0);
-
-                try {
-                    range.setStart(testTextNode, 1);
-
-                    rangeProto.setStart = function(node, offset) {
-                        this.nativeRange.setStart(node, offset);
-                        updateRangeProperties(this);
-                    };
-
-                    rangeProto.setEnd = function(node, offset) {
-                        this.nativeRange.setEnd(node, offset);
-                        updateRangeProperties(this);
-                    };
-
-                    createBeforeAfterNodeSetter = function(name) {
-                        return function(node) {
-                            this.nativeRange[name](node);
-                            updateRangeProperties(this);
-                        };
-                    };
-
-                } catch(ex) {
-
-                    rangeProto.setStart = function(node, offset) {
-                        try {
-                            this.nativeRange.setStart(node, offset);
-                        } catch (ex) {
-                            this.nativeRange.setEnd(node, offset);
-                            this.nativeRange.setStart(node, offset);
-                        }
-                        updateRangeProperties(this);
-                    };
-
-                    rangeProto.setEnd = function(node, offset) {
-                        try {
-                            this.nativeRange.setEnd(node, offset);
-                        } catch (ex) {
-                            this.nativeRange.setStart(node, offset);
-                            this.nativeRange.setEnd(node, offset);
-                        }
-                        updateRangeProperties(this);
-                    };
-
-                    createBeforeAfterNodeSetter = function(name, oppositeName) {
-                        return function(node) {
-                            try {
-                                this.nativeRange[name](node);
-                            } catch (ex) {
-                                this.nativeRange[oppositeName](node);
-                                this.nativeRange[name](node);
-                            }
-                            updateRangeProperties(this);
-                        };
-                    };
-                }
-
-                rangeProto.setStartBefore = createBeforeAfterNodeSetter("setStartBefore", "setEndBefore");
-                rangeProto.setStartAfter = createBeforeAfterNodeSetter("setStartAfter", "setEndAfter");
-                rangeProto.setEndBefore = createBeforeAfterNodeSetter("setEndBefore", "setStartBefore");
-                rangeProto.setEndAfter = createBeforeAfterNodeSetter("setEndAfter", "setStartAfter");
-
-                /*--------------------------------------------------------------------------------------------------------*/
-
-                // Always use DOM4-compliant selectNodeContents implementation: it's simpler and less code than testing
-                // whether the native implementation can be trusted
-                rangeProto.selectNodeContents = function(node) {
-                    this.setStartAndEnd(node, 0, dom.getNodeLength(node));
-                };
-
-                /*--------------------------------------------------------------------------------------------------------*/
-
-                // Test for and correct WebKit bug that has the behaviour of compareBoundaryPoints round the wrong way for
-                // constants START_TO_END and END_TO_START: https://bugs.webkit.org/show_bug.cgi?id=20738
-
-                range.selectNodeContents(testTextNode);
-                range.setEnd(testTextNode, 3);
-
-                var range2 = document.createRange();
-                range2.selectNodeContents(testTextNode);
-                range2.setEnd(testTextNode, 4);
-                range2.setStart(testTextNode, 2);
-
-                if (range.compareBoundaryPoints(range.START_TO_END, range2) == -1 &&
-                        range.compareBoundaryPoints(range.END_TO_START, range2) == 1) {
-                    // This is the wrong way round, so correct for it
-
-                    rangeProto.compareBoundaryPoints = function(type, range) {
-                        range = range.nativeRange || range;
-                        if (type == range.START_TO_END) {
-                            type = range.END_TO_START;
-                        } else if (type == range.END_TO_START) {
-                            type = range.START_TO_END;
-                        }
-                        return this.nativeRange.compareBoundaryPoints(type, range);
-                    };
-                } else {
-                    rangeProto.compareBoundaryPoints = function(type, range) {
-                        return this.nativeRange.compareBoundaryPoints(type, range.nativeRange || range);
-                    };
-                }
-
-                /*--------------------------------------------------------------------------------------------------------*/
-
-                // Test for IE deleteContents() and extractContents() bug and correct it. See issue 107.
-
-                var el = document.createElement("div");
-                el.innerHTML = "123";
-                var textNode = el.firstChild;
-                var body = getBody(document);
-                body.appendChild(el);
-
-                range.setStart(textNode, 1);
-                range.setEnd(textNode, 2);
-                range.deleteContents();
-
-                if (textNode.data == "13") {
-                    // Behaviour is correct per DOM4 Range so wrap the browser's implementation of deleteContents() and
-                    // extractContents()
-                    rangeProto.deleteContents = function() {
-                        this.nativeRange.deleteContents();
-                        updateRangeProperties(this);
-                    };
-
-                    rangeProto.extractContents = function() {
-                        var frag = this.nativeRange.extractContents();
-                        updateRangeProperties(this);
-                        return frag;
-                    };
-                } else {
-                }
-
-                body.removeChild(el);
-                body = null;
-
-                /*--------------------------------------------------------------------------------------------------------*/
-
-                // Test for existence of createContextualFragment and delegate to it if it exists
-                if (util.isHostMethod(range, "createContextualFragment")) {
-                    rangeProto.createContextualFragment = function(fragmentStr) {
-                        return this.nativeRange.createContextualFragment(fragmentStr);
-                    };
-                }
-
-                /*--------------------------------------------------------------------------------------------------------*/
-
-                // Clean up
-                getBody(document).removeChild(testTextNode);
-
-                rangeProto.getName = function() {
-                    return "WrappedRange";
-                };
-
-                api.WrappedRange = WrappedRange;
-
-                api.createNativeRange = function(doc) {
-                    doc = getContentDocument(doc, module, "createNativeRange");
-                    return doc.createRange();
-                };
-            })();
-        }
-
-        if (api.features.implementsTextRange) {
-            /*
-            This is a workaround for a bug where IE returns the wrong container element from the TextRange's parentElement()
-            method. For example, in the following (where pipes denote the selection boundaries):
-
-            <ul id="ul"><li id="a">| a </li><li id="b"> b |</li></ul>
-
-            var range = document.selection.createRange();
-            alert(range.parentElement().id); // Should alert "ul" but alerts "b"
-
-            This method returns the common ancestor node of the following:
-            - the parentElement() of the textRange
-            - the parentElement() of the textRange after calling collapse(true)
-            - the parentElement() of the textRange after calling collapse(false)
-            */
-            var getTextRangeContainerElement = function(textRange) {
-                var parentEl = textRange.parentElement();
-                var range = textRange.duplicate();
-                range.collapse(true);
-                var startEl = range.parentElement();
-                range = textRange.duplicate();
-                range.collapse(false);
-                var endEl = range.parentElement();
-                var startEndContainer = (startEl == endEl) ? startEl : dom.getCommonAncestor(startEl, endEl);
-
-                return startEndContainer == parentEl ? startEndContainer : dom.getCommonAncestor(parentEl, startEndContainer);
-            };
-
-            var textRangeIsCollapsed = function(textRange) {
-                return textRange.compareEndPoints("StartToEnd", textRange) == 0;
-            };
-
-            // Gets the boundary of a TextRange expressed as a node and an offset within that node. This function started
-            // out as an improved version of code found in Tim Cameron Ryan's IERange (http://code.google.com/p/ierange/)
-            // but has grown, fixing problems with line breaks in preformatted text, adding workaround for IE TextRange
-            // bugs, handling for inputs and images, plus optimizations.
-            var getTextRangeBoundaryPosition = function(textRange, wholeRangeContainerElement, isStart, isCollapsed, startInfo) {
-                var workingRange = textRange.duplicate();
-                workingRange.collapse(isStart);
-                var containerElement = workingRange.parentElement();
-
-                // Sometimes collapsing a TextRange that's at the start of a text node can move it into the previous node, so
-                // check for that
-                if (!dom.isOrIsAncestorOf(wholeRangeContainerElement, containerElement)) {
-                    containerElement = wholeRangeContainerElement;
-                }
-
-
-                // Deal with nodes that cannot "contain rich HTML markup". In practice, this means form inputs, images and
-                // similar. See http://msdn.microsoft.com/en-us/library/aa703950%28VS.85%29.aspx
-                if (!containerElement.canHaveHTML) {
-                    var pos = new DomPosition(containerElement.parentNode, dom.getNodeIndex(containerElement));
-                    return {
-                        boundaryPosition: pos,
-                        nodeInfo: {
-                            nodeIndex: pos.offset,
-                            containerElement: pos.node
-                        }
-                    };
-                }
-
-                var workingNode = dom.getDocument(containerElement).createElement("span");
-
-                // Workaround for HTML5 Shiv's insane violation of document.createElement(). See Rangy issue 104 and HTML5
-                // Shiv issue 64: https://github.com/aFarkas/html5shiv/issues/64
-                if (workingNode.parentNode) {
-                    dom.removeNode(workingNode);
-                }
-
-                var comparison, workingComparisonType = isStart ? "StartToStart" : "StartToEnd";
-                var previousNode, nextNode, boundaryPosition, boundaryNode;
-                var start = (startInfo && startInfo.containerElement == containerElement) ? startInfo.nodeIndex : 0;
-                var childNodeCount = containerElement.childNodes.length;
-                var end = childNodeCount;
-
-                // Check end first. Code within the loop assumes that the endth child node of the container is definitely
-                // after the range boundary.
-                var nodeIndex = end;
-
-                while (true) {
-                    if (nodeIndex == childNodeCount) {
-                        containerElement.appendChild(workingNode);
-                    } else {
-                        containerElement.insertBefore(workingNode, containerElement.childNodes[nodeIndex]);
-                    }
-                    workingRange.moveToElementText(workingNode);
-                    comparison = workingRange.compareEndPoints(workingComparisonType, textRange);
-                    if (comparison == 0 || start == end) {
-                        break;
-                    } else if (comparison == -1) {
-                        if (end == start + 1) {
-                            // We know the endth child node is after the range boundary, so we must be done.
-                            break;
-                        } else {
-                            start = nodeIndex;
-                        }
-                    } else {
-                        end = (end == start + 1) ? start : nodeIndex;
-                    }
-                    nodeIndex = Math.floor((start + end) / 2);
-                    containerElement.removeChild(workingNode);
-                }
-
-
-                // We've now reached or gone past the boundary of the text range we're interested in
-                // so have identified the node we want
-                boundaryNode = workingNode.nextSibling;
-
-                if (comparison == -1 && boundaryNode && isCharacterDataNode(boundaryNode)) {
-                    // This is a character data node (text, comment, cdata). The working range is collapsed at the start of
-                    // the node containing the text range's boundary, so we move the end of the working range to the
-                    // boundary point and measure the length of its text to get the boundary's offset within the node.
-                    workingRange.setEndPoint(isStart ? "EndToStart" : "EndToEnd", textRange);
-
-                    var offset;
-
-                    if (/[\r\n]/.test(boundaryNode.data)) {
-                        /*
-                        For the particular case of a boundary within a text node containing rendered line breaks (within a
-                        <pre> element, for example), we need a slightly complicated approach to get the boundary's offset in
-                        IE. The facts:
-
-                        - Each line break is represented as \r in the text node's data/nodeValue properties
-                        - Each line break is represented as \r\n in the TextRange's 'text' property
-                        - The 'text' property of the TextRange does not contain trailing line breaks
-
-                        To get round the problem presented by the final fact above, we can use the fact that TextRange's
-                        moveStart() and moveEnd() methods return the actual number of characters moved, which is not
-                        necessarily the same as the number of characters it was instructed to move. The simplest approach is
-                        to use this to store the characters moved when moving both the start and end of the range to the
-                        start of the document body and subtracting the start offset from the end offset (the
-                        "move-negative-gazillion" method). However, this is extremely slow when the document is large and
-                        the range is near the end of it. Clearly doing the mirror image (i.e. moving the range boundaries to
-                        the end of the document) has the same problem.
-
-                        Another approach that works is to use moveStart() to move the start boundary of the range up to the
-                        end boundary one character at a time and incrementing a counter with the value returned by the
-                        moveStart() call. However, the check for whether the start boundary has reached the end boundary is
-                        expensive, so this method is slow (although unlike "move-negative-gazillion" is largely unaffected
-                        by the location of the range within the document).
-
-                        The approach used below is a hybrid of the two methods above. It uses the fact that a string
-                        containing the TextRange's 'text' property with each \r\n converted to a single \r character cannot
-                        be longer than the text of the TextRange, so the start of the range is moved that length initially
-                        and then a character at a time to make up for any trailing line breaks not contained in the 'text'
-                        property. This has good performance in most situations compared to the previous two methods.
-                        */
-                        var tempRange = workingRange.duplicate();
-                        var rangeLength = tempRange.text.replace(/\r\n/g, "\r").length;
-
-                        offset = tempRange.moveStart("character", rangeLength);
-                        while ( (comparison = tempRange.compareEndPoints("StartToEnd", tempRange)) == -1) {
-                            offset++;
-                            tempRange.moveStart("character", 1);
-                        }
-                    } else {
-                        offset = workingRange.text.length;
-                    }
-                    boundaryPosition = new DomPosition(boundaryNode, offset);
-                } else {
-
-                    // If the boundary immediately follows a character data node and this is the end boundary, we should favour
-                    // a position within that, and likewise for a start boundary preceding a character data node
-                    previousNode = (isCollapsed || !isStart) && workingNode.previousSibling;
-                    nextNode = (isCollapsed || isStart) && workingNode.nextSibling;
-                    if (nextNode && isCharacterDataNode(nextNode)) {
-                        boundaryPosition = new DomPosition(nextNode, 0);
-                    } else if (previousNode && isCharacterDataNode(previousNode)) {
-                        boundaryPosition = new DomPosition(previousNode, previousNode.data.length);
-                    } else {
-                        boundaryPosition = new DomPosition(containerElement, dom.getNodeIndex(workingNode));
-                    }
-                }
-
-                // Clean up
-                dom.removeNode(workingNode);
-
-                return {
-                    boundaryPosition: boundaryPosition,
-                    nodeInfo: {
-                        nodeIndex: nodeIndex,
-                        containerElement: containerElement
-                    }
-                };
-            };
-
-            // Returns a TextRange representing the boundary of a TextRange expressed as a node and an offset within that
-            // node. This function started out as an optimized version of code found in Tim Cameron Ryan's IERange
-            // (http://code.google.com/p/ierange/)
-            var createBoundaryTextRange = function(boundaryPosition, isStart) {
-                var boundaryNode, boundaryParent, boundaryOffset = boundaryPosition.offset;
-                var doc = dom.getDocument(boundaryPosition.node);
-                var workingNode, childNodes, workingRange = getBody(doc).createTextRange();
-                var nodeIsDataNode = isCharacterDataNode(boundaryPosition.node);
-
-                if (nodeIsDataNode) {
-                    boundaryNode = boundaryPosition.node;
-                    boundaryParent = boundaryNode.parentNode;
-                } else {
-                    childNodes = boundaryPosition.node.childNodes;
-                    boundaryNode = (boundaryOffset < childNodes.length) ? childNodes[boundaryOffset] : null;
-                    boundaryParent = boundaryPosition.node;
-                }
-
-                // Position the range immediately before the node containing the boundary
-                workingNode = doc.createElement("span");
-
-                // Making the working element non-empty element persuades IE to consider the TextRange boundary to be within
-                // the element rather than immediately before or after it
-                workingNode.innerHTML = "&#feff;";
-
-                // insertBefore is supposed to work like appendChild if the second parameter is null. However, a bug report
-                // for IERange suggests that it can crash the browser: http://code.google.com/p/ierange/issues/detail?id=12
-                if (boundaryNode) {
-                    boundaryParent.insertBefore(workingNode, boundaryNode);
-                } else {
-                    boundaryParent.appendChild(workingNode);
-                }
-
-                workingRange.moveToElementText(workingNode);
-                workingRange.collapse(!isStart);
-
-                // Clean up
-                boundaryParent.removeChild(workingNode);
-
-                // Move the working range to the text offset, if required
-                if (nodeIsDataNode) {
-                    workingRange[isStart ? "moveStart" : "moveEnd"]("character", boundaryOffset);
-                }
-
-                return workingRange;
-            };
-
-            /*------------------------------------------------------------------------------------------------------------*/
-
-            // This is a wrapper around a TextRange, providing full DOM Range functionality using rangy's DomRange as a
-            // prototype
-
-            WrappedTextRange = function(textRange) {
-                this.textRange = textRange;
-                this.refresh();
-            };
-
-            WrappedTextRange.prototype = new DomRange(document);
-
-            WrappedTextRange.prototype.refresh = function() {
-                var start, end, startBoundary;
-
-                // TextRange's parentElement() method cannot be trusted. getTextRangeContainerElement() works around that.
-                var rangeContainerElement = getTextRangeContainerElement(this.textRange);
-
-                if (textRangeIsCollapsed(this.textRange)) {
-                    end = start = getTextRangeBoundaryPosition(this.textRange, rangeContainerElement, true,
-                        true).boundaryPosition;
-                } else {
-                    startBoundary = getTextRangeBoundaryPosition(this.textRange, rangeContainerElement, true, false);
-                    start = startBoundary.boundaryPosition;
-
-                    // An optimization used here is that if the start and end boundaries have the same parent element, the
-                    // search scope for the end boundary can be limited to exclude the portion of the element that precedes
-                    // the start boundary
-                    end = getTextRangeBoundaryPosition(this.textRange, rangeContainerElement, false, false,
-                        startBoundary.nodeInfo).boundaryPosition;
-                }
-
-                this.setStart(start.node, start.offset);
-                this.setEnd(end.node, end.offset);
-            };
-
-            WrappedTextRange.prototype.getName = function() {
-                return "WrappedTextRange";
-            };
-
-            DomRange.copyComparisonConstants(WrappedTextRange);
-
-            var rangeToTextRange = function(range) {
-                if (range.collapsed) {
-                    return createBoundaryTextRange(new DomPosition(range.startContainer, range.startOffset), true);
-                } else {
-                    var startRange = createBoundaryTextRange(new DomPosition(range.startContainer, range.startOffset), true);
-                    var endRange = createBoundaryTextRange(new DomPosition(range.endContainer, range.endOffset), false);
-                    var textRange = getBody( DomRange.getRangeDocument(range) ).createTextRange();
-                    textRange.setEndPoint("StartToStart", startRange);
-                    textRange.setEndPoint("EndToEnd", endRange);
-                    return textRange;
-                }
-            };
-
-            WrappedTextRange.rangeToTextRange = rangeToTextRange;
-
-            WrappedTextRange.prototype.toTextRange = function() {
-                return rangeToTextRange(this);
-            };
-
-            api.WrappedTextRange = WrappedTextRange;
-
-            // IE 9 and above have both implementations and Rangy makes both available. The next few lines sets which
-            // implementation to use by default.
-            if (!api.features.implementsDomRange || api.config.preferTextRange) {
-                // Add WrappedTextRange as the Range property of the global object to allow expression like Range.END_TO_END to work
-                var globalObj = (function(f) { return f("return this;")(); })(Function);
-                if (typeof globalObj.Range == "undefined") {
-                    globalObj.Range = WrappedTextRange;
-                }
-
-                api.createNativeRange = function(doc) {
-                    doc = getContentDocument(doc, module, "createNativeRange");
-                    return getBody(doc).createTextRange();
-                };
-
-                api.WrappedRange = WrappedTextRange;
-            }
-        }
-
-        api.createRange = function(doc) {
-            doc = getContentDocument(doc, module, "createRange");
-            return new api.WrappedRange(api.createNativeRange(doc));
-        };
-
-        api.createRangyRange = function(doc) {
-            doc = getContentDocument(doc, module, "createRangyRange");
-            return new DomRange(doc);
-        };
-
-        util.createAliasForDeprecatedMethod(api, "createIframeRange", "createRange");
-        util.createAliasForDeprecatedMethod(api, "createIframeRangyRange", "createRangyRange");
-
-        api.addShimListener(function(win) {
-            var doc = win.document;
-            if (typeof doc.createRange == "undefined") {
-                doc.createRange = function() {
-                    return api.createRange(doc);
-                };
-            }
-            doc = win = null;
-        });
-    });
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // This module creates a selection object wrapper that conforms as closely as possible to the Selection specification
-    // in the HTML Editing spec (http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#selections)
-    api.createCoreModule("WrappedSelection", ["DomRange", "WrappedRange"], function(api, module) {
-        api.config.checkSelectionRanges = true;
-
-        var BOOLEAN = "boolean";
-        var NUMBER = "number";
-        var dom = api.dom;
-        var util = api.util;
-        var isHostMethod = util.isHostMethod;
-        var DomRange = api.DomRange;
-        var WrappedRange = api.WrappedRange;
-        var DOMException = api.DOMException;
-        var DomPosition = dom.DomPosition;
-        var getNativeSelection;
-        var selectionIsCollapsed;
-        var features = api.features;
-        var CONTROL = "Control";
-        var getDocument = dom.getDocument;
-        var getBody = dom.getBody;
-        var rangesEqual = DomRange.rangesEqual;
-
-
-        // Utility function to support direction parameters in the API that may be a string ("backward", "backwards",
-        // "forward" or "forwards") or a Boolean (true for backwards).
-        function isDirectionBackward(dir) {
-            return (typeof dir == "string") ? /^backward(s)?$/i.test(dir) : !!dir;
-        }
-
-        function getWindow(win, methodName) {
-            if (!win) {
-                return window;
-            } else if (dom.isWindow(win)) {
-                return win;
-            } else if (win instanceof WrappedSelection) {
-                return win.win;
-            } else {
-                var doc = dom.getContentDocument(win, module, methodName);
-                return dom.getWindow(doc);
-            }
-        }
-
-        function getWinSelection(winParam) {
-            return getWindow(winParam, "getWinSelection").getSelection();
-        }
-
-        function getDocSelection(winParam) {
-            return getWindow(winParam, "getDocSelection").document.selection;
-        }
-
-        function winSelectionIsBackward(sel) {
-            var backward = false;
-            if (sel.anchorNode) {
-                backward = (dom.comparePoints(sel.anchorNode, sel.anchorOffset, sel.focusNode, sel.focusOffset) == 1);
-            }
-            return backward;
-        }
-
-        // Test for the Range/TextRange and Selection features required
-        // Test for ability to retrieve selection
-        var implementsWinGetSelection = isHostMethod(window, "getSelection"),
-            implementsDocSelection = util.isHostObject(document, "selection");
-
-        features.implementsWinGetSelection = implementsWinGetSelection;
-        features.implementsDocSelection = implementsDocSelection;
-
-        var useDocumentSelection = implementsDocSelection && (!implementsWinGetSelection || api.config.preferTextRange);
-
-        if (useDocumentSelection) {
-            getNativeSelection = getDocSelection;
-            api.isSelectionValid = function(winParam) {
-                var doc = getWindow(winParam, "isSelectionValid").document, nativeSel = doc.selection;
-
-                // Check whether the selection TextRange is actually contained within the correct document
-                return (nativeSel.type != "None" || getDocument(nativeSel.createRange().parentElement()) == doc);
-            };
-        } else if (implementsWinGetSelection) {
-            getNativeSelection = getWinSelection;
-            api.isSelectionValid = function() {
-                return true;
-            };
-        } else {
-            module.fail("Neither document.selection or window.getSelection() detected.");
-            return false;
-        }
-
-        api.getNativeSelection = getNativeSelection;
-
-        var testSelection = getNativeSelection();
-
-        // In Firefox, the selection is null in an iframe with display: none. See issue #138.
-        if (!testSelection) {
-            module.fail("Native selection was null (possibly issue 138?)");
-            return false;
-        }
-
-        var testRange = api.createNativeRange(document);
-        var body = getBody(document);
-
-        // Obtaining a range from a selection
-        var selectionHasAnchorAndFocus = util.areHostProperties(testSelection,
-            ["anchorNode", "focusNode", "anchorOffset", "focusOffset"]);
-
-        features.selectionHasAnchorAndFocus = selectionHasAnchorAndFocus;
-
-        // Test for existence of native selection extend() method
-        var selectionHasExtend = isHostMethod(testSelection, "extend");
-        features.selectionHasExtend = selectionHasExtend;
-
-        // Test if rangeCount exists
-        var selectionHasRangeCount = (typeof testSelection.rangeCount == NUMBER);
-        features.selectionHasRangeCount = selectionHasRangeCount;
-
-        var selectionSupportsMultipleRanges = false;
-        var collapsedNonEditableSelectionsSupported = true;
-
-        var addRangeBackwardToNative = selectionHasExtend ?
-            function(nativeSelection, range) {
-                var doc = DomRange.getRangeDocument(range);
-                var endRange = api.createRange(doc);
-                endRange.collapseToPoint(range.endContainer, range.endOffset);
-                nativeSelection.addRange(getNativeRange(endRange));
-                nativeSelection.extend(range.startContainer, range.startOffset);
-            } : null;
-
-        if (util.areHostMethods(testSelection, ["addRange", "getRangeAt", "removeAllRanges"]) &&
-                typeof testSelection.rangeCount == NUMBER && features.implementsDomRange) {
-
-            (function() {
-                // Previously an iframe was used but this caused problems in some circumstances in IE, so tests are
-                // performed on the current document's selection. See issue 109.
-
-                // Note also that if a selection previously existed, it is wiped and later restored by these tests. This
-                // will result in the selection direction begin reversed if the original selection was backwards and the
-                // browser does not support setting backwards selections (Internet Explorer, I'm looking at you).
-                var sel = window.getSelection();
-                if (sel) {
-                    // Store the current selection
-                    var originalSelectionRangeCount = sel.rangeCount;
-                    var selectionHasMultipleRanges = (originalSelectionRangeCount > 1);
-                    var originalSelectionRanges = [];
-                    var originalSelectionBackward = winSelectionIsBackward(sel);
-                    for (var i = 0; i < originalSelectionRangeCount; ++i) {
-                        originalSelectionRanges[i] = sel.getRangeAt(i);
-                    }
-
-                    // Create some test elements
-                    var testEl = dom.createTestElement(document, "", false);
-                    var textNode = testEl.appendChild( document.createTextNode("\u00a0\u00a0\u00a0") );
-
-                    // Test whether the native selection will allow a collapsed selection within a non-editable element
-                    var r1 = document.createRange();
-
-                    r1.setStart(textNode, 1);
-                    r1.collapse(true);
-                    sel.removeAllRanges();
-                    sel.addRange(r1);
-                    collapsedNonEditableSelectionsSupported = (sel.rangeCount == 1);
-                    sel.removeAllRanges();
-
-                    // Test whether the native selection is capable of supporting multiple ranges.
-                    if (!selectionHasMultipleRanges) {
-                        // Doing the original feature test here in Chrome 36 (and presumably later versions) prints a
-                        // console error of "Discontiguous selection is not supported." that cannot be suppressed. There's
-                        // nothing we can do about this while retaining the feature test so we have to resort to a browser
-                        // sniff. I'm not happy about it. See
-                        // https://code.google.com/p/chromium/issues/detail?id=399791
-                        var chromeMatch = window.navigator.appVersion.match(/Chrome\/(.*?) /);
-                        if (chromeMatch && parseInt(chromeMatch[1]) >= 36) {
-                            selectionSupportsMultipleRanges = false;
-                        } else {
-                            var r2 = r1.cloneRange();
-                            r1.setStart(textNode, 0);
-                            r2.setEnd(textNode, 3);
-                            r2.setStart(textNode, 2);
-                            sel.addRange(r1);
-                            sel.addRange(r2);
-                            selectionSupportsMultipleRanges = (sel.rangeCount == 2);
-                        }
-                    }
-
-                    // Clean up
-                    dom.removeNode(testEl);
-                    sel.removeAllRanges();
-
-                    for (i = 0; i < originalSelectionRangeCount; ++i) {
-                        if (i == 0 && originalSelectionBackward) {
-                            if (addRangeBackwardToNative) {
-                                addRangeBackwardToNative(sel, originalSelectionRanges[i]);
-                            } else {
-                                api.warn("Rangy initialization: original selection was backwards but selection has been restored forwards because the browser does not support Selection.extend");
-                                sel.addRange(originalSelectionRanges[i]);
-                            }
-                        } else {
-                            sel.addRange(originalSelectionRanges[i]);
-                        }
-                    }
-                }
-            })();
-        }
-
-        features.selectionSupportsMultipleRanges = selectionSupportsMultipleRanges;
-        features.collapsedNonEditableSelectionsSupported = collapsedNonEditableSelectionsSupported;
-
-        // ControlRanges
-        var implementsControlRange = false, testControlRange;
-
-        if (body && isHostMethod(body, "createControlRange")) {
-            testControlRange = body.createControlRange();
-            if (util.areHostProperties(testControlRange, ["item", "add"])) {
-                implementsControlRange = true;
-            }
-        }
-        features.implementsControlRange = implementsControlRange;
-
-        // Selection collapsedness
-        if (selectionHasAnchorAndFocus) {
-            selectionIsCollapsed = function(sel) {
-                return sel.anchorNode === sel.focusNode && sel.anchorOffset === sel.focusOffset;
-            };
-        } else {
-            selectionIsCollapsed = function(sel) {
-                return sel.rangeCount ? sel.getRangeAt(sel.rangeCount - 1).collapsed : false;
-            };
-        }
-
-        function updateAnchorAndFocusFromRange(sel, range, backward) {
-            var anchorPrefix = backward ? "end" : "start", focusPrefix = backward ? "start" : "end";
-            sel.anchorNode = range[anchorPrefix + "Container"];
-            sel.anchorOffset = range[anchorPrefix + "Offset"];
-            sel.focusNode = range[focusPrefix + "Container"];
-            sel.focusOffset = range[focusPrefix + "Offset"];
-        }
-
-        function updateAnchorAndFocusFromNativeSelection(sel) {
-            var nativeSel = sel.nativeSelection;
-            sel.anchorNode = nativeSel.anchorNode;
-            sel.anchorOffset = nativeSel.anchorOffset;
-            sel.focusNode = nativeSel.focusNode;
-            sel.focusOffset = nativeSel.focusOffset;
-        }
-
-        function updateEmptySelection(sel) {
-            sel.anchorNode = sel.focusNode = null;
-            sel.anchorOffset = sel.focusOffset = 0;
-            sel.rangeCount = 0;
-            sel.isCollapsed = true;
-            sel._ranges.length = 0;
-        }
-
-        function getNativeRange(range) {
-            var nativeRange;
-            if (range instanceof DomRange) {
-                nativeRange = api.createNativeRange(range.getDocument());
-                nativeRange.setEnd(range.endContainer, range.endOffset);
-                nativeRange.setStart(range.startContainer, range.startOffset);
-            } else if (range instanceof WrappedRange) {
-                nativeRange = range.nativeRange;
-            } else if (features.implementsDomRange && (range instanceof dom.getWindow(range.startContainer).Range)) {
-                nativeRange = range;
-            }
-            return nativeRange;
-        }
-
-        function rangeContainsSingleElement(rangeNodes) {
-            if (!rangeNodes.length || rangeNodes[0].nodeType != 1) {
-                return false;
-            }
-            for (var i = 1, len = rangeNodes.length; i < len; ++i) {
-                if (!dom.isAncestorOf(rangeNodes[0], rangeNodes[i])) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function getSingleElementFromRange(range) {
-            var nodes = range.getNodes();
-            if (!rangeContainsSingleElement(nodes)) {
-                throw module.createError("getSingleElementFromRange: range " + range.inspect() + " did not consist of a single element");
-            }
-            return nodes[0];
-        }
-
-        // Simple, quick test which only needs to distinguish between a TextRange and a ControlRange
-        function isTextRange(range) {
-            return !!range && typeof range.text != "undefined";
-        }
-
-        function updateFromTextRange(sel, range) {
-            // Create a Range from the selected TextRange
-            var wrappedRange = new WrappedRange(range);
-            sel._ranges = [wrappedRange];
-
-            updateAnchorAndFocusFromRange(sel, wrappedRange, false);
-            sel.rangeCount = 1;
-            sel.isCollapsed = wrappedRange.collapsed;
-        }
-
-        function updateControlSelection(sel) {
-            // Update the wrapped selection based on what's now in the native selection
-            sel._ranges.length = 0;
-            if (sel.docSelection.type == "None") {
-                updateEmptySelection(sel);
-            } else {
-                var controlRange = sel.docSelection.createRange();
-                if (isTextRange(controlRange)) {
-                    // This case (where the selection type is "Control" and calling createRange() on the selection returns
-                    // a TextRange) can happen in IE 9. It happens, for example, when all elements in the selected
-                    // ControlRange have been removed from the ControlRange and removed from the document.
-                    updateFromTextRange(sel, controlRange);
-                } else {
-                    sel.rangeCount = controlRange.length;
-                    var range, doc = getDocument(controlRange.item(0));
-                    for (var i = 0; i < sel.rangeCount; ++i) {
-                        range = api.createRange(doc);
-                        range.selectNode(controlRange.item(i));
-                        sel._ranges.push(range);
-                    }
-                    sel.isCollapsed = sel.rangeCount == 1 && sel._ranges[0].collapsed;
-                    updateAnchorAndFocusFromRange(sel, sel._ranges[sel.rangeCount - 1], false);
-                }
-            }
-        }
-
-        function addRangeToControlSelection(sel, range) {
-            var controlRange = sel.docSelection.createRange();
-            var rangeElement = getSingleElementFromRange(range);
-
-            // Create a new ControlRange containing all the elements in the selected ControlRange plus the element
-            // contained by the supplied range
-            var doc = getDocument(controlRange.item(0));
-            var newControlRange = getBody(doc).createControlRange();
-            for (var i = 0, len = controlRange.length; i < len; ++i) {
-                newControlRange.add(controlRange.item(i));
-            }
-            try {
-                newControlRange.add(rangeElement);
-            } catch (ex) {
-                throw module.createError("addRange(): Element within the specified Range could not be added to control selection (does it have layout?)");
-            }
-            newControlRange.select();
-
-            // Update the wrapped selection based on what's now in the native selection
-            updateControlSelection(sel);
-        }
-
-        var getSelectionRangeAt;
-
-        if (isHostMethod(testSelection, "getRangeAt")) {
-            // try/catch is present because getRangeAt() must have thrown an error in some browser and some situation.
-            // Unfortunately, I didn't write a comment about the specifics and am now scared to take it out. Let that be a
-            // lesson to us all, especially me.
-            getSelectionRangeAt = function(sel, index) {
-                try {
-                    return sel.getRangeAt(index);
-                } catch (ex) {
-                    return null;
-                }
-            };
-        } else if (selectionHasAnchorAndFocus) {
-            getSelectionRangeAt = function(sel) {
-                var doc = getDocument(sel.anchorNode);
-                var range = api.createRange(doc);
-                range.setStartAndEnd(sel.anchorNode, sel.anchorOffset, sel.focusNode, sel.focusOffset);
-
-                // Handle the case when the selection was selected backwards (from the end to the start in the
-                // document)
-                if (range.collapsed !== this.isCollapsed) {
-                    range.setStartAndEnd(sel.focusNode, sel.focusOffset, sel.anchorNode, sel.anchorOffset);
-                }
-
-                return range;
-            };
-        }
-
-        function WrappedSelection(selection, docSelection, win) {
-            this.nativeSelection = selection;
-            this.docSelection = docSelection;
-            this._ranges = [];
-            this.win = win;
-            this.refresh();
-        }
-
-        WrappedSelection.prototype = api.selectionPrototype;
-
-        function deleteProperties(sel) {
-            sel.win = sel.anchorNode = sel.focusNode = sel._ranges = null;
-            sel.rangeCount = sel.anchorOffset = sel.focusOffset = 0;
-            sel.detached = true;
-        }
-
-        var cachedRangySelections = [];
-
-        function actOnCachedSelection(win, action) {
-            var i = cachedRangySelections.length, cached, sel;
-            while (i--) {
-                cached = cachedRangySelections[i];
-                sel = cached.selection;
-                if (action == "deleteAll") {
-                    deleteProperties(sel);
-                } else if (cached.win == win) {
-                    if (action == "delete") {
-                        cachedRangySelections.splice(i, 1);
-                        return true;
-                    } else {
-                        return sel;
-                    }
-                }
-            }
-            if (action == "deleteAll") {
-                cachedRangySelections.length = 0;
-            }
-            return null;
-        }
-
-        var getSelection = function(win) {
-            // Check if the parameter is a Rangy Selection object
-            if (win && win instanceof WrappedSelection) {
-                win.refresh();
-                return win;
-            }
-
-            win = getWindow(win, "getNativeSelection");
-
-            var sel = actOnCachedSelection(win);
-            var nativeSel = getNativeSelection(win), docSel = implementsDocSelection ? getDocSelection(win) : null;
-            if (sel) {
-                sel.nativeSelection = nativeSel;
-                sel.docSelection = docSel;
-                sel.refresh();
-            } else {
-                sel = new WrappedSelection(nativeSel, docSel, win);
-                cachedRangySelections.push( { win: win, selection: sel } );
-            }
-            return sel;
-        };
-
-        api.getSelection = getSelection;
-
-        util.createAliasForDeprecatedMethod(api, "getIframeSelection", "getSelection");
-
-        var selProto = WrappedSelection.prototype;
-
-        function createControlSelection(sel, ranges) {
-            // Ensure that the selection becomes of type "Control"
-            var doc = getDocument(ranges[0].startContainer);
-            var controlRange = getBody(doc).createControlRange();
-            for (var i = 0, el, len = ranges.length; i < len; ++i) {
-                el = getSingleElementFromRange(ranges[i]);
-                try {
-                    controlRange.add(el);
-                } catch (ex) {
-                    throw module.createError("setRanges(): Element within one of the specified Ranges could not be added to control selection (does it have layout?)");
-                }
-            }
-            controlRange.select();
-
-            // Update the wrapped selection based on what's now in the native selection
-            updateControlSelection(sel);
-        }
-
-        // Selecting a range
-        if (!useDocumentSelection && selectionHasAnchorAndFocus && util.areHostMethods(testSelection, ["removeAllRanges", "addRange"])) {
-            selProto.removeAllRanges = function() {
-                this.nativeSelection.removeAllRanges();
-                updateEmptySelection(this);
-            };
-
-            var addRangeBackward = function(sel, range) {
-                addRangeBackwardToNative(sel.nativeSelection, range);
-                sel.refresh();
-            };
-
-            if (selectionHasRangeCount) {
-                selProto.addRange = function(range, direction) {
-                    if (implementsControlRange && implementsDocSelection && this.docSelection.type == CONTROL) {
-                        addRangeToControlSelection(this, range);
-                    } else {
-                        if (isDirectionBackward(direction) && selectionHasExtend) {
-                            addRangeBackward(this, range);
-                        } else {
-                            var previousRangeCount;
-                            if (selectionSupportsMultipleRanges) {
-                                previousRangeCount = this.rangeCount;
-                            } else {
-                                this.removeAllRanges();
-                                previousRangeCount = 0;
-                            }
-                            // Clone the native range so that changing the selected range does not affect the selection.
-                            // This is contrary to the spec but is the only way to achieve consistency between browsers. See
-                            // issue 80.
-                            var clonedNativeRange = getNativeRange(range).cloneRange();
-                            try {
-                                this.nativeSelection.addRange(clonedNativeRange);
-                            } catch (ex) {
-                            }
-
-                            // Check whether adding the range was successful
-                            this.rangeCount = this.nativeSelection.rangeCount;
-
-                            if (this.rangeCount == previousRangeCount + 1) {
-                                // The range was added successfully
-
-                                // Check whether the range that we added to the selection is reflected in the last range extracted from
-                                // the selection
-                                if (api.config.checkSelectionRanges) {
-                                    var nativeRange = getSelectionRangeAt(this.nativeSelection, this.rangeCount - 1);
-                                    if (nativeRange && !rangesEqual(nativeRange, range)) {
-                                        // Happens in WebKit with, for example, a selection placed at the start of a text node
-                                        range = new WrappedRange(nativeRange);
-                                    }
-                                }
-                                this._ranges[this.rangeCount - 1] = range;
-                                updateAnchorAndFocusFromRange(this, range, selectionIsBackward(this.nativeSelection));
-                                this.isCollapsed = selectionIsCollapsed(this);
-                            } else {
-                                // The range was not added successfully. The simplest thing is to refresh
-                                this.refresh();
-                            }
-                        }
-                    }
-                };
-            } else {
-                selProto.addRange = function(range, direction) {
-                    if (isDirectionBackward(direction) && selectionHasExtend) {
-                        addRangeBackward(this, range);
-                    } else {
-                        this.nativeSelection.addRange(getNativeRange(range));
-                        this.refresh();
-                    }
-                };
-            }
-
-            selProto.setRanges = function(ranges) {
-                if (implementsControlRange && implementsDocSelection && ranges.length > 1) {
-                    createControlSelection(this, ranges);
-                } else {
-                    this.removeAllRanges();
-                    for (var i = 0, len = ranges.length; i < len; ++i) {
-                        this.addRange(ranges[i]);
-                    }
-                }
-            };
-        } else if (isHostMethod(testSelection, "empty") && isHostMethod(testRange, "select") &&
-                   implementsControlRange && useDocumentSelection) {
-
-            selProto.removeAllRanges = function() {
-                // Added try/catch as fix for issue #21
-                try {
-                    this.docSelection.empty();
-
-                    // Check for empty() not working (issue #24)
-                    if (this.docSelection.type != "None") {
-                        // Work around failure to empty a control selection by instead selecting a TextRange and then
-                        // calling empty()
-                        var doc;
-                        if (this.anchorNode) {
-                            doc = getDocument(this.anchorNode);
-                        } else if (this.docSelection.type == CONTROL) {
-                            var controlRange = this.docSelection.createRange();
-                            if (controlRange.length) {
-                                doc = getDocument( controlRange.item(0) );
-                            }
-                        }
-                        if (doc) {
-                            var textRange = getBody(doc).createTextRange();
-                            textRange.select();
-                            this.docSelection.empty();
-                        }
-                    }
-                } catch(ex) {}
-                updateEmptySelection(this);
-            };
-
-            selProto.addRange = function(range) {
-                if (this.docSelection.type == CONTROL) {
-                    addRangeToControlSelection(this, range);
-                } else {
-                    api.WrappedTextRange.rangeToTextRange(range).select();
-                    this._ranges[0] = range;
-                    this.rangeCount = 1;
-                    this.isCollapsed = this._ranges[0].collapsed;
-                    updateAnchorAndFocusFromRange(this, range, false);
-                }
-            };
-
-            selProto.setRanges = function(ranges) {
-                this.removeAllRanges();
-                var rangeCount = ranges.length;
-                if (rangeCount > 1) {
-                    createControlSelection(this, ranges);
-                } else if (rangeCount) {
-                    this.addRange(ranges[0]);
-                }
-            };
-        } else {
-            module.fail("No means of selecting a Range or TextRange was found");
-            return false;
-        }
-
-        selProto.getRangeAt = function(index) {
-            if (index < 0 || index >= this.rangeCount) {
-                throw new DOMException("INDEX_SIZE_ERR");
-            } else {
-                // Clone the range to preserve selection-range independence. See issue 80.
-                return this._ranges[index].cloneRange();
-            }
-        };
-
-        var refreshSelection;
-
-        if (useDocumentSelection) {
-            refreshSelection = function(sel) {
-                var range;
-                if (api.isSelectionValid(sel.win)) {
-                    range = sel.docSelection.createRange();
-                } else {
-                    range = getBody(sel.win.document).createTextRange();
-                    range.collapse(true);
-                }
-
-                if (sel.docSelection.type == CONTROL) {
-                    updateControlSelection(sel);
-                } else if (isTextRange(range)) {
-                    updateFromTextRange(sel, range);
-                } else {
-                    updateEmptySelection(sel);
-                }
-            };
-        } else if (isHostMethod(testSelection, "getRangeAt") && typeof testSelection.rangeCount == NUMBER) {
-            refreshSelection = function(sel) {
-                if (implementsControlRange && implementsDocSelection && sel.docSelection.type == CONTROL) {
-                    updateControlSelection(sel);
-                } else {
-                    sel._ranges.length = sel.rangeCount = sel.nativeSelection.rangeCount;
-                    if (sel.rangeCount) {
-                        for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-                            sel._ranges[i] = new api.WrappedRange(sel.nativeSelection.getRangeAt(i));
-                        }
-                        updateAnchorAndFocusFromRange(sel, sel._ranges[sel.rangeCount - 1], selectionIsBackward(sel.nativeSelection));
-                        sel.isCollapsed = selectionIsCollapsed(sel);
-                    } else {
-                        updateEmptySelection(sel);
-                    }
-                }
-            };
-        } else if (selectionHasAnchorAndFocus && typeof testSelection.isCollapsed == BOOLEAN && typeof testRange.collapsed == BOOLEAN && features.implementsDomRange) {
-            refreshSelection = function(sel) {
-                var range, nativeSel = sel.nativeSelection;
-                if (nativeSel.anchorNode) {
-                    range = getSelectionRangeAt(nativeSel, 0);
-                    sel._ranges = [range];
-                    sel.rangeCount = 1;
-                    updateAnchorAndFocusFromNativeSelection(sel);
-                    sel.isCollapsed = selectionIsCollapsed(sel);
-                } else {
-                    updateEmptySelection(sel);
-                }
-            };
-        } else {
-            module.fail("No means of obtaining a Range or TextRange from the user's selection was found");
-            return false;
-        }
-
-        selProto.refresh = function(checkForChanges) {
-            var oldRanges = checkForChanges ? this._ranges.slice(0) : null;
-            var oldAnchorNode = this.anchorNode, oldAnchorOffset = this.anchorOffset;
-
-            refreshSelection(this);
-            if (checkForChanges) {
-                // Check the range count first
-                var i = oldRanges.length;
-                if (i != this._ranges.length) {
-                    return true;
-                }
-
-                // Now check the direction. Checking the anchor position is the same is enough since we're checking all the
-                // ranges after this
-                if (this.anchorNode != oldAnchorNode || this.anchorOffset != oldAnchorOffset) {
-                    return true;
-                }
-
-                // Finally, compare each range in turn
-                while (i--) {
-                    if (!rangesEqual(oldRanges[i], this._ranges[i])) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        };
-
-        // Removal of a single range
-        var removeRangeManually = function(sel, range) {
-            var ranges = sel.getAllRanges();
-            sel.removeAllRanges();
-            for (var i = 0, len = ranges.length; i < len; ++i) {
-                if (!rangesEqual(range, ranges[i])) {
-                    sel.addRange(ranges[i]);
-                }
-            }
-            if (!sel.rangeCount) {
-                updateEmptySelection(sel);
-            }
-        };
-
-        if (implementsControlRange && implementsDocSelection) {
-            selProto.removeRange = function(range) {
-                if (this.docSelection.type == CONTROL) {
-                    var controlRange = this.docSelection.createRange();
-                    var rangeElement = getSingleElementFromRange(range);
-
-                    // Create a new ControlRange containing all the elements in the selected ControlRange minus the
-                    // element contained by the supplied range
-                    var doc = getDocument(controlRange.item(0));
-                    var newControlRange = getBody(doc).createControlRange();
-                    var el, removed = false;
-                    for (var i = 0, len = controlRange.length; i < len; ++i) {
-                        el = controlRange.item(i);
-                        if (el !== rangeElement || removed) {
-                            newControlRange.add(controlRange.item(i));
-                        } else {
-                            removed = true;
-                        }
-                    }
-                    newControlRange.select();
-
-                    // Update the wrapped selection based on what's now in the native selection
-                    updateControlSelection(this);
-                } else {
-                    removeRangeManually(this, range);
-                }
-            };
-        } else {
-            selProto.removeRange = function(range) {
-                removeRangeManually(this, range);
-            };
-        }
-
-        // Detecting if a selection is backward
-        var selectionIsBackward;
-        if (!useDocumentSelection && selectionHasAnchorAndFocus && features.implementsDomRange) {
-            selectionIsBackward = winSelectionIsBackward;
-
-            selProto.isBackward = function() {
-                return selectionIsBackward(this);
-            };
-        } else {
-            selectionIsBackward = selProto.isBackward = function() {
-                return false;
-            };
-        }
-
-        // Create an alias for backwards compatibility. From 1.3, everything is "backward" rather than "backwards"
-        selProto.isBackwards = selProto.isBackward;
-
-        // Selection stringifier
-        // This is conformant to the old HTML5 selections draft spec but differs from WebKit and Mozilla's implementation.
-        // The current spec does not yet define this method.
-        selProto.toString = function() {
-            var rangeTexts = [];
-            for (var i = 0, len = this.rangeCount; i < len; ++i) {
-                rangeTexts[i] = "" + this._ranges[i];
-            }
-            return rangeTexts.join("");
-        };
-
-        function assertNodeInSameDocument(sel, node) {
-            if (sel.win.document != getDocument(node)) {
-                throw new DOMException("WRONG_DOCUMENT_ERR");
-            }
-        }
-
-        // No current browser conforms fully to the spec for this method, so Rangy's own method is always used
-        selProto.collapse = function(node, offset) {
-            assertNodeInSameDocument(this, node);
-            var range = api.createRange(node);
-            range.collapseToPoint(node, offset);
-            this.setSingleRange(range);
-            this.isCollapsed = true;
-        };
-
-        selProto.collapseToStart = function() {
-            if (this.rangeCount) {
-                var range = this._ranges[0];
-                this.collapse(range.startContainer, range.startOffset);
-            } else {
-                throw new DOMException("INVALID_STATE_ERR");
-            }
-        };
-
-        selProto.collapseToEnd = function() {
-            if (this.rangeCount) {
-                var range = this._ranges[this.rangeCount - 1];
-                this.collapse(range.endContainer, range.endOffset);
-            } else {
-                throw new DOMException("INVALID_STATE_ERR");
-            }
-        };
-
-        // The spec is very specific on how selectAllChildren should be implemented and not all browsers implement it as
-        // specified so the native implementation is never used by Rangy.
-        selProto.selectAllChildren = function(node) {
-            assertNodeInSameDocument(this, node);
-            var range = api.createRange(node);
-            range.selectNodeContents(node);
-            this.setSingleRange(range);
-        };
-
-        selProto.deleteFromDocument = function() {
-            // Sepcial behaviour required for IE's control selections
-            if (implementsControlRange && implementsDocSelection && this.docSelection.type == CONTROL) {
-                var controlRange = this.docSelection.createRange();
-                var element;
-                while (controlRange.length) {
-                    element = controlRange.item(0);
-                    controlRange.remove(element);
-                    dom.removeNode(element);
-                }
-                this.refresh();
-            } else if (this.rangeCount) {
-                var ranges = this.getAllRanges();
-                if (ranges.length) {
-                    this.removeAllRanges();
-                    for (var i = 0, len = ranges.length; i < len; ++i) {
-                        ranges[i].deleteContents();
-                    }
-                    // The spec says nothing about what the selection should contain after calling deleteContents on each
-                    // range. Firefox moves the selection to where the final selected range was, so we emulate that
-                    this.addRange(ranges[len - 1]);
-                }
-            }
-        };
-
-        // The following are non-standard extensions
-        selProto.eachRange = function(func, returnValue) {
-            for (var i = 0, len = this._ranges.length; i < len; ++i) {
-                if ( func( this.getRangeAt(i) ) ) {
-                    return returnValue;
-                }
-            }
-        };
-
-        selProto.getAllRanges = function() {
-            var ranges = [];
-            this.eachRange(function(range) {
-                ranges.push(range);
-            });
-            return ranges;
-        };
-
-        selProto.setSingleRange = function(range, direction) {
-            this.removeAllRanges();
-            this.addRange(range, direction);
-        };
-
-        selProto.callMethodOnEachRange = function(methodName, params) {
-            var results = [];
-            this.eachRange( function(range) {
-                results.push( range[methodName].apply(range, params || []) );
-            } );
-            return results;
-        };
-
-        function createStartOrEndSetter(isStart) {
-            return function(node, offset) {
-                var range;
-                if (this.rangeCount) {
-                    range = this.getRangeAt(0);
-                    range["set" + (isStart ? "Start" : "End")](node, offset);
-                } else {
-                    range = api.createRange(this.win.document);
-                    range.setStartAndEnd(node, offset);
-                }
-                this.setSingleRange(range, this.isBackward());
-            };
-        }
-
-        selProto.setStart = createStartOrEndSetter(true);
-        selProto.setEnd = createStartOrEndSetter(false);
-
-        // Add select() method to Range prototype. Any existing selection will be removed.
-        api.rangePrototype.select = function(direction) {
-            getSelection( this.getDocument() ).setSingleRange(this, direction);
-        };
-
-        selProto.changeEachRange = function(func) {
-            var ranges = [];
-            var backward = this.isBackward();
-
-            this.eachRange(function(range) {
-                func(range);
-                ranges.push(range);
-            });
-
-            this.removeAllRanges();
-            if (backward && ranges.length == 1) {
-                this.addRange(ranges[0], "backward");
-            } else {
-                this.setRanges(ranges);
-            }
-        };
-
-        selProto.containsNode = function(node, allowPartial) {
-            return this.eachRange( function(range) {
-                return range.containsNode(node, allowPartial);
-            }, true ) || false;
-        };
-
-        selProto.getBookmark = function(containerNode) {
-            return {
-                backward: this.isBackward(),
-                rangeBookmarks: this.callMethodOnEachRange("getBookmark", [containerNode])
-            };
-        };
-
-        selProto.moveToBookmark = function(bookmark) {
-            var selRanges = [];
-            for (var i = 0, rangeBookmark, range; rangeBookmark = bookmark.rangeBookmarks[i++]; ) {
-                range = api.createRange(this.win);
-                range.moveToBookmark(rangeBookmark);
-                selRanges.push(range);
-            }
-            if (bookmark.backward) {
-                this.setSingleRange(selRanges[0], "backward");
-            } else {
-                this.setRanges(selRanges);
-            }
-        };
-
-        selProto.saveRanges = function() {
-            return {
-                backward: this.isBackward(),
-                ranges: this.callMethodOnEachRange("cloneRange")
-            };
-        };
-
-        selProto.restoreRanges = function(selRanges) {
-            this.removeAllRanges();
-            for (var i = 0, range; range = selRanges.ranges[i]; ++i) {
-                this.addRange(range, (selRanges.backward && i == 0));
-            }
-        };
-
-        selProto.toHtml = function() {
-            var rangeHtmls = [];
-            this.eachRange(function(range) {
-                rangeHtmls.push( DomRange.toHtml(range) );
-            });
-            return rangeHtmls.join("");
-        };
-
-        if (features.implementsTextRange) {
-            selProto.getNativeTextRange = function() {
-                var sel, textRange;
-                if ( (sel = this.docSelection) ) {
-                    var range = sel.createRange();
-                    if (isTextRange(range)) {
-                        return range;
-                    } else {
-                        throw module.createError("getNativeTextRange: selection is a control selection");
-                    }
-                } else if (this.rangeCount > 0) {
-                    return api.WrappedTextRange.rangeToTextRange( this.getRangeAt(0) );
-                } else {
-                    throw module.createError("getNativeTextRange: selection contains no range");
-                }
-            };
-        }
-
-        function inspect(sel) {
-            var rangeInspects = [];
-            var anchor = new DomPosition(sel.anchorNode, sel.anchorOffset);
-            var focus = new DomPosition(sel.focusNode, sel.focusOffset);
-            var name = (typeof sel.getName == "function") ? sel.getName() : "Selection";
-
-            if (typeof sel.rangeCount != "undefined") {
-                for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-                    rangeInspects[i] = DomRange.inspect(sel.getRangeAt(i));
-                }
-            }
-            return "[" + name + "(Ranges: " + rangeInspects.join(", ") +
-                    ")(anchor: " + anchor.inspect() + ", focus: " + focus.inspect() + "]";
-        }
-
-        selProto.getName = function() {
-            return "WrappedSelection";
-        };
-
-        selProto.inspect = function() {
-            return inspect(this);
-        };
-
-        selProto.detach = function() {
-            actOnCachedSelection(this.win, "delete");
-            deleteProperties(this);
-        };
-
-        WrappedSelection.detachAll = function() {
-            actOnCachedSelection(null, "deleteAll");
-        };
-
-        WrappedSelection.inspect = inspect;
-        WrappedSelection.isDirectionBackward = isDirectionBackward;
-
-        api.Selection = WrappedSelection;
-
-        api.selectionPrototype = selProto;
-
-        api.addShimListener(function(win) {
-            if (typeof win.getSelection == "undefined") {
-                win.getSelection = function() {
-                    return getSelection(win);
-                };
-            }
-            win = null;
-        });
-    });
-    
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-
-    // Wait for document to load before initializing
-    var docReady = false;
-
-    var loadHandler = function(e) {
-        if (!docReady) {
-            docReady = true;
-            if (!api.initialized && api.config.autoInitialize) {
-                init();
-            }
-        }
-    };
-
-    if (isBrowser) {
-        // Test whether the document has already been loaded and initialize immediately if so
-        if (document.readyState == "complete") {
-            loadHandler();
-        } else {
-            if (isHostMethod(document, "addEventListener")) {
-                document.addEventListener("DOMContentLoaded", loadHandler, false);
-            }
-
-            // Add a fallback in case the DOMContentLoaded event isn't supported
-            addListener(window, "load", loadHandler);
-        }
-    }
-
-    return api;
-}, this);
-/**
- * Class Applier module for Rangy.
- * Adds, removes and toggles classes on Ranges and Selections
- *
- * Part of Rangy, a cross-browser JavaScript range and selection library
- * https://github.com/timdown/rangy
- *
- * Depends on Rangy core.
- *
- * Copyright 2015, Tim Down
- * Licensed under the MIT license.
- * Version: 1.3.0
- * Build date: 10 May 2015
- */
-(function(factory, root) {
-    if (typeof define == "function" && define.amd) {
-        // AMD. Register as an anonymous module with a dependency on Rangy.
-        define(["./rangy-core"], factory);
-    } else if (typeof module != "undefined" && typeof exports == "object") {
-        // Node/CommonJS style
-        module.exports = factory( require("rangy") );
-    } else {
-        // No AMD or CommonJS support so we use the rangy property of root (probably the global variable)
-        factory(root.rangy);
-    }
-})(function(rangy) {
-    rangy.createModule("ClassApplier", ["WrappedSelection"], function(api, module) {
-        var dom = api.dom;
-        var DomPosition = dom.DomPosition;
-        var contains = dom.arrayContains;
-        var util = api.util;
-        var forEach = util.forEach;
-
-
-        var defaultTagName = "span";
-        var createElementNSSupported = util.isHostMethod(document, "createElementNS");
-
-        function each(obj, func) {
-            for (var i in obj) {
-                if (obj.hasOwnProperty(i)) {
-                    if (func(i, obj[i]) === false) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        function trim(str) {
-            return str.replace(/^\s\s*/, "").replace(/\s\s*$/, "");
-        }
-
-        function classNameContainsClass(fullClassName, className) {
-            return !!fullClassName && new RegExp("(?:^|\\s)" + className + "(?:\\s|$)").test(fullClassName);
-        }
-
-        // Inefficient, inelegant nonsense for IE's svg element, which has no classList and non-HTML className implementation
-        function hasClass(el, className) {
-            if (typeof el.classList == "object") {
-                return el.classList.contains(className);
-            } else {
-                var classNameSupported = (typeof el.className == "string");
-                var elClass = classNameSupported ? el.className : el.getAttribute("class");
-                return classNameContainsClass(elClass, className);
-            }
-        }
-
-        function addClass(el, className) {
-            if (typeof el.classList == "object") {
-                el.classList.add(className);
-            } else {
-                var classNameSupported = (typeof el.className == "string");
-                var elClass = classNameSupported ? el.className : el.getAttribute("class");
-                if (elClass) {
-                    if (!classNameContainsClass(elClass, className)) {
-                        elClass += " " + className;
-                    }
-                } else {
-                    elClass = className;
-                }
-                if (classNameSupported) {
-                    el.className = elClass;
-                } else {
-                    el.setAttribute("class", elClass);
-                }
-            }
-        }
-
-        var removeClass = (function() {
-            function replacer(matched, whiteSpaceBefore, whiteSpaceAfter) {
-                return (whiteSpaceBefore && whiteSpaceAfter) ? " " : "";
-            }
-
-            return function(el, className) {
-                if (typeof el.classList == "object") {
-                    el.classList.remove(className);
-                } else {
-                    var classNameSupported = (typeof el.className == "string");
-                    var elClass = classNameSupported ? el.className : el.getAttribute("class");
-                    elClass = elClass.replace(new RegExp("(^|\\s)" + className + "(\\s|$)"), replacer);
-                    if (classNameSupported) {
-                        el.className = elClass;
-                    } else {
-                        el.setAttribute("class", elClass);
-                    }
-                }
-            };
-        })();
-
-        function getClass(el) {
-            var classNameSupported = (typeof el.className == "string");
-            return classNameSupported ? el.className : el.getAttribute("class");
-        }
-
-        function sortClassName(className) {
-            return className && className.split(/\s+/).sort().join(" ");
-        }
-
-        function getSortedClassName(el) {
-            return sortClassName( getClass(el) );
-        }
-
-        function haveSameClasses(el1, el2) {
-            return getSortedClassName(el1) == getSortedClassName(el2);
-        }
-
-        function hasAllClasses(el, className) {
-            var classes = className.split(/\s+/);
-            for (var i = 0, len = classes.length; i < len; ++i) {
-                if (!hasClass(el, trim(classes[i]))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function canTextBeStyled(textNode) {
-            var parent = textNode.parentNode;
-            return (parent && parent.nodeType == 1 && !/^(textarea|style|script|select|iframe)$/i.test(parent.nodeName));
-        }
-
-        function movePosition(position, oldParent, oldIndex, newParent, newIndex) {
-            var posNode = position.node, posOffset = position.offset;
-            var newNode = posNode, newOffset = posOffset;
-
-            if (posNode == newParent && posOffset > newIndex) {
-                ++newOffset;
-            }
-
-            if (posNode == oldParent && (posOffset == oldIndex  || posOffset == oldIndex + 1)) {
-                newNode = newParent;
-                newOffset += newIndex - oldIndex;
-            }
-
-            if (posNode == oldParent && posOffset > oldIndex + 1) {
-                --newOffset;
-            }
-
-            position.node = newNode;
-            position.offset = newOffset;
-        }
-
-        function movePositionWhenRemovingNode(position, parentNode, index) {
-            if (position.node == parentNode && position.offset > index) {
-                --position.offset;
-            }
-        }
-
-        function movePreservingPositions(node, newParent, newIndex, positionsToPreserve) {
-            // For convenience, allow newIndex to be -1 to mean "insert at the end".
-            if (newIndex == -1) {
-                newIndex = newParent.childNodes.length;
-            }
-
-            var oldParent = node.parentNode;
-            var oldIndex = dom.getNodeIndex(node);
-
-            forEach(positionsToPreserve, function(position) {
-                movePosition(position, oldParent, oldIndex, newParent, newIndex);
-            });
-
-            // Now actually move the node.
-            if (newParent.childNodes.length == newIndex) {
-                newParent.appendChild(node);
-            } else {
-                newParent.insertBefore(node, newParent.childNodes[newIndex]);
-            }
-        }
-
-        function removePreservingPositions(node, positionsToPreserve) {
-
-            var oldParent = node.parentNode;
-            var oldIndex = dom.getNodeIndex(node);
-
-            forEach(positionsToPreserve, function(position) {
-                movePositionWhenRemovingNode(position, oldParent, oldIndex);
-            });
-
-            dom.removeNode(node);
-        }
-
-        function moveChildrenPreservingPositions(node, newParent, newIndex, removeNode, positionsToPreserve) {
-            var child, children = [];
-            while ( (child = node.firstChild) ) {
-                movePreservingPositions(child, newParent, newIndex++, positionsToPreserve);
-                children.push(child);
-            }
-            if (removeNode) {
-                removePreservingPositions(node, positionsToPreserve);
-            }
-            return children;
-        }
-
-        function replaceWithOwnChildrenPreservingPositions(element, positionsToPreserve) {
-            return moveChildrenPreservingPositions(element, element.parentNode, dom.getNodeIndex(element), true, positionsToPreserve);
-        }
-
-        function rangeSelectsAnyText(range, textNode) {
-            var textNodeRange = range.cloneRange();
-            textNodeRange.selectNodeContents(textNode);
-
-            var intersectionRange = textNodeRange.intersection(range);
-            var text = intersectionRange ? intersectionRange.toString() : "";
-
-            return text != "";
-        }
-
-        function getEffectiveTextNodes(range) {
-            var nodes = range.getNodes([3]);
-
-            // Optimization as per issue 145
-
-            // Remove non-intersecting text nodes from the start of the range
-            var start = 0, node;
-            while ( (node = nodes[start]) && !rangeSelectsAnyText(range, node) ) {
-                ++start;
-            }
-
-            // Remove non-intersecting text nodes from the start of the range
-            var end = nodes.length - 1;
-            while ( (node = nodes[end]) && !rangeSelectsAnyText(range, node) ) {
-                --end;
-            }
-
-            return nodes.slice(start, end + 1);
-        }
-
-        function elementsHaveSameNonClassAttributes(el1, el2) {
-            if (el1.attributes.length != el2.attributes.length) return false;
-            for (var i = 0, len = el1.attributes.length, attr1, attr2, name; i < len; ++i) {
-                attr1 = el1.attributes[i];
-                name = attr1.name;
-                if (name != "class") {
-                    attr2 = el2.attributes.getNamedItem(name);
-                    if ( (attr1 === null) != (attr2 === null) ) return false;
-                    if (attr1.specified != attr2.specified) return false;
-                    if (attr1.specified && attr1.nodeValue !== attr2.nodeValue) return false;
-                }
-            }
-            return true;
-        }
-
-        function elementHasNonClassAttributes(el, exceptions) {
-            for (var i = 0, len = el.attributes.length, attrName; i < len; ++i) {
-                attrName = el.attributes[i].name;
-                if ( !(exceptions && contains(exceptions, attrName)) && el.attributes[i].specified && attrName != "class") {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        var getComputedStyleProperty = dom.getComputedStyleProperty;
-        var isEditableElement = (function() {
-            var testEl = document.createElement("div");
-            return typeof testEl.isContentEditable == "boolean" ?
-                function (node) {
-                    return node && node.nodeType == 1 && node.isContentEditable;
-                } :
-                function (node) {
-                    if (!node || node.nodeType != 1 || node.contentEditable == "false") {
-                        return false;
-                    }
-                    return node.contentEditable == "true" || isEditableElement(node.parentNode);
-                };
-        })();
-
-        function isEditingHost(node) {
-            var parent;
-            return node && node.nodeType == 1 &&
-                (( (parent = node.parentNode) && parent.nodeType == 9 && parent.designMode == "on") ||
-                (isEditableElement(node) && !isEditableElement(node.parentNode)));
-        }
-
-        function isEditable(node) {
-            return (isEditableElement(node) || (node.nodeType != 1 && isEditableElement(node.parentNode))) && !isEditingHost(node);
-        }
-
-        var inlineDisplayRegex = /^inline(-block|-table)?$/i;
-
-        function isNonInlineElement(node) {
-            return node && node.nodeType == 1 && !inlineDisplayRegex.test(getComputedStyleProperty(node, "display"));
-        }
-
-        // White space characters as defined by HTML 4 (http://www.w3.org/TR/html401/struct/text.html)
-        var htmlNonWhiteSpaceRegex = /[^\r\n\t\f \u200B]/;
-
-        function isUnrenderedWhiteSpaceNode(node) {
-            if (node.data.length == 0) {
-                return true;
-            }
-            if (htmlNonWhiteSpaceRegex.test(node.data)) {
-                return false;
-            }
-            var cssWhiteSpace = getComputedStyleProperty(node.parentNode, "whiteSpace");
-            switch (cssWhiteSpace) {
-                case "pre":
-                case "pre-wrap":
-                case "-moz-pre-wrap":
-                    return false;
-                case "pre-line":
-                    if (/[\r\n]/.test(node.data)) {
-                        return false;
-                    }
-            }
-
-            // We now have a whitespace-only text node that may be rendered depending on its context. If it is adjacent to a
-            // non-inline element, it will not be rendered. This seems to be a good enough definition.
-            return isNonInlineElement(node.previousSibling) || isNonInlineElement(node.nextSibling);
-        }
-
-        function getRangeBoundaries(ranges) {
-            var positions = [], i, range;
-            for (i = 0; range = ranges[i++]; ) {
-                positions.push(
-                    new DomPosition(range.startContainer, range.startOffset),
-                    new DomPosition(range.endContainer, range.endOffset)
-                );
-            }
-            return positions;
-        }
-
-        function updateRangesFromBoundaries(ranges, positions) {
-            for (var i = 0, range, start, end, len = ranges.length; i < len; ++i) {
-                range = ranges[i];
-                start = positions[i * 2];
-                end = positions[i * 2 + 1];
-                range.setStartAndEnd(start.node, start.offset, end.node, end.offset);
-            }
-        }
-
-        function isSplitPoint(node, offset) {
-            if (dom.isCharacterDataNode(node)) {
-                if (offset == 0) {
-                    return !!node.previousSibling;
-                } else if (offset == node.length) {
-                    return !!node.nextSibling;
-                } else {
-                    return true;
-                }
-            }
-
-            return offset > 0 && offset < node.childNodes.length;
-        }
-
-        function splitNodeAt(node, descendantNode, descendantOffset, positionsToPreserve) {
-            var newNode, parentNode;
-            var splitAtStart = (descendantOffset == 0);
-
-            if (dom.isAncestorOf(descendantNode, node)) {
-                return node;
-            }
-
-            if (dom.isCharacterDataNode(descendantNode)) {
-                var descendantIndex = dom.getNodeIndex(descendantNode);
-                if (descendantOffset == 0) {
-                    descendantOffset = descendantIndex;
-                } else if (descendantOffset == descendantNode.length) {
-                    descendantOffset = descendantIndex + 1;
-                } else {
-                    throw module.createError("splitNodeAt() should not be called with offset in the middle of a data node (" +
-                        descendantOffset + " in " + descendantNode.data);
-                }
-                descendantNode = descendantNode.parentNode;
-            }
-
-            if (isSplitPoint(descendantNode, descendantOffset)) {
-                // descendantNode is now guaranteed not to be a text or other character node
-                newNode = descendantNode.cloneNode(false);
-                parentNode = descendantNode.parentNode;
-                if (newNode.id) {
-                    newNode.removeAttribute("id");
-                }
-                var child, newChildIndex = 0;
-
-                while ( (child = descendantNode.childNodes[descendantOffset]) ) {
-                    movePreservingPositions(child, newNode, newChildIndex++, positionsToPreserve);
-                }
-                movePreservingPositions(newNode, parentNode, dom.getNodeIndex(descendantNode) + 1, positionsToPreserve);
-                return (descendantNode == node) ? newNode : splitNodeAt(node, parentNode, dom.getNodeIndex(newNode), positionsToPreserve);
-            } else if (node != descendantNode) {
-                newNode = descendantNode.parentNode;
-
-                // Work out a new split point in the parent node
-                var newNodeIndex = dom.getNodeIndex(descendantNode);
-
-                if (!splitAtStart) {
-                    newNodeIndex++;
-                }
-                return splitNodeAt(node, newNode, newNodeIndex, positionsToPreserve);
-            }
-            return node;
-        }
-
-        function areElementsMergeable(el1, el2) {
-            return el1.namespaceURI == el2.namespaceURI &&
-                el1.tagName.toLowerCase() == el2.tagName.toLowerCase() &&
-                haveSameClasses(el1, el2) &&
-                elementsHaveSameNonClassAttributes(el1, el2) &&
-                getComputedStyleProperty(el1, "display") == "inline" &&
-                getComputedStyleProperty(el2, "display") == "inline";
-        }
-
-        function createAdjacentMergeableTextNodeGetter(forward) {
-            var siblingPropName = forward ? "nextSibling" : "previousSibling";
-
-            return function(textNode, checkParentElement) {
-                var el = textNode.parentNode;
-                var adjacentNode = textNode[siblingPropName];
-                if (adjacentNode) {
-                    // Can merge if the node's previous/next sibling is a text node
-                    if (adjacentNode && adjacentNode.nodeType == 3) {
-                        return adjacentNode;
-                    }
-                } else if (checkParentElement) {
-                    // Compare text node parent element with its sibling
-                    adjacentNode = el[siblingPropName];
-                    if (adjacentNode && adjacentNode.nodeType == 1 && areElementsMergeable(el, adjacentNode)) {
-                        var adjacentNodeChild = adjacentNode[forward ? "firstChild" : "lastChild"];
-                        if (adjacentNodeChild && adjacentNodeChild.nodeType == 3) {
-                            return adjacentNodeChild;
-                        }
-                    }
-                }
-                return null;
-            };
-        }
-
-        var getPreviousMergeableTextNode = createAdjacentMergeableTextNodeGetter(false),
-            getNextMergeableTextNode = createAdjacentMergeableTextNodeGetter(true);
-
-    
-        function Merge(firstNode) {
-            this.isElementMerge = (firstNode.nodeType == 1);
-            this.textNodes = [];
-            var firstTextNode = this.isElementMerge ? firstNode.lastChild : firstNode;
-            if (firstTextNode) {
-                this.textNodes[0] = firstTextNode;
-            }
-        }
-
-        Merge.prototype = {
-            doMerge: function(positionsToPreserve) {
-                var textNodes = this.textNodes;
-                var firstTextNode = textNodes[0];
-                if (textNodes.length > 1) {
-                    var firstTextNodeIndex = dom.getNodeIndex(firstTextNode);
-                    var textParts = [], combinedTextLength = 0, textNode, parent;
-                    forEach(textNodes, function(textNode, i) {
-                        parent = textNode.parentNode;
-                        if (i > 0) {
-                            parent.removeChild(textNode);
-                            if (!parent.hasChildNodes()) {
-                                dom.removeNode(parent);
-                            }
-                            if (positionsToPreserve) {
-                                forEach(positionsToPreserve, function(position) {
-                                    // Handle case where position is inside the text node being merged into a preceding node
-                                    if (position.node == textNode) {
-                                        position.node = firstTextNode;
-                                        position.offset += combinedTextLength;
-                                    }
-                                    // Handle case where both text nodes precede the position within the same parent node
-                                    if (position.node == parent && position.offset > firstTextNodeIndex) {
-                                        --position.offset;
-                                        if (position.offset == firstTextNodeIndex + 1 && i < len - 1) {
-                                            position.node = firstTextNode;
-                                            position.offset = combinedTextLength;
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                        textParts[i] = textNode.data;
-                        combinedTextLength += textNode.data.length;
-                    });
-                    firstTextNode.data = textParts.join("");
-                }
-                return firstTextNode.data;
-            },
-
-            getLength: function() {
-                var i = this.textNodes.length, len = 0;
-                while (i--) {
-                    len += this.textNodes[i].length;
-                }
-                return len;
-            },
-
-            toString: function() {
-                var textParts = [];
-                forEach(this.textNodes, function(textNode, i) {
-                    textParts[i] = "'" + textNode.data + "'";
-                });
-                return "[Merge(" + textParts.join(",") + ")]";
-            }
-        };
-
-        var optionProperties = ["elementTagName", "ignoreWhiteSpace", "applyToEditableOnly", "useExistingElements",
-            "removeEmptyElements", "onElementCreate"];
-
-        // TODO: Populate this with every attribute name that corresponds to a property with a different name. Really??
-        var attrNamesForProperties = {};
-
-        function ClassApplier(className, options, tagNames) {
-            var normalize, i, len, propName, applier = this;
-            applier.cssClass = applier.className = className; // cssClass property is for backward compatibility
-
-            var elementPropertiesFromOptions = null, elementAttributes = {};
-
-            // Initialize from options object
-            if (typeof options == "object" && options !== null) {
-                if (typeof options.elementTagName !== "undefined") {
-                    options.elementTagName = options.elementTagName.toLowerCase();
-                }
-                tagNames = options.tagNames;
-                elementPropertiesFromOptions = options.elementProperties;
-                elementAttributes = options.elementAttributes;
-
-                for (i = 0; propName = optionProperties[i++]; ) {
-                    if (options.hasOwnProperty(propName)) {
-                        applier[propName] = options[propName];
-                    }
-                }
-                normalize = options.normalize;
-            } else {
-                normalize = options;
-            }
-
-            // Backward compatibility: the second parameter can also be a Boolean indicating to normalize after unapplying
-            applier.normalize = (typeof normalize == "undefined") ? true : normalize;
-
-            // Initialize element properties and attribute exceptions
-            applier.attrExceptions = [];
-            var el = document.createElement(applier.elementTagName);
-            applier.elementProperties = applier.copyPropertiesToElement(elementPropertiesFromOptions, el, true);
-            each(elementAttributes, function(attrName, attrValue) {
-                applier.attrExceptions.push(attrName);
-                // Ensure each attribute value is a string
-                elementAttributes[attrName] = "" + attrValue;
-            });
-            applier.elementAttributes = elementAttributes;
-
-            applier.elementSortedClassName = applier.elementProperties.hasOwnProperty("className") ?
-                sortClassName(applier.elementProperties.className + " " + className) : className;
-
-            // Initialize tag names
-            applier.applyToAnyTagName = false;
-            var type = typeof tagNames;
-            if (type == "string") {
-                if (tagNames == "*") {
-                    applier.applyToAnyTagName = true;
-                } else {
-                    applier.tagNames = trim(tagNames.toLowerCase()).split(/\s*,\s*/);
-                }
-            } else if (type == "object" && typeof tagNames.length == "number") {
-                applier.tagNames = [];
-                for (i = 0, len = tagNames.length; i < len; ++i) {
-                    if (tagNames[i] == "*") {
-                        applier.applyToAnyTagName = true;
-                    } else {
-                        applier.tagNames.push(tagNames[i].toLowerCase());
-                    }
-                }
-            } else {
-                applier.tagNames = [applier.elementTagName];
-            }
-        }
-
-        ClassApplier.prototype = {
-            elementTagName: defaultTagName,
-            elementProperties: {},
-            elementAttributes: {},
-            ignoreWhiteSpace: true,
-            applyToEditableOnly: false,
-            useExistingElements: true,
-            removeEmptyElements: true,
-            onElementCreate: null,
-
-            copyPropertiesToElement: function(props, el, createCopy) {
-                var s, elStyle, elProps = {}, elPropsStyle, propValue, elPropValue, attrName;
-
-                for (var p in props) {
-                    if (props.hasOwnProperty(p)) {
-                        propValue = props[p];
-                        elPropValue = el[p];
-
-                        // Special case for class. The copied properties object has the applier's class as well as its own
-                        // to simplify checks when removing styling elements
-                        if (p == "className") {
-                            addClass(el, propValue);
-                            addClass(el, this.className);
-                            el[p] = sortClassName(el[p]);
-                            if (createCopy) {
-                                elProps[p] = propValue;
-                            }
-                        }
-
-                        // Special case for style
-                        else if (p == "style") {
-                            elStyle = elPropValue;
-                            if (createCopy) {
-                                elProps[p] = elPropsStyle = {};
-                            }
-                            for (s in props[p]) {
-                                if (props[p].hasOwnProperty(s)) {
-                                    elStyle[s] = propValue[s];
-                                    if (createCopy) {
-                                        elPropsStyle[s] = elStyle[s];
-                                    }
-                                }
-                            }
-                            this.attrExceptions.push(p);
-                        } else {
-                            el[p] = propValue;
-                            // Copy the property back from the dummy element so that later comparisons to check whether
-                            // elements may be removed are checking against the right value. For example, the href property
-                            // of an element returns a fully qualified URL even if it was previously assigned a relative
-                            // URL.
-                            if (createCopy) {
-                                elProps[p] = el[p];
-
-                                // Not all properties map to identically-named attributes
-                                attrName = attrNamesForProperties.hasOwnProperty(p) ? attrNamesForProperties[p] : p;
-                                this.attrExceptions.push(attrName);
-                            }
-                        }
-                    }
-                }
-
-                return createCopy ? elProps : "";
-            },
-
-            copyAttributesToElement: function(attrs, el) {
-                for (var attrName in attrs) {
-                    if (attrs.hasOwnProperty(attrName) && !/^class(?:Name)?$/i.test(attrName)) {
-                        el.setAttribute(attrName, attrs[attrName]);
-                    }
-                }
-            },
-
-            appliesToElement: function(el) {
-                return contains(this.tagNames, el.tagName.toLowerCase());
-            },
-
-            getEmptyElements: function(range) {
-                var applier = this;
-                return range.getNodes([1], function(el) {
-                    return applier.appliesToElement(el) && !el.hasChildNodes();
-                });
-            },
-
-            hasClass: function(node) {
-                return node.nodeType == 1 &&
-                    (this.applyToAnyTagName || this.appliesToElement(node)) &&
-                    hasClass(node, this.className);
-            },
-
-            getSelfOrAncestorWithClass: function(node) {
-                while (node) {
-                    if (this.hasClass(node)) {
-                        return node;
-                    }
-                    node = node.parentNode;
-                }
-                return null;
-            },
-
-            isModifiable: function(node) {
-                return !this.applyToEditableOnly || isEditable(node);
-            },
-
-            // White space adjacent to an unwrappable node can be ignored for wrapping
-            isIgnorableWhiteSpaceNode: function(node) {
-                return this.ignoreWhiteSpace && node && node.nodeType == 3 && isUnrenderedWhiteSpaceNode(node);
-            },
-
-            // Normalizes nodes after applying a class to a Range.
-            postApply: function(textNodes, range, positionsToPreserve, isUndo) {
-                var firstNode = textNodes[0], lastNode = textNodes[textNodes.length - 1];
-
-                var merges = [], currentMerge;
-
-                var rangeStartNode = firstNode, rangeEndNode = lastNode;
-                var rangeStartOffset = 0, rangeEndOffset = lastNode.length;
-
-                var textNode, precedingTextNode;
-
-                // Check for every required merge and create a Merge object for each
-                forEach(textNodes, function(textNode) {
-                    precedingTextNode = getPreviousMergeableTextNode(textNode, !isUndo);
-                    if (precedingTextNode) {
-                        if (!currentMerge) {
-                            currentMerge = new Merge(precedingTextNode);
-                            merges.push(currentMerge);
-                        }
-                        currentMerge.textNodes.push(textNode);
-                        if (textNode === firstNode) {
-                            rangeStartNode = currentMerge.textNodes[0];
-                            rangeStartOffset = rangeStartNode.length;
-                        }
-                        if (textNode === lastNode) {
-                            rangeEndNode = currentMerge.textNodes[0];
-                            rangeEndOffset = currentMerge.getLength();
-                        }
-                    } else {
-                        currentMerge = null;
-                    }
-                });
-
-                // Test whether the first node after the range needs merging
-                var nextTextNode = getNextMergeableTextNode(lastNode, !isUndo);
-
-                if (nextTextNode) {
-                    if (!currentMerge) {
-                        currentMerge = new Merge(lastNode);
-                        merges.push(currentMerge);
-                    }
-                    currentMerge.textNodes.push(nextTextNode);
-                }
-
-                // Apply the merges
-                if (merges.length) {
-                    for (i = 0, len = merges.length; i < len; ++i) {
-                        merges[i].doMerge(positionsToPreserve);
-                    }
-
-                    // Set the range boundaries
-                    range.setStartAndEnd(rangeStartNode, rangeStartOffset, rangeEndNode, rangeEndOffset);
-                }
-            },
-
-            createContainer: function(parentNode) {
-                var doc = dom.getDocument(parentNode);
-                var namespace;
-                var el = createElementNSSupported && !dom.isHtmlNamespace(parentNode) && (namespace = parentNode.namespaceURI) ?
-                    doc.createElementNS(parentNode.namespaceURI, this.elementTagName) :
-                    doc.createElement(this.elementTagName);
-
-                this.copyPropertiesToElement(this.elementProperties, el, false);
-                this.copyAttributesToElement(this.elementAttributes, el);
-                addClass(el, this.className);
-                if (this.onElementCreate) {
-                    this.onElementCreate(el, this);
-                }
-                return el;
-            },
-
-            elementHasProperties: function(el, props) {
-                var applier = this;
-                return each(props, function(p, propValue) {
-                    if (p == "className") {
-                        // For checking whether we should reuse an existing element, we just want to check that the element
-                        // has all the classes specified in the className property. When deciding whether the element is
-                        // removable when unapplying a class, there is separate special handling to check whether the
-                        // element has extra classes so the same simple check will do.
-                        return hasAllClasses(el, propValue);
-                    } else if (typeof propValue == "object") {
-                        if (!applier.elementHasProperties(el[p], propValue)) {
-                            return false;
-                        }
-                    } else if (el[p] !== propValue) {
-                        return false;
-                    }
-                });
-            },
-
-            elementHasAttributes: function(el, attrs) {
-                return each(attrs, function(name, value) {
-                    if (el.getAttribute(name) !== value) {
-                        return false;
-                    }
-                });
-            },
-
-            applyToTextNode: function(textNode, positionsToPreserve) {
-
-                // Check whether the text node can be styled. Text within a <style> or <script> element, for example,
-                // should not be styled. See issue 283.
-                if (canTextBeStyled(textNode)) {
-                    var parent = textNode.parentNode;
-                    if (parent.childNodes.length == 1 &&
-                        this.useExistingElements &&
-                        this.appliesToElement(parent) &&
-                        this.elementHasProperties(parent, this.elementProperties) &&
-                        this.elementHasAttributes(parent, this.elementAttributes)) {
-
-                        addClass(parent, this.className);
-                    } else {
-                        var textNodeParent = textNode.parentNode;
-                        var el = this.createContainer(textNodeParent);
-                        textNodeParent.insertBefore(el, textNode);
-                        el.appendChild(textNode);
-                    }
-                }
-
-            },
-
-            isRemovable: function(el) {
-                return el.tagName.toLowerCase() == this.elementTagName &&
-                    getSortedClassName(el) == this.elementSortedClassName &&
-                    this.elementHasProperties(el, this.elementProperties) &&
-                    !elementHasNonClassAttributes(el, this.attrExceptions) &&
-                    this.elementHasAttributes(el, this.elementAttributes) &&
-                    this.isModifiable(el);
-            },
-
-            isEmptyContainer: function(el) {
-                var childNodeCount = el.childNodes.length;
-                return el.nodeType == 1 &&
-                    this.isRemovable(el) &&
-                    (childNodeCount == 0 || (childNodeCount == 1 && this.isEmptyContainer(el.firstChild)));
-            },
-
-            removeEmptyContainers: function(range) {
-                var applier = this;
-                var nodesToRemove = range.getNodes([1], function(el) {
-                    return applier.isEmptyContainer(el);
-                });
-
-                var rangesToPreserve = [range];
-                var positionsToPreserve = getRangeBoundaries(rangesToPreserve);
-
-                forEach(nodesToRemove, function(node) {
-                    removePreservingPositions(node, positionsToPreserve);
-                });
-
-                // Update the range from the preserved boundary positions
-                updateRangesFromBoundaries(rangesToPreserve, positionsToPreserve);
-            },
-
-            undoToTextNode: function(textNode, range, ancestorWithClass, positionsToPreserve) {
-                if (!range.containsNode(ancestorWithClass)) {
-                    // Split out the portion of the ancestor from which we can remove the class
-                    //var parent = ancestorWithClass.parentNode, index = dom.getNodeIndex(ancestorWithClass);
-                    var ancestorRange = range.cloneRange();
-                    ancestorRange.selectNode(ancestorWithClass);
-                    if (ancestorRange.isPointInRange(range.endContainer, range.endOffset)) {
-                        splitNodeAt(ancestorWithClass, range.endContainer, range.endOffset, positionsToPreserve);
-                        range.setEndAfter(ancestorWithClass);
-                    }
-                    if (ancestorRange.isPointInRange(range.startContainer, range.startOffset)) {
-                        ancestorWithClass = splitNodeAt(ancestorWithClass, range.startContainer, range.startOffset, positionsToPreserve);
-                    }
-                }
-
-                if (this.isRemovable(ancestorWithClass)) {
-                    replaceWithOwnChildrenPreservingPositions(ancestorWithClass, positionsToPreserve);
-                } else {
-                    removeClass(ancestorWithClass, this.className);
-                }
-            },
-
-            splitAncestorWithClass: function(container, offset, positionsToPreserve) {
-                var ancestorWithClass = this.getSelfOrAncestorWithClass(container);
-                if (ancestorWithClass) {
-                    splitNodeAt(ancestorWithClass, container, offset, positionsToPreserve);
-                }
-            },
-
-            undoToAncestor: function(ancestorWithClass, positionsToPreserve) {
-                if (this.isRemovable(ancestorWithClass)) {
-                    replaceWithOwnChildrenPreservingPositions(ancestorWithClass, positionsToPreserve);
-                } else {
-                    removeClass(ancestorWithClass, this.className);
-                }
-            },
-
-            applyToRange: function(range, rangesToPreserve) {
-                var applier = this;
-                rangesToPreserve = rangesToPreserve || [];
-
-                // Create an array of range boundaries to preserve
-                var positionsToPreserve = getRangeBoundaries(rangesToPreserve || []);
-
-                range.splitBoundariesPreservingPositions(positionsToPreserve);
-
-                // Tidy up the DOM by removing empty containers
-                if (applier.removeEmptyElements) {
-                    applier.removeEmptyContainers(range);
-                }
-
-                var textNodes = getEffectiveTextNodes(range);
-
-                if (textNodes.length) {
-                    forEach(textNodes, function(textNode) {
-                        if (!applier.isIgnorableWhiteSpaceNode(textNode) && !applier.getSelfOrAncestorWithClass(textNode) &&
-                                applier.isModifiable(textNode)) {
-                            applier.applyToTextNode(textNode, positionsToPreserve);
-                        }
-                    });
-                    var lastTextNode = textNodes[textNodes.length - 1];
-                    range.setStartAndEnd(textNodes[0], 0, lastTextNode, lastTextNode.length);
-                    if (applier.normalize) {
-                        applier.postApply(textNodes, range, positionsToPreserve, false);
-                    }
-
-                    // Update the ranges from the preserved boundary positions
-                    updateRangesFromBoundaries(rangesToPreserve, positionsToPreserve);
-                }
-
-                // Apply classes to any appropriate empty elements
-                var emptyElements = applier.getEmptyElements(range);
-
-                forEach(emptyElements, function(el) {
-                    addClass(el, applier.className);
-                });
-            },
-
-            applyToRanges: function(ranges) {
-
-                var i = ranges.length;
-                while (i--) {
-                    this.applyToRange(ranges[i], ranges);
-                }
-
-
-                return ranges;
-            },
-
-            applyToSelection: function(win) {
-                var sel = api.getSelection(win);
-                sel.setRanges( this.applyToRanges(sel.getAllRanges()) );
-            },
-
-            undoToRange: function(range, rangesToPreserve) {
-                var applier = this;
-                // Create an array of range boundaries to preserve
-                rangesToPreserve = rangesToPreserve || [];
-                var positionsToPreserve = getRangeBoundaries(rangesToPreserve);
-
-
-                range.splitBoundariesPreservingPositions(positionsToPreserve);
-
-                // Tidy up the DOM by removing empty containers
-                if (applier.removeEmptyElements) {
-                    applier.removeEmptyContainers(range, positionsToPreserve);
-                }
-
-                var textNodes = getEffectiveTextNodes(range);
-                var textNode, ancestorWithClass;
-                var lastTextNode = textNodes[textNodes.length - 1];
-
-                if (textNodes.length) {
-                    applier.splitAncestorWithClass(range.endContainer, range.endOffset, positionsToPreserve);
-                    applier.splitAncestorWithClass(range.startContainer, range.startOffset, positionsToPreserve);
-                    for (var i = 0, len = textNodes.length; i < len; ++i) {
-                        textNode = textNodes[i];
-                        ancestorWithClass = applier.getSelfOrAncestorWithClass(textNode);
-                        if (ancestorWithClass && applier.isModifiable(textNode)) {
-                            applier.undoToAncestor(ancestorWithClass, positionsToPreserve);
-                        }
-                    }
-                    // Ensure the range is still valid
-                    range.setStartAndEnd(textNodes[0], 0, lastTextNode, lastTextNode.length);
-
-
-                    if (applier.normalize) {
-                        applier.postApply(textNodes, range, positionsToPreserve, true);
-                    }
-
-                    // Update the ranges from the preserved boundary positions
-                    updateRangesFromBoundaries(rangesToPreserve, positionsToPreserve);
-                }
-
-                // Remove class from any appropriate empty elements
-                var emptyElements = applier.getEmptyElements(range);
-
-                forEach(emptyElements, function(el) {
-                    removeClass(el, applier.className);
-                });
-            },
-
-            undoToRanges: function(ranges) {
-                // Get ranges returned in document order
-                var i = ranges.length;
-
-                while (i--) {
-                    this.undoToRange(ranges[i], ranges);
-                }
-
-                return ranges;
-            },
-
-            undoToSelection: function(win) {
-                var sel = api.getSelection(win);
-                var ranges = api.getSelection(win).getAllRanges();
-                this.undoToRanges(ranges);
-                sel.setRanges(ranges);
-            },
-
-            isAppliedToRange: function(range) {
-                if (range.collapsed || range.toString() == "") {
-                    return !!this.getSelfOrAncestorWithClass(range.commonAncestorContainer);
-                } else {
-                    var textNodes = range.getNodes( [3] );
-                    if (textNodes.length)
-                    for (var i = 0, textNode; textNode = textNodes[i++]; ) {
-                        if (!this.isIgnorableWhiteSpaceNode(textNode) && rangeSelectsAnyText(range, textNode) &&
-                                this.isModifiable(textNode) && !this.getSelfOrAncestorWithClass(textNode)) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            },
-
-            isAppliedToRanges: function(ranges) {
-                var i = ranges.length;
-                if (i == 0) {
-                    return false;
-                }
-                while (i--) {
-                    if (!this.isAppliedToRange(ranges[i])) {
-                        return false;
-                    }
-                }
-                return true;
-            },
-
-            isAppliedToSelection: function(win) {
-                var sel = api.getSelection(win);
-                return this.isAppliedToRanges(sel.getAllRanges());
-            },
-
-            toggleRange: function(range) {
-                if (this.isAppliedToRange(range)) {
-                    this.undoToRange(range);
-                } else {
-                    this.applyToRange(range);
-                }
-            },
-
-            toggleSelection: function(win) {
-                if (this.isAppliedToSelection(win)) {
-                    this.undoToSelection(win);
-                } else {
-                    this.applyToSelection(win);
-                }
-            },
-
-            getElementsWithClassIntersectingRange: function(range) {
-                var elements = [];
-                var applier = this;
-                range.getNodes([3], function(textNode) {
-                    var el = applier.getSelfOrAncestorWithClass(textNode);
-                    if (el && !contains(elements, el)) {
-                        elements.push(el);
-                    }
-                });
-                return elements;
-            },
-
-            detach: function() {}
-        };
-
-        function createClassApplier(className, options, tagNames) {
-            return new ClassApplier(className, options, tagNames);
-        }
-
-        ClassApplier.util = {
-            hasClass: hasClass,
-            addClass: addClass,
-            removeClass: removeClass,
-            getClass: getClass,
-            hasSameClasses: haveSameClasses,
-            hasAllClasses: hasAllClasses,
-            replaceWithOwnChildren: replaceWithOwnChildrenPreservingPositions,
-            elementsHaveSameNonClassAttributes: elementsHaveSameNonClassAttributes,
-            elementHasNonClassAttributes: elementHasNonClassAttributes,
-            splitNodeAt: splitNodeAt,
-            isEditableElement: isEditableElement,
-            isEditingHost: isEditingHost,
-            isEditable: isEditable
-        };
-
-        api.CssClassApplier = api.ClassApplier = ClassApplier;
-        api.createClassApplier = createClassApplier;
-        util.createAliasForDeprecatedMethod(api, "createCssClassApplier", "createClassApplier", module);
-    });
-    
-    return rangy;
-}, this);
-
-/**
- * Highlighter module for Rangy, a cross-browser JavaScript range and selection library
- * https://github.com/timdown/rangy
- *
- * Depends on Rangy core, ClassApplier and optionally TextRange modules.
- *
- * Copyright 2015, Tim Down
- * Licensed under the MIT license.
- * Version: 1.3.0
- * Build date: 10 May 2015
- */
-(function(factory, root) {
-    if (typeof define == "function" && define.amd) {
-        // AMD. Register as an anonymous module with a dependency on Rangy.
-        define(["./rangy-core"], factory);
-    } else if (typeof module != "undefined" && typeof exports == "object") {
-        // Node/CommonJS style
-        module.exports = factory( require("rangy") );
-    } else {
-        // No AMD or CommonJS support so we use the rangy property of root (probably the global variable)
-        factory(root.rangy);
-    }
-})(function(rangy) {
-    rangy.createModule("Highlighter", ["ClassApplier"], function(api, module) {
-        var dom = api.dom;
-        var contains = dom.arrayContains;
-        var getBody = dom.getBody;
-        var createOptions = api.util.createOptions;
-        var forEach = api.util.forEach;
-        var nextHighlightId = 1;
-
-        // Puts highlights in order, last in document first.
-        function compareHighlights(h1, h2) {
-            return h1.characterRange.start - h2.characterRange.start;
-        }
-
-        function getContainerElement(doc, id) {
-            return id ? doc.getElementById(id) : getBody(doc);
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        var highlighterTypes = {};
-
-        function HighlighterType(type, converterCreator) {
-            this.type = type;
-            this.converterCreator = converterCreator;
-        }
-
-        HighlighterType.prototype.create = function() {
-            var converter = this.converterCreator();
-            converter.type = this.type;
-            return converter;
-        };
-
-        function registerHighlighterType(type, converterCreator) {
-            highlighterTypes[type] = new HighlighterType(type, converterCreator);
-        }
-
-        function getConverter(type) {
-            var highlighterType = highlighterTypes[type];
-            if (highlighterType instanceof HighlighterType) {
-                return highlighterType.create();
-            } else {
-                throw new Error("Highlighter type '" + type + "' is not valid");
-            }
-        }
-
-        api.registerHighlighterType = registerHighlighterType;
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function CharacterRange(start, end) {
-            this.start = start;
-            this.end = end;
-        }
-
-        CharacterRange.prototype = {
-            intersects: function(charRange) {
-                return this.start < charRange.end && this.end > charRange.start;
-            },
-
-            isContiguousWith: function(charRange) {
-                return this.start == charRange.end || this.end == charRange.start;
-            },
-
-            union: function(charRange) {
-                return new CharacterRange(Math.min(this.start, charRange.start), Math.max(this.end, charRange.end));
-            },
-
-            intersection: function(charRange) {
-                return new CharacterRange(Math.max(this.start, charRange.start), Math.min(this.end, charRange.end));
-            },
-
-            getComplements: function(charRange) {
-                var ranges = [];
-                if (this.start >= charRange.start) {
-                    if (this.end <= charRange.end) {
-                        return [];
-                    }
-                    ranges.push(new CharacterRange(charRange.end, this.end));
-                } else {
-                    ranges.push(new CharacterRange(this.start, Math.min(this.end, charRange.start)));
-                    if (this.end > charRange.end) {
-                        ranges.push(new CharacterRange(charRange.end, this.end));
-                    }
-                }
-                return ranges;
-            },
-
-            toString: function() {
-                return "[CharacterRange(" + this.start + ", " + this.end + ")]";
-            }
-        };
-
-        CharacterRange.fromCharacterRange = function(charRange) {
-            return new CharacterRange(charRange.start, charRange.end);
-        };
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        var textContentConverter = {
-            rangeToCharacterRange: function(range, containerNode) {
-                var bookmark = range.getBookmark(containerNode);
-                return new CharacterRange(bookmark.start, bookmark.end);
-            },
-
-            characterRangeToRange: function(doc, characterRange, containerNode) {
-                var range = api.createRange(doc);
-                range.moveToBookmark({
-                    start: characterRange.start,
-                    end: characterRange.end,
-                    containerNode: containerNode
-                });
-
-                return range;
-            },
-
-            serializeSelection: function(selection, containerNode) {
-                var ranges = selection.getAllRanges(), rangeCount = ranges.length;
-                var rangeInfos = [];
-
-                var backward = rangeCount == 1 && selection.isBackward();
-
-                for (var i = 0, len = ranges.length; i < len; ++i) {
-                    rangeInfos[i] = {
-                        characterRange: this.rangeToCharacterRange(ranges[i], containerNode),
-                        backward: backward
-                    };
-                }
-
-                return rangeInfos;
-            },
-
-            restoreSelection: function(selection, savedSelection, containerNode) {
-                selection.removeAllRanges();
-                var doc = selection.win.document;
-                for (var i = 0, len = savedSelection.length, range, rangeInfo, characterRange; i < len; ++i) {
-                    rangeInfo = savedSelection[i];
-                    characterRange = rangeInfo.characterRange;
-                    range = this.characterRangeToRange(doc, rangeInfo.characterRange, containerNode);
-                    selection.addRange(range, rangeInfo.backward);
-                }
-            }
-        };
-
-        registerHighlighterType("textContent", function() {
-            return textContentConverter;
-        });
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Lazily load the TextRange-based converter so that the dependency is only checked when required.
-        registerHighlighterType("TextRange", (function() {
-            var converter;
-
-            return function() {
-                if (!converter) {
-                    // Test that textRangeModule exists and is supported
-                    var textRangeModule = api.modules.TextRange;
-                    if (!textRangeModule) {
-                        throw new Error("TextRange module is missing.");
-                    } else if (!textRangeModule.supported) {
-                        throw new Error("TextRange module is present but not supported.");
-                    }
-
-                    converter = {
-                        rangeToCharacterRange: function(range, containerNode) {
-                            return CharacterRange.fromCharacterRange( range.toCharacterRange(containerNode) );
-                        },
-
-                        characterRangeToRange: function(doc, characterRange, containerNode) {
-                            var range = api.createRange(doc);
-                            range.selectCharacters(containerNode, characterRange.start, characterRange.end);
-                            return range;
-                        },
-
-                        serializeSelection: function(selection, containerNode) {
-                            return selection.saveCharacterRanges(containerNode);
-                        },
-
-                        restoreSelection: function(selection, savedSelection, containerNode) {
-                            selection.restoreCharacterRanges(containerNode, savedSelection);
-                        }
-                    };
-                }
-
-                return converter;
-            };
-        })());
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function Highlight(doc, characterRange, classApplier, converter, id, containerElementId) {
-            if (id) {
-                this.id = id;
-                nextHighlightId = Math.max(nextHighlightId, id + 1);
-            } else {
-                this.id = nextHighlightId++;
-            }
-            this.characterRange = characterRange;
-            this.doc = doc;
-            this.classApplier = classApplier;
-            this.converter = converter;
-            this.containerElementId = containerElementId || null;
-            this.applied = false;
-        }
-
-        Highlight.prototype = {
-            getContainerElement: function() {
-                return getContainerElement(this.doc, this.containerElementId);
-            },
-
-            getRange: function() {
-                return this.converter.characterRangeToRange(this.doc, this.characterRange, this.getContainerElement());
-            },
-
-            fromRange: function(range) {
-                this.characterRange = this.converter.rangeToCharacterRange(range, this.getContainerElement());
-            },
-
-            getText: function() {
-                return this.getRange().toString();
-            },
-
-            containsElement: function(el) {
-                return this.getRange().containsNodeContents(el.firstChild);
-            },
-
-            unapply: function() {
-                this.classApplier.undoToRange(this.getRange());
-                this.applied = false;
-            },
-
-            apply: function() {
-                this.classApplier.applyToRange(this.getRange());
-                this.applied = true;
-            },
-
-            getHighlightElements: function() {
-                return this.classApplier.getElementsWithClassIntersectingRange(this.getRange());
-            },
-
-            toString: function() {
-                return "[Highlight(ID: " + this.id + ", class: " + this.classApplier.className + ", character range: " +
-                    this.characterRange.start + " - " + this.characterRange.end + ")]";
-            }
-        };
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function Highlighter(doc, type) {
-            type = type || "textContent";
-            this.doc = doc || document;
-            this.classAppliers = {};
-            this.highlights = [];
-            this.converter = getConverter(type);
-        }
-
-        Highlighter.prototype = {
-            addClassApplier: function(classApplier) {
-                this.classAppliers[classApplier.className] = classApplier;
-            },
-
-            getHighlightForElement: function(el) {
-                var highlights = this.highlights;
-                for (var i = 0, len = highlights.length; i < len; ++i) {
-                    if (highlights[i].containsElement(el)) {
-                        return highlights[i];
-                    }
-                }
-                return null;
-            },
-
-            removeHighlights: function(highlights) {
-                for (var i = 0, len = this.highlights.length, highlight; i < len; ++i) {
-                    highlight = this.highlights[i];
-                    if (contains(highlights, highlight)) {
-                        highlight.unapply();
-                        this.highlights.splice(i--, 1);
-                    }
-                }
-            },
-
-            removeAllHighlights: function() {
-                this.removeHighlights(this.highlights);
-            },
-
-            getIntersectingHighlights: function(ranges) {
-                // Test each range against each of the highlighted ranges to see whether they overlap
-                var intersectingHighlights = [], highlights = this.highlights;
-                forEach(ranges, function(range) {
-                    //var selCharRange = converter.rangeToCharacterRange(range);
-                    forEach(highlights, function(highlight) {
-                        if (range.intersectsRange( highlight.getRange() ) && !contains(intersectingHighlights, highlight)) {
-                            intersectingHighlights.push(highlight);
-                        }
-                    });
-                });
-
-                return intersectingHighlights;
-            },
-
-            highlightCharacterRanges: function(className, charRanges, options) {
-                var i, len, j;
-                var highlights = this.highlights;
-                var converter = this.converter;
-                var doc = this.doc;
-                var highlightsToRemove = [];
-                var classApplier = className ? this.classAppliers[className] : null;
-
-                options = createOptions(options, {
-                    containerElementId: null,
-                    exclusive: true
-                });
-
-                var containerElementId = options.containerElementId;
-                var exclusive = options.exclusive;
-
-                var containerElement, containerElementRange, containerElementCharRange;
-                if (containerElementId) {
-                    containerElement = this.doc.getElementById(containerElementId);
-                    if (containerElement) {
-                        containerElementRange = api.createRange(this.doc);
-                        containerElementRange.selectNodeContents(containerElement);
-                        containerElementCharRange = new CharacterRange(0, containerElementRange.toString().length);
-                    }
-                }
-
-                var charRange, highlightCharRange, removeHighlight, isSameClassApplier, highlightsToKeep, splitHighlight;
-
-                for (i = 0, len = charRanges.length; i < len; ++i) {
-                    charRange = charRanges[i];
-                    highlightsToKeep = [];
-
-                    // Restrict character range to container element, if it exists
-                    if (containerElementCharRange) {
-                        charRange = charRange.intersection(containerElementCharRange);
-                    }
-
-                    // Ignore empty ranges
-                    if (charRange.start == charRange.end) {
-                        continue;
-                    }
-
-                    // Check for intersection with existing highlights. For each intersection, create a new highlight
-                    // which is the union of the highlight range and the selected range
-                    for (j = 0; j < highlights.length; ++j) {
-                        removeHighlight = false;
-
-                        if (containerElementId == highlights[j].containerElementId) {
-                            highlightCharRange = highlights[j].characterRange;
-                            isSameClassApplier = (classApplier == highlights[j].classApplier);
-                            splitHighlight = !isSameClassApplier && exclusive;
-
-                            // Replace the existing highlight if it needs to be:
-                            //  1. merged (isSameClassApplier)
-                            //  2. partially or entirely erased (className === null)
-                            //  3. partially or entirely replaced (isSameClassApplier == false && exclusive == true)
-                            if (    (highlightCharRange.intersects(charRange) || highlightCharRange.isContiguousWith(charRange)) &&
-                                    (isSameClassApplier || splitHighlight) ) {
-
-                                // Remove existing highlights, keeping the unselected parts
-                                if (splitHighlight) {
-                                    forEach(highlightCharRange.getComplements(charRange), function(rangeToAdd) {
-                                        highlightsToKeep.push( new Highlight(doc, rangeToAdd, highlights[j].classApplier, converter, null, containerElementId) );
-                                    });
-                                }
-
-                                removeHighlight = true;
-                                if (isSameClassApplier) {
-                                    charRange = highlightCharRange.union(charRange);
-                                }
-                            }
-                        }
-
-                        if (removeHighlight) {
-                            highlightsToRemove.push(highlights[j]);
-                            highlights[j] = new Highlight(doc, highlightCharRange.union(charRange), classApplier, converter, null, containerElementId);
-                        } else {
-                            highlightsToKeep.push(highlights[j]);
-                        }
-                    }
-
-                    // Add new range
-                    if (classApplier) {
-                        highlightsToKeep.push(new Highlight(doc, charRange, classApplier, converter, null, containerElementId));
-                    }
-                    this.highlights = highlights = highlightsToKeep;
-                }
-
-                // Remove the old highlights
-                forEach(highlightsToRemove, function(highlightToRemove) {
-                    highlightToRemove.unapply();
-                });
-
-                // Apply new highlights
-                var newHighlights = [];
-                forEach(highlights, function(highlight) {
-                    if (!highlight.applied) {
-                        highlight.apply();
-                        newHighlights.push(highlight);
-                    }
-                });
-
-                return newHighlights;
-            },
-
-            highlightRanges: function(className, ranges, options) {
-                var selCharRanges = [];
-                var converter = this.converter;
-
-                options = createOptions(options, {
-                    containerElement: null,
-                    exclusive: true
-                });
-
-                var containerElement = options.containerElement;
-                var containerElementId = containerElement ? containerElement.id : null;
-                var containerElementRange;
-                if (containerElement) {
-                    containerElementRange = api.createRange(containerElement);
-                    containerElementRange.selectNodeContents(containerElement);
-                }
-
-                forEach(ranges, function(range) {
-                    var scopedRange = containerElement ? containerElementRange.intersection(range) : range;
-                    selCharRanges.push( converter.rangeToCharacterRange(scopedRange, containerElement || getBody(range.getDocument())) );
-                });
-
-                return this.highlightCharacterRanges(className, selCharRanges, {
-                    containerElementId: containerElementId,
-                    exclusive: options.exclusive
-                });
-            },
-
-            highlightSelection: function(className, options) {
-                var converter = this.converter;
-                var classApplier = className ? this.classAppliers[className] : false;
-
-                options = createOptions(options, {
-                    containerElementId: null,
-                    selection: api.getSelection(this.doc),
-                    exclusive: true
-                });
-
-                var containerElementId = options.containerElementId;
-                var exclusive = options.exclusive;
-                var selection = options.selection;
-                var doc = selection.win.document;
-                var containerElement = getContainerElement(doc, containerElementId);
-
-                if (!classApplier && className !== false) {
-                    throw new Error("No class applier found for class '" + className + "'");
-                }
-
-                // Store the existing selection as character ranges
-                var serializedSelection = converter.serializeSelection(selection, containerElement);
-
-                // Create an array of selected character ranges
-                var selCharRanges = [];
-                forEach(serializedSelection, function(rangeInfo) {
-                    selCharRanges.push( CharacterRange.fromCharacterRange(rangeInfo.characterRange) );
-                });
-
-                var newHighlights = this.highlightCharacterRanges(className, selCharRanges, {
-                    containerElementId: containerElementId,
-                    exclusive: exclusive
-                });
-
-                // Restore selection
-                converter.restoreSelection(selection, serializedSelection, containerElement);
-
-                return newHighlights;
-            },
-
-            unhighlightSelection: function(selection) {
-                selection = selection || api.getSelection(this.doc);
-                var intersectingHighlights = this.getIntersectingHighlights( selection.getAllRanges() );
-                this.removeHighlights(intersectingHighlights);
-                selection.removeAllRanges();
-                return intersectingHighlights;
-            },
-
-            getHighlightsInSelection: function(selection) {
-                selection = selection || api.getSelection(this.doc);
-                return this.getIntersectingHighlights(selection.getAllRanges());
-            },
-
-            selectionOverlapsHighlight: function(selection) {
-                return this.getHighlightsInSelection(selection).length > 0;
-            },
-
-            serialize: function(options) {
-                var highlighter = this;
-                var highlights = highlighter.highlights;
-                var serializedType, serializedHighlights, convertType, serializationConverter;
-
-                highlights.sort(compareHighlights);
-                options = createOptions(options, {
-                    serializeHighlightText: false,
-                    type: highlighter.converter.type
-                });
-
-                serializedType = options.type;
-                convertType = (serializedType != highlighter.converter.type);
-
-                if (convertType) {
-                    serializationConverter = getConverter(serializedType);
-                }
-
-                serializedHighlights = ["type:" + serializedType];
-
-                forEach(highlights, function(highlight) {
-                    var characterRange = highlight.characterRange;
-                    var containerElement;
-
-                    // Convert to the current Highlighter's type, if different from the serialization type
-                    if (convertType) {
-                        containerElement = highlight.getContainerElement();
-                        characterRange = serializationConverter.rangeToCharacterRange(
-                            highlighter.converter.characterRangeToRange(highlighter.doc, characterRange, containerElement),
-                            containerElement
-                        );
-                    }
-
-                    var parts = [
-                        characterRange.start,
-                        characterRange.end,
-                        highlight.id,
-                        highlight.classApplier.className,
-                        highlight.containerElementId
-                    ];
-
-                    if (options.serializeHighlightText) {
-                        parts.push(highlight.getText());
-                    }
-                    serializedHighlights.push( parts.join("$") );
-                });
-
-                return serializedHighlights.join("|");
-            },
-
-            deserialize: function(serialized) {
-                var serializedHighlights = serialized.split("|");
-                var highlights = [];
-
-                var firstHighlight = serializedHighlights[0];
-                var regexResult;
-                var serializationType, serializationConverter, convertType = false;
-                if ( firstHighlight && (regexResult = /^type:(\w+)$/.exec(firstHighlight)) ) {
-                    serializationType = regexResult[1];
-                    if (serializationType != this.converter.type) {
-                        serializationConverter = getConverter(serializationType);
-                        convertType = true;
-                    }
-                    serializedHighlights.shift();
-                } else {
-                    throw new Error("Serialized highlights are invalid.");
-                }
-
-                var classApplier, highlight, characterRange, containerElementId, containerElement;
-
-                for (var i = serializedHighlights.length, parts; i-- > 0; ) {
-                    parts = serializedHighlights[i].split("$");
-                    characterRange = new CharacterRange(+parts[0], +parts[1]);
-                    containerElementId = parts[4] || null;
-
-                    // Convert to the current Highlighter's type, if different from the serialization type
-                    if (convertType) {
-                        containerElement = getContainerElement(this.doc, containerElementId);
-                        characterRange = this.converter.rangeToCharacterRange(
-                            serializationConverter.characterRangeToRange(this.doc, characterRange, containerElement),
-                            containerElement
-                        );
-                    }
-
-                    classApplier = this.classAppliers[ parts[3] ];
-
-                    if (!classApplier) {
-                        throw new Error("No class applier found for class '" + parts[3] + "'");
-                    }
-
-                    highlight = new Highlight(this.doc, characterRange, classApplier, this.converter, parseInt(parts[2]), containerElementId);
-                    highlight.apply();
-                    highlights.push(highlight);
-                }
-                this.highlights = highlights;
-            }
-        };
-
-        api.Highlighter = Highlighter;
-
-        api.createHighlighter = function(doc, rangeCharacterOffsetConverterType) {
-            return new Highlighter(doc, rangeCharacterOffsetConverterType);
-        };
-    });
-    
-    return rangy;
-}, this);
-
-/**
- * Selection save and restore module for Rangy.
- * Saves and restores user selections using marker invisible elements in the DOM.
- *
- * Part of Rangy, a cross-browser JavaScript range and selection library
- * https://github.com/timdown/rangy
- *
- * Depends on Rangy core.
- *
- * Copyright 2015, Tim Down
- * Licensed under the MIT license.
- * Version: 1.3.0
- * Build date: 10 May 2015
- */
-(function(factory, root) {
-    if (typeof define == "function" && define.amd) {
-        // AMD. Register as an anonymous module with a dependency on Rangy.
-        define(["./rangy-core"], factory);
-    } else if (typeof module != "undefined" && typeof exports == "object") {
-        // Node/CommonJS style
-        module.exports = factory( require("rangy") );
-    } else {
-        // No AMD or CommonJS support so we use the rangy property of root (probably the global variable)
-        factory(root.rangy);
-    }
-})(function(rangy) {
-    rangy.createModule("SaveRestore", ["WrappedRange"], function(api, module) {
-        var dom = api.dom;
-        var removeNode = dom.removeNode;
-        var isDirectionBackward = api.Selection.isDirectionBackward;
-        var markerTextChar = "\ufeff";
-
-        function gEBI(id, doc) {
-            return (doc || document).getElementById(id);
-        }
-
-        function insertRangeBoundaryMarker(range, atStart) {
-            var markerId = "selectionBoundary_" + (+new Date()) + "_" + ("" + Math.random()).slice(2);
-            var markerEl;
-            var doc = dom.getDocument(range.startContainer);
-
-            // Clone the Range and collapse to the appropriate boundary point
-            var boundaryRange = range.cloneRange();
-            boundaryRange.collapse(atStart);
-
-            // Create the marker element containing a single invisible character using DOM methods and insert it
-            markerEl = doc.createElement("span");
-            markerEl.id = markerId;
-            markerEl.style.lineHeight = "0";
-            markerEl.style.display = "none";
-            markerEl.className = "rangySelectionBoundary";
-            markerEl.appendChild(doc.createTextNode(markerTextChar));
-
-            boundaryRange.insertNode(markerEl);
-            return markerEl;
-        }
-
-        function setRangeBoundary(doc, range, markerId, atStart) {
-            var markerEl = gEBI(markerId, doc);
-            if (markerEl) {
-                range[atStart ? "setStartBefore" : "setEndBefore"](markerEl);
-                removeNode(markerEl);
-            } else {
-                module.warn("Marker element has been removed. Cannot restore selection.");
-            }
-        }
-
-        function compareRanges(r1, r2) {
-            return r2.compareBoundaryPoints(r1.START_TO_START, r1);
-        }
-
-        function saveRange(range, direction) {
-            var startEl, endEl, doc = api.DomRange.getRangeDocument(range), text = range.toString();
-            var backward = isDirectionBackward(direction);
-
-            if (range.collapsed) {
-                endEl = insertRangeBoundaryMarker(range, false);
-                return {
-                    document: doc,
-                    markerId: endEl.id,
-                    collapsed: true
-                };
-            } else {
-                endEl = insertRangeBoundaryMarker(range, false);
-                startEl = insertRangeBoundaryMarker(range, true);
-
-                return {
-                    document: doc,
-                    startMarkerId: startEl.id,
-                    endMarkerId: endEl.id,
-                    collapsed: false,
-                    backward: backward,
-                    toString: function() {
-                        return "original text: '" + text + "', new text: '" + range.toString() + "'";
-                    }
-                };
-            }
-        }
-
-        function restoreRange(rangeInfo, normalize) {
-            var doc = rangeInfo.document;
-            if (typeof normalize == "undefined") {
-                normalize = true;
-            }
-            var range = api.createRange(doc);
-            if (rangeInfo.collapsed) {
-                var markerEl = gEBI(rangeInfo.markerId, doc);
-                if (markerEl) {
-                    markerEl.style.display = "inline";
-                    var previousNode = markerEl.previousSibling;
-
-                    // Workaround for issue 17
-                    if (previousNode && previousNode.nodeType == 3) {
-                        removeNode(markerEl);
-                        range.collapseToPoint(previousNode, previousNode.length);
-                    } else {
-                        range.collapseBefore(markerEl);
-                        removeNode(markerEl);
-                    }
-                } else {
-                    module.warn("Marker element has been removed. Cannot restore selection.");
-                }
-            } else {
-                setRangeBoundary(doc, range, rangeInfo.startMarkerId, true);
-                setRangeBoundary(doc, range, rangeInfo.endMarkerId, false);
-            }
-
-            if (normalize) {
-                range.normalizeBoundaries();
-            }
-
-            return range;
-        }
-
-        function saveRanges(ranges, direction) {
-            var rangeInfos = [], range, doc;
-            var backward = isDirectionBackward(direction);
-
-            // Order the ranges by position within the DOM, latest first, cloning the array to leave the original untouched
-            ranges = ranges.slice(0);
-            ranges.sort(compareRanges);
-
-            for (var i = 0, len = ranges.length; i < len; ++i) {
-                rangeInfos[i] = saveRange(ranges[i], backward);
-            }
-
-            // Now that all the markers are in place and DOM manipulation over, adjust each range's boundaries to lie
-            // between its markers
-            for (i = len - 1; i >= 0; --i) {
-                range = ranges[i];
-                doc = api.DomRange.getRangeDocument(range);
-                if (range.collapsed) {
-                    range.collapseAfter(gEBI(rangeInfos[i].markerId, doc));
-                } else {
-                    range.setEndBefore(gEBI(rangeInfos[i].endMarkerId, doc));
-                    range.setStartAfter(gEBI(rangeInfos[i].startMarkerId, doc));
-                }
-            }
-
-            return rangeInfos;
-        }
-
-        function saveSelection(win) {
-            if (!api.isSelectionValid(win)) {
-                module.warn("Cannot save selection. This usually happens when the selection is collapsed and the selection document has lost focus.");
-                return null;
-            }
-            var sel = api.getSelection(win);
-            var ranges = sel.getAllRanges();
-            var backward = (ranges.length == 1 && sel.isBackward());
-
-            var rangeInfos = saveRanges(ranges, backward);
-
-            // Ensure current selection is unaffected
-            if (backward) {
-                sel.setSingleRange(ranges[0], backward);
-            } else {
-                sel.setRanges(ranges);
-            }
-
-            return {
-                win: win,
-                rangeInfos: rangeInfos,
-                restored: false
-            };
-        }
-
-        function restoreRanges(rangeInfos) {
-            var ranges = [];
-
-            // Ranges are in reverse order of appearance in the DOM. We want to restore earliest first to avoid
-            // normalization affecting previously restored ranges.
-            var rangeCount = rangeInfos.length;
-
-            for (var i = rangeCount - 1; i >= 0; i--) {
-                ranges[i] = restoreRange(rangeInfos[i], true);
-            }
-
-            return ranges;
-        }
-
-        function restoreSelection(savedSelection, preserveDirection) {
-            if (!savedSelection.restored) {
-                var rangeInfos = savedSelection.rangeInfos;
-                var sel = api.getSelection(savedSelection.win);
-                var ranges = restoreRanges(rangeInfos), rangeCount = rangeInfos.length;
-
-                if (rangeCount == 1 && preserveDirection && api.features.selectionHasExtend && rangeInfos[0].backward) {
-                    sel.removeAllRanges();
-                    sel.addRange(ranges[0], true);
-                } else {
-                    sel.setRanges(ranges);
-                }
-
-                savedSelection.restored = true;
-            }
-        }
-
-        function removeMarkerElement(doc, markerId) {
-            var markerEl = gEBI(markerId, doc);
-            if (markerEl) {
-                removeNode(markerEl);
-            }
-        }
-
-        function removeMarkers(savedSelection) {
-            var rangeInfos = savedSelection.rangeInfos;
-            for (var i = 0, len = rangeInfos.length, rangeInfo; i < len; ++i) {
-                rangeInfo = rangeInfos[i];
-                if (rangeInfo.collapsed) {
-                    removeMarkerElement(savedSelection.doc, rangeInfo.markerId);
-                } else {
-                    removeMarkerElement(savedSelection.doc, rangeInfo.startMarkerId);
-                    removeMarkerElement(savedSelection.doc, rangeInfo.endMarkerId);
-                }
-            }
-        }
-
-        api.util.extend(api, {
-            saveRange: saveRange,
-            restoreRange: restoreRange,
-            saveRanges: saveRanges,
-            restoreRanges: restoreRanges,
-            saveSelection: saveSelection,
-            restoreSelection: restoreSelection,
-            removeMarkerElement: removeMarkerElement,
-            removeMarkers: removeMarkers
-        });
-    });
-    
-    return rangy;
-}, this);
-/**
- * Serializer module for Rangy.
- * Serializes Ranges and Selections. An example use would be to store a user's selection on a particular page in a
- * cookie or local storage and restore it on the user's next visit to the same page.
- *
- * Part of Rangy, a cross-browser JavaScript range and selection library
- * https://github.com/timdown/rangy
- *
- * Depends on Rangy core.
- *
- * Copyright 2015, Tim Down
- * Licensed under the MIT license.
- * Version: 1.3.0
- * Build date: 10 May 2015
- */
-(function(factory, root) {
-    if (typeof define == "function" && define.amd) {
-        // AMD. Register as an anonymous module with a dependency on Rangy.
-        define(["./rangy-core"], factory);
-    } else if (typeof module != "undefined" && typeof exports == "object") {
-        // Node/CommonJS style
-        module.exports = factory( require("rangy") );
-    } else {
-        // No AMD or CommonJS support so we use the rangy property of root (probably the global variable)
-        factory(root.rangy);
-    }
-})(function(rangy) {
-    rangy.createModule("Serializer", ["WrappedSelection"], function(api, module) {
-        var UNDEF = "undefined";
-        var util = api.util;
-
-        // encodeURIComponent and decodeURIComponent are required for cookie handling
-        if (typeof encodeURIComponent == UNDEF || typeof decodeURIComponent == UNDEF) {
-            module.fail("encodeURIComponent and/or decodeURIComponent method is missing");
-        }
-
-        // Checksum for checking whether range can be serialized
-        var crc32 = (function() {
-            function utf8encode(str) {
-                var utf8CharCodes = [];
-
-                for (var i = 0, len = str.length, c; i < len; ++i) {
-                    c = str.charCodeAt(i);
-                    if (c < 128) {
-                        utf8CharCodes.push(c);
-                    } else if (c < 2048) {
-                        utf8CharCodes.push((c >> 6) | 192, (c & 63) | 128);
-                    } else {
-                        utf8CharCodes.push((c >> 12) | 224, ((c >> 6) & 63) | 128, (c & 63) | 128);
-                    }
-                }
-                return utf8CharCodes;
-            }
-
-            var cachedCrcTable = null;
-
-            function buildCRCTable() {
-                var table = [];
-                for (var i = 0, j, crc; i < 256; ++i) {
-                    crc = i;
-                    j = 8;
-                    while (j--) {
-                        if ((crc & 1) == 1) {
-                            crc = (crc >>> 1) ^ 0xEDB88320;
-                        } else {
-                            crc >>>= 1;
-                        }
-                    }
-                    table[i] = crc >>> 0;
-                }
-                return table;
-            }
-
-            function getCrcTable() {
-                if (!cachedCrcTable) {
-                    cachedCrcTable = buildCRCTable();
-                }
-                return cachedCrcTable;
-            }
-
-            return function(str) {
-                var utf8CharCodes = utf8encode(str), crc = -1, crcTable = getCrcTable();
-                for (var i = 0, len = utf8CharCodes.length, y; i < len; ++i) {
-                    y = (crc ^ utf8CharCodes[i]) & 0xFF;
-                    crc = (crc >>> 8) ^ crcTable[y];
-                }
-                return (crc ^ -1) >>> 0;
-            };
-        })();
-
-        var dom = api.dom;
-
-        function escapeTextForHtml(str) {
-            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
-
-        function nodeToInfoString(node, infoParts) {
-            infoParts = infoParts || [];
-            var nodeType = node.nodeType, children = node.childNodes, childCount = children.length;
-            var nodeInfo = [nodeType, node.nodeName, childCount].join(":");
-            var start = "", end = "";
-            switch (nodeType) {
-                case 3: // Text node
-                    start = escapeTextForHtml(node.nodeValue);
-                    break;
-                case 8: // Comment
-                    start = "<!--" + escapeTextForHtml(node.nodeValue) + "-->";
-                    break;
-                default:
-                    start = "<" + nodeInfo + ">";
-                    end = "</>";
-                    break;
-            }
-            if (start) {
-                infoParts.push(start);
-            }
-            for (var i = 0; i < childCount; ++i) {
-                nodeToInfoString(children[i], infoParts);
-            }
-            if (end) {
-                infoParts.push(end);
-            }
-            return infoParts;
-        }
-
-        // Creates a string representation of the specified element's contents that is similar to innerHTML but omits all
-        // attributes and comments and includes child node counts. This is done instead of using innerHTML to work around
-        // IE <= 8's policy of including element properties in attributes, which ruins things by changing an element's
-        // innerHTML whenever the user changes an input within the element.
-        function getElementChecksum(el) {
-            var info = nodeToInfoString(el).join("");
-            return crc32(info).toString(16);
-        }
-
-        function serializePosition(node, offset, rootNode) {
-            var pathParts = [], n = node;
-            rootNode = rootNode || dom.getDocument(node).documentElement;
-            while (n && n != rootNode) {
-                pathParts.push(dom.getNodeIndex(n, true));
-                n = n.parentNode;
-            }
-            return pathParts.join("/") + ":" + offset;
-        }
-
-        function deserializePosition(serialized, rootNode, doc) {
-            if (!rootNode) {
-                rootNode = (doc || document).documentElement;
-            }
-            var parts = serialized.split(":");
-            var node = rootNode;
-            var nodeIndices = parts[0] ? parts[0].split("/") : [], i = nodeIndices.length, nodeIndex;
-
-            while (i--) {
-                nodeIndex = parseInt(nodeIndices[i], 10);
-                if (nodeIndex < node.childNodes.length) {
-                    node = node.childNodes[nodeIndex];
-                } else {
-                    throw module.createError("deserializePosition() failed: node " + dom.inspectNode(node) +
-                            " has no child with index " + nodeIndex + ", " + i);
-                }
-            }
-
-            return new dom.DomPosition(node, parseInt(parts[1], 10));
-        }
-
-        function serializeRange(range, omitChecksum, rootNode) {
-            rootNode = rootNode || api.DomRange.getRangeDocument(range).documentElement;
-            if (!dom.isOrIsAncestorOf(rootNode, range.commonAncestorContainer)) {
-                throw module.createError("serializeRange(): range " + range.inspect() +
-                    " is not wholly contained within specified root node " + dom.inspectNode(rootNode));
-            }
-            var serialized = serializePosition(range.startContainer, range.startOffset, rootNode) + "," +
-                serializePosition(range.endContainer, range.endOffset, rootNode);
-            if (!omitChecksum) {
-                serialized += "{" + getElementChecksum(rootNode) + "}";
-            }
-            return serialized;
-        }
-
-        var deserializeRegex = /^([^,]+),([^,\{]+)(\{([^}]+)\})?$/;
-
-        function deserializeRange(serialized, rootNode, doc) {
-            if (rootNode) {
-                doc = doc || dom.getDocument(rootNode);
-            } else {
-                doc = doc || document;
-                rootNode = doc.documentElement;
-            }
-            var result = deserializeRegex.exec(serialized);
-            var checksum = result[4];
-            if (checksum) {
-                var rootNodeChecksum = getElementChecksum(rootNode);
-                if (checksum !== rootNodeChecksum) {
-                    throw module.createError("deserializeRange(): checksums of serialized range root node (" + checksum +
-                        ") and target root node (" + rootNodeChecksum + ") do not match");
-                }
-            }
-            var start = deserializePosition(result[1], rootNode, doc), end = deserializePosition(result[2], rootNode, doc);
-            var range = api.createRange(doc);
-            range.setStartAndEnd(start.node, start.offset, end.node, end.offset);
-            return range;
-        }
-
-        function canDeserializeRange(serialized, rootNode, doc) {
-            if (!rootNode) {
-                rootNode = (doc || document).documentElement;
-            }
-            var result = deserializeRegex.exec(serialized);
-            var checksum = result[3];
-            return !checksum || checksum === getElementChecksum(rootNode);
-        }
-
-        function serializeSelection(selection, omitChecksum, rootNode) {
-            selection = api.getSelection(selection);
-            var ranges = selection.getAllRanges(), serializedRanges = [];
-            for (var i = 0, len = ranges.length; i < len; ++i) {
-                serializedRanges[i] = serializeRange(ranges[i], omitChecksum, rootNode);
-            }
-            return serializedRanges.join("|");
-        }
-
-        function deserializeSelection(serialized, rootNode, win) {
-            if (rootNode) {
-                win = win || dom.getWindow(rootNode);
-            } else {
-                win = win || window;
-                rootNode = win.document.documentElement;
-            }
-            var serializedRanges = serialized.split("|");
-            var sel = api.getSelection(win);
-            var ranges = [];
-
-            for (var i = 0, len = serializedRanges.length; i < len; ++i) {
-                ranges[i] = deserializeRange(serializedRanges[i], rootNode, win.document);
-            }
-            sel.setRanges(ranges);
-
-            return sel;
-        }
-
-        function canDeserializeSelection(serialized, rootNode, win) {
-            var doc;
-            if (rootNode) {
-                doc = win ? win.document : dom.getDocument(rootNode);
-            } else {
-                win = win || window;
-                rootNode = win.document.documentElement;
-            }
-            var serializedRanges = serialized.split("|");
-
-            for (var i = 0, len = serializedRanges.length; i < len; ++i) {
-                if (!canDeserializeRange(serializedRanges[i], rootNode, doc)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        var cookieName = "rangySerializedSelection";
-
-        function getSerializedSelectionFromCookie(cookie) {
-            var parts = cookie.split(/[;,]/);
-            for (var i = 0, len = parts.length, nameVal, val; i < len; ++i) {
-                nameVal = parts[i].split("=");
-                if (nameVal[0].replace(/^\s+/, "") == cookieName) {
-                    val = nameVal[1];
-                    if (val) {
-                        return decodeURIComponent(val.replace(/\s+$/, ""));
-                    }
-                }
-            }
-            return null;
-        }
-
-        function restoreSelectionFromCookie(win) {
-            win = win || window;
-            var serialized = getSerializedSelectionFromCookie(win.document.cookie);
-            if (serialized) {
-                deserializeSelection(serialized, win.doc);
-            }
-        }
-
-        function saveSelectionCookie(win, props) {
-            win = win || window;
-            props = (typeof props == "object") ? props : {};
-            var expires = props.expires ? ";expires=" + props.expires.toUTCString() : "";
-            var path = props.path ? ";path=" + props.path : "";
-            var domain = props.domain ? ";domain=" + props.domain : "";
-            var secure = props.secure ? ";secure" : "";
-            var serialized = serializeSelection(api.getSelection(win));
-            win.document.cookie = encodeURIComponent(cookieName) + "=" + encodeURIComponent(serialized) + expires + path + domain + secure;
-        }
-
-        util.extend(api, {
-            serializePosition: serializePosition,
-            deserializePosition: deserializePosition,
-            serializeRange: serializeRange,
-            deserializeRange: deserializeRange,
-            canDeserializeRange: canDeserializeRange,
-            serializeSelection: serializeSelection,
-            deserializeSelection: deserializeSelection,
-            canDeserializeSelection: canDeserializeSelection,
-            restoreSelectionFromCookie: restoreSelectionFromCookie,
-            saveSelectionCookie: saveSelectionCookie,
-            getElementChecksum: getElementChecksum,
-            nodeToInfoString: nodeToInfoString
-        });
-
-        util.crc32 = crc32;
-    });
-    
-    return rangy;
-}, this);
-/**
- * Text range module for Rangy.
- * Text-based manipulation and searching of ranges and selections.
- *
- * Features
- *
- * - Ability to move range boundaries by character or word offsets
- * - Customizable word tokenizer
- * - Ignores text nodes inside <script> or <style> elements or those hidden by CSS display and visibility properties
- * - Range findText method to search for text or regex within the page or within a range. Flags for whole words and case
- *   sensitivity
- * - Selection and range save/restore as text offsets within a node
- * - Methods to return visible text within a range or selection
- * - innerText method for elements
- *
- * References
- *
- * https://www.w3.org/Bugs/Public/show_bug.cgi?id=13145
- * http://aryeh.name/spec/innertext/innertext.html
- * http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html
- *
- * Part of Rangy, a cross-browser JavaScript range and selection library
- * https://github.com/timdown/rangy
- *
- * Depends on Rangy core.
- *
- * Copyright 2015, Tim Down
- * Licensed under the MIT license.
- * Version: 1.3.0
- * Build date: 10 May 2015
- */
-
-/**
- * Problem: handling of trailing spaces before line breaks is handled inconsistently between browsers.
- *
- * First, a <br>: this is relatively simple. For the following HTML:
- *
- * 1 <br>2
- *
- * - IE and WebKit render the space, include it in the selection (i.e. when the content is selected and pasted into a
- *   textarea, the space is present) and allow the caret to be placed after it.
- * - Firefox does not acknowledge the space in the selection but it is possible to place the caret after it.
- * - Opera does not render the space but has two separate caret positions on either side of the space (left and right
- *   arrow keys show this) and includes the space in the selection.
- *
- * The other case is the line break or breaks implied by block elements. For the following HTML:
- *
- * <p>1 </p><p>2<p>
- *
- * - WebKit does not acknowledge the space in any way
- * - Firefox, IE and Opera as per <br>
- *
- * One more case is trailing spaces before line breaks in elements with white-space: pre-line. For the following HTML:
- *
- * <p style="white-space: pre-line">1
- * 2</p>
- *
- * - Firefox and WebKit include the space in caret positions
- * - IE does not support pre-line up to and including version 9
- * - Opera ignores the space
- * - Trailing space only renders if there is a non-collapsed character in the line
- *
- * Problem is whether Rangy should ever acknowledge the space and if so, when. Another problem is whether this can be
- * feature-tested
- */
-(function(factory, root) {
-    if (typeof define == "function" && define.amd) {
-        // AMD. Register as an anonymous module with a dependency on Rangy.
-        define(["./rangy-core"], factory);
-    } else if (typeof module != "undefined" && typeof exports == "object") {
-        // Node/CommonJS style
-        module.exports = factory( require("rangy") );
-    } else {
-        // No AMD or CommonJS support so we use the rangy property of root (probably the global variable)
-        factory(root.rangy);
-    }
-})(function(rangy) {
-    rangy.createModule("TextRange", ["WrappedSelection"], function(api, module) {
-        var UNDEF = "undefined";
-        var CHARACTER = "character", WORD = "word";
-        var dom = api.dom, util = api.util;
-        var extend = util.extend;
-        var createOptions = util.createOptions;
-        var getBody = dom.getBody;
-
-
-        var spacesRegex = /^[ \t\f\r\n]+$/;
-        var spacesMinusLineBreaksRegex = /^[ \t\f\r]+$/;
-        var allWhiteSpaceRegex = /^[\t-\r \u0085\u00A0\u1680\u180E\u2000-\u200B\u2028\u2029\u202F\u205F\u3000]+$/;
-        var nonLineBreakWhiteSpaceRegex = /^[\t \u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000]+$/;
-        var lineBreakRegex = /^[\n-\r\u0085\u2028\u2029]$/;
-
-        var defaultLanguage = "en";
-
-        var isDirectionBackward = api.Selection.isDirectionBackward;
-
-        // Properties representing whether trailing spaces inside blocks are completely collapsed (as they are in WebKit,
-        // but not other browsers). Also test whether trailing spaces before <br> elements are collapsed.
-        var trailingSpaceInBlockCollapses = false;
-        var trailingSpaceBeforeBrCollapses = false;
-        var trailingSpaceBeforeBlockCollapses = false;
-        var trailingSpaceBeforeLineBreakInPreLineCollapses = true;
-
-        (function() {
-            var el = dom.createTestElement(document, "<p>1 </p><p></p>", true);
-            var p = el.firstChild;
-            var sel = api.getSelection();
-            sel.collapse(p.lastChild, 2);
-            sel.setStart(p.firstChild, 0);
-            trailingSpaceInBlockCollapses = ("" + sel).length == 1;
-
-            el.innerHTML = "1 <br />";
-            sel.collapse(el, 2);
-            sel.setStart(el.firstChild, 0);
-            trailingSpaceBeforeBrCollapses = ("" + sel).length == 1;
-
-            el.innerHTML = "1 <p>1</p>";
-            sel.collapse(el, 2);
-            sel.setStart(el.firstChild, 0);
-            trailingSpaceBeforeBlockCollapses = ("" + sel).length == 1;
-
-            dom.removeNode(el);
-            sel.removeAllRanges();
-        })();
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // This function must create word and non-word tokens for the whole of the text supplied to it
-        function defaultTokenizer(chars, wordOptions) {
-            var word = chars.join(""), result, tokenRanges = [];
-
-            function createTokenRange(start, end, isWord) {
-                tokenRanges.push( { start: start, end: end, isWord: isWord } );
-            }
-
-            // Match words and mark characters
-            var lastWordEnd = 0, wordStart, wordEnd;
-            while ( (result = wordOptions.wordRegex.exec(word)) ) {
-                wordStart = result.index;
-                wordEnd = wordStart + result[0].length;
-
-                // Create token for non-word characters preceding this word
-                if (wordStart > lastWordEnd) {
-                    createTokenRange(lastWordEnd, wordStart, false);
-                }
-
-                // Get trailing space characters for word
-                if (wordOptions.includeTrailingSpace) {
-                    while ( nonLineBreakWhiteSpaceRegex.test(chars[wordEnd]) ) {
-                        ++wordEnd;
-                    }
-                }
-                createTokenRange(wordStart, wordEnd, true);
-                lastWordEnd = wordEnd;
-            }
-
-            // Create token for trailing non-word characters, if any exist
-            if (lastWordEnd < chars.length) {
-                createTokenRange(lastWordEnd, chars.length, false);
-            }
-
-            return tokenRanges;
-        }
-
-        function convertCharRangeToToken(chars, tokenRange) {
-            var tokenChars = chars.slice(tokenRange.start, tokenRange.end);
-            var token = {
-                isWord: tokenRange.isWord,
-                chars: tokenChars,
-                toString: function() {
-                    return tokenChars.join("");
-                }
-            };
-            for (var i = 0, len = tokenChars.length; i < len; ++i) {
-                tokenChars[i].token = token;
-            }
-            return token;
-        }
-
-        function tokenize(chars, wordOptions, tokenizer) {
-            var tokenRanges = tokenizer(chars, wordOptions);
-            var tokens = [];
-            for (var i = 0, tokenRange; tokenRange = tokenRanges[i++]; ) {
-                tokens.push( convertCharRangeToToken(chars, tokenRange) );
-            }
-            return tokens;
-        }
-
-        var defaultCharacterOptions = {
-            includeBlockContentTrailingSpace: true,
-            includeSpaceBeforeBr: true,
-            includeSpaceBeforeBlock: true,
-            includePreLineTrailingSpace: true,
-            ignoreCharacters: ""
-        };
-
-        function normalizeIgnoredCharacters(ignoredCharacters) {
-            // Check if character is ignored
-            var ignoredChars = ignoredCharacters || "";
-
-            // Normalize ignored characters into a string consisting of characters in ascending order of character code
-            var ignoredCharsArray = (typeof ignoredChars == "string") ? ignoredChars.split("") : ignoredChars;
-            ignoredCharsArray.sort(function(char1, char2) {
-                return char1.charCodeAt(0) - char2.charCodeAt(0);
-            });
-
-            /// Convert back to a string and remove duplicates
-            return ignoredCharsArray.join("").replace(/(.)\1+/g, "$1");
-        }
-
-        var defaultCaretCharacterOptions = {
-            includeBlockContentTrailingSpace: !trailingSpaceBeforeLineBreakInPreLineCollapses,
-            includeSpaceBeforeBr: !trailingSpaceBeforeBrCollapses,
-            includeSpaceBeforeBlock: !trailingSpaceBeforeBlockCollapses,
-            includePreLineTrailingSpace: true
-        };
-
-        var defaultWordOptions = {
-            "en": {
-                wordRegex: /[a-z0-9]+('[a-z0-9]+)*/gi,
-                includeTrailingSpace: false,
-                tokenizer: defaultTokenizer
-            }
-        };
-
-        var defaultFindOptions = {
-            caseSensitive: false,
-            withinRange: null,
-            wholeWordsOnly: false,
-            wrap: false,
-            direction: "forward",
-            wordOptions: null,
-            characterOptions: null
-        };
-
-        var defaultMoveOptions = {
-            wordOptions: null,
-            characterOptions: null
-        };
-
-        var defaultExpandOptions = {
-            wordOptions: null,
-            characterOptions: null,
-            trim: false,
-            trimStart: true,
-            trimEnd: true
-        };
-
-        var defaultWordIteratorOptions = {
-            wordOptions: null,
-            characterOptions: null,
-            direction: "forward"
-        };
-
-        function createWordOptions(options) {
-            var lang, defaults;
-            if (!options) {
-                return defaultWordOptions[defaultLanguage];
-            } else {
-                lang = options.language || defaultLanguage;
-                defaults = {};
-                extend(defaults, defaultWordOptions[lang] || defaultWordOptions[defaultLanguage]);
-                extend(defaults, options);
-                return defaults;
-            }
-        }
-
-        function createNestedOptions(optionsParam, defaults) {
-            var options = createOptions(optionsParam, defaults);
-            if (defaults.hasOwnProperty("wordOptions")) {
-                options.wordOptions = createWordOptions(options.wordOptions);
-            }
-            if (defaults.hasOwnProperty("characterOptions")) {
-                options.characterOptions = createOptions(options.characterOptions, defaultCharacterOptions);
-            }
-            return options;
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        /* DOM utility functions */
-        var getComputedStyleProperty = dom.getComputedStyleProperty;
-
-        // Create cachable versions of DOM functions
-
-        // Test for old IE's incorrect display properties
-        var tableCssDisplayBlock;
-        (function() {
-            var table = document.createElement("table");
-            var body = getBody(document);
-            body.appendChild(table);
-            tableCssDisplayBlock = (getComputedStyleProperty(table, "display") == "block");
-            body.removeChild(table);
-        })();
-
-        var defaultDisplayValueForTag = {
-            table: "table",
-            caption: "table-caption",
-            colgroup: "table-column-group",
-            col: "table-column",
-            thead: "table-header-group",
-            tbody: "table-row-group",
-            tfoot: "table-footer-group",
-            tr: "table-row",
-            td: "table-cell",
-            th: "table-cell"
-        };
-
-        // Corrects IE's "block" value for table-related elements
-        function getComputedDisplay(el, win) {
-            var display = getComputedStyleProperty(el, "display", win);
-            var tagName = el.tagName.toLowerCase();
-            return (display == "block" &&
-                    tableCssDisplayBlock &&
-                    defaultDisplayValueForTag.hasOwnProperty(tagName)) ?
-                defaultDisplayValueForTag[tagName] : display;
-        }
-
-        function isHidden(node) {
-            var ancestors = getAncestorsAndSelf(node);
-            for (var i = 0, len = ancestors.length; i < len; ++i) {
-                if (ancestors[i].nodeType == 1 && getComputedDisplay(ancestors[i]) == "none") {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        function isVisibilityHiddenTextNode(textNode) {
-            var el;
-            return textNode.nodeType == 3 &&
-                (el = textNode.parentNode) &&
-                getComputedStyleProperty(el, "visibility") == "hidden";
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-    
-        // "A block node is either an Element whose "display" property does not have
-        // resolved value "inline" or "inline-block" or "inline-table" or "none", or a
-        // Document, or a DocumentFragment."
-        function isBlockNode(node) {
-            return node &&
-                ((node.nodeType == 1 && !/^(inline(-block|-table)?|none)$/.test(getComputedDisplay(node))) ||
-                node.nodeType == 9 || node.nodeType == 11);
-        }
-
-        function getLastDescendantOrSelf(node) {
-            var lastChild = node.lastChild;
-            return lastChild ? getLastDescendantOrSelf(lastChild) : node;
-        }
-
-        function containsPositions(node) {
-            return dom.isCharacterDataNode(node) ||
-                !/^(area|base|basefont|br|col|frame|hr|img|input|isindex|link|meta|param)$/i.test(node.nodeName);
-        }
-
-        function getAncestors(node) {
-            var ancestors = [];
-            while (node.parentNode) {
-                ancestors.unshift(node.parentNode);
-                node = node.parentNode;
-            }
-            return ancestors;
-        }
-
-        function getAncestorsAndSelf(node) {
-            return getAncestors(node).concat([node]);
-        }
-
-        function nextNodeDescendants(node) {
-            while (node && !node.nextSibling) {
-                node = node.parentNode;
-            }
-            if (!node) {
-                return null;
-            }
-            return node.nextSibling;
-        }
-
-        function nextNode(node, excludeChildren) {
-            if (!excludeChildren && node.hasChildNodes()) {
-                return node.firstChild;
-            }
-            return nextNodeDescendants(node);
-        }
-
-        function previousNode(node) {
-            var previous = node.previousSibling;
-            if (previous) {
-                node = previous;
-                while (node.hasChildNodes()) {
-                    node = node.lastChild;
-                }
-                return node;
-            }
-            var parent = node.parentNode;
-            if (parent && parent.nodeType == 1) {
-                return parent;
-            }
-            return null;
-        }
-
-        // Adpated from Aryeh's code.
-        // "A whitespace node is either a Text node whose data is the empty string; or
-        // a Text node whose data consists only of one or more tabs (0x0009), line
-        // feeds (0x000A), carriage returns (0x000D), and/or spaces (0x0020), and whose
-        // parent is an Element whose resolved value for "white-space" is "normal" or
-        // "nowrap"; or a Text node whose data consists only of one or more tabs
-        // (0x0009), carriage returns (0x000D), and/or spaces (0x0020), and whose
-        // parent is an Element whose resolved value for "white-space" is "pre-line"."
-        function isWhitespaceNode(node) {
-            if (!node || node.nodeType != 3) {
-                return false;
-            }
-            var text = node.data;
-            if (text === "") {
-                return true;
-            }
-            var parent = node.parentNode;
-            if (!parent || parent.nodeType != 1) {
-                return false;
-            }
-            var computedWhiteSpace = getComputedStyleProperty(node.parentNode, "whiteSpace");
-
-            return (/^[\t\n\r ]+$/.test(text) && /^(normal|nowrap)$/.test(computedWhiteSpace)) ||
-                (/^[\t\r ]+$/.test(text) && computedWhiteSpace == "pre-line");
-        }
-
-        // Adpated from Aryeh's code.
-        // "node is a collapsed whitespace node if the following algorithm returns
-        // true:"
-        function isCollapsedWhitespaceNode(node) {
-            // "If node's data is the empty string, return true."
-            if (node.data === "") {
-                return true;
-            }
-
-            // "If node is not a whitespace node, return false."
-            if (!isWhitespaceNode(node)) {
-                return false;
-            }
-
-            // "Let ancestor be node's parent."
-            var ancestor = node.parentNode;
-
-            // "If ancestor is null, return true."
-            if (!ancestor) {
-                return true;
-            }
-
-            // "If the "display" property of some ancestor of node has resolved value "none", return true."
-            if (isHidden(node)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        function isCollapsedNode(node) {
-            var type = node.nodeType;
-            return type == 7 /* PROCESSING_INSTRUCTION */ ||
-                type == 8 /* COMMENT */ ||
-                isHidden(node) ||
-                /^(script|style)$/i.test(node.nodeName) ||
-                isVisibilityHiddenTextNode(node) ||
-                isCollapsedWhitespaceNode(node);
-        }
-
-        function isIgnoredNode(node, win) {
-            var type = node.nodeType;
-            return type == 7 /* PROCESSING_INSTRUCTION */ ||
-                type == 8 /* COMMENT */ ||
-                (type == 1 && getComputedDisplay(node, win) == "none");
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Possibly overengineered caching system to prevent repeated DOM calls slowing everything down
-
-        function Cache() {
-            this.store = {};
-        }
-
-        Cache.prototype = {
-            get: function(key) {
-                return this.store.hasOwnProperty(key) ? this.store[key] : null;
-            },
-
-            set: function(key, value) {
-                return this.store[key] = value;
-            }
-        };
-
-        var cachedCount = 0, uncachedCount = 0;
-
-        function createCachingGetter(methodName, func, objProperty) {
-            return function(args) {
-                var cache = this.cache;
-                if (cache.hasOwnProperty(methodName)) {
-                    cachedCount++;
-                    return cache[methodName];
-                } else {
-                    uncachedCount++;
-                    var value = func.call(this, objProperty ? this[objProperty] : this, args);
-                    cache[methodName] = value;
-                    return value;
-                }
-            };
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function NodeWrapper(node, session) {
-            this.node = node;
-            this.session = session;
-            this.cache = new Cache();
-            this.positions = new Cache();
-        }
-
-        var nodeProto = {
-            getPosition: function(offset) {
-                var positions = this.positions;
-                return positions.get(offset) || positions.set(offset, new Position(this, offset));
-            },
-
-            toString: function() {
-                return "[NodeWrapper(" + dom.inspectNode(this.node) + ")]";
-            }
-        };
-
-        NodeWrapper.prototype = nodeProto;
-
-        var EMPTY = "EMPTY",
-            NON_SPACE = "NON_SPACE",
-            UNCOLLAPSIBLE_SPACE = "UNCOLLAPSIBLE_SPACE",
-            COLLAPSIBLE_SPACE = "COLLAPSIBLE_SPACE",
-            TRAILING_SPACE_BEFORE_BLOCK = "TRAILING_SPACE_BEFORE_BLOCK",
-            TRAILING_SPACE_IN_BLOCK = "TRAILING_SPACE_IN_BLOCK",
-            TRAILING_SPACE_BEFORE_BR = "TRAILING_SPACE_BEFORE_BR",
-            PRE_LINE_TRAILING_SPACE_BEFORE_LINE_BREAK = "PRE_LINE_TRAILING_SPACE_BEFORE_LINE_BREAK",
-            TRAILING_LINE_BREAK_AFTER_BR = "TRAILING_LINE_BREAK_AFTER_BR",
-            INCLUDED_TRAILING_LINE_BREAK_AFTER_BR = "INCLUDED_TRAILING_LINE_BREAK_AFTER_BR";
-
-        extend(nodeProto, {
-            isCharacterDataNode: createCachingGetter("isCharacterDataNode", dom.isCharacterDataNode, "node"),
-            getNodeIndex: createCachingGetter("nodeIndex", dom.getNodeIndex, "node"),
-            getLength: createCachingGetter("nodeLength", dom.getNodeLength, "node"),
-            containsPositions: createCachingGetter("containsPositions", containsPositions, "node"),
-            isWhitespace: createCachingGetter("isWhitespace", isWhitespaceNode, "node"),
-            isCollapsedWhitespace: createCachingGetter("isCollapsedWhitespace", isCollapsedWhitespaceNode, "node"),
-            getComputedDisplay: createCachingGetter("computedDisplay", getComputedDisplay, "node"),
-            isCollapsed: createCachingGetter("collapsed", isCollapsedNode, "node"),
-            isIgnored: createCachingGetter("ignored", isIgnoredNode, "node"),
-            next: createCachingGetter("nextPos", nextNode, "node"),
-            previous: createCachingGetter("previous", previousNode, "node"),
-
-            getTextNodeInfo: createCachingGetter("textNodeInfo", function(textNode) {
-                var spaceRegex = null, collapseSpaces = false;
-                var cssWhitespace = getComputedStyleProperty(textNode.parentNode, "whiteSpace");
-                var preLine = (cssWhitespace == "pre-line");
-                if (preLine) {
-                    spaceRegex = spacesMinusLineBreaksRegex;
-                    collapseSpaces = true;
-                } else if (cssWhitespace == "normal" || cssWhitespace == "nowrap") {
-                    spaceRegex = spacesRegex;
-                    collapseSpaces = true;
-                }
-
-                return {
-                    node: textNode,
-                    text: textNode.data,
-                    spaceRegex: spaceRegex,
-                    collapseSpaces: collapseSpaces,
-                    preLine: preLine
-                };
-            }, "node"),
-
-            hasInnerText: createCachingGetter("hasInnerText", function(el, backward) {
-                var session = this.session;
-                var posAfterEl = session.getPosition(el.parentNode, this.getNodeIndex() + 1);
-                var firstPosInEl = session.getPosition(el, 0);
-
-                var pos = backward ? posAfterEl : firstPosInEl;
-                var endPos = backward ? firstPosInEl : posAfterEl;
-
-                /*
-                 <body><p>X  </p><p>Y</p></body>
-
-                 Positions:
-
-                 body:0:""
-                 p:0:""
-                 text:0:""
-                 text:1:"X"
-                 text:2:TRAILING_SPACE_IN_BLOCK
-                 text:3:COLLAPSED_SPACE
-                 p:1:""
-                 body:1:"\n"
-                 p:0:""
-                 text:0:""
-                 text:1:"Y"
-
-                 A character is a TRAILING_SPACE_IN_BLOCK iff:
-
-                 - There is no uncollapsed character after it within the visible containing block element
-
-                 A character is a TRAILING_SPACE_BEFORE_BR iff:
-
-                 - There is no uncollapsed character after it preceding a <br> element
-
-                 An element has inner text iff
-
-                 - It is not hidden
-                 - It contains an uncollapsed character
-
-                 All trailing spaces (pre-line, before <br>, end of block) require definite non-empty characters to render.
-                 */
-
-                while (pos !== endPos) {
-                    pos.prepopulateChar();
-                    if (pos.isDefinitelyNonEmpty()) {
-                        return true;
-                    }
-                    pos = backward ? pos.previousVisible() : pos.nextVisible();
-                }
-
-                return false;
-            }, "node"),
-
-            isRenderedBlock: createCachingGetter("isRenderedBlock", function(el) {
-                // Ensure that a block element containing a <br> is considered to have inner text
-                var brs = el.getElementsByTagName("br");
-                for (var i = 0, len = brs.length; i < len; ++i) {
-                    if (!isCollapsedNode(brs[i])) {
-                        return true;
-                    }
-                }
-                return this.hasInnerText();
-            }, "node"),
-
-            getTrailingSpace: createCachingGetter("trailingSpace", function(el) {
-                if (el.tagName.toLowerCase() == "br") {
-                    return "";
-                } else {
-                    switch (this.getComputedDisplay()) {
-                        case "inline":
-                            var child = el.lastChild;
-                            while (child) {
-                                if (!isIgnoredNode(child)) {
-                                    return (child.nodeType == 1) ? this.session.getNodeWrapper(child).getTrailingSpace() : "";
-                                }
-                                child = child.previousSibling;
-                            }
-                            break;
-                        case "inline-block":
-                        case "inline-table":
-                        case "none":
-                        case "table-column":
-                        case "table-column-group":
-                            break;
-                        case "table-cell":
-                            return "\t";
-                        default:
-                            return this.isRenderedBlock(true) ? "\n" : "";
-                    }
-                }
-                return "";
-            }, "node"),
-
-            getLeadingSpace: createCachingGetter("leadingSpace", function(el) {
-                switch (this.getComputedDisplay()) {
-                    case "inline":
-                    case "inline-block":
-                    case "inline-table":
-                    case "none":
-                    case "table-column":
-                    case "table-column-group":
-                    case "table-cell":
-                        break;
-                    default:
-                        return this.isRenderedBlock(false) ? "\n" : "";
-                }
-                return "";
-            }, "node")
-        });
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function Position(nodeWrapper, offset) {
-            this.offset = offset;
-            this.nodeWrapper = nodeWrapper;
-            this.node = nodeWrapper.node;
-            this.session = nodeWrapper.session;
-            this.cache = new Cache();
-        }
-
-        function inspectPosition() {
-            return "[Position(" + dom.inspectNode(this.node) + ":" + this.offset + ")]";
-        }
-
-        var positionProto = {
-            character: "",
-            characterType: EMPTY,
-            isBr: false,
-
-            /*
-            This method:
-            - Fully populates positions that have characters that can be determined independently of any other characters.
-            - Populates most types of space positions with a provisional character. The character is finalized later.
-             */
-            prepopulateChar: function() {
-                var pos = this;
-                if (!pos.prepopulatedChar) {
-                    var node = pos.node, offset = pos.offset;
-                    var visibleChar = "", charType = EMPTY;
-                    var finalizedChar = false;
-                    if (offset > 0) {
-                        if (node.nodeType == 3) {
-                            var text = node.data;
-                            var textChar = text.charAt(offset - 1);
-
-                            var nodeInfo = pos.nodeWrapper.getTextNodeInfo();
-                            var spaceRegex = nodeInfo.spaceRegex;
-                            if (nodeInfo.collapseSpaces) {
-                                if (spaceRegex.test(textChar)) {
-                                    // "If the character at position is from set, append a single space (U+0020) to newdata and advance
-                                    // position until the character at position is not from set."
-
-                                    // We also need to check for the case where we're in a pre-line and we have a space preceding a
-                                    // line break, because such spaces are collapsed in some browsers
-                                    if (offset > 1 && spaceRegex.test(text.charAt(offset - 2))) {
-                                    } else if (nodeInfo.preLine && text.charAt(offset) === "\n") {
-                                        visibleChar = " ";
-                                        charType = PRE_LINE_TRAILING_SPACE_BEFORE_LINE_BREAK;
-                                    } else {
-                                        visibleChar = " ";
-                                        //pos.checkForFollowingLineBreak = true;
-                                        charType = COLLAPSIBLE_SPACE;
-                                    }
-                                } else {
-                                    visibleChar = textChar;
-                                    charType = NON_SPACE;
-                                    finalizedChar = true;
-                                }
-                            } else {
-                                visibleChar = textChar;
-                                charType = UNCOLLAPSIBLE_SPACE;
-                                finalizedChar = true;
-                            }
-                        } else {
-                            var nodePassed = node.childNodes[offset - 1];
-                            if (nodePassed && nodePassed.nodeType == 1 && !isCollapsedNode(nodePassed)) {
-                                if (nodePassed.tagName.toLowerCase() == "br") {
-                                    visibleChar = "\n";
-                                    pos.isBr = true;
-                                    charType = COLLAPSIBLE_SPACE;
-                                    finalizedChar = false;
-                                } else {
-                                    pos.checkForTrailingSpace = true;
-                                }
-                            }
-
-                            // Check the leading space of the next node for the case when a block element follows an inline
-                            // element or text node. In that case, there is an implied line break between the two nodes.
-                            if (!visibleChar) {
-                                var nextNode = node.childNodes[offset];
-                                if (nextNode && nextNode.nodeType == 1 && !isCollapsedNode(nextNode)) {
-                                    pos.checkForLeadingSpace = true;
-                                }
-                            }
-                        }
-                    }
-
-                    pos.prepopulatedChar = true;
-                    pos.character = visibleChar;
-                    pos.characterType = charType;
-                    pos.isCharInvariant = finalizedChar;
-                }
-            },
-
-            isDefinitelyNonEmpty: function() {
-                var charType = this.characterType;
-                return charType == NON_SPACE || charType == UNCOLLAPSIBLE_SPACE;
-            },
-
-            // Resolve leading and trailing spaces, which may involve prepopulating other positions
-            resolveLeadingAndTrailingSpaces: function() {
-                if (!this.prepopulatedChar) {
-                    this.prepopulateChar();
-                }
-                if (this.checkForTrailingSpace) {
-                    var trailingSpace = this.session.getNodeWrapper(this.node.childNodes[this.offset - 1]).getTrailingSpace();
-                    if (trailingSpace) {
-                        this.isTrailingSpace = true;
-                        this.character = trailingSpace;
-                        this.characterType = COLLAPSIBLE_SPACE;
-                    }
-                    this.checkForTrailingSpace = false;
-                }
-                if (this.checkForLeadingSpace) {
-                    var leadingSpace = this.session.getNodeWrapper(this.node.childNodes[this.offset]).getLeadingSpace();
-                    if (leadingSpace) {
-                        this.isLeadingSpace = true;
-                        this.character = leadingSpace;
-                        this.characterType = COLLAPSIBLE_SPACE;
-                    }
-                    this.checkForLeadingSpace = false;
-                }
-            },
-
-            getPrecedingUncollapsedPosition: function(characterOptions) {
-                var pos = this, character;
-                while ( (pos = pos.previousVisible()) ) {
-                    character = pos.getCharacter(characterOptions);
-                    if (character !== "") {
-                        return pos;
-                    }
-                }
-
-                return null;
-            },
-
-            getCharacter: function(characterOptions) {
-                this.resolveLeadingAndTrailingSpaces();
-
-                var thisChar = this.character, returnChar;
-
-                // Check if character is ignored
-                var ignoredChars = normalizeIgnoredCharacters(characterOptions.ignoreCharacters);
-                var isIgnoredCharacter = (thisChar !== "" && ignoredChars.indexOf(thisChar) > -1);
-
-                // Check if this position's  character is invariant (i.e. not dependent on character options) and return it
-                // if so
-                if (this.isCharInvariant) {
-                    returnChar = isIgnoredCharacter ? "" : thisChar;
-                    return returnChar;
-                }
-
-                var cacheKey = ["character", characterOptions.includeSpaceBeforeBr, characterOptions.includeBlockContentTrailingSpace, characterOptions.includePreLineTrailingSpace, ignoredChars].join("_");
-                var cachedChar = this.cache.get(cacheKey);
-                if (cachedChar !== null) {
-                    return cachedChar;
-                }
-
-                // We need to actually get the character now
-                var character = "";
-                var collapsible = (this.characterType == COLLAPSIBLE_SPACE);
-
-                var nextPos, previousPos;
-                var gotPreviousPos = false;
-                var pos = this;
-
-                function getPreviousPos() {
-                    if (!gotPreviousPos) {
-                        previousPos = pos.getPrecedingUncollapsedPosition(characterOptions);
-                        gotPreviousPos = true;
-                    }
-                    return previousPos;
-                }
-
-                // Disallow a collapsible space that is followed by a line break or is the last character
-                if (collapsible) {
-                    // Allow a trailing space that we've previously determined should be included
-                    if (this.type == INCLUDED_TRAILING_LINE_BREAK_AFTER_BR) {
-                        character = "\n";
-                    }
-                    // Disallow a collapsible space that follows a trailing space or line break, or is the first character,
-                    // or follows a collapsible included space
-                    else if (thisChar == " " &&
-                            (!getPreviousPos() || previousPos.isTrailingSpace || previousPos.character == "\n" || (previousPos.character == " " && previousPos.characterType == COLLAPSIBLE_SPACE))) {
-                    }
-                    // Allow a leading line break unless it follows a line break
-                    else if (thisChar == "\n" && this.isLeadingSpace) {
-                        if (getPreviousPos() && previousPos.character != "\n") {
-                            character = "\n";
-                        } else {
-                        }
-                    } else {
-                        nextPos = this.nextUncollapsed();
-                        if (nextPos) {
-                            if (nextPos.isBr) {
-                                this.type = TRAILING_SPACE_BEFORE_BR;
-                            } else if (nextPos.isTrailingSpace && nextPos.character == "\n") {
-                                this.type = TRAILING_SPACE_IN_BLOCK;
-                            } else if (nextPos.isLeadingSpace && nextPos.character == "\n") {
-                                this.type = TRAILING_SPACE_BEFORE_BLOCK;
-                            }
-
-                            if (nextPos.character == "\n") {
-                                if (this.type == TRAILING_SPACE_BEFORE_BR && !characterOptions.includeSpaceBeforeBr) {
-                                } else if (this.type == TRAILING_SPACE_BEFORE_BLOCK && !characterOptions.includeSpaceBeforeBlock) {
-                                } else if (this.type == TRAILING_SPACE_IN_BLOCK && nextPos.isTrailingSpace && !characterOptions.includeBlockContentTrailingSpace) {
-                                } else if (this.type == PRE_LINE_TRAILING_SPACE_BEFORE_LINE_BREAK && nextPos.type == NON_SPACE && !characterOptions.includePreLineTrailingSpace) {
-                                } else if (thisChar == "\n") {
-                                    if (nextPos.isTrailingSpace) {
-                                        if (this.isTrailingSpace) {
-                                        } else if (this.isBr) {
-                                            nextPos.type = TRAILING_LINE_BREAK_AFTER_BR;
-
-                                            if (getPreviousPos() && previousPos.isLeadingSpace && !previousPos.isTrailingSpace && previousPos.character == "\n") {
-                                                nextPos.character = "";
-                                            } else {
-                                                nextPos.type = INCLUDED_TRAILING_LINE_BREAK_AFTER_BR;
-                                            }
-                                        }
-                                    } else {
-                                        character = "\n";
-                                    }
-                                } else if (thisChar == " ") {
-                                    character = " ";
-                                } else {
-                                }
-                            } else {
-                                character = thisChar;
-                            }
-                        } else {
-                        }
-                    }
-                }
-
-                if (ignoredChars.indexOf(character) > -1) {
-                    character = "";
-                }
-
-
-                this.cache.set(cacheKey, character);
-
-                return character;
-            },
-
-            equals: function(pos) {
-                return !!pos && this.node === pos.node && this.offset === pos.offset;
-            },
-
-            inspect: inspectPosition,
-
-            toString: function() {
-                return this.character;
-            }
-        };
-
-        Position.prototype = positionProto;
-
-        extend(positionProto, {
-            next: createCachingGetter("nextPos", function(pos) {
-                var nodeWrapper = pos.nodeWrapper, node = pos.node, offset = pos.offset, session = nodeWrapper.session;
-                if (!node) {
-                    return null;
-                }
-                var nextNode, nextOffset, child;
-                if (offset == nodeWrapper.getLength()) {
-                    // Move onto the next node
-                    nextNode = node.parentNode;
-                    nextOffset = nextNode ? nodeWrapper.getNodeIndex() + 1 : 0;
-                } else {
-                    if (nodeWrapper.isCharacterDataNode()) {
-                        nextNode = node;
-                        nextOffset = offset + 1;
-                    } else {
-                        child = node.childNodes[offset];
-                        // Go into the children next, if children there are
-                        if (session.getNodeWrapper(child).containsPositions()) {
-                            nextNode = child;
-                            nextOffset = 0;
-                        } else {
-                            nextNode = node;
-                            nextOffset = offset + 1;
-                        }
-                    }
-                }
-
-                return nextNode ? session.getPosition(nextNode, nextOffset) : null;
-            }),
-
-            previous: createCachingGetter("previous", function(pos) {
-                var nodeWrapper = pos.nodeWrapper, node = pos.node, offset = pos.offset, session = nodeWrapper.session;
-                var previousNode, previousOffset, child;
-                if (offset == 0) {
-                    previousNode = node.parentNode;
-                    previousOffset = previousNode ? nodeWrapper.getNodeIndex() : 0;
-                } else {
-                    if (nodeWrapper.isCharacterDataNode()) {
-                        previousNode = node;
-                        previousOffset = offset - 1;
-                    } else {
-                        child = node.childNodes[offset - 1];
-                        // Go into the children next, if children there are
-                        if (session.getNodeWrapper(child).containsPositions()) {
-                            previousNode = child;
-                            previousOffset = dom.getNodeLength(child);
-                        } else {
-                            previousNode = node;
-                            previousOffset = offset - 1;
-                        }
-                    }
-                }
-                return previousNode ? session.getPosition(previousNode, previousOffset) : null;
-            }),
-
-            /*
-             Next and previous position moving functions that filter out
-
-             - Hidden (CSS visibility/display) elements
-             - Script and style elements
-             */
-            nextVisible: createCachingGetter("nextVisible", function(pos) {
-                var next = pos.next();
-                if (!next) {
-                    return null;
-                }
-                var nodeWrapper = next.nodeWrapper, node = next.node;
-                var newPos = next;
-                if (nodeWrapper.isCollapsed()) {
-                    // We're skipping this node and all its descendants
-                    newPos = nodeWrapper.session.getPosition(node.parentNode, nodeWrapper.getNodeIndex() + 1);
-                }
-                return newPos;
-            }),
-
-            nextUncollapsed: createCachingGetter("nextUncollapsed", function(pos) {
-                var nextPos = pos;
-                while ( (nextPos = nextPos.nextVisible()) ) {
-                    nextPos.resolveLeadingAndTrailingSpaces();
-                    if (nextPos.character !== "") {
-                        return nextPos;
-                    }
-                }
-                return null;
-            }),
-
-            previousVisible: createCachingGetter("previousVisible", function(pos) {
-                var previous = pos.previous();
-                if (!previous) {
-                    return null;
-                }
-                var nodeWrapper = previous.nodeWrapper, node = previous.node;
-                var newPos = previous;
-                if (nodeWrapper.isCollapsed()) {
-                    // We're skipping this node and all its descendants
-                    newPos = nodeWrapper.session.getPosition(node.parentNode, nodeWrapper.getNodeIndex());
-                }
-                return newPos;
-            })
-        });
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        var currentSession = null;
-
-        var Session = (function() {
-            function createWrapperCache(nodeProperty) {
-                var cache = new Cache();
-
-                return {
-                    get: function(node) {
-                        var wrappersByProperty = cache.get(node[nodeProperty]);
-                        if (wrappersByProperty) {
-                            for (var i = 0, wrapper; wrapper = wrappersByProperty[i++]; ) {
-                                if (wrapper.node === node) {
-                                    return wrapper;
-                                }
-                            }
-                        }
-                        return null;
-                    },
-
-                    set: function(nodeWrapper) {
-                        var property = nodeWrapper.node[nodeProperty];
-                        var wrappersByProperty = cache.get(property) || cache.set(property, []);
-                        wrappersByProperty.push(nodeWrapper);
-                    }
-                };
-            }
-
-            var uniqueIDSupported = util.isHostProperty(document.documentElement, "uniqueID");
-
-            function Session() {
-                this.initCaches();
-            }
-
-            Session.prototype = {
-                initCaches: function() {
-                    this.elementCache = uniqueIDSupported ? (function() {
-                        var elementsCache = new Cache();
-
-                        return {
-                            get: function(el) {
-                                return elementsCache.get(el.uniqueID);
-                            },
-
-                            set: function(elWrapper) {
-                                elementsCache.set(elWrapper.node.uniqueID, elWrapper);
-                            }
-                        };
-                    })() : createWrapperCache("tagName");
-
-                    // Store text nodes keyed by data, although we may need to truncate this
-                    this.textNodeCache = createWrapperCache("data");
-                    this.otherNodeCache = createWrapperCache("nodeName");
-                },
-
-                getNodeWrapper: function(node) {
-                    var wrapperCache;
-                    switch (node.nodeType) {
-                        case 1:
-                            wrapperCache = this.elementCache;
-                            break;
-                        case 3:
-                            wrapperCache = this.textNodeCache;
-                            break;
-                        default:
-                            wrapperCache = this.otherNodeCache;
-                            break;
-                    }
-
-                    var wrapper = wrapperCache.get(node);
-                    if (!wrapper) {
-                        wrapper = new NodeWrapper(node, this);
-                        wrapperCache.set(wrapper);
-                    }
-                    return wrapper;
-                },
-
-                getPosition: function(node, offset) {
-                    return this.getNodeWrapper(node).getPosition(offset);
-                },
-
-                getRangeBoundaryPosition: function(range, isStart) {
-                    var prefix = isStart ? "start" : "end";
-                    return this.getPosition(range[prefix + "Container"], range[prefix + "Offset"]);
-                },
-
-                detach: function() {
-                    this.elementCache = this.textNodeCache = this.otherNodeCache = null;
-                }
-            };
-
-            return Session;
-        })();
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function startSession() {
-            endSession();
-            return (currentSession = new Session());
-        }
-
-        function getSession() {
-            return currentSession || startSession();
-        }
-
-        function endSession() {
-            if (currentSession) {
-                currentSession.detach();
-            }
-            currentSession = null;
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Extensions to the rangy.dom utility object
-
-        extend(dom, {
-            nextNode: nextNode,
-            previousNode: previousNode
-        });
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        function createCharacterIterator(startPos, backward, endPos, characterOptions) {
-
-            // Adjust the end position to ensure that it is actually reached
-            if (endPos) {
-                if (backward) {
-                    if (isCollapsedNode(endPos.node)) {
-                        endPos = startPos.previousVisible();
-                    }
-                } else {
-                    if (isCollapsedNode(endPos.node)) {
-                        endPos = endPos.nextVisible();
-                    }
-                }
-            }
-
-            var pos = startPos, finished = false;
-
-            function next() {
-                var charPos = null;
-                if (backward) {
-                    charPos = pos;
-                    if (!finished) {
-                        pos = pos.previousVisible();
-                        finished = !pos || (endPos && pos.equals(endPos));
-                    }
-                } else {
-                    if (!finished) {
-                        charPos = pos = pos.nextVisible();
-                        finished = !pos || (endPos && pos.equals(endPos));
-                    }
-                }
-                if (finished) {
-                    pos = null;
-                }
-                return charPos;
-            }
-
-            var previousTextPos, returnPreviousTextPos = false;
-
-            return {
-                next: function() {
-                    if (returnPreviousTextPos) {
-                        returnPreviousTextPos = false;
-                        return previousTextPos;
-                    } else {
-                        var pos, character;
-                        while ( (pos = next()) ) {
-                            character = pos.getCharacter(characterOptions);
-                            if (character) {
-                                previousTextPos = pos;
-                                return pos;
-                            }
-                        }
-                        return null;
-                    }
-                },
-
-                rewind: function() {
-                    if (previousTextPos) {
-                        returnPreviousTextPos = true;
-                    } else {
-                        throw module.createError("createCharacterIterator: cannot rewind. Only one position can be rewound.");
-                    }
-                },
-
-                dispose: function() {
-                    startPos = endPos = null;
-                }
-            };
-        }
-
-        var arrayIndexOf = Array.prototype.indexOf ?
-            function(arr, val) {
-                return arr.indexOf(val);
-            } :
-            function(arr, val) {
-                for (var i = 0, len = arr.length; i < len; ++i) {
-                    if (arr[i] === val) {
-                        return i;
-                    }
-                }
-                return -1;
-            };
-
-        // Provides a pair of iterators over text positions, tokenized. Transparently requests more text when next()
-        // is called and there is no more tokenized text
-        function createTokenizedTextProvider(pos, characterOptions, wordOptions) {
-            var forwardIterator = createCharacterIterator(pos, false, null, characterOptions);
-            var backwardIterator = createCharacterIterator(pos, true, null, characterOptions);
-            var tokenizer = wordOptions.tokenizer;
-
-            // Consumes a word and the whitespace beyond it
-            function consumeWord(forward) {
-                var pos, textChar;
-                var newChars = [], it = forward ? forwardIterator : backwardIterator;
-
-                var passedWordBoundary = false, insideWord = false;
-
-                while ( (pos = it.next()) ) {
-                    textChar = pos.character;
-
-
-                    if (allWhiteSpaceRegex.test(textChar)) {
-                        if (insideWord) {
-                            insideWord = false;
-                            passedWordBoundary = true;
-                        }
-                    } else {
-                        if (passedWordBoundary) {
-                            it.rewind();
-                            break;
-                        } else {
-                            insideWord = true;
-                        }
-                    }
-                    newChars.push(pos);
-                }
-
-
-                return newChars;
-            }
-
-            // Get initial word surrounding initial position and tokenize it
-            var forwardChars = consumeWord(true);
-            var backwardChars = consumeWord(false).reverse();
-            var tokens = tokenize(backwardChars.concat(forwardChars), wordOptions, tokenizer);
-
-            // Create initial token buffers
-            var forwardTokensBuffer = forwardChars.length ?
-                tokens.slice(arrayIndexOf(tokens, forwardChars[0].token)) : [];
-
-            var backwardTokensBuffer = backwardChars.length ?
-                tokens.slice(0, arrayIndexOf(tokens, backwardChars.pop().token) + 1) : [];
-
-            function inspectBuffer(buffer) {
-                var textPositions = ["[" + buffer.length + "]"];
-                for (var i = 0; i < buffer.length; ++i) {
-                    textPositions.push("(word: " + buffer[i] + ", is word: " + buffer[i].isWord + ")");
-                }
-                return textPositions;
-            }
-
-
-            return {
-                nextEndToken: function() {
-                    var lastToken, forwardChars;
-
-                    // If we're down to the last token, consume character chunks until we have a word or run out of
-                    // characters to consume
-                    while ( forwardTokensBuffer.length == 1 &&
-                        !(lastToken = forwardTokensBuffer[0]).isWord &&
-                        (forwardChars = consumeWord(true)).length > 0) {
-
-                        // Merge trailing non-word into next word and tokenize
-                        forwardTokensBuffer = tokenize(lastToken.chars.concat(forwardChars), wordOptions, tokenizer);
-                    }
-
-                    return forwardTokensBuffer.shift();
-                },
-
-                previousStartToken: function() {
-                    var lastToken, backwardChars;
-
-                    // If we're down to the last token, consume character chunks until we have a word or run out of
-                    // characters to consume
-                    while ( backwardTokensBuffer.length == 1 &&
-                        !(lastToken = backwardTokensBuffer[0]).isWord &&
-                        (backwardChars = consumeWord(false)).length > 0) {
-
-                        // Merge leading non-word into next word and tokenize
-                        backwardTokensBuffer = tokenize(backwardChars.reverse().concat(lastToken.chars), wordOptions, tokenizer);
-                    }
-
-                    return backwardTokensBuffer.pop();
-                },
-
-                dispose: function() {
-                    forwardIterator.dispose();
-                    backwardIterator.dispose();
-                    forwardTokensBuffer = backwardTokensBuffer = null;
-                }
-            };
-        }
-
-        function movePositionBy(pos, unit, count, characterOptions, wordOptions) {
-            var unitsMoved = 0, currentPos, newPos = pos, charIterator, nextPos, absCount = Math.abs(count), token;
-            if (count !== 0) {
-                var backward = (count < 0);
-
-                switch (unit) {
-                    case CHARACTER:
-                        charIterator = createCharacterIterator(pos, backward, null, characterOptions);
-                        while ( (currentPos = charIterator.next()) && unitsMoved < absCount ) {
-                            ++unitsMoved;
-                            newPos = currentPos;
-                        }
-                        nextPos = currentPos;
-                        charIterator.dispose();
-                        break;
-                    case WORD:
-                        var tokenizedTextProvider = createTokenizedTextProvider(pos, characterOptions, wordOptions);
-                        var next = backward ? tokenizedTextProvider.previousStartToken : tokenizedTextProvider.nextEndToken;
-
-                        while ( (token = next()) && unitsMoved < absCount ) {
-                            if (token.isWord) {
-                                ++unitsMoved;
-                                newPos = backward ? token.chars[0] : token.chars[token.chars.length - 1];
-                            }
-                        }
-                        break;
-                    default:
-                        throw new Error("movePositionBy: unit '" + unit + "' not implemented");
-                }
-
-                // Perform any necessary position tweaks
-                if (backward) {
-                    newPos = newPos.previousVisible();
-                    unitsMoved = -unitsMoved;
-                } else if (newPos && newPos.isLeadingSpace && !newPos.isTrailingSpace) {
-                    // Tweak the position for the case of a leading space. The problem is that an uncollapsed leading space
-                    // before a block element (for example, the line break between "1" and "2" in the following HTML:
-                    // "1<p>2</p>") is considered to be attached to the position immediately before the block element, which
-                    // corresponds with a different selection position in most browsers from the one we want (i.e. at the
-                    // start of the contents of the block element). We get round this by advancing the position returned to
-                    // the last possible equivalent visible position.
-                    if (unit == WORD) {
-                        charIterator = createCharacterIterator(pos, false, null, characterOptions);
-                        nextPos = charIterator.next();
-                        charIterator.dispose();
-                    }
-                    if (nextPos) {
-                        newPos = nextPos.previousVisible();
-                    }
-                }
-            }
-
-
-            return {
-                position: newPos,
-                unitsMoved: unitsMoved
-            };
-        }
-
-        function createRangeCharacterIterator(session, range, characterOptions, backward) {
-            var rangeStart = session.getRangeBoundaryPosition(range, true);
-            var rangeEnd = session.getRangeBoundaryPosition(range, false);
-            var itStart = backward ? rangeEnd : rangeStart;
-            var itEnd = backward ? rangeStart : rangeEnd;
-
-            return createCharacterIterator(itStart, !!backward, itEnd, characterOptions);
-        }
-
-        function getRangeCharacters(session, range, characterOptions) {
-
-            var chars = [], it = createRangeCharacterIterator(session, range, characterOptions), pos;
-            while ( (pos = it.next()) ) {
-                chars.push(pos);
-            }
-
-            it.dispose();
-            return chars;
-        }
-
-        function isWholeWord(startPos, endPos, wordOptions) {
-            var range = api.createRange(startPos.node);
-            range.setStartAndEnd(startPos.node, startPos.offset, endPos.node, endPos.offset);
-            return !range.expand("word", { wordOptions: wordOptions });
-        }
-
-        function findTextFromPosition(initialPos, searchTerm, isRegex, searchScopeRange, findOptions) {
-            var backward = isDirectionBackward(findOptions.direction);
-            var it = createCharacterIterator(
-                initialPos,
-                backward,
-                initialPos.session.getRangeBoundaryPosition(searchScopeRange, backward),
-                findOptions.characterOptions
-            );
-            var text = "", chars = [], pos, currentChar, matchStartIndex, matchEndIndex;
-            var result, insideRegexMatch;
-            var returnValue = null;
-
-            function handleMatch(startIndex, endIndex) {
-                var startPos = chars[startIndex].previousVisible();
-                var endPos = chars[endIndex - 1];
-                var valid = (!findOptions.wholeWordsOnly || isWholeWord(startPos, endPos, findOptions.wordOptions));
-
-                return {
-                    startPos: startPos,
-                    endPos: endPos,
-                    valid: valid
-                };
-            }
-
-            while ( (pos = it.next()) ) {
-                currentChar = pos.character;
-                if (!isRegex && !findOptions.caseSensitive) {
-                    currentChar = currentChar.toLowerCase();
-                }
-
-                if (backward) {
-                    chars.unshift(pos);
-                    text = currentChar + text;
-                } else {
-                    chars.push(pos);
-                    text += currentChar;
-                }
-
-                if (isRegex) {
-                    result = searchTerm.exec(text);
-                    if (result) {
-                        matchStartIndex = result.index;
-                        matchEndIndex = matchStartIndex + result[0].length;
-                        if (insideRegexMatch) {
-                            // Check whether the match is now over
-                            if ((!backward && matchEndIndex < text.length) || (backward && matchStartIndex > 0)) {
-                                returnValue = handleMatch(matchStartIndex, matchEndIndex);
-                                break;
-                            }
-                        } else {
-                            insideRegexMatch = true;
-                        }
-                    }
-                } else if ( (matchStartIndex = text.indexOf(searchTerm)) != -1 ) {
-                    returnValue = handleMatch(matchStartIndex, matchStartIndex + searchTerm.length);
-                    break;
-                }
-            }
-
-            // Check whether regex match extends to the end of the range
-            if (insideRegexMatch) {
-                returnValue = handleMatch(matchStartIndex, matchEndIndex);
-            }
-            it.dispose();
-
-            return returnValue;
-        }
-
-        function createEntryPointFunction(func) {
-            return function() {
-                var sessionRunning = !!currentSession;
-                var session = getSession();
-                var args = [session].concat( util.toArray(arguments) );
-                var returnValue = func.apply(this, args);
-                if (!sessionRunning) {
-                    endSession();
-                }
-                return returnValue;
-            };
-        }
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Extensions to the Rangy Range object
-
-        function createRangeBoundaryMover(isStart, collapse) {
-            /*
-             Unit can be "character" or "word"
-             Options:
-
-             - includeTrailingSpace
-             - wordRegex
-             - tokenizer
-             - collapseSpaceBeforeLineBreak
-             */
-            return createEntryPointFunction(
-                function(session, unit, count, moveOptions) {
-                    if (typeof count == UNDEF) {
-                        count = unit;
-                        unit = CHARACTER;
-                    }
-                    moveOptions = createNestedOptions(moveOptions, defaultMoveOptions);
-
-                    var boundaryIsStart = isStart;
-                    if (collapse) {
-                        boundaryIsStart = (count >= 0);
-                        this.collapse(!boundaryIsStart);
-                    }
-                    var moveResult = movePositionBy(session.getRangeBoundaryPosition(this, boundaryIsStart), unit, count, moveOptions.characterOptions, moveOptions.wordOptions);
-                    var newPos = moveResult.position;
-                    this[boundaryIsStart ? "setStart" : "setEnd"](newPos.node, newPos.offset);
-                    return moveResult.unitsMoved;
-                }
-            );
-        }
-
-        function createRangeTrimmer(isStart) {
-            return createEntryPointFunction(
-                function(session, characterOptions) {
-                    characterOptions = createOptions(characterOptions, defaultCharacterOptions);
-                    var pos;
-                    var it = createRangeCharacterIterator(session, this, characterOptions, !isStart);
-                    var trimCharCount = 0;
-                    while ( (pos = it.next()) && allWhiteSpaceRegex.test(pos.character) ) {
-                        ++trimCharCount;
-                    }
-                    it.dispose();
-                    var trimmed = (trimCharCount > 0);
-                    if (trimmed) {
-                        this[isStart ? "moveStart" : "moveEnd"](
-                            "character",
-                            isStart ? trimCharCount : -trimCharCount,
-                            { characterOptions: characterOptions }
-                        );
-                    }
-                    return trimmed;
-                }
-            );
-        }
-
-        extend(api.rangePrototype, {
-            moveStart: createRangeBoundaryMover(true, false),
-
-            moveEnd: createRangeBoundaryMover(false, false),
-
-            move: createRangeBoundaryMover(true, true),
-
-            trimStart: createRangeTrimmer(true),
-
-            trimEnd: createRangeTrimmer(false),
-
-            trim: createEntryPointFunction(
-                function(session, characterOptions) {
-                    var startTrimmed = this.trimStart(characterOptions), endTrimmed = this.trimEnd(characterOptions);
-                    return startTrimmed || endTrimmed;
-                }
-            ),
-
-            expand: createEntryPointFunction(
-                function(session, unit, expandOptions) {
-                    var moved = false;
-                    expandOptions = createNestedOptions(expandOptions, defaultExpandOptions);
-                    var characterOptions = expandOptions.characterOptions;
-                    if (!unit) {
-                        unit = CHARACTER;
-                    }
-                    if (unit == WORD) {
-                        var wordOptions = expandOptions.wordOptions;
-                        var startPos = session.getRangeBoundaryPosition(this, true);
-                        var endPos = session.getRangeBoundaryPosition(this, false);
-
-                        var startTokenizedTextProvider = createTokenizedTextProvider(startPos, characterOptions, wordOptions);
-                        var startToken = startTokenizedTextProvider.nextEndToken();
-                        var newStartPos = startToken.chars[0].previousVisible();
-                        var endToken, newEndPos;
-
-                        if (this.collapsed) {
-                            endToken = startToken;
-                        } else {
-                            var endTokenizedTextProvider = createTokenizedTextProvider(endPos, characterOptions, wordOptions);
-                            endToken = endTokenizedTextProvider.previousStartToken();
-                        }
-                        newEndPos = endToken.chars[endToken.chars.length - 1];
-
-                        if (!newStartPos.equals(startPos)) {
-                            this.setStart(newStartPos.node, newStartPos.offset);
-                            moved = true;
-                        }
-                        if (newEndPos && !newEndPos.equals(endPos)) {
-                            this.setEnd(newEndPos.node, newEndPos.offset);
-                            moved = true;
-                        }
-
-                        if (expandOptions.trim) {
-                            if (expandOptions.trimStart) {
-                                moved = this.trimStart(characterOptions) || moved;
-                            }
-                            if (expandOptions.trimEnd) {
-                                moved = this.trimEnd(characterOptions) || moved;
-                            }
-                        }
-
-                        return moved;
-                    } else {
-                        return this.moveEnd(CHARACTER, 1, expandOptions);
-                    }
-                }
-            ),
-
-            text: createEntryPointFunction(
-                function(session, characterOptions) {
-                    return this.collapsed ?
-                        "" : getRangeCharacters(session, this, createOptions(characterOptions, defaultCharacterOptions)).join("");
-                }
-            ),
-
-            selectCharacters: createEntryPointFunction(
-                function(session, containerNode, startIndex, endIndex, characterOptions) {
-                    var moveOptions = { characterOptions: characterOptions };
-                    if (!containerNode) {
-                        containerNode = getBody( this.getDocument() );
-                    }
-                    this.selectNodeContents(containerNode);
-                    this.collapse(true);
-                    this.moveStart("character", startIndex, moveOptions);
-                    this.collapse(true);
-                    this.moveEnd("character", endIndex - startIndex, moveOptions);
-                }
-            ),
-
-            // Character indexes are relative to the start of node
-            toCharacterRange: createEntryPointFunction(
-                function(session, containerNode, characterOptions) {
-                    if (!containerNode) {
-                        containerNode = getBody( this.getDocument() );
-                    }
-                    var parent = containerNode.parentNode, nodeIndex = dom.getNodeIndex(containerNode);
-                    var rangeStartsBeforeNode = (dom.comparePoints(this.startContainer, this.endContainer, parent, nodeIndex) == -1);
-                    var rangeBetween = this.cloneRange();
-                    var startIndex, endIndex;
-                    if (rangeStartsBeforeNode) {
-                        rangeBetween.setStartAndEnd(this.startContainer, this.startOffset, parent, nodeIndex);
-                        startIndex = -rangeBetween.text(characterOptions).length;
-                    } else {
-                        rangeBetween.setStartAndEnd(parent, nodeIndex, this.startContainer, this.startOffset);
-                        startIndex = rangeBetween.text(characterOptions).length;
-                    }
-                    endIndex = startIndex + this.text(characterOptions).length;
-
-                    return {
-                        start: startIndex,
-                        end: endIndex
-                    };
-                }
-            ),
-
-            findText: createEntryPointFunction(
-                function(session, searchTermParam, findOptions) {
-                    // Set up options
-                    findOptions = createNestedOptions(findOptions, defaultFindOptions);
-
-                    // Create word options if we're matching whole words only
-                    if (findOptions.wholeWordsOnly) {
-                        // We don't ever want trailing spaces for search results
-                        findOptions.wordOptions.includeTrailingSpace = false;
-                    }
-
-                    var backward = isDirectionBackward(findOptions.direction);
-
-                    // Create a range representing the search scope if none was provided
-                    var searchScopeRange = findOptions.withinRange;
-                    if (!searchScopeRange) {
-                        searchScopeRange = api.createRange();
-                        searchScopeRange.selectNodeContents(this.getDocument());
-                    }
-
-                    // Examine and prepare the search term
-                    var searchTerm = searchTermParam, isRegex = false;
-                    if (typeof searchTerm == "string") {
-                        if (!findOptions.caseSensitive) {
-                            searchTerm = searchTerm.toLowerCase();
-                        }
-                    } else {
-                        isRegex = true;
-                    }
-
-                    var initialPos = session.getRangeBoundaryPosition(this, !backward);
-
-                    // Adjust initial position if it lies outside the search scope
-                    var comparison = searchScopeRange.comparePoint(initialPos.node, initialPos.offset);
-
-                    if (comparison === -1) {
-                        initialPos = session.getRangeBoundaryPosition(searchScopeRange, true);
-                    } else if (comparison === 1) {
-                        initialPos = session.getRangeBoundaryPosition(searchScopeRange, false);
-                    }
-
-                    var pos = initialPos;
-                    var wrappedAround = false;
-
-                    // Try to find a match and ignore invalid ones
-                    var findResult;
-                    while (true) {
-                        findResult = findTextFromPosition(pos, searchTerm, isRegex, searchScopeRange, findOptions);
-
-                        if (findResult) {
-                            if (findResult.valid) {
-                                this.setStartAndEnd(findResult.startPos.node, findResult.startPos.offset, findResult.endPos.node, findResult.endPos.offset);
-                                return true;
-                            } else {
-                                // We've found a match that is not a whole word, so we carry on searching from the point immediately
-                                // after the match
-                                pos = backward ? findResult.startPos : findResult.endPos;
-                            }
-                        } else if (findOptions.wrap && !wrappedAround) {
-                            // No result found but we're wrapping around and limiting the scope to the unsearched part of the range
-                            searchScopeRange = searchScopeRange.cloneRange();
-                            pos = session.getRangeBoundaryPosition(searchScopeRange, !backward);
-                            searchScopeRange.setBoundary(initialPos.node, initialPos.offset, backward);
-                            wrappedAround = true;
-                        } else {
-                            // Nothing found and we can't wrap around, so we're done
-                            return false;
-                        }
-                    }
-                }
-            ),
-
-            pasteHtml: function(html) {
-                this.deleteContents();
-                if (html) {
-                    var frag = this.createContextualFragment(html);
-                    var lastChild = frag.lastChild;
-                    this.insertNode(frag);
-                    this.collapseAfter(lastChild);
-                }
-            }
-        });
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Extensions to the Rangy Selection object
-
-        function createSelectionTrimmer(methodName) {
-            return createEntryPointFunction(
-                function(session, characterOptions) {
-                    var trimmed = false;
-                    this.changeEachRange(function(range) {
-                        trimmed = range[methodName](characterOptions) || trimmed;
-                    });
-                    return trimmed;
-                }
-            );
-        }
-
-        extend(api.selectionPrototype, {
-            expand: createEntryPointFunction(
-                function(session, unit, expandOptions) {
-                    this.changeEachRange(function(range) {
-                        range.expand(unit, expandOptions);
-                    });
-                }
-            ),
-
-            move: createEntryPointFunction(
-                function(session, unit, count, options) {
-                    var unitsMoved = 0;
-                    if (this.focusNode) {
-                        this.collapse(this.focusNode, this.focusOffset);
-                        var range = this.getRangeAt(0);
-                        if (!options) {
-                            options = {};
-                        }
-                        options.characterOptions = createOptions(options.characterOptions, defaultCaretCharacterOptions);
-                        unitsMoved = range.move(unit, count, options);
-                        this.setSingleRange(range);
-                    }
-                    return unitsMoved;
-                }
-            ),
-
-            trimStart: createSelectionTrimmer("trimStart"),
-            trimEnd: createSelectionTrimmer("trimEnd"),
-            trim: createSelectionTrimmer("trim"),
-
-            selectCharacters: createEntryPointFunction(
-                function(session, containerNode, startIndex, endIndex, direction, characterOptions) {
-                    var range = api.createRange(containerNode);
-                    range.selectCharacters(containerNode, startIndex, endIndex, characterOptions);
-                    this.setSingleRange(range, direction);
-                }
-            ),
-
-            saveCharacterRanges: createEntryPointFunction(
-                function(session, containerNode, characterOptions) {
-                    var ranges = this.getAllRanges(), rangeCount = ranges.length;
-                    var rangeInfos = [];
-
-                    var backward = rangeCount == 1 && this.isBackward();
-
-                    for (var i = 0, len = ranges.length; i < len; ++i) {
-                        rangeInfos[i] = {
-                            characterRange: ranges[i].toCharacterRange(containerNode, characterOptions),
-                            backward: backward,
-                            characterOptions: characterOptions
-                        };
-                    }
-
-                    return rangeInfos;
-                }
-            ),
-
-            restoreCharacterRanges: createEntryPointFunction(
-                function(session, containerNode, saved) {
-                    this.removeAllRanges();
-                    for (var i = 0, len = saved.length, range, rangeInfo, characterRange; i < len; ++i) {
-                        rangeInfo = saved[i];
-                        characterRange = rangeInfo.characterRange;
-                        range = api.createRange(containerNode);
-                        range.selectCharacters(containerNode, characterRange.start, characterRange.end, rangeInfo.characterOptions);
-                        this.addRange(range, rangeInfo.backward);
-                    }
-                }
-            ),
-
-            text: createEntryPointFunction(
-                function(session, characterOptions) {
-                    var rangeTexts = [];
-                    for (var i = 0, len = this.rangeCount; i < len; ++i) {
-                        rangeTexts[i] = this.getRangeAt(i).text(characterOptions);
-                    }
-                    return rangeTexts.join("");
-                }
-            )
-        });
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        // Extensions to the core rangy object
-
-        api.innerText = function(el, characterOptions) {
-            var range = api.createRange(el);
-            range.selectNodeContents(el);
-            var text = range.text(characterOptions);
-            return text;
-        };
-
-        api.createWordIterator = function(startNode, startOffset, iteratorOptions) {
-            var session = getSession();
-            iteratorOptions = createNestedOptions(iteratorOptions, defaultWordIteratorOptions);
-            var startPos = session.getPosition(startNode, startOffset);
-            var tokenizedTextProvider = createTokenizedTextProvider(startPos, iteratorOptions.characterOptions, iteratorOptions.wordOptions);
-            var backward = isDirectionBackward(iteratorOptions.direction);
-
-            return {
-                next: function() {
-                    return backward ? tokenizedTextProvider.previousStartToken() : tokenizedTextProvider.nextEndToken();
-                },
-
-                dispose: function() {
-                    tokenizedTextProvider.dispose();
-                    this.next = function() {};
-                }
-            };
-        };
-
-        /*----------------------------------------------------------------------------------------------------------------*/
-
-        api.noMutation = function(func) {
-            var session = getSession();
-            func(session);
-            endSession();
-        };
-
-        api.noMutation.createEntryPointFunction = createEntryPointFunction;
-
-        api.textRange = {
-            isBlockNode: isBlockNode,
-            isCollapsedWhitespaceNode: isCollapsedWhitespaceNode,
-
-            createPosition: createEntryPointFunction(
-                function(session, node, offset) {
-                    return session.getPosition(node, offset);
-                }
-            )
-        };
-    });
-    
-    return rangy;
-}, this);
-/*
-@license textAngular
-Author : Austin Anderson
-License : 2013 MIT
-Version 1.5.1
-
-See README.md or https://github.com/fraywing/textAngular/wiki for requirements and use.
-*/
-
-/*
-Commonjs package manager support (eg componentjs).
-*/
-
-
-"use strict";
-// IE version detection - http://stackoverflow.com/questions/4169160/javascript-ie-detection-why-not-use-simple-conditional-comments
-// We need this as IE sometimes plays funny tricks with the contenteditable.
-// ----------------------------------------------------------
-// If you're not in IE (or IE version is less than 5) then:
-// ie === undefined
-// If you're in IE (>=5) then you can determine which version:
-// ie === 7; // IE7
-// Thus, to detect IE:
-// if (ie) {}
-// And to detect the version:
-// ie === 6 // IE6
-// ie > 7 // IE8, IE9, IE10 ...
-// ie < 9 // Anything less than IE9
-// ----------------------------------------------------------
-/* istanbul ignore next: untestable browser check */
-var _browserDetect = {
-	ie: (function(){
-		var undef,
-			v = 3,
-			div = document.createElement('div'),
-			all = div.getElementsByTagName('i');
-
-		while (
-			div.innerHTML = '<!--[if gt IE ' + (++v) + ']><i></i><![endif]-->',
-			all[0]
-		);
-
-		return v > 4 ? v : undef;
-	}()),
-	webkit: /AppleWebKit\/([\d.]+)/i.test(navigator.userAgent)
-};
-
-// fix a webkit bug, see: https://gist.github.com/shimondoodkin/1081133
-// this is set true when a blur occurs as the blur of the ta-bind triggers before the click
-var globalContentEditableBlur = false;
-/* istanbul ignore next: Browser Un-Focus fix for webkit */
-if(_browserDetect.webkit) {
-	document.addEventListener("mousedown", function(_event){
-		var e = _event || window.event;
-		var curelement = e.target;
-		if(globalContentEditableBlur && curelement !== null){
-			var isEditable = false;
-			var tempEl = curelement;
-			while(tempEl !== null && tempEl.tagName.toLowerCase() !== 'html' && !isEditable){
-				isEditable = tempEl.contentEditable === 'true';
-				tempEl = tempEl.parentNode;
-			}
-			if(!isEditable){
-				document.getElementById('textAngular-editableFix-010203040506070809').setSelectionRange(0, 0); // set caret focus to an element that handles caret focus correctly.
-				curelement.focus(); // focus the wanted element.
-				if (curelement.select) {
-					curelement.select(); // use select to place cursor for input elements.
-				}
-			}
-		}
-		globalContentEditableBlur = false;
-	}, false); // add global click handler
-	angular.element(document).ready(function () {
-		angular.element(document.body).append(angular.element('<input id="textAngular-editableFix-010203040506070809" class="ta-hidden-input" aria-hidden="true" unselectable="on" tabIndex="-1">'));
-	});
-}
-
-// Gloabl to textAngular REGEXP vars for block and list elements.
-
-var BLOCKELEMENTS = /^(address|article|aside|audio|blockquote|canvas|dd|div|dl|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|noscript|ol|output|p|pre|section|table|tfoot|ul|video)$/i;
-var LISTELEMENTS = /^(ul|li|ol)$/i;
-var VALIDELEMENTS = /^(address|article|aside|audio|blockquote|canvas|dd|div|dl|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|noscript|ol|output|p|pre|section|table|tfoot|ul|video|li)$/i;
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/Trim#Compatibility
-/* istanbul ignore next: trim shim for older browsers */
-if (!String.prototype.trim) {
-	String.prototype.trim = function () {
-		return this.replace(/^\s+|\s+$/g, '');
-	};
-}
-
-/*
-	Custom stylesheet for the placeholders rules.
-	Credit to: http://davidwalsh.name/add-rules-stylesheets
-*/
-var sheet, addCSSRule, removeCSSRule, _addCSSRule, _removeCSSRule, _getRuleIndex;
-/* istanbul ignore else: IE <8 test*/
-if(_browserDetect.ie > 8 || _browserDetect.ie === undefined){
-	var _sheets = document.styleSheets;
-	/* istanbul ignore next: preference for stylesheet loaded externally */
-	for(var i = 0; i < _sheets.length; i++){
-		if(_sheets[i].media.length === 0 || _sheets[i].media.mediaText.match(/(all|screen)/ig)){
-			if(_sheets[i].href){
-				if(_sheets[i].href.match(/textangular\.(min\.|)css/ig)){
-					sheet = _sheets[i];
-					break;
-				}
-			}
-		}
-	}
-	/* istanbul ignore next: preference for stylesheet loaded externally */
-	if(!sheet){
-		// this sheet is used for the placeholders later on.
-		sheet = (function() {
-			// Create the <style> tag
-			var style = document.createElement("style");
-			/* istanbul ignore else : WebKit hack :( */
-			if(_browserDetect.webkit) style.appendChild(document.createTextNode(""));
-
-			// Add the <style> element to the page, add as first so the styles can be overridden by custom stylesheets
-			document.getElementsByTagName('head')[0].appendChild(style);
-
-			return style.sheet;
-		})();
-	}
-
-	// use as: addCSSRule("header", "float: left");
-	addCSSRule = function(selector, rules) {
-		return _addCSSRule(sheet, selector, rules);
-	};
-	_addCSSRule = function(_sheet, selector, rules){
-		var insertIndex;
-		var insertedRule;
-		// This order is important as IE 11 has both cssRules and rules but they have different lengths - cssRules is correct, rules gives an error in IE 11
-		/* istanbul ignore next: browser catches */
-		if(_sheet.cssRules) insertIndex = Math.max(_sheet.cssRules.length - 1, 0);
-		else if(_sheet.rules) insertIndex = Math.max(_sheet.rules.length - 1, 0);
-
-		/* istanbul ignore else: untestable IE option */
-		if(_sheet.insertRule) {
-			_sheet.insertRule(selector + "{" + rules + "}", insertIndex);
-		}
-		else {
-			_sheet.addRule(selector, rules, insertIndex);
-		}
-		/* istanbul ignore next: browser catches */
-		if(sheet.rules) insertedRule = sheet.rules[insertIndex];
-		else if(sheet.cssRules) insertedRule = sheet.cssRules[insertIndex];
-		// return the inserted stylesheet rule
-		return insertedRule;
-	};
-
-	_getRuleIndex = function(rule, rules) {
-		var i, ruleIndex;
-		for (i=0; i < rules.length; i++) {
-			/* istanbul ignore else: check for correct rule */
-			if (rules[i].cssText === rule.cssText) {
-				ruleIndex = i;
-				break;
-			}
-		}
-		return ruleIndex;
-	};
-
-	removeCSSRule = function(rule){
-		_removeCSSRule(sheet, rule);
-	};
-	/* istanbul ignore next: tests are browser specific */
-	_removeCSSRule = function(sheet, rule){
-		var rules = sheet.cssRules || sheet.rules;
-		if(!rules || rules.length === 0) return;
-		var ruleIndex = _getRuleIndex(rule, rules);
-		if(sheet.removeRule){
-			sheet.removeRule(ruleIndex);
-		}else{
-			sheet.deleteRule(ruleIndex);
-		}
-	};
-}
-
-angular.module('textAngular.factories', [])
-.factory('taBrowserTag', [function(){
-	return function(tag){
-		/* istanbul ignore next: ie specific test */
-		if(!tag) return (_browserDetect.ie <= 8)? 'P' : 'p';
-		else if(tag === '') return (_browserDetect.ie === undefined)? 'div' : (_browserDetect.ie <= 8)? 'P' : 'p';
-		else return (_browserDetect.ie <= 8)? tag.toUpperCase() : tag;
-	};
-}]).factory('taApplyCustomRenderers', ['taCustomRenderers', 'taDOM', function(taCustomRenderers, taDOM){
-	return function(val){
-		var element = angular.element('<div></div>');
-		element[0].innerHTML = val;
-
-		angular.forEach(taCustomRenderers, function(renderer){
-			var elements = [];
-			// get elements based on what is defined. If both defined do secondary filter in the forEach after using selector string
-			if(renderer.selector && renderer.selector !== '')
-				elements = element.find(renderer.selector);
-			/* istanbul ignore else: shouldn't fire, if it does we're ignoring everything */
-			else if(renderer.customAttribute && renderer.customAttribute !== '')
-				elements = taDOM.getByAttribute(element, renderer.customAttribute);
-			// process elements if any found
-			angular.forEach(elements, function(_element){
-				_element = angular.element(_element);
-				if(renderer.selector && renderer.selector !== '' && renderer.customAttribute && renderer.customAttribute !== ''){
-					if(_element.attr(renderer.customAttribute) !== undefined) renderer.renderLogic(_element);
-				} else renderer.renderLogic(_element);
-			});
-		});
-
-		return element[0].innerHTML;
-	};
-}]).factory('taFixChrome', function(){
-	// get whaterever rubbish is inserted in chrome
-	// should be passed an html string, returns an html string
-	var taFixChrome = function(html){
-		if(!html || !angular.isString(html) || html.length <= 0) return html;
-		// grab all elements with a style attibute
-		var spanMatch = /<([^>\/]+?)style=("([^"]+)"|'([^']+)')([^>]*)>/ig;
-		var match, styleVal, newTag, finalHtml = '', lastIndex = 0;
-		while(match = spanMatch.exec(html)){
-			// one of the quoted values ' or "
-			/* istanbul ignore next: quotations match */
-			styleVal = match[3] || match[4];
-			// test for chrome inserted junk
-			if(styleVal && styleVal.match(/line-height: 1.[0-9]{3,12};|color: inherit; line-height: 1.1;/i)){
-				// replace original tag with new tag
-				styleVal = styleVal.replace(/( |)font-family: inherit;|( |)line-height: 1.[0-9]{3,12};|( |)color: inherit;/ig, '');
-				newTag = '<' + match[1].trim();
-				if(styleVal.trim().length > 0) newTag += ' style=' + match[2].substring(0,1) + styleVal + match[2].substring(0,1);
-				newTag += match[5].trim() + ">";
-				finalHtml += html.substring(lastIndex, match.index) + newTag;
-				lastIndex = match.index + match[0].length;
-			}
-		}
-		finalHtml += html.substring(lastIndex);
-		// only replace when something has changed, else we get focus problems on inserting lists
-		if(lastIndex > 0){
-			// replace all empty strings
-			return finalHtml.replace(/<span\s?>(.*?)<\/span>(<br(\/|)>|)/ig, '$1');
-		} else return html;
-	};
-	return taFixChrome;
-}).factory('taSanitize', ['$sanitize', function taSanitizeFactory($sanitize){
-
-	var convert_infos = [
-		{
-			property: 'font-weight',
-			values: [ 'bold' ],
-			tag: 'b'
-		},
-		{
-			property: 'font-style',
-			values: [ 'italic' ],
-			tag: 'i'
-		}
-	];
-	
-	var styleMatch = [];
-	for(var i = 0; i < convert_infos.length; i++){
-		var _partialStyle = '(' + convert_infos[i].property + ':\\s*(';
-		for(var j = 0; j < convert_infos[i].values.length; j++){
-			/* istanbul ignore next: not needed to be tested yet */
-			if(j > 0) _partialStyle += '|';
-			_partialStyle += convert_infos[i].values[j];
-		}
-		_partialStyle += ');)';
-		styleMatch.push(_partialStyle);
-	}
-	var styleRegexString = '(' + styleMatch.join('|') + ')';
-	
-	function wrapNested(html, wrapTag) {
-		var depth = 0;
-		var lastIndex = 0;
-		var match;
-		var tagRegex = /<[^>]*>/ig;
-		while(match = tagRegex.exec(html)){
-			lastIndex = match.index;
-			if(match[0].substr(1, 1) === '/'){
-				if(depth === 0) break;
-				else depth--;
-			}else depth++;
-		}
-		return wrapTag +
-			html.substring(0, lastIndex) +
-			// get the start tags reversed - this is safe as we construct the strings with no content except the tags
-			angular.element(wrapTag)[0].outerHTML.substring(wrapTag.length) +
-			html.substring(lastIndex);
-	}
-	
-	function transformLegacyStyles(html){
-		if(!html || !angular.isString(html) || html.length <= 0) return html;
-		var i;
-		var styleElementMatch = /<([^>\/]+?)style=("([^"]+)"|'([^']+)')([^>]*)>/ig;
-		var match, subMatch, styleVal, newTag, lastNewTag = '', newHtml, finalHtml = '', lastIndex = 0;
-		while(match = styleElementMatch.exec(html)){
-			// one of the quoted values ' or "
-			/* istanbul ignore next: quotations match */
-			styleVal = match[3] || match[4];
-			var styleRegex = new RegExp(styleRegexString, 'i');
-			// test for style values to change
-			if(angular.isString(styleVal) && styleRegex.test(styleVal)){
-				// remove build tag list
-				newTag = '';
-				// init regex here for exec
-				var styleRegexExec = new RegExp(styleRegexString, 'ig');
-				// find relevand tags and build a string of them
-				while(subMatch = styleRegexExec.exec(styleVal)){
-					for(i = 0; i < convert_infos.length; i++){
-						if(!!subMatch[(i*2) + 2]){
-							newTag += '<' + convert_infos[i].tag + '>';
-						}
-					}
-				}
-				// recursively find more legacy styles in html before this tag and after the previous match (if any)
-				newHtml = transformLegacyStyles(html.substring(lastIndex, match.index));
-				// build up html
-				if(lastNewTag.length > 0){
-					finalHtml += wrapNested(newHtml, lastNewTag);
-				}else finalHtml += newHtml;
-				// grab the style val without the transformed values
-				styleVal = styleVal.replace(new RegExp(styleRegexString, 'ig'), '');
-				// build the html tag
-				finalHtml += '<' + match[1].trim();
-				if(styleVal.length > 0) finalHtml += ' style="' + styleVal + '"';
-				finalHtml += match[5] + '>';
-				// update the start index to after this tag
-				lastIndex = match.index + match[0].length;
-				lastNewTag = newTag;
-			}
-		}
-		if(lastNewTag.length > 0){
-			finalHtml += wrapNested(html.substring(lastIndex), lastNewTag);
-		}
-		else finalHtml += html.substring(lastIndex);
-		return finalHtml;
-	}
-	
-	function transformLegacyAttributes(html){
-		if(!html || !angular.isString(html) || html.length <= 0) return html;
-		// replace all align='...' tags with text-align attributes
-		var attrElementMatch = /<([^>\/]+?)align=("([^"]+)"|'([^']+)')([^>]*)>/ig;
-		var match, finalHtml = '', lastIndex = 0;
-		// match all attr tags
-		while(match = attrElementMatch.exec(html)){
-			// add all html before this tag
-			finalHtml += html.substring(lastIndex, match.index);
-			// record last index after this tag
-			lastIndex = match.index + match[0].length;
-			// construct tag without the align attribute
-			var newTag = '<' + match[1] + match[5];
-			// add the style attribute
-			if(/style=("([^"]+)"|'([^']+)')/ig.test(newTag)){
-				/* istanbul ignore next: quotations match */
-				newTag = newTag.replace(/style=("([^"]+)"|'([^']+)')/i, 'style="$2$3 text-align:' + (match[3] || match[4]) + ';"');
-			}else{
-				/* istanbul ignore next: quotations match */
-				newTag += ' style="text-align:' + (match[3] || match[4]) + ';"';
-			}
-			newTag += '>';
-			// add to html
-			finalHtml += newTag;
-		}
-		// return with remaining html
-		return finalHtml + html.substring(lastIndex);
-	}
-	
-	return function taSanitize(unsafe, oldsafe, ignore){
-		// unsafe html should NEVER built into a DOM object via angular.element. This allows XSS to be inserted and run.
-		if ( !ignore ) {
-			try {
-				unsafe = transformLegacyStyles(unsafe);
-			} catch (e) {
-			}
-		}
-
-		// unsafe and oldsafe should be valid HTML strings
-		// any exceptions (lets say, color for example) should be made here but with great care
-		// setup unsafe element for modification
-		unsafe = transformLegacyAttributes(unsafe);
-		
-		var safe;
-		try {
-			safe = $sanitize(unsafe);
-			// do this afterwards, then the $sanitizer should still throw for bad markup
-			if(ignore) safe = unsafe;
-		} catch (e){
-			safe = oldsafe || '';
-		}
-		
-		// Do processing for <pre> tags, removing tabs and return carriages outside of them
-		
-		var _preTags = safe.match(/(<pre[^>]*>.*?<\/pre[^>]*>)/ig);
-		var processedSafe = safe.replace(/(&#(9|10);)*/ig, '');
-		var re = /<pre[^>]*>.*?<\/pre[^>]*>/ig;
-		var index = 0;
-		var lastIndex = 0;
-		var origTag;
-		safe = '';
-		while((origTag = re.exec(processedSafe)) !== null && index < _preTags.length){
-			safe += processedSafe.substring(lastIndex, origTag.index) + _preTags[index];
-			lastIndex = origTag.index + origTag[0].length;
-			index++;
-		}
-		return safe + processedSafe.substring(lastIndex);
-	};
-}]).factory('taToolExecuteAction', ['$q', '$log', function($q, $log){
-	// this must be called on a toolScope or instance
-	return function(editor){
-		if(editor !== undefined) this.$editor = function(){ return editor; };
-		var deferred = $q.defer(),
-			promise = deferred.promise,
-			_editor = this.$editor();
-		// pass into the action the deferred function and also the function to reload the current selection if rangy available
-		var result;
-		try{
-			result = this.action(deferred, _editor.startAction());
-			// We set the .finally callback here to make sure it doesn't get executed before any other .then callback.
-			promise['finally'](function(){
-				_editor.endAction.call(_editor);
-			});
-		}catch(exc){
-			$log.error(exc);
-		}
-		if(result || result === undefined){
-			// if true or undefined is returned then the action has finished. Otherwise the deferred action will be resolved manually.
-			deferred.resolve();
-		}
-	};
-}]);
-angular.module('textAngular.DOM', ['textAngular.factories'])
-.factory('taExecCommand', ['taSelection', 'taBrowserTag', '$document', function(taSelection, taBrowserTag, $document){
-	var listToDefault = function(listElement, defaultWrap){
-		var $target, i;
-		// if all selected then we should remove the list
-		// grab all li elements and convert to taDefaultWrap tags
-		var children = listElement.find('li');
-		for(i = children.length - 1; i >= 0; i--){
-			$target = angular.element('<' + defaultWrap + '>' + children[i].innerHTML + '</' + defaultWrap + '>');
-			listElement.after($target);
-		}
-		listElement.remove();
-		taSelection.setSelectionToElementEnd($target[0]);
-	};
-	var selectLi = function(liElement){
-		if(/(<br(|\/)>)$/i.test(liElement.innerHTML.trim())) taSelection.setSelectionBeforeElement(angular.element(liElement).find("br")[0]);
-		else taSelection.setSelectionToElementEnd(liElement);
-	};
-	var listToList = function(listElement, newListTag){
-		var $target = angular.element('<' + newListTag + '>' + listElement[0].innerHTML + '</' + newListTag + '>');
-		listElement.after($target);
-		listElement.remove();
-		selectLi($target.find('li')[0]);
-	};
-	var childElementsToList = function(elements, listElement, newListTag){
-		var html = '';
-		for(var i = 0; i < elements.length; i++){
-			html += '<' + taBrowserTag('li') + '>' + elements[i].innerHTML + '</' + taBrowserTag('li') + '>';
-		}
-		var $target = angular.element('<' + newListTag + '>' + html + '</' + newListTag + '>');
-		listElement.after($target);
-		listElement.remove();
-		selectLi($target.find('li')[0]);
-	};
-	return function(taDefaultWrap, topNode){
-		taDefaultWrap = taBrowserTag(taDefaultWrap);
-		return function(command, showUI, options, defaultTagAttributes){
-			var i, $target, html, _nodes, next, optionsTagName, selectedElement;
-			var defaultWrapper = angular.element('<' + taDefaultWrap + '>');
-			try{
-				selectedElement = taSelection.getSelectionElement();
-			}catch(e){}
-			var $selected = angular.element(selectedElement);
-			if(selectedElement !== undefined){
-				var tagName = selectedElement.tagName.toLowerCase();
-				if(command.toLowerCase() === 'insertorderedlist' || command.toLowerCase() === 'insertunorderedlist'){
-					var selfTag = taBrowserTag((command.toLowerCase() === 'insertorderedlist')? 'ol' : 'ul');
-					if(tagName === selfTag){
-						// if all selected then we should remove the list
-						// grab all li elements and convert to taDefaultWrap tags
-						return listToDefault($selected, taDefaultWrap);
-					}else if(tagName === 'li' && $selected.parent()[0].tagName.toLowerCase() === selfTag && $selected.parent().children().length === 1){
-						// catch for the previous statement if only one li exists
-						return listToDefault($selected.parent(), taDefaultWrap);
-					}else if(tagName === 'li' && $selected.parent()[0].tagName.toLowerCase() !== selfTag && $selected.parent().children().length === 1){
-						// catch for the previous statement if only one li exists
-						return listToList($selected.parent(), selfTag);
-					}else if(tagName.match(BLOCKELEMENTS) && !$selected.hasClass('ta-bind')){
-						// if it's one of those block elements we have to change the contents
-						// if it's a ol/ul we are changing from one to the other
-						if(tagName === 'ol' || tagName === 'ul'){
-							return listToList($selected, selfTag);
-						}else{
-							var childBlockElements = false;
-							angular.forEach($selected.children(), function(elem){
-								if(elem.tagName.match(BLOCKELEMENTS)) {
-									childBlockElements = true;
-								}
-							});
-							if(childBlockElements){
-								return childElementsToList($selected.children(), $selected, selfTag);
-							}else{
-								return childElementsToList([angular.element('<div>' + selectedElement.innerHTML + '</div>')[0]], $selected, selfTag);
-							}
-						}
-					}else if(tagName.match(BLOCKELEMENTS)){
-						// if we get here then all the contents of the ta-bind are selected
-						_nodes = taSelection.getOnlySelectedElements();
-						if(_nodes.length === 0){
-							// here is if there is only text in ta-bind ie <div ta-bind>test content</div>
-							$target = angular.element('<' + selfTag + '><li>' + selectedElement.innerHTML + '</li></' + selfTag + '>');
-							$selected.html('');
-							$selected.append($target);
-						}else if(_nodes.length === 1 && (_nodes[0].tagName.toLowerCase() === 'ol' || _nodes[0].tagName.toLowerCase() === 'ul')){
-							if(_nodes[0].tagName.toLowerCase() === selfTag){
-								// remove
-								return listToDefault(angular.element(_nodes[0]), taDefaultWrap);
-							}else{
-								return listToList(angular.element(_nodes[0]), selfTag);
-							}
-						}else{
-							html = '';
-							var $nodes = [];
-							for(i = 0; i < _nodes.length; i++){
-								/* istanbul ignore else: catch for real-world can't make it occur in testing */
-								if(_nodes[i].nodeType !== 3){
-									var $n = angular.element(_nodes[i]);
-									/* istanbul ignore if: browser check only, phantomjs doesn't return children nodes but chrome at least does */
-									if(_nodes[i].tagName.toLowerCase() === 'li') continue;
-									else if(_nodes[i].tagName.toLowerCase() === 'ol' || _nodes[i].tagName.toLowerCase() === 'ul'){
-										html += $n[0].innerHTML; // if it's a list, add all it's children
-									}else if(_nodes[i].tagName.toLowerCase() === 'span' && (_nodes[i].childNodes[0].tagName.toLowerCase() === 'ol' || _nodes[i].childNodes[0].tagName.toLowerCase() === 'ul')){
-										html += $n[0].childNodes[0].innerHTML; // if it's a list, add all it's children
-									}else{
-										html += '<' + taBrowserTag('li') + '>' + $n[0].innerHTML + '</' + taBrowserTag('li') + '>';
-									}
-									$nodes.unshift($n);
-								}
-							}
-							$target = angular.element('<' + selfTag + '>' + html + '</' + selfTag + '>');
-							$nodes.pop().replaceWith($target);
-							angular.forEach($nodes, function($node){ $node.remove(); });
-						}
-						taSelection.setSelectionToElementEnd($target[0]);
-						return;
-					}
-				}else if(command.toLowerCase() === 'formatblock'){
-					optionsTagName = options.toLowerCase().replace(/[<>]/ig, '');
-					if(optionsTagName.trim() === 'default') {
-						optionsTagName = taDefaultWrap;
-						options = '<' + taDefaultWrap + '>';
-					}
-					if(tagName === 'li') $target = $selected.parent();
-					else $target = $selected;
-					// find the first blockElement
-					while(!$target[0].tagName || !$target[0].tagName.match(BLOCKELEMENTS) && !$target.parent().attr('contenteditable')){
-						$target = $target.parent();
-						/* istanbul ignore next */
-						tagName = ($target[0].tagName || '').toLowerCase();
-					}
-					if(tagName === optionsTagName){
-						// $target is wrap element
-						_nodes = $target.children();
-						var hasBlock = false;
-						for(i = 0; i < _nodes.length; i++){
-							hasBlock = hasBlock || _nodes[i].tagName.match(BLOCKELEMENTS);
-						}
-						if(hasBlock){
-							$target.after(_nodes);
-							next = $target.next();
-							$target.remove();
-							$target = next;
-						}else{
-							defaultWrapper.append($target[0].childNodes);
-							$target.after(defaultWrapper);
-							$target.remove();
-							$target = defaultWrapper;
-						}
-					}else if($target.parent()[0].tagName.toLowerCase() === optionsTagName && !$target.parent().hasClass('ta-bind')){
-						//unwrap logic for parent
-						var blockElement = $target.parent();
-						var contents = blockElement.contents();
-						for(i = 0; i < contents.length; i ++){
-							/* istanbul ignore next: can't test - some wierd thing with how phantomjs works */
-							if(blockElement.parent().hasClass('ta-bind') && contents[i].nodeType === 3){
-								defaultWrapper = angular.element('<' + taDefaultWrap + '>');
-								defaultWrapper[0].innerHTML = contents[i].outerHTML;
-								contents[i] = defaultWrapper[0];
-							}
-							blockElement.parent()[0].insertBefore(contents[i], blockElement[0]);
-						}
-						blockElement.remove();
-					}else if(tagName.match(LISTELEMENTS)){
-						// wrapping a list element
-						$target.wrap(options);
-					}else{
-						// default wrap behaviour
-						_nodes = taSelection.getOnlySelectedElements();
-						if(_nodes.length === 0) _nodes = [$target[0]];
-						// find the parent block element if any of the nodes are inline or text
-						for(i = 0; i < _nodes.length; i++){
-							if(_nodes[i].nodeType === 3 || !_nodes[i].tagName.match(BLOCKELEMENTS)){
-								while(_nodes[i].nodeType === 3 || !_nodes[i].tagName || !_nodes[i].tagName.match(BLOCKELEMENTS)){
-									_nodes[i] = _nodes[i].parentNode;
-								}
-							}
-						}
-						if(angular.element(_nodes[0]).hasClass('ta-bind')){
-							$target = angular.element(options);
-							$target[0].innerHTML = _nodes[0].innerHTML;
-							_nodes[0].innerHTML = $target[0].outerHTML;
-						}else if(optionsTagName === 'blockquote'){
-							// blockquotes wrap other block elements
-							html = '';
-							for(i = 0; i < _nodes.length; i++){
-								html += _nodes[i].outerHTML;
-							}
-							$target = angular.element(options);
-							$target[0].innerHTML = html;
-							_nodes[0].parentNode.insertBefore($target[0],_nodes[0]);
-							for(i = _nodes.length - 1; i >= 0; i--){
-								/* istanbul ignore else:  */
-								if(_nodes[i].parentNode) _nodes[i].parentNode.removeChild(_nodes[i]);
-							}
-						}
-						else {
-							// regular block elements replace other block elements
-							for(i = 0; i < _nodes.length; i++){
-								$target = angular.element(options);
-								$target[0].innerHTML = _nodes[i].innerHTML;
-								_nodes[i].parentNode.insertBefore($target[0],_nodes[i]);
-								_nodes[i].parentNode.removeChild(_nodes[i]);
-							}
-						}
-					}
-					taSelection.setSelectionToElementEnd($target[0]);
-					return;
-				}else if(command.toLowerCase() === 'createlink'){
-					var tagBegin = '<a href="' + options + '" target="' +
-							(defaultTagAttributes.a.target ? defaultTagAttributes.a.target : '') +
-							'">',
-						tagEnd = '</a>',
-						_selection = taSelection.getSelection();
-					if(_selection.collapsed){
-						// insert text at selection, then select then just let normal exec-command run
-						taSelection.insertHtml(tagBegin + options + tagEnd, topNode);
-					}else if(rangy.getSelection().getRangeAt(0).canSurroundContents()){
-						var node = angular.element(tagBegin + tagEnd)[0];
-						rangy.getSelection().getRangeAt(0).surroundContents(node);
-					}
-					return;
-				}else if(command.toLowerCase() === 'inserthtml'){
-					taSelection.insertHtml(options, topNode);
-					return;
-				}
-			}
-			try{
-				$document[0].execCommand(command, showUI, options);
-			}catch(e){}
-		};
-	};
-}]).service('taSelection', ['$document', 'taDOM',
-/* istanbul ignore next: all browser specifics and PhantomJS dosen't seem to support half of it */
-function($document, taDOM){
-	// need to dereference the document else the calls don't work correctly
-	var _document = $document[0];
-	var brException = function (element, offset) {
-		/* check if selection is a BR element at the beginning of a container. If so, get
-		* the parentNode instead.
-		* offset should be zero in this case. Otherwise, return the original
-		* element.
-		*/
-		if (element.tagName && element.tagName.match(/^br$/i) && offset === 0 && !element.previousSibling) {
-            return {
-                element: element.parentNode,
-                offset: 0
-            };
-		} else {
-			return {
-				element: element,
-				offset: offset
-			};
-		}
-	};
-	var api = {
-		getSelection: function(){
-			var range = rangy.getSelection().getRangeAt(0);
-			var container = range.commonAncestorContainer;
-			var selection = {
-				start: brException(range.startContainer, range.startOffset),
-				end: brException(range.endContainer, range.endOffset),
-				collapsed: range.collapsed
-			};
-			// Check if the container is a text node and return its parent if so
-			container = container.nodeType === 3 ? container.parentNode : container;
-			if (container.parentNode === selection.start.element ||
-				container.parentNode === selection.end.element) {
-				selection.container = container.parentNode;
-			} else {
-				selection.container = container;
-			}
-			return selection;
-		},
-		getOnlySelectedElements: function(){
-			var range = rangy.getSelection().getRangeAt(0);
-			var container = range.commonAncestorContainer;
-			// Check if the container is a text node and return its parent if so
-			container = container.nodeType === 3 ? container.parentNode : container;
-			return range.getNodes([1], function(node){
-				return node.parentNode === container;
-			});
-		},
-		// Some basic selection functions
-		getSelectionElement: function () {
-			return api.getSelection().container;
-		},
-		setSelection: function(el, start, end){
-			var range = rangy.createRange();
-			
-			range.setStart(el, start);
-			range.setEnd(el, end);
-			
-			rangy.getSelection().setSingleRange(range);
-		},
-		setSelectionBeforeElement: function (el){
-			var range = rangy.createRange();
-			
-			range.selectNode(el);
-			range.collapse(true);
-			
-			rangy.getSelection().setSingleRange(range);
-		},
-		setSelectionAfterElement: function (el){
-			var range = rangy.createRange();
-			
-			range.selectNode(el);
-			range.collapse(false);
-			
-			rangy.getSelection().setSingleRange(range);
-		},
-		setSelectionToElementStart: function (el){
-			var range = rangy.createRange();
-			
-			range.selectNodeContents(el);
-			range.collapse(true);
-			
-			rangy.getSelection().setSingleRange(range);
-		},
-		setSelectionToElementEnd: function (el){
-			var range = rangy.createRange();
-			
-			range.selectNodeContents(el);
-			range.collapse(false);
-			if(el.childNodes && el.childNodes[el.childNodes.length - 1] && el.childNodes[el.childNodes.length - 1].nodeName === 'br'){
-				range.startOffset = range.endOffset = range.startOffset - 1;
-			}
-			rangy.getSelection().setSingleRange(range);
-		},
-		// from http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
-		// topNode is the contenteditable normally, all manipulation MUST be inside this.
-		insertHtml: function(html, topNode){
-			var parent, secondParent, _childI, nodes, i, lastNode, _tempFrag;
-			var element = angular.element("<div>" + html + "</div>");
-			var range = rangy.getSelection().getRangeAt(0);
-			var frag = _document.createDocumentFragment();
-			var children = element[0].childNodes;
-			var isInline = true;
-			
-			if(children.length > 0){
-				// NOTE!! We need to do the following:
-				// check for blockelements - if they exist then we have to split the current element in half (and all others up to the closest block element) and insert all children in-between.
-				// If there are no block elements, or there is a mixture we need to create textNodes for the non wrapped text (we don't want them spans messing up the picture).
-				nodes = [];
-				for(_childI = 0; _childI < children.length; _childI++){
-					if(!(
-						(children[_childI].nodeName.toLowerCase() === 'p' && children[_childI].innerHTML.trim() === '') || // empty p element
-						(children[_childI].nodeType === 3 && children[_childI].nodeValue.trim() === '') // empty text node
-					)){
-						isInline = isInline && !BLOCKELEMENTS.test(children[_childI].nodeName);
-						nodes.push(children[_childI]);
-					}
-				}
-				for(var _n = 0; _n < nodes.length; _n++) lastNode = frag.appendChild(nodes[_n]);
-				if(!isInline && range.collapsed && /^(|<br(|\/)>)$/i.test(range.startContainer.innerHTML)) range.selectNode(range.startContainer);
-			}else{
-				isInline = true;
-				// paste text of some sort
-				lastNode = frag = _document.createTextNode(html);
-			}
-			
-			// Other Edge case - selected data spans multiple blocks.
-			if(isInline){
-				range.deleteContents();
-			}else{ // not inline insert
-				if(range.collapsed && range.startContainer !== topNode){
-					if(range.startContainer.innerHTML && range.startContainer.innerHTML.match(/^<[^>]*>$/i)){
-						// this log is to catch when innerHTML is something like `<img ...>`
-						parent = range.startContainer;
-						if(range.startOffset === 1){
-							// before single tag
-							range.setStartAfter(parent);
-							range.setEndAfter(parent);
-						}else{
-							// after single tag
-							range.setStartBefore(parent);
-							range.setEndBefore(parent);
-						}
-					}else{
-						// split element into 2 and insert block element in middle
-						if(range.startContainer.nodeType === 3 && range.startContainer.parentNode !== topNode){ // if text node
-							parent = range.startContainer.parentNode;
-							secondParent = parent.cloneNode();
-							// split the nodes into two lists - before and after, splitting the node with the selection into 2 text nodes.
-							taDOM.splitNodes(parent.childNodes, parent, secondParent, range.startContainer, range.startOffset);
-							
-							// Escape out of the inline tags like b
-							while(!VALIDELEMENTS.test(parent.nodeName)){
-								angular.element(parent).after(secondParent);
-								parent = parent.parentNode;
-								var _lastSecondParent = secondParent;
-								secondParent = parent.cloneNode();
-								// split the nodes into two lists - before and after, splitting the node with the selection into 2 text nodes.
-								taDOM.splitNodes(parent.childNodes, parent, secondParent, _lastSecondParent);
-							}
-						}else{
-							parent = range.startContainer;
-							secondParent = parent.cloneNode();
-							taDOM.splitNodes(parent.childNodes, parent, secondParent, undefined, undefined, range.startOffset);
-						}
-						
-						angular.element(parent).after(secondParent);
-						// put cursor to end of inserted content
-						range.setStartAfter(parent);
-						range.setEndAfter(parent);
-						
-						if(/^(|<br(|\/)>)$/i.test(parent.innerHTML.trim())){
-							range.setStartBefore(parent);
-							range.setEndBefore(parent);
-							angular.element(parent).remove();
-						}
-						if(/^(|<br(|\/)>)$/i.test(secondParent.innerHTML.trim())) angular.element(secondParent).remove();
-						if(parent.nodeName.toLowerCase() === 'li'){
-							_tempFrag = _document.createDocumentFragment();
-							for(i = 0; i < frag.childNodes.length; i++){
-								element = angular.element('<li>');
-								taDOM.transferChildNodes(frag.childNodes[i], element[0]);
-								taDOM.transferNodeAttributes(frag.childNodes[i], element[0]);
-								_tempFrag.appendChild(element[0]);
-							}
-							frag = _tempFrag;
-							if(lastNode){
-								lastNode = frag.childNodes[frag.childNodes.length - 1];
-								lastNode = lastNode.childNodes[lastNode.childNodes.length - 1];
-							}
-						}
-					}
-				}else{
-					range.deleteContents();
-				}
-			}
-			
-			range.insertNode(frag);
-			if(lastNode){
-				api.setSelectionToElementEnd(lastNode);
-			}
-		}
-	};
-	return api;
-}]).service('taDOM', function(){
-	var taDOM = {
-		// recursive function that returns an array of angular.elements that have the passed attribute set on them
-		getByAttribute: function(element, attribute){
-			var resultingElements = [];
-			var childNodes = element.children();
-			if(childNodes.length){
-				angular.forEach(childNodes, function(child){
-					resultingElements = resultingElements.concat(taDOM.getByAttribute(angular.element(child), attribute));
-				});
-			}
-			if(element.attr(attribute) !== undefined) resultingElements.push(element);
-			return resultingElements;
-		},
-		
-		transferChildNodes: function(source, target){
-			// clear out target
-			target.innerHTML = '';
-			while(source.childNodes.length > 0) target.appendChild(source.childNodes[0]);
-			return target;
-		},
-		
-		splitNodes: function(nodes, target1, target2, splitNode, subSplitIndex, splitIndex){
-			if(!splitNode && isNaN(splitIndex)) throw new Error('taDOM.splitNodes requires a splitNode or splitIndex');
-			var startNodes = document.createDocumentFragment();
-			var endNodes = document.createDocumentFragment();
-			var index = 0;
-			
-			while(nodes.length > 0 && (isNaN(splitIndex) || splitIndex !== index) && nodes[0] !== splitNode){
-				startNodes.appendChild(nodes[0]); // this removes from the nodes array (if proper childNodes object.
-				index++;
-			}
-			
-			if(!isNaN(subSplitIndex) && subSplitIndex >= 0 && nodes[0]){
-				startNodes.appendChild(document.createTextNode(nodes[0].nodeValue.substring(0, subSplitIndex)));
-				nodes[0].nodeValue = nodes[0].nodeValue.substring(subSplitIndex);
-			}
-			while(nodes.length > 0) endNodes.appendChild(nodes[0]);
-			
-			taDOM.transferChildNodes(startNodes, target1);
-			taDOM.transferChildNodes(endNodes, target2);
-		},
-		
-		transferNodeAttributes: function(source, target){
-			for(var i = 0; i < source.attributes.length; i++) target.setAttribute(source.attributes[i].name, source.attributes[i].value);
-			return target;
-		}
-	};
-	return taDOM;
-});
-angular.module('textAngular.validators', [])
-.directive('taMaxText', function(){
-	return {
-		restrict: 'A',
-		require: 'ngModel',
-		link: function(scope, elem, attrs, ctrl){
-			var max = parseInt(scope.$eval(attrs.taMaxText));
-			if (isNaN(max)){
-				throw('Max text must be an integer');
-			}
-			attrs.$observe('taMaxText', function(value){
-				max = parseInt(value);
-				if (isNaN(max)){
-					throw('Max text must be an integer');
-				}
-				if (ctrl.$dirty){
-					ctrl.$validate();
-				}
-			});
-			ctrl.$validators.taMaxText = function(viewValue){
-				var source = angular.element('<div/>');
-				source.html(viewValue);
-				return source.text().length <= max;
-			};
-		}
-	};
-}).directive('taMinText', function(){
-	return {
-		restrict: 'A',
-		require: 'ngModel',
-		link: function(scope, elem, attrs, ctrl){
-			var min = parseInt(scope.$eval(attrs.taMinText));
-			if (isNaN(min)){
-				throw('Min text must be an integer');
-			}
-			attrs.$observe('taMinText', function(value){
-				min = parseInt(value);
-				if (isNaN(min)){
-					throw('Min text must be an integer');
-				}
-				if (ctrl.$dirty){
-					ctrl.$validate();
-				}
-			});
-			ctrl.$validators.taMinText = function(viewValue){
-				var source = angular.element('<div/>');
-				source.html(viewValue);
-				return !source.text().length || source.text().length >= min;
-			};
-		}
-	};
-});
-angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'])
-.service('_taBlankTest', [function(){
-	var INLINETAGS_NONBLANK = /<(a|abbr|acronym|bdi|bdo|big|cite|code|del|dfn|img|ins|kbd|label|map|mark|q|ruby|rp|rt|s|samp|time|tt|var)[^>]*(>|$)/i;
-	return function(_defaultTest){
-		return function(_blankVal){
-			if(!_blankVal) return true;
-			// find first non-tag match - ie start of string or after tag that is not whitespace
-			var _firstMatch = /(^[^<]|>)[^<]/i.exec(_blankVal);
-			var _firstTagIndex;
-			if(!_firstMatch){
-				// find the end of the first tag removing all the
-				// Don't do a global replace as that would be waaayy too long, just replace the first 4 occurences should be enough
-				_blankVal = _blankVal.toString().replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '');
-				_firstTagIndex = _blankVal.indexOf('>');
-			}else{
-				_firstTagIndex = _firstMatch.index;
-			}
-			_blankVal = _blankVal.trim().substring(_firstTagIndex, _firstTagIndex + 100);
-			// check for no tags entry
-			if(/^[^<>]+$/i.test(_blankVal)) return false;
-			// this regex is to match any number of whitespace only between two tags
-			if (_blankVal.length === 0 || _blankVal === _defaultTest || /^>(\s|&nbsp;)*<\/[^>]+>$/ig.test(_blankVal)) return true;
-			// this regex tests if there is a tag followed by some optional whitespace and some text after that
-			else if (/>\s*[^\s<]/i.test(_blankVal) || INLINETAGS_NONBLANK.test(_blankVal)) return false;
-			else return true;
-		};
-	};
-}])
-.directive('taButton', [function(){
-	return {
-		link: function(scope, element, attrs){
-			element.attr('unselectable', 'on');
-			element.on('mousedown', function(e, eventData){
-				/* istanbul ignore else: this is for catching the jqLite testing*/
-				if(eventData) angular.extend(e, eventData);
-				// this prevents focusout from firing on the editor when clicking toolbar buttons
-				e.preventDefault();
-				return false;
-			});
-		}
-	};
-}])
-.directive('taBind', [
-		'taSanitize', '$timeout', '$document', 'taFixChrome', 'taBrowserTag',
-		'taSelection', 'taSelectableElements', 'taApplyCustomRenderers', 'taOptions',
-		'_taBlankTest', '$parse', 'taDOM', 'textAngularManager',
-		function(
-			taSanitize, $timeout, $document, taFixChrome, taBrowserTag,
-			taSelection, taSelectableElements, taApplyCustomRenderers, taOptions,
-			_taBlankTest, $parse, taDOM, textAngularManager){
-	// Uses for this are textarea or input with ng-model and ta-bind='text'
-	// OR any non-form element with contenteditable="contenteditable" ta-bind="html|text" ng-model
-	return {
-		priority: 2, // So we override validators correctly
-		require: ['ngModel','?ngModelOptions'],
-		link: function(scope, element, attrs, controller){
-			var ngModel = controller[0];
-			var ngModelOptions = controller[1] || {};
-			// the option to use taBind on an input or textarea is required as it will sanitize all input into it correctly.
-			var _isContentEditable = element.attr('contenteditable') !== undefined && element.attr('contenteditable');
-			var _isInputFriendly = _isContentEditable || element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input';
-			var _isReadonly = false;
-			var _focussed = false;
-			var _skipRender = false;
-			var _disableSanitizer = attrs.taUnsafeSanitizer || taOptions.disableSanitizer;
-			var _lastKey;
-			// see http://www.javascripter.net/faq/keycodes.htm for good information
-			// NOTE Mute On|Off 173 (Opera MSIE Safari Chrome) 181 (Firefox)
-			// BLOCKED_KEYS are special keys...
-			// Tab, pause/break, CapsLock, Esc, Page Up, End, Home,
-			// Left arrow, Up arrow, Right arrow, Down arrow, Insert, Delete,
-			// f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12
-			// NumLock, ScrollLock
-			var BLOCKED_KEYS = /^(9|19|20|27|33|34|35|36|37|38|39|40|45|112|113|114|115|116|117|118|119|120|121|122|123|144|145)$/i;
-			// UNDO_TRIGGER_KEYS - spaces, enter, delete, backspace, all punctuation
-			// Backspace, Enter, Space, Delete, (; :) (Firefox), (= +) (Firefox),
-			// Numpad +, Numpad -, (; :), (= +),
-			// (, <), (- _), (. >), (/ ?), (` ~), ([ {), (\ |), (] }), (' ")
-			// NOTE - Firefox: 173 = (- _) -- adding this to UNDO_TRIGGER_KEYS
-			var UNDO_TRIGGER_KEYS = /^(8|13|32|46|59|61|107|109|173|186|187|188|189|190|191|192|219|220|221|222)$/i;
-			var _pasteHandler;
-
-			// defaults to the paragraph element, but we need the line-break or it doesn't allow you to type into the empty element
-			// non IE is '<p><br/></p>', ie is '<p></p>' as for once IE gets it correct...
-			var _defaultVal, _defaultTest;
-
-			var _CTRL_KEY = 0x0001;
-			var _META_KEY = 0x0002;
-			var _ALT_KEY = 0x0004;
-			var _SHIFT_KEY = 0x0008;
-			// map events to special keys...
-			// mappings is an array of maps from events to specialKeys as declared in textAngularSetup
-			var _keyMappings = [
-				//		ctrl/command + z
-				{
-					specialKey: 'UndoKey',
-					forbiddenModifiers: _ALT_KEY + _SHIFT_KEY,
-					mustHaveModifiers: [_META_KEY + _CTRL_KEY],
-					keyCode: 90
-				},
-				//		ctrl/command + shift + z
-				{
-					specialKey: 'RedoKey',
-					forbiddenModifiers: _ALT_KEY,
-					mustHaveModifiers: [_META_KEY + _CTRL_KEY, _SHIFT_KEY],
-					keyCode: 90
-				},
-				//		ctrl/command + y
-				{
-					specialKey: 'RedoKey',
-					forbiddenModifiers: _ALT_KEY + _SHIFT_KEY,
-					mustHaveModifiers: [_META_KEY + _CTRL_KEY],
-					keyCode: 89
-				},
-				//		TabKey
-				{
-					specialKey: 'TabKey',
-					forbiddenModifiers: _META_KEY + _SHIFT_KEY + _ALT_KEY + _CTRL_KEY,
-					mustHaveModifiers: [],
-					keyCode: 9
-				},
-				//		shift + TabKey
-				{
-					specialKey: 'ShiftTabKey',
-					forbiddenModifiers: _META_KEY + _ALT_KEY + _CTRL_KEY,
-					mustHaveModifiers: [_SHIFT_KEY],
-					keyCode: 9
-				}
-			];
-			function _mapKeys(event) {
-				var specialKey;
-				_keyMappings.forEach(function (map){
-					if (map.keyCode === event.keyCode) {
-						var netModifiers = (event.metaKey ? _META_KEY: 0) +
-							(event.ctrlKey ? _CTRL_KEY: 0) +
-							(event.shiftKey ? _SHIFT_KEY: 0) +
-							(event.altKey ? _ALT_KEY: 0);
-						if (map.forbiddenModifiers & netModifiers) return;
-						if (map.mustHaveModifiers.every(function (modifier) { return netModifiers & modifier; })){
-							specialKey = map.specialKey;
-						}
-					}
-				});
-				return specialKey;
-			}
-
-			// set the default to be a paragraph value
-			if(attrs.taDefaultWrap === undefined) attrs.taDefaultWrap = 'p';
-			/* istanbul ignore next: ie specific test */
-			if(attrs.taDefaultWrap === ''){
-				_defaultVal = '';
-				_defaultTest = (_browserDetect.ie === undefined)? '<div><br></div>' : (_browserDetect.ie >= 11)? '<p><br></p>' : (_browserDetect.ie <= 8)? '<P>&nbsp;</P>' : '<p>&nbsp;</p>';
-			}else{
-				_defaultVal = (_browserDetect.ie === undefined || _browserDetect.ie >= 11)?
-					'<' + attrs.taDefaultWrap + '><br></' + attrs.taDefaultWrap + '>' :
-					(_browserDetect.ie <= 8)?
-						'<' + attrs.taDefaultWrap.toUpperCase() + '></' + attrs.taDefaultWrap.toUpperCase() + '>' :
-						'<' + attrs.taDefaultWrap + '></' + attrs.taDefaultWrap + '>';
-				_defaultTest = (_browserDetect.ie === undefined || _browserDetect.ie >= 11)?
-					'<' + attrs.taDefaultWrap + '><br></' + attrs.taDefaultWrap + '>' :
-					(_browserDetect.ie <= 8)?
-						'<' + attrs.taDefaultWrap.toUpperCase() + '>&nbsp;</' + attrs.taDefaultWrap.toUpperCase() + '>' :
-						'<' + attrs.taDefaultWrap + '>&nbsp;</' + attrs.taDefaultWrap + '>';
-			}
-
-			/* istanbul ignore else */
-			if(!ngModelOptions.$options) ngModelOptions.$options = {}; // ng-model-options support
-
-			var _blankTest = _taBlankTest(_defaultTest);
-
-			var _ensureContentWrapped = function(value) {
-				if (_blankTest(value)) return value;
-				var domTest = angular.element("<div>" + value + "</div>");
-				//console.log('domTest.children().length():', domTest.children().length);
-				if (domTest.children().length === 0) {
-					value = "<" + attrs.taDefaultWrap + ">" + value + "</" + attrs.taDefaultWrap + ">";
-				} else {
-					var _children = domTest[0].childNodes;
-					var i;
-					var _foundBlockElement = false;
-					for (i = 0; i < _children.length; i++) {
-						if (_foundBlockElement = _children[i].nodeName.toLowerCase().match(BLOCKELEMENTS)) break;
-					}
-					if (!_foundBlockElement) {
-						value = "<" + attrs.taDefaultWrap + ">" + value + "</" + attrs.taDefaultWrap + ">";
-					}
-					else{
-						value = "";
-						for(i = 0; i < _children.length; i++){
-							var node = _children[i];
-							var nodeName = node.nodeName.toLowerCase();
-							//console.log(nodeName);
-							if(nodeName === '#comment') {
-								value += '<!--' + node.nodeValue + '-->';
-							} else if(nodeName === '#text') {
-								// determine if this is all whitespace, if so, we will leave it as it is.
-								// otherwise, we will wrap it as it is
-								var text = node.textContent;
-								if (!text.trim()) {
-									// just whitespace
-									value += text;
-								} else {
-									// not pure white space so wrap in <p>...</p> or whatever attrs.taDefaultWrap is set to.
-									value += "<" + attrs.taDefaultWrap + ">" + text + "</" + attrs.taDefaultWrap + ">";
-								}
-							} else if(!nodeName.match(BLOCKELEMENTS)){
-								/* istanbul ignore  next: Doesn't seem to trigger on tests */
-								var _subVal = (node.outerHTML || node.nodeValue);
-								/* istanbul ignore else: Doesn't seem to trigger on tests, is tested though */
-								if(_subVal.trim() !== '')
-									value += "<" + attrs.taDefaultWrap + ">" + _subVal + "</" + attrs.taDefaultWrap + ">";
-								else value += _subVal;
-							} else {
-								value += node.outerHTML;
-							}
-						}
-					}
-				}
-				//console.log(value);
-				return value;
-			};
-
-			if(attrs.taPaste) _pasteHandler = $parse(attrs.taPaste);
-
-			element.addClass('ta-bind');
-
-			var _undoKeyupTimeout;
-
-			scope['$undoManager' + (attrs.id || '')] = ngModel.$undoManager = {
-				_stack: [],
-				_index: 0,
-				_max: 1000,
-				push: function(value){
-					if((typeof value === "undefined" || value === null) ||
-						((typeof this.current() !== "undefined" && this.current() !== null) && value === this.current())) return value;
-					if(this._index < this._stack.length - 1){
-						this._stack = this._stack.slice(0,this._index+1);
-					}
-					this._stack.push(value);
-					if(_undoKeyupTimeout) $timeout.cancel(_undoKeyupTimeout);
-					if(this._stack.length > this._max) this._stack.shift();
-					this._index = this._stack.length - 1;
-					return value;
-				},
-				undo: function(){
-					return this.setToIndex(this._index-1);
-				},
-				redo: function(){
-					return this.setToIndex(this._index+1);
-				},
-				setToIndex: function(index){
-					if(index < 0 || index > this._stack.length - 1){
-						return undefined;
-					}
-					this._index = index;
-					return this.current();
-				},
-				current: function(){
-					return this._stack[this._index];
-				}
-			};
-
-			var _redoUndoTimeout;
-			var _undo = scope['$undoTaBind' + (attrs.id || '')] = function(){
-				/* istanbul ignore else: can't really test it due to all changes being ignored as well in readonly */
-				if(!_isReadonly && _isContentEditable){
-					var content = ngModel.$undoManager.undo();
-					if(typeof content !== "undefined" && content !== null){
-						_setInnerHTML(content);
-						_setViewValue(content, false);
-						if(_redoUndoTimeout) $timeout.cancel(_redoUndoTimeout);
-						_redoUndoTimeout = $timeout(function(){
-							element[0].focus();
-							taSelection.setSelectionToElementEnd(element[0]);
-						}, 1);
-					}
-				}
-			};
-
-			var _redo = scope['$redoTaBind' + (attrs.id || '')] = function(){
-				/* istanbul ignore else: can't really test it due to all changes being ignored as well in readonly */
-				if(!_isReadonly && _isContentEditable){
-					var content = ngModel.$undoManager.redo();
-					if(typeof content !== "undefined" && content !== null){
-						_setInnerHTML(content);
-						_setViewValue(content, false);
-						/* istanbul ignore next */
-						if(_redoUndoTimeout) $timeout.cancel(_redoUndoTimeout);
-						_redoUndoTimeout = $timeout(function(){
-							element[0].focus();
-							taSelection.setSelectionToElementEnd(element[0]);
-						}, 1);
-					}
-				}
-			};
-
-			// in here we are undoing the converts used elsewhere to prevent the < > and & being displayed when they shouldn't in the code.
-			var _compileHtml = function(){
-				if(_isContentEditable) return element[0].innerHTML;
-				if(_isInputFriendly) return element.val();
-				throw ('textAngular Error: attempting to update non-editable taBind');
-			};
-
-			var _setViewValue = function(_val, triggerUndo, skipRender){
-				_skipRender = skipRender || false;
-				if(typeof triggerUndo === "undefined" || triggerUndo === null) triggerUndo = true && _isContentEditable; // if not contentEditable then the native undo/redo is fine
-				if(typeof _val === "undefined" || _val === null) _val = _compileHtml();
-				if(_blankTest(_val)){
-					// this avoids us from tripping the ng-pristine flag if we click in and out with out typing
-					if(ngModel.$viewValue !== '') ngModel.$setViewValue('');
-					if(triggerUndo && ngModel.$undoManager.current() !== '') ngModel.$undoManager.push('');
-				}else{
-					_reApplyOnSelectorHandlers();
-					if(ngModel.$viewValue !== _val){
-						ngModel.$setViewValue(_val);
-						if(triggerUndo) ngModel.$undoManager.push(_val);
-					}
-				}
-				ngModel.$render();
-			};
-
-			//used for updating when inserting wrapped elements
-			scope['updateTaBind' + (attrs.id || '')] = function(){
-				if(!_isReadonly) _setViewValue(undefined, undefined, true);
-			};
-
-			// catch DOM XSS via taSanitize
-			// Sanitizing both ways is identical
-			var _sanitize = function(unsafe){
-				return (ngModel.$oldViewValue = taSanitize(taFixChrome(unsafe), ngModel.$oldViewValue, _disableSanitizer));
-			};
-
-			// trigger the validation calls
-			if(element.attr('required')) ngModel.$validators.required = function(modelValue, viewValue) {
-				return !_blankTest(modelValue || viewValue);
-			};
-			// parsers trigger from the above keyup function or any other time that the viewValue is updated and parses it for storage in the ngModel
-			ngModel.$parsers.push(_sanitize);
-			ngModel.$parsers.unshift(_ensureContentWrapped);
-			// because textAngular is bi-directional (which is awesome) we need to also sanitize values going in from the server
-			ngModel.$formatters.push(_sanitize);
-			ngModel.$formatters.unshift(_ensureContentWrapped);
-			ngModel.$formatters.unshift(function(value){
-				return ngModel.$undoManager.push(value || '');
-			});
-
-			//this code is used to update the models when data is entered/deleted
-			if(_isInputFriendly){
-				scope.events = {};
-				if(!_isContentEditable){
-					// if a textarea or input just add in change and blur handlers, everything else is done by angulars input directive
-					element.on('change blur', scope.events.change = scope.events.blur = function(){
-						if(!_isReadonly) ngModel.$setViewValue(_compileHtml());
-					});
-
-					element.on('keydown', scope.events.keydown = function(event, eventData){
-						/* istanbul ignore else: this is for catching the jqLite testing*/
-						if(eventData) angular.extend(event, eventData);
-						// Reference to http://stackoverflow.com/questions/6140632/how-to-handle-tab-in-textarea
-						/* istanbul ignore else: otherwise normal functionality */
-						if(event.keyCode === 9){ // tab was pressed
-							// get caret position/selection
-							var start = this.selectionStart;
-							var end = this.selectionEnd;
-
-							var value = element.val();
-							if(event.shiftKey){
-								// find \t
-								var _linebreak = value.lastIndexOf('\n', start), _tab = value.lastIndexOf('\t', start);
-								if(_tab !== -1 && _tab >= _linebreak){
-									// set textarea value to: text before caret + tab + text after caret
-									element.val(value.substring(0, _tab) + value.substring(_tab + 1));
-
-									// put caret at right position again (add one for the tab)
-									this.selectionStart = this.selectionEnd = start - 1;
-								}
-							}else{
-								// set textarea value to: text before caret + tab + text after caret
-								element.val(value.substring(0, start) + "\t" + value.substring(end));
-
-								// put caret at right position again (add one for the tab)
-								this.selectionStart = this.selectionEnd = start + 1;
-							}
-							// prevent the focus lose
-							event.preventDefault();
-						}
-					});
-
-					var _repeat = function(string, n){
-						var result = '';
-						for(var _n = 0; _n < n; _n++) result += string;
-						return result;
-					};
-
-					// add a forEach function that will work on a NodeList, etc..
-					var forEach = function (array, callback, scope) {
-						for (var i= 0; i<array.length; i++) {
-							callback.call(scope, i, array[i]);
-						}
-					};
-
-					// handle <ul> or <ol> nodes
-					var recursiveListFormat = function(listNode, tablevel){
-						var _html = '';
-						var _subnodes = listNode.childNodes;
-						tablevel++;
-						// tab out and add the <ul> or <ol> html piece
-						_html += _repeat('\t', tablevel-1) + listNode.outerHTML.substring(0, 4);
-						forEach(_subnodes, function (index, node) {
-							/* istanbul ignore next: browser catch */
-							var nodeName = node.nodeName.toLowerCase();
-							if (nodeName === '#comment') {
-								_html += '<!--' + node.nodeValue + '-->';
-								return;
-							}
-							if (nodeName === '#text') {
-								_html += node.textContent;
-								return;
-							}
-							/* istanbul ignore next: not tested, and this was original code -- so not wanting to possibly cause an issue, leaving it... */
-							if(!node.outerHTML) {
-								// no html to add
-								return;
-							}
-							if(nodeName === 'ul' || nodeName === 'ol') {
-								_html += '\n' + recursiveListFormat(node, tablevel);
-							}
-							else {
-								// no reformatting within this subnode, so just do the tabing...
-								_html += '\n' + _repeat('\t', tablevel) + node.outerHTML;
-							}
-						});
-						// now add on the </ol> or </ul> piece
-						_html += '\n' + _repeat('\t', tablevel-1) + listNode.outerHTML.substring(listNode.outerHTML.lastIndexOf('<'));
-						return _html;
-					};
-					// handle formating of something like:
-					// <ol><!--First comment-->
-					//  <li>Test Line 1<!--comment test list 1--></li>
-					//    <ul><!--comment ul-->
-					//      <li>Nested Line 1</li>
-					//        <!--comment between nested lines--><li>Nested Line 2</li>
-					//    </ul>
-					//  <li>Test Line 3</li>
-					// </ol>
-					ngModel.$formatters.unshift(function(htmlValue){
-						// tabulate the HTML so it looks nicer
-						//
-						// first get a list of the nodes...
-						// we do this by using the element parser...
-						//
-						// doing this -- which is simpiler -- breaks our tests...
-						//var _nodes=angular.element(htmlValue);
-						var _nodes = angular.element('<div>' + htmlValue + '</div>')[0].childNodes;
-						if(_nodes.length > 0){
-							// do the reformatting of the layout...
-							htmlValue = '';
-							forEach(_nodes, function (index, node) {
-								var nodeName = node.nodeName.toLowerCase();
-								if (nodeName === '#comment') {
-									htmlValue += '<!--' + node.nodeValue + '-->';
-									return;
-								}
-								if (nodeName === '#text') {
-									htmlValue += node.textContent;
-									return;
-								}
-								/* istanbul ignore next: not tested, and this was original code -- so not wanting to possibly cause an issue, leaving it... */
-								if(!node.outerHTML)
-								{
-									// nothing to format!
-									return;
-								}
-								if(htmlValue.length > 0) {
-									// we aready have some content, so drop to a new line
-									htmlValue += '\n';
-								}
-								if(nodeName === 'ul' || nodeName === 'ol') {
-									// okay a set of list stuff we want to reformat in a nested way
-									htmlValue += '' + recursiveListFormat(node, 0);
-								}
-								else {
-									// just use the original without any additional formating
-									htmlValue += '' + node.outerHTML;
-								}
-							});
-						}
-						return htmlValue;
-					});
-				}else{
-					// all the code specific to contenteditable divs
-					var _processingPaste = false;
-					/* istanbul ignore next: phantom js cannot test this for some reason */
-					var processpaste = function(text) {
-                        var _isOneNote = text.match(/content=["']*OneNote.File/i);
-						/* istanbul ignore else: don't care if nothing pasted */
-                        //console.log(text);
-						if(text && text.trim().length){
-							// test paste from word/microsoft product
-							if(text.match(/class=["']*Mso(Normal|List)/i) || text.match(/content=["']*Word.Document/i) || text.match(/content=["']*OneNote.File/i)){
-								var textFragment = text.match(/<!--StartFragment-->([\s\S]*?)<!--EndFragment-->/i);
-								if(!textFragment) textFragment = text;
-								else textFragment = textFragment[1];
-								textFragment = textFragment.replace(/<o:p>[\s\S]*?<\/o:p>/ig, '').replace(/class=(["']|)MsoNormal(["']|)/ig, '');
-								var dom = angular.element("<div>" + textFragment + "</div>");
-								var targetDom = angular.element("<div></div>");
-								var _list = {
-									element: null,
-									lastIndent: [],
-									lastLi: null,
-									isUl: false
-								};
-								_list.lastIndent.peek = function(){
-									var n = this.length;
-									if (n>0) return this[n-1];
-								};
-								var _resetList = function(isUl){
-									_list.isUl = isUl;
-									_list.element = angular.element(isUl ? "<ul>" : "<ol>");
-									_list.lastIndent = [];
-									_list.lastIndent.peek = function(){
-										var n = this.length;
-										if (n>0) return this[n-1];
-									};
-									_list.lastLevelMatch = null;
-								};
-								for(var i = 0; i <= dom[0].childNodes.length; i++){
-									if(!dom[0].childNodes[i] || dom[0].childNodes[i].nodeName === "#text"){
-										continue;
-									} else {
-										var tagName = dom[0].childNodes[i].tagName.toLowerCase();
-										if(tagName !== "p" && tagName !== "h1" && tagName !== "h2" && tagName !== "h3" && tagName !== "h4" && tagName !== "h5" && tagName !== "h6"){
-											continue;
-										}
-									}
-									var el = angular.element(dom[0].childNodes[i]);
-									var _listMatch = (el.attr('class') || '').match(/MsoList(Bullet|Number|Paragraph)(CxSp(First|Middle|Last)|)/i);
-
-									if(_listMatch){
-										if(el[0].childNodes.length < 2 || el[0].childNodes[1].childNodes.length < 1){
-											continue;
-										}
-										var isUl = _listMatch[1].toLowerCase() === "bullet" || (_listMatch[1].toLowerCase() !== "number" && !(/^[^0-9a-z<]*[0-9a-z]+[^0-9a-z<>]</i.test(el[0].childNodes[1].innerHTML) || /^[^0-9a-z<]*[0-9a-z]+[^0-9a-z<>]</i.test(el[0].childNodes[1].childNodes[0].innerHTML)));
-										var _indentMatch = (el.attr('style') || '').match(/margin-left:([\-\.0-9]*)/i);
-										var indent = parseFloat((_indentMatch)?_indentMatch[1]:0);
-										var _levelMatch = (el.attr('style') || '').match(/mso-list:l([0-9]+) level([0-9]+) lfo[0-9+]($|;)/i);
-										// prefers the mso-list syntax
-
-										if(_levelMatch && _levelMatch[2]) indent = parseInt(_levelMatch[2]);
-
-										if ((_levelMatch && (!_list.lastLevelMatch || _levelMatch[1] !== _list.lastLevelMatch[1])) || !_listMatch[3] || _listMatch[3].toLowerCase() === "first" || (_list.lastIndent.peek() === null) || (_list.isUl !== isUl && _list.lastIndent.peek() === indent)) {
-											_resetList(isUl);
-											targetDom.append(_list.element);
-										} else if (_list.lastIndent.peek() != null && _list.lastIndent.peek() < indent){
-											_list.element = angular.element(isUl ? "<ul>" : "<ol>");
-											_list.lastLi.append(_list.element);
-										} else if (_list.lastIndent.peek() != null && _list.lastIndent.peek() > indent){
-											while(_list.lastIndent.peek() != null && _list.lastIndent.peek() > indent){
-												if(_list.element.parent()[0].tagName.toLowerCase() === 'li'){
-													_list.element = _list.element.parent();
-													continue;
-												}else if(/[uo]l/i.test(_list.element.parent()[0].tagName.toLowerCase())){
-													_list.element = _list.element.parent();
-												}else{ // else it's it should be a sibling
-													break;
-												}
-												_list.lastIndent.pop();
-											}
-											_list.isUl = _list.element[0].tagName.toLowerCase() === "ul";
-											if (isUl !== _list.isUl) {
-												_resetList(isUl);
-												targetDom.append(_list.element);
-											}
-										}
-
-										_list.lastLevelMatch = _levelMatch;
-										if(indent !== _list.lastIndent.peek()) _list.lastIndent.push(indent);
-										_list.lastLi = angular.element("<li>");
-										_list.element.append(_list.lastLi);
-										_list.lastLi.html(el.html().replace(/<!(--|)\[if !supportLists\](--|)>[\s\S]*?<!(--|)\[endif\](--|)>/ig, ''));
-										el.remove();
-									}else{
-										_resetList(false);
-										targetDom.append(el);
-									}
-								}
-								var _unwrapElement = function(node){
-									node = angular.element(node);
-									for(var _n = node[0].childNodes.length - 1; _n >= 0; _n--) node.after(node[0].childNodes[_n]);
-									node.remove();
-								};
-
-								angular.forEach(targetDom.find('span'), function(node){
-									node.removeAttribute('lang');
-									if(node.attributes.length <= 0) _unwrapElement(node);
-								});
-								angular.forEach(targetDom.find('font'), _unwrapElement);
-
-                                text = targetDom.html();
-                                if(_isOneNote){
-                                    text = targetDom.html() || dom.html();
-                                }
-							}else{
-								// remove unnecessary chrome insert
-								text = text.replace(/<(|\/)meta[^>]*?>/ig, '');
-								if(text.match(/<[^>]*?(ta-bind)[^>]*?>/)){
-									// entire text-angular or ta-bind has been pasted, REMOVE AT ONCE!!
-									if(text.match(/<[^>]*?(text-angular)[^>]*?>/)){
-										var _el = angular.element("<div>" + text + "</div>");
-										_el.find('textarea').remove();
-										var binds = taDOM.getByAttribute(_el, 'ta-bind');
-										for(var _b = 0; _b < binds.length; _b++){
-											var _target = binds[_b][0].parentNode.parentNode;
-											for(var _c = 0; _c < binds[_b][0].childNodes.length; _c++){
-												_target.parentNode.insertBefore(binds[_b][0].childNodes[_c], _target);
-											}
-											_target.parentNode.removeChild(_target);
-										}
-										text = _el.html().replace('<br class="Apple-interchange-newline">', '');
-									}
-								}else if(text.match(/^<span/)){
-									// in case of pasting only a span - chrome paste, remove them. THis is just some wierd formatting
-									// if we remove the '<span class="Apple-converted-space"> </span>' here we destroy the spacing
-									// on paste from even ourselves!
-									if (!text.match(/<span class=(\"Apple-converted-space\"|\'Apple-converted-space\')>.<\/span>/ig)) {
-										text = text.replace(/<(|\/)span[^>]*?>/ig, '');
-									}
-								}
-								// Webkit on Apple tags
-								text = text.replace(/<br class="Apple-interchange-newline"[^>]*?>/ig, '').replace(/<span class="Apple-converted-space">( |&nbsp;)<\/span>/ig, '&nbsp;');
-							}
-
-							if (/<li(\s.*)?>/i.test(text) && /(<ul(\s.*)?>|<ol(\s.*)?>).*<li(\s.*)?>/i.test(text) === false) {
-								// insert missing parent of li element
-								text = text.replace(/<li(\s.*)?>.*<\/li(\s.*)?>/i, '<ul>$&</ul>');
-							}
-
-							// parse whitespace from plaintext input, starting with preceding spaces that get stripped on paste
-							text = text.replace(/^[ |\u00A0]+/gm, function (match) {
-								var result = '';
-								for (var i = 0; i < match.length; i++) {
-									result += '&nbsp;';
-								}
-								return result;
-							}).replace(/\n|\r\n|\r/g, '<br />').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-
-							if(_pasteHandler) text = _pasteHandler(scope, {$html: text}) || text;
-
-							text = taSanitize(text, '', _disableSanitizer);
-
-							taSelection.insertHtml(text, element[0]);
-							$timeout(function(){
-								ngModel.$setViewValue(_compileHtml());
-								_processingPaste = false;
-								element.removeClass('processing-paste');
-							}, 0);
-						}else{
-							_processingPaste = false;
-							element.removeClass('processing-paste');
-						}
-					};
-
-					element.on('paste', scope.events.paste = function(e, eventData){
-						/* istanbul ignore else: this is for catching the jqLite testing*/
-						if(eventData) angular.extend(e, eventData);
-						if(_isReadonly || _processingPaste){
-							e.stopPropagation();
-							e.preventDefault();
-							return false;
-						}
-
-						// Code adapted from http://stackoverflow.com/questions/2176861/javascript-get-clipboard-data-on-paste-event-cross-browser/6804718#6804718
-						_processingPaste = true;
-						element.addClass('processing-paste');
-						var pastedContent;
-						var clipboardData = (e.originalEvent || e).clipboardData;
-						if (clipboardData && clipboardData.getData && clipboardData.types.length > 0) {// Webkit - get data from clipboard, put into editdiv, cleanup, then cancel event
-							var _types = "";
-							for(var _t = 0; _t < clipboardData.types.length; _t++){
-								_types += " " + clipboardData.types[_t];
-							}
-							/* istanbul ignore next: browser tests */
-							if (/text\/html/i.test(_types)) {
-								pastedContent = clipboardData.getData('text/html');
-							} else if (/text\/plain/i.test(_types)) {
-								pastedContent = clipboardData.getData('text/plain');
-							}
-
-							processpaste(pastedContent);
-							e.stopPropagation();
-							e.preventDefault();
-							return false;
-						} else {// Everything else - empty editdiv and allow browser to paste content into it, then cleanup
-							var _savedSelection = rangy.saveSelection(),
-								_tempDiv = angular.element('<div class="ta-hidden-input" contenteditable="true"></div>');
-							$document.find('body').append(_tempDiv);
-							_tempDiv[0].focus();
-							$timeout(function(){
-								// restore selection
-								rangy.restoreSelection(_savedSelection);
-								processpaste(_tempDiv[0].innerHTML);
-								element[0].focus();
-								_tempDiv.remove();
-							}, 0);
-						}
-					});
-					element.on('cut', scope.events.cut = function(e){
-						// timeout to next is needed as otherwise the paste/cut event has not finished actually changing the display
-						if(!_isReadonly) $timeout(function(){
-							ngModel.$setViewValue(_compileHtml());
-						}, 0);
-						else e.preventDefault();
-					});
-
-					element.on('keydown', scope.events.keydown = function(event, eventData){
-						/* istanbul ignore else: this is for catching the jqLite testing*/
-						if(eventData) angular.extend(event, eventData);
-						event.specialKey = _mapKeys(event);
-						var userSpecialKey;
-						/* istanbul ignore next: difficult to test */
-						taOptions.keyMappings.forEach(function (mapping) {
-							if (event.specialKey === mapping.commandKeyCode) {
-								// taOptions has remapped this binding... so
-								// we disable our own
-								event.specialKey = undefined;
-							}
-							if (mapping.testForKey(event)) {
-								userSpecialKey = mapping.commandKeyCode;
-							}
-							if ((mapping.commandKeyCode === 'UndoKey') || (mapping.commandKeyCode === 'RedoKey')) {
-								// this is necessary to fully stop the propagation.
-								if (!mapping.enablePropagation) {
-									event.preventDefault();
-								}
-							}
-						});
-						/* istanbul ignore next: difficult to test */
-						if (typeof userSpecialKey !== 'undefined') {
-							event.specialKey = userSpecialKey;
-						}
-						/* istanbul ignore next: difficult to test as can't seem to select */
-						if ((typeof event.specialKey !== 'undefined') && (
-								event.specialKey !== 'UndoKey' || event.specialKey !== 'RedoKey'
-							)) {
-							event.preventDefault();
-							textAngularManager.sendKeyCommand(scope, event);
-						}
-						/* istanbul ignore else: readonly check */
-						if(!_isReadonly){
-							if (event.specialKey==='UndoKey') {
-								_undo();
-								event.preventDefault();
-							}
-							if (event.specialKey==='RedoKey') {
-								_redo();
-								event.preventDefault();
-							}
-							/* istanbul ignore next: difficult to test as can't seem to select */
-							if(event.keyCode === 13 && !event.shiftKey){
-								var contains = function(a, obj) {
-									for (var i = 0; i < a.length; i++) {
-										if (a[i] === obj) {
-											return true;
-										}
-									}
-									return false;
-								};
-								var $selection;
-								var selection = taSelection.getSelectionElement();
-								if(!selection.tagName.match(VALIDELEMENTS)) return;
-								var _new = angular.element(_defaultVal);
-								// if we are in the last element of a blockquote, or ul or ol and the element is blank
-								// we need to pull the element outside of the said type
-								var moveOutsideElements = ['blockquote', 'ul', 'ol'];
-								if (contains(moveOutsideElements, selection.parentNode.tagName.toLowerCase())) {
-									if (/^<br(|\/)>$/i.test(selection.innerHTML.trim()) && !selection.nextSibling) {
-										// if last element is blank, pull element outside.
-										$selection = angular.element(selection);
-										var _parent = $selection.parent();
-										_parent.after(_new);
-										$selection.remove();
-										if (_parent.children().length === 0) _parent.remove();
-										taSelection.setSelectionToElementStart(_new[0]);
-										event.preventDefault();
-									}
-									if (/^<[^>]+><br(|\/)><\/[^>]+>$/i.test(selection.innerHTML.trim())) {
-										$selection = angular.element(selection);
-										$selection.after(_new);
-										$selection.remove();
-										taSelection.setSelectionToElementStart(_new[0]);
-										event.preventDefault();
-									}
-								}
-							}
-						}
-					});
-					var _keyupTimeout;
-					element.on('keyup', scope.events.keyup = function(event, eventData){
-						/* istanbul ignore else: this is for catching the jqLite testing*/
-						if(eventData) angular.extend(event, eventData);
-						/* istanbul ignore next: FF specific bug fix */
-						if (event.keyCode === 9) {
-							var _selection = taSelection.getSelection();
-							if(_selection.start.element === element[0] && element.children().length) taSelection.setSelectionToElementStart(element.children()[0]);
-							return;
-						}
-						if(_undoKeyupTimeout) $timeout.cancel(_undoKeyupTimeout);
-						if(!_isReadonly && !BLOCKED_KEYS.test(event.keyCode)){
-							// if enter - insert new taDefaultWrap, if shift+enter insert <br/>
-							if(_defaultVal !== '' && event.keyCode === 13){
-								if(!event.shiftKey){
-									// new paragraph, br should be caught correctly
-									var selection = taSelection.getSelectionElement();
-									while(!selection.tagName.match(VALIDELEMENTS) && selection !== element[0]){
-										selection = selection.parentNode;
-									}
-
-									if(selection.tagName.toLowerCase() !== attrs.taDefaultWrap && selection.tagName.toLowerCase() !== 'li' && (selection.innerHTML.trim() === '' || selection.innerHTML.trim() === '<br>')){
-										var _new = angular.element(_defaultVal);
-										angular.element(selection).replaceWith(_new);
-										taSelection.setSelectionToElementStart(_new[0]);
-									}
-								}
-							}
-							var val = _compileHtml();
-							if(_defaultVal !== '' && val.trim() === ''){
-								_setInnerHTML(_defaultVal);
-								taSelection.setSelectionToElementStart(element.children()[0]);
-							}else if(val.substring(0, 1) !== '<' && attrs.taDefaultWrap !== ''){
-								/* we no longer do this, since there can be comments here and white space
-								var _savedSelection = rangy.saveSelection();
-								val = _compileHtml();
-								val = "<" + attrs.taDefaultWrap + ">" + val + "</" + attrs.taDefaultWrap + ">";
-								_setInnerHTML(val);
-								rangy.restoreSelection(_savedSelection);
-								*/
-							}
-							var triggerUndo = _lastKey !== event.keyCode && UNDO_TRIGGER_KEYS.test(event.keyCode);
-							if(_keyupTimeout) $timeout.cancel(_keyupTimeout);
-							_keyupTimeout = $timeout(function() {
-								_setViewValue(val, triggerUndo, true);
-							}, ngModelOptions.$options.debounce || 400);
-							if(!triggerUndo) _undoKeyupTimeout = $timeout(function(){ ngModel.$undoManager.push(val); }, 250);
-							_lastKey = event.keyCode;
-						}
-					});
-
-					element.on('blur', scope.events.blur = function(){
-						_focussed = false;
-						/* istanbul ignore else: if readonly don't update model */
-						if(!_isReadonly){
-							_setViewValue(undefined, undefined, true);
-						}else{
-							_skipRender = true; // don't redo the whole thing, just check the placeholder logic
-							ngModel.$render();
-						}
-					});
-
-					// Placeholders not supported on ie 8 and below
-					if(attrs.placeholder && (_browserDetect.ie > 8 || _browserDetect.ie === undefined)){
-						var rule;
-						if(attrs.id) rule = addCSSRule('#' + attrs.id + '.placeholder-text:before', 'content: "' + attrs.placeholder + '"');
-						else throw('textAngular Error: An unique ID is required for placeholders to work');
-
-						scope.$on('$destroy', function(){
-							removeCSSRule(rule);
-						});
-					}
-
-					element.on('focus', scope.events.focus = function(){
-						_focussed = true;
-						element.removeClass('placeholder-text');
-						_reApplyOnSelectorHandlers();
-					});
-
-					element.on('mouseup', scope.events.mouseup = function(){
-						var _selection = taSelection.getSelection();
-						if(_selection.start.element === element[0] && element.children().length) taSelection.setSelectionToElementStart(element.children()[0]);
-					});
-
-					// prevent propagation on mousedown in editor, see #206
-					element.on('mousedown', scope.events.mousedown = function(event, eventData){
-						/* istanbul ignore else: this is for catching the jqLite testing*/
-						if(eventData) angular.extend(event, eventData);
-						event.stopPropagation();
-					});
-				}
-			}
-
-			var selectorClickHandler = function(event){
-				// emit the element-select event, pass the element
-				scope.$emit('ta-element-select', this);
-				event.preventDefault();
-				return false;
-			};
-			var fileDropHandler = function(event, eventData){
-				/* istanbul ignore else: this is for catching the jqLite testing*/
-				if(eventData) angular.extend(event, eventData);
-				// emit the drop event, pass the element, preventing should be done elsewhere
-				if(!dropFired && !_isReadonly){
-					dropFired = true;
-					var dataTransfer;
-					if(event.originalEvent) dataTransfer = event.originalEvent.dataTransfer;
-					else dataTransfer = event.dataTransfer;
-					scope.$emit('ta-drop-event', this, event, dataTransfer);
-					$timeout(function(){
-						dropFired = false;
-						_setViewValue(undefined, undefined, true);
-					}, 100);
-				}
-			};
-
-			//used for updating when inserting wrapped elements
-			var _reApplyOnSelectorHandlers = scope['reApplyOnSelectorHandlers' + (attrs.id || '')] = function(){
-				/* istanbul ignore else */
-				if(!_isReadonly) angular.forEach(taSelectableElements, function(selector){
-						// check we don't apply the handler twice
-						element.find(selector)
-							.off('click', selectorClickHandler)
-							.on('click', selectorClickHandler);
-					});
-			};
-
-			var _setInnerHTML = function(newval){
-				element[0].innerHTML = newval;
-			};
-			var _renderTimeout;
-			var _renderInProgress = false;
-			// changes to the model variable from outside the html/text inputs
-			ngModel.$render = function(){
-				/* istanbul ignore if: Catches rogue renders, hard to replicate in tests */
-				if(_renderInProgress) return;
-				else _renderInProgress = true;
-				// catch model being null or undefined
-				var val = ngModel.$viewValue || '';
-				// if the editor isn't focused it needs to be updated, otherwise it's receiving user input
-				if(!_skipRender){
-					/* istanbul ignore else: in other cases we don't care */
-					if(_isContentEditable && _focussed){
-						// update while focussed
-						element.removeClass('placeholder-text');
-						if(_renderTimeout) $timeout.cancel(_renderTimeout);
-						_renderTimeout = $timeout(function(){
-							/* istanbul ignore if: Can't be bothered testing this... */
-							if(!_focussed){
-								element[0].focus();
-								taSelection.setSelectionToElementEnd(element.children()[element.children().length - 1]);
-							}
-							_renderTimeout = undefined;
-						}, 1);
-					}
-					if(_isContentEditable){
-						// WYSIWYG Mode
-						if(attrs.placeholder){
-							if(val === ''){
-								// blank
-								_setInnerHTML(_defaultVal);
-							}else{
-								// not-blank
-								_setInnerHTML(val);
-							}
-						}else{
-							_setInnerHTML((val === '') ? _defaultVal : val);
-						}
-						// if in WYSIWYG and readOnly we kill the use of links by clicking
-						if(!_isReadonly){
-							_reApplyOnSelectorHandlers();
-							element.on('drop', fileDropHandler);
-						}else{
-							element.off('drop', fileDropHandler);
-						}
-					}else if(element[0].tagName.toLowerCase() !== 'textarea' && element[0].tagName.toLowerCase() !== 'input'){
-						// make sure the end user can SEE the html code as a display. This is a read-only display element
-						_setInnerHTML(taApplyCustomRenderers(val));
-					}else{
-						// only for input and textarea inputs
-						element.val(val);
-					}
-				}
-				if(_isContentEditable && attrs.placeholder){
-					if(val === ''){
-						if(_focussed) element.removeClass('placeholder-text');
-						else element.addClass('placeholder-text');
-					}else{
-						element.removeClass('placeholder-text');
-					}
-				}
-				_renderInProgress = _skipRender = false;
-			};
-
-			if(attrs.taReadonly){
-				//set initial value
-				_isReadonly = scope.$eval(attrs.taReadonly);
-				if(_isReadonly){
-					element.addClass('ta-readonly');
-					// we changed to readOnly mode (taReadonly='true')
-					if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
-						element.attr('disabled', 'disabled');
-					}
-					if(element.attr('contenteditable') !== undefined && element.attr('contenteditable')){
-						element.removeAttr('contenteditable');
-					}
-				}else{
-					element.removeClass('ta-readonly');
-					// we changed to NOT readOnly mode (taReadonly='false')
-					if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
-						element.removeAttr('disabled');
-					}else if(_isContentEditable){
-						element.attr('contenteditable', 'true');
-					}
-				}
-				// taReadonly only has an effect if the taBind element is an input or textarea or has contenteditable='true' on it.
-				// Otherwise it is readonly by default
-				scope.$watch(attrs.taReadonly, function(newVal, oldVal){
-					if(oldVal === newVal) return;
-					if(newVal){
-						element.addClass('ta-readonly');
-						// we changed to readOnly mode (taReadonly='true')
-						if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
-							element.attr('disabled', 'disabled');
-						}
-						if(element.attr('contenteditable') !== undefined && element.attr('contenteditable')){
-							element.removeAttr('contenteditable');
-						}
-						// turn ON selector click handlers
-						angular.forEach(taSelectableElements, function(selector){
-							element.find(selector).on('click', selectorClickHandler);
-						});
-						element.off('drop', fileDropHandler);
-					}else{
-						element.removeClass('ta-readonly');
-						// we changed to NOT readOnly mode (taReadonly='false')
-						if(element[0].tagName.toLowerCase() === 'textarea' || element[0].tagName.toLowerCase() === 'input'){
-							element.removeAttr('disabled');
-						}else if(_isContentEditable){
-							element.attr('contenteditable', 'true');
-						}
-						// remove the selector click handlers
-						angular.forEach(taSelectableElements, function(selector){
-							element.find(selector).off('click', selectorClickHandler);
-						});
-						element.on('drop', fileDropHandler);
-					}
-					_isReadonly = newVal;
-				});
-			}
-
-			// Initialise the selectableElements
-			// if in WYSIWYG and readOnly we kill the use of links by clicking
-			if(_isContentEditable && !_isReadonly){
-				angular.forEach(taSelectableElements, function(selector){
-					element.find(selector).on('click', selectorClickHandler);
-				});
-				element.on('drop', fileDropHandler);
-				element.on('blur', function(){
-					/* istanbul ignore next: webkit fix */
-					if(_browserDetect.webkit) { // detect webkit
-						globalContentEditableBlur = true;
-					}
-				});
-			}
-		}
-	};
-}]);
-
-// this global var is used to prevent multiple fires of the drop event. Needs to be global to the textAngular file.
-var dropFired = false;
-var textAngular = angular.module("textAngular", ['ngSanitize', 'textAngularSetup', 'textAngular.factories', 'textAngular.DOM', 'textAngular.validators', 'textAngular.taBind']); //This makes ngSanitize required
-
-textAngular.config([function(){
-	// clear taTools variable. Just catches testing and any other time that this config may run multiple times...
-	angular.forEach(taTools, function(value, key){ delete taTools[key];	});
-}]);
-
-textAngular.directive("textAngular", [
-	'$compile', '$timeout', 'taOptions', 'taSelection', 'taExecCommand',
-	'textAngularManager', '$document', '$animate', '$log', '$q', '$parse',
-	function($compile, $timeout, taOptions, taSelection, taExecCommand,
-		textAngularManager, $document, $animate, $log, $q, $parse){
-		return {
-			require: '?ngModel',
-			scope: {},
-			restrict: "EA",
-			priority: 2, // So we override validators correctly
-			link: function(scope, element, attrs, ngModel){
-				// all these vars should not be accessable outside this directive
-				var _keydown, _keyup, _keypress, _mouseup, _focusin, _focusout,
-					_originalContents, _toolbars,
-					_serial = (attrs.serial) ? attrs.serial : Math.floor(Math.random() * 10000000000000000),
-					_taExecCommand, _resizeMouseDown, _updateSelectedStylesTimeout;
-
-				scope._name = (attrs.name) ? attrs.name : 'textAngularEditor' + _serial;
-
-				var oneEvent = function(_element, event, action){
-					$timeout(function(){
-						// shim the .one till fixed
-						var _func = function(){
-							_element.off(event, _func);
-							action.apply(this, arguments);
-						};
-						_element.on(event, _func);
-					}, 100);
-				};
-				_taExecCommand = taExecCommand(attrs.taDefaultWrap);
-				// get the settings from the defaults and add our specific functions that need to be on the scope
-				angular.extend(scope, angular.copy(taOptions), {
-					// wraps the selection in the provided tag / execCommand function. Should only be called in WYSIWYG mode.
-					wrapSelection: function(command, opt, isSelectableElementTool){
-						if(command.toLowerCase() === "undo"){
-							scope['$undoTaBindtaTextElement' + _serial]();
-						}else if(command.toLowerCase() === "redo"){
-							scope['$redoTaBindtaTextElement' + _serial]();
-						}else{
-							// catch errors like FF erroring when you try to force an undo with nothing done
-							_taExecCommand(command, false, opt, scope.defaultTagAttributes);
-							if(isSelectableElementTool){
-								// re-apply the selectable tool events
-								scope['reApplyOnSelectorHandlerstaTextElement' + _serial]();
-							}
-							// refocus on the shown display element, this fixes a display bug when using :focus styles to outline the box.
-							// You still have focus on the text/html input it just doesn't show up
-							scope.displayElements.text[0].focus();
-						}
-					},
-					showHtml: scope.$eval(attrs.taShowHtml) || false
-				});
-				// setup the options from the optional attributes
-				if(attrs.taFocussedClass)			scope.classes.focussed = attrs.taFocussedClass;
-				if(attrs.taTextEditorClass)			scope.classes.textEditor = attrs.taTextEditorClass;
-				if(attrs.taHtmlEditorClass)			scope.classes.htmlEditor = attrs.taHtmlEditorClass;
-				if(attrs.taDefaultTagAttributes){
-					try	{
-						//	TODO: This should use angular.merge to enhance functionality once angular 1.4 is required
-						angular.extend(scope.defaultTagAttributes, angular.fromJson(attrs.taDefaultTagAttributes));
-					} catch (error) {
-						$log.error(error);
-					}
-				}
-				// optional setup functions
-				if(attrs.taTextEditorSetup)			scope.setup.textEditorSetup = scope.$parent.$eval(attrs.taTextEditorSetup);
-				if(attrs.taHtmlEditorSetup)			scope.setup.htmlEditorSetup = scope.$parent.$eval(attrs.taHtmlEditorSetup);
-				// optional fileDropHandler function
-				if(attrs.taFileDrop)				scope.fileDropHandler = scope.$parent.$eval(attrs.taFileDrop);
-				else								scope.fileDropHandler = scope.defaultFileDropHandler;
-
-				_originalContents = element[0].innerHTML;
-				// clear the original content
-				element[0].innerHTML = '';
-
-				// Setup the HTML elements as variable references for use later
-				scope.displayElements = {
-					// we still need the hidden input even with a textarea as the textarea may have invalid/old input in it,
-					// wheras the input will ALLWAYS have the correct value.
-					forminput: angular.element("<input type='hidden' tabindex='-1' style='display: none;'>"),
-					html: angular.element("<textarea></textarea>"),
-					text: angular.element("<div></div>"),
-					// other toolbased elements
-					scrollWindow: angular.element("<div class='ta-scroll-window'></div>"),
-					popover: angular.element('<div class="popover fade bottom" style="max-width: none; width: 305px;"></div>'),
-					popoverArrow: angular.element('<div class="arrow"></div>'),
-					popoverContainer: angular.element('<div class="popover-content"></div>'),
-					resize: {
-						overlay: angular.element('<div class="ta-resizer-handle-overlay"></div>'),
-						background: angular.element('<div class="ta-resizer-handle-background"></div>'),
-						anchors: [
-							angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-tl"></div>'),
-							angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-tr"></div>'),
-							angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-bl"></div>'),
-							angular.element('<div class="ta-resizer-handle-corner ta-resizer-handle-corner-br"></div>')
-						],
-						info: angular.element('<div class="ta-resizer-handle-info"></div>')
-					}
-				};
-
-				// Setup the popover
-				scope.displayElements.popover.append(scope.displayElements.popoverArrow);
-				scope.displayElements.popover.append(scope.displayElements.popoverContainer);
-				scope.displayElements.scrollWindow.append(scope.displayElements.popover);
-
-				scope.displayElements.popover.on('mousedown', function(e, eventData){
-					/* istanbul ignore else: this is for catching the jqLite testing*/
-					if(eventData) angular.extend(e, eventData);
-					// this prevents focusout from firing on the editor when clicking anything in the popover
-					e.preventDefault();
-					return false;
-				});
-
-				// define the popover show and hide functions
-				scope.showPopover = function(_el){
-					scope.displayElements.popover.css('display', 'block');
-					scope.reflowPopover(_el);
-					$animate.addClass(scope.displayElements.popover, 'in');
-					oneEvent($document.find('body'), 'click keyup', function(){scope.hidePopover();});
-				};
-				scope.reflowPopover = function(_el){
-					/* istanbul ignore if: catches only if near bottom of editor */
-					if(scope.displayElements.text[0].offsetHeight - 51 > _el[0].offsetTop){
-						scope.displayElements.popover.css('top', _el[0].offsetTop + _el[0].offsetHeight + scope.displayElements.scrollWindow[0].scrollTop + 'px');
-						scope.displayElements.popover.removeClass('top').addClass('bottom');
-					}else{
-						scope.displayElements.popover.css('top', _el[0].offsetTop - 54 + scope.displayElements.scrollWindow[0].scrollTop + 'px');
-						scope.displayElements.popover.removeClass('bottom').addClass('top');
-					}
-					var _maxLeft = scope.displayElements.text[0].offsetWidth - scope.displayElements.popover[0].offsetWidth;
-					var _targetLeft = _el[0].offsetLeft + (_el[0].offsetWidth / 2.0) - (scope.displayElements.popover[0].offsetWidth / 2.0);
-					scope.displayElements.popover.css('left', Math.max(0, Math.min(_maxLeft, _targetLeft)) + 'px');
-					scope.displayElements.popoverArrow.css('margin-left', (Math.min(_targetLeft, (Math.max(0, _targetLeft - _maxLeft))) - 11) + 'px');
-				};
-				scope.hidePopover = function(){
-					scope.displayElements.popover.css('display', '');
-					scope.displayElements.popoverContainer.attr('style', '');
-					scope.displayElements.popoverContainer.attr('class', 'popover-content');
-					scope.displayElements.popover.removeClass('in');
-				};
-
-				// setup the resize overlay
-				scope.displayElements.resize.overlay.append(scope.displayElements.resize.background);
-				angular.forEach(scope.displayElements.resize.anchors, function(anchor){ scope.displayElements.resize.overlay.append(anchor);});
-				scope.displayElements.resize.overlay.append(scope.displayElements.resize.info);
-				scope.displayElements.scrollWindow.append(scope.displayElements.resize.overlay);
-
-				// define the show and hide events
-				scope.reflowResizeOverlay = function(_el){
-					_el = angular.element(_el)[0];
-					scope.displayElements.resize.overlay.css({
-						'display': 'block',
-						'left': _el.offsetLeft - 5 + 'px',
-						'top': _el.offsetTop - 5 + 'px',
-						'width': _el.offsetWidth + 10 + 'px',
-						'height': _el.offsetHeight + 10 + 'px'
-					});
-					scope.displayElements.resize.info.text(_el.offsetWidth + ' x ' + _el.offsetHeight);
-				};
-				/* istanbul ignore next: pretty sure phantomjs won't test this */
-				scope.showResizeOverlay = function(_el){
-					var _body = $document.find('body');
-					_resizeMouseDown = function(event){
-						var startPosition = {
-							width: parseInt(_el.attr('width')),
-							height: parseInt(_el.attr('height')),
-							x: event.clientX,
-							y: event.clientY
-						};
-						if(startPosition.width === undefined || isNaN(startPosition.width)) startPosition.width = _el[0].offsetWidth;
-						if(startPosition.height === undefined || isNaN(startPosition.height)) startPosition.height = _el[0].offsetHeight;
-						scope.hidePopover();
-						var ratio = startPosition.height / startPosition.width;
-						var mousemove = function(event){
-							// calculate new size
-							var pos = {
-								x: Math.max(0, startPosition.width + (event.clientX - startPosition.x)),
-								y: Math.max(0, startPosition.height + (event.clientY - startPosition.y))
-							};
-
-							// DEFAULT: the aspect ratio is not locked unless the Shift key is pressed.
-							//
-							// attribute: ta-resize-force-aspect-ratio -- locks resize into maintaing the aspect ratio
-							var bForceAspectRatio = (attrs.taResizeForceAspectRatio !== undefined);
-							// attribute: ta-resize-maintain-aspect-ratio=true causes the space ratio to remain locked
-							// unless the Shift key is pressed
-							var bFlipKeyBinding = attrs.taResizeMaintainAspectRatio;
-							var bKeepRatio =  bForceAspectRatio || (bFlipKeyBinding && !event.shiftKey);
-							if(bKeepRatio) {
-								var newRatio = pos.y / pos.x;
-								pos.x = ratio > newRatio ? pos.x : pos.y / ratio;
-								pos.y = ratio > newRatio ? pos.x * ratio : pos.y;
-							}
-							var el = angular.element(_el);
-							function roundedMaxVal(val) {
-								return Math.round(Math.max(0, val));
-							}
-							el.css('height', roundedMaxVal(pos.y) + 'px');
-							el.css('width', roundedMaxVal(pos.x) + 'px');
-
-							// reflow the popover tooltip
-							scope.reflowResizeOverlay(_el);
-						};
-						_body.on('mousemove', mousemove);
-						oneEvent(_body, 'mouseup', function(event){
-							event.preventDefault();
-							event.stopPropagation();
-							_body.off('mousemove', mousemove);
-							// at this point, we need to force the model to update! since the css has changed!
-							// this fixes bug: #862 - we now hide the popover -- as this seems more consitent.
-							// there are still issues under firefox, the window does not repaint. -- not sure
-							// how best to resolve this, but clicking anywhere works.
-							scope.$apply(function (){
-								scope.hidePopover();
-								scope.updateTaBindtaTextElement();
-							}, 100);
-						});
-						event.stopPropagation();
-						event.preventDefault();
-					};
-
-					scope.displayElements.resize.anchors[3].off('mousedown');
-					scope.displayElements.resize.anchors[3].on('mousedown', _resizeMouseDown);
-
-					scope.reflowResizeOverlay(_el);
-					oneEvent(_body, 'click', function(){scope.hideResizeOverlay();});
-				};
-				/* istanbul ignore next: pretty sure phantomjs won't test this */
-				scope.hideResizeOverlay = function(){
-					scope.displayElements.resize.anchors[3].off('mousedown', _resizeMouseDown);
-					scope.displayElements.resize.overlay.css('display', '');
-				};
-
-				// allow for insertion of custom directives on the textarea and div
-				scope.setup.htmlEditorSetup(scope.displayElements.html);
-				scope.setup.textEditorSetup(scope.displayElements.text);
-				scope.displayElements.html.attr({
-					'id': 'taHtmlElement' + _serial,
-					'ng-show': 'showHtml',
-					'ta-bind': 'ta-bind',
-					'ng-model': 'html',
-					'ng-model-options': element.attr('ng-model-options')
-				});
-				scope.displayElements.text.attr({
-					'id': 'taTextElement' + _serial,
-					'contentEditable': 'true',
-					'ta-bind': 'ta-bind',
-					'ng-model': 'html',
-					'ng-model-options': element.attr('ng-model-options')
-				});
-				scope.displayElements.scrollWindow.attr({'ng-hide': 'showHtml'});
-				if(attrs.taDefaultWrap) scope.displayElements.text.attr('ta-default-wrap', attrs.taDefaultWrap);
-
-				if(attrs.taUnsafeSanitizer){
-					scope.displayElements.text.attr('ta-unsafe-sanitizer', attrs.taUnsafeSanitizer);
-					scope.displayElements.html.attr('ta-unsafe-sanitizer', attrs.taUnsafeSanitizer);
-				}
-
-				// add the main elements to the origional element
-				scope.displayElements.scrollWindow.append(scope.displayElements.text);
-				element.append(scope.displayElements.scrollWindow);
-				element.append(scope.displayElements.html);
-
-				scope.displayElements.forminput.attr('name', scope._name);
-				element.append(scope.displayElements.forminput);
-
-				if(attrs.tabindex){
-					element.removeAttr('tabindex');
-					scope.displayElements.text.attr('tabindex', attrs.tabindex);
-					scope.displayElements.html.attr('tabindex', attrs.tabindex);
-				}
-
-				if (attrs.placeholder) {
-					scope.displayElements.text.attr('placeholder', attrs.placeholder);
-					scope.displayElements.html.attr('placeholder', attrs.placeholder);
-				}
-
-				if(attrs.taDisabled){
-					scope.displayElements.text.attr('ta-readonly', 'disabled');
-					scope.displayElements.html.attr('ta-readonly', 'disabled');
-					scope.disabled = scope.$parent.$eval(attrs.taDisabled);
-					scope.$parent.$watch(attrs.taDisabled, function(newVal){
-						scope.disabled = newVal;
-						if(scope.disabled){
-							element.addClass(scope.classes.disabled);
-						}else{
-							element.removeClass(scope.classes.disabled);
-						}
-					});
-				}
-
-				if(attrs.taPaste){
-					scope._pasteHandler = function(_html){
-						return $parse(attrs.taPaste)(scope.$parent, {$html: _html});
-					};
-					scope.displayElements.text.attr('ta-paste', '_pasteHandler($html)');
-				}
-
-				// compile the scope with the text and html elements only - if we do this with the main element it causes a compile loop
-				$compile(scope.displayElements.scrollWindow)(scope);
-				$compile(scope.displayElements.html)(scope);
-
-				scope.updateTaBindtaTextElement = scope['updateTaBindtaTextElement' + _serial];
-				scope.updateTaBindtaHtmlElement = scope['updateTaBindtaHtmlElement' + _serial];
-
-				// add the classes manually last
-				element.addClass("ta-root");
-				scope.displayElements.scrollWindow.addClass("ta-text ta-editor " + scope.classes.textEditor);
-				scope.displayElements.html.addClass("ta-html ta-editor " + scope.classes.htmlEditor);
-
-				// used in the toolbar actions
-				scope._actionRunning = false;
-				var _savedSelection = false;
-				scope.startAction = function(){
-					scope._actionRunning = true;
-					// if rangy library is loaded return a function to reload the current selection
-					_savedSelection = rangy.saveSelection();
-					return function(){
-						if(_savedSelection) rangy.restoreSelection(_savedSelection);
-					};
-				};
-				scope.endAction = function(){
-					scope._actionRunning = false;
-					if(_savedSelection){
-						if(scope.showHtml){
-							scope.displayElements.html[0].focus();
-						}else{
-							scope.displayElements.text[0].focus();
-						}
-						// rangy.restoreSelection(_savedSelection);
-						rangy.removeMarkers(_savedSelection);
-					}
-					_savedSelection = false;
-					scope.updateSelectedStyles();
-					// only update if in text or WYSIWYG mode
-					if(!scope.showHtml) scope['updateTaBindtaTextElement' + _serial]();
-				};
-
-				// note that focusout > focusin is called everytime we click a button - except bad support: http://www.quirksmode.org/dom/events/blurfocus.html
-				// cascades to displayElements.text and displayElements.html automatically.
-				_focusin = function(){
-					scope.focussed = true;
-					element.addClass(scope.classes.focussed);
-					_toolbars.focus();
-					element.triggerHandler('focus');
-				};
-				scope.displayElements.html.on('focus', _focusin);
-				scope.displayElements.text.on('focus', _focusin);
-				_focusout = function(e){
-					// if we are NOT runnig an action and have NOT focussed again on the text etc then fire the blur events
-					if(!scope._actionRunning && $document[0].activeElement !== scope.displayElements.html[0] && $document[0].activeElement !== scope.displayElements.text[0]){
-						element.removeClass(scope.classes.focussed);
-						_toolbars.unfocus();
-						// to prevent multiple apply error defer to next seems to work.
-						$timeout(function(){
-							scope._bUpdateSelectedStyles = false;
-							element.triggerHandler('blur');
-							scope.focussed = false;
-						}, 0);
-					}
-					e.preventDefault();
-					return false;
-				};
-				scope.displayElements.html.on('blur', _focusout);
-				scope.displayElements.text.on('blur', _focusout);
-
-				scope.displayElements.text.on('paste', function(event){
-					element.triggerHandler('paste', event);
-				});
-
-				// Setup the default toolbar tools, this way allows the user to add new tools like plugins.
-				// This is on the editor for future proofing if we find a better way to do this.
-				scope.queryFormatBlockState = function(command){
-					// $document[0].queryCommandValue('formatBlock') errors in Firefox if we call this when focussed on the textarea
-					return !scope.showHtml && command.toLowerCase() === $document[0].queryCommandValue('formatBlock').toLowerCase();
-				};
-				scope.queryCommandState = function(command){
-					// $document[0].queryCommandValue('formatBlock') errors in Firefox if we call this when focussed on the textarea
-					return (!scope.showHtml) ? $document[0].queryCommandState(command) : '';
-				};
-				scope.switchView = function(){
-					scope.showHtml = !scope.showHtml;
-					$animate.enabled(false, scope.displayElements.html);
-					$animate.enabled(false, scope.displayElements.text);
-					//Show the HTML view
-					if(scope.showHtml){
-						//defer until the element is visible
-						$timeout(function(){
-							$animate.enabled(true, scope.displayElements.html);
-							$animate.enabled(true, scope.displayElements.text);
-							// [0] dereferences the DOM object from the angular.element
-							return scope.displayElements.html[0].focus();
-						}, 100);
-					}else{
-						//Show the WYSIWYG view
-						//defer until the element is visible
-						$timeout(function(){
-							$animate.enabled(true, scope.displayElements.html);
-							$animate.enabled(true, scope.displayElements.text);
-							// [0] dereferences the DOM object from the angular.element
-							return scope.displayElements.text[0].focus();
-						}, 100);
-					}
-				};
-
-				// changes to the model variable from outside the html/text inputs
-				// if no ngModel, then the only input is from inside text-angular
-				if(attrs.ngModel){
-					var _firstRun = true;
-					ngModel.$render = function(){
-						if(_firstRun){
-							// we need this firstRun to set the originalContents otherwise it gets overrided by the setting of ngModel to undefined from NaN
-							_firstRun = false;
-							// if view value is null or undefined initially and there was original content, set to the original content
-							var _initialValue = scope.$parent.$eval(attrs.ngModel);
-							if((_initialValue === undefined || _initialValue === null) && (_originalContents && _originalContents !== '')){
-								// on passing through to taBind it will be sanitised
-								ngModel.$setViewValue(_originalContents);
-							}
-						}
-						scope.displayElements.forminput.val(ngModel.$viewValue);
-						// if the editors aren't focused they need to be updated, otherwise they are doing the updating
-						scope.html = ngModel.$viewValue || '';
-					};
-					// trigger the validation calls
-					if(element.attr('required')) ngModel.$validators.required = function(modelValue, viewValue) {
-						var value = modelValue || viewValue;
-						return !(!value || value.trim() === '');
-					};
-				}else{
-					// if no ngModel then update from the contents of the origional html.
-					scope.displayElements.forminput.val(_originalContents);
-					scope.html = _originalContents;
-				}
-
-				// changes from taBind back up to here
-				scope.$watch('html', function(newValue, oldValue){
-					if(newValue !== oldValue){
-						if(attrs.ngModel && ngModel.$viewValue !== newValue) ngModel.$setViewValue(newValue);
-						scope.displayElements.forminput.val(newValue);
-					}
-				});
-
-				if(attrs.taTargetToolbars) _toolbars = textAngularManager.registerEditor(scope._name, scope, attrs.taTargetToolbars.split(','));
-				else{
-					var _toolbar = angular.element('<div text-angular-toolbar name="textAngularToolbar' + _serial + '">');
-					// passthrough init of toolbar options
-					if(attrs.taToolbar)						_toolbar.attr('ta-toolbar', attrs.taToolbar);
-					if(attrs.taToolbarClass)				_toolbar.attr('ta-toolbar-class', attrs.taToolbarClass);
-					if(attrs.taToolbarGroupClass)			_toolbar.attr('ta-toolbar-group-class', attrs.taToolbarGroupClass);
-					if(attrs.taToolbarButtonClass)			_toolbar.attr('ta-toolbar-button-class', attrs.taToolbarButtonClass);
-					if(attrs.taToolbarActiveButtonClass)	_toolbar.attr('ta-toolbar-active-button-class', attrs.taToolbarActiveButtonClass);
-					if(attrs.taFocussedClass)				_toolbar.attr('ta-focussed-class', attrs.taFocussedClass);
-
-					element.prepend(_toolbar);
-					$compile(_toolbar)(scope.$parent);
-					_toolbars = textAngularManager.registerEditor(scope._name, scope, ['textAngularToolbar' + _serial]);
-				}
-
-				scope.$on('$destroy', function(){
-					textAngularManager.unregisterEditor(scope._name);
-					angular.element(window).off('blur');
-				});
-
-				// catch element select event and pass to toolbar tools
-				scope.$on('ta-element-select', function(event, element){
-					if(_toolbars.triggerElementSelect(event, element)){
-						scope['reApplyOnSelectorHandlerstaTextElement' + _serial]();
-					}
-				});
-
-				scope.$on('ta-drop-event', function(event, element, dropEvent, dataTransfer){
-					scope.displayElements.text[0].focus();
-					if(dataTransfer && dataTransfer.files && dataTransfer.files.length > 0){
-						angular.forEach(dataTransfer.files, function(file){
-							// taking advantage of boolean execution, if the fileDropHandler returns true, nothing else after it is executed
-							// If it is false then execute the defaultFileDropHandler if the fileDropHandler is NOT the default one
-							// Once one of these has been executed wrap the result as a promise, if undefined or variable update the taBind, else we should wait for the promise
-							try{
-								$q.when(scope.fileDropHandler(file, scope.wrapSelection) ||
-									(scope.fileDropHandler !== scope.defaultFileDropHandler &&
-									$q.when(scope.defaultFileDropHandler(file, scope.wrapSelection)))).then(function(){
-										scope['updateTaBindtaTextElement' + _serial]();
-									});
-							}catch(error){
-								$log.error(error);
-							}
-						});
-						dropEvent.preventDefault();
-						dropEvent.stopPropagation();
-					/* istanbul ignore else, the updates if moved text */
-					}else{
-						$timeout(function(){
-							scope['updateTaBindtaTextElement' + _serial]();
-						}, 0);
-					}
-				});
-
-				// the following is for applying the active states to the tools that support it
-				scope._bUpdateSelectedStyles = false;
-				/* istanbul ignore next: browser window/tab leave check */
-				angular.element(window).on('blur', function(){
-					scope._bUpdateSelectedStyles = false;
-					scope.focussed = false;
-				});
-				// loop through all the tools polling their activeState function if it exists
-				scope.updateSelectedStyles = function(){
-					var _selection;
-					/* istanbul ignore next: This check is to ensure multiple timeouts don't exist */
-					if(_updateSelectedStylesTimeout) $timeout.cancel(_updateSelectedStylesTimeout);
-					// test if the common element ISN'T the root ta-text node
-					if((_selection = taSelection.getSelectionElement()) !== undefined && _selection.parentNode !== scope.displayElements.text[0]){
-						_toolbars.updateSelectedStyles(angular.element(_selection));
-					}else _toolbars.updateSelectedStyles();
-					// used to update the active state when a key is held down, ie the left arrow
-					/* istanbul ignore else: browser only check */
-					if(scope._bUpdateSelectedStyles) _updateSelectedStylesTimeout = $timeout(scope.updateSelectedStyles, 200);
-				};
-				// start updating on keydown
-				_keydown = function(){
-					/* istanbul ignore next: ie catch */
-					if(!scope.focussed){
-						scope._bUpdateSelectedStyles = false;
-						return;
-					}
-					/* istanbul ignore else: don't run if already running */
-					if(!scope._bUpdateSelectedStyles){
-						scope._bUpdateSelectedStyles = true;
-						scope.$apply(function(){
-							scope.updateSelectedStyles();
-						});
-					}
-				};
-				scope.displayElements.html.on('keydown', _keydown);
-				scope.displayElements.text.on('keydown', _keydown);
-				// stop updating on key up and update the display/model
-				_keyup = function(){
-					scope._bUpdateSelectedStyles = false;
-				};
-				scope.displayElements.html.on('keyup', _keyup);
-				scope.displayElements.text.on('keyup', _keyup);
-				// stop updating on key up and update the display/model
-				_keypress = function(event, eventData){
-					/* istanbul ignore else: this is for catching the jqLite testing*/
-					if(eventData) angular.extend(event, eventData);
-					scope.$apply(function(){
-						if(_toolbars.sendKeyCommand(event)){
-							/* istanbul ignore else: don't run if already running */
-							if(!scope._bUpdateSelectedStyles){
-								scope.updateSelectedStyles();
-							}
-							event.preventDefault();
-							return false;
-						}
-					});
-				};
-				scope.displayElements.html.on('keypress', _keypress);
-				scope.displayElements.text.on('keypress', _keypress);
-				// update the toolbar active states when we click somewhere in the text/html boxed
-				_mouseup = function(){
-					// ensure only one execution of updateSelectedStyles()
-					scope._bUpdateSelectedStyles = false;
-					scope.$apply(function(){
-						scope.updateSelectedStyles();
-					});
-				};
-				scope.displayElements.html.on('mouseup', _mouseup);
-				scope.displayElements.text.on('mouseup', _mouseup);
-			}
-		};
-	}
-]);
-textAngular.service('textAngularManager', ['taToolExecuteAction', 'taTools', 'taRegisterTool', function(taToolExecuteAction, taTools, taRegisterTool){
-	// this service is used to manage all textAngular editors and toolbars.
-	// All publicly published functions that modify/need to access the toolbar or editor scopes should be in here
-	// these contain references to all the editors and toolbars that have been initialised in this app
-	var toolbars = {}, editors = {};
-	// when we focus into a toolbar, we need to set the TOOLBAR's $parent to be the toolbars it's linked to.
-	// We also need to set the tools to be updated to be the toolbars...
-	return {
-		// register an editor and the toolbars that it is affected by
-		registerEditor: function(name, scope, targetToolbars){
-			// targetToolbars are optional, we don't require a toolbar to function
-			if(!name || name === '') throw('textAngular Error: An editor requires a name');
-			if(!scope) throw('textAngular Error: An editor requires a scope');
-			if(editors[name]) throw('textAngular Error: An Editor with name "' + name + '" already exists');
-			// _toolbars is an ARRAY of toolbar scopes
-			var _toolbars = [];
-			angular.forEach(targetToolbars, function(_name){
-				if(toolbars[_name]) _toolbars.push(toolbars[_name]);
-				// if it doesn't exist it may not have been compiled yet and it will be added later
-			});
-			editors[name] = {
-				scope: scope,
-				toolbars: targetToolbars,
-				_registerToolbar: function(toolbarScope){
-					// add to the list late
-					if(this.toolbars.indexOf(toolbarScope.name) >= 0) _toolbars.push(toolbarScope);
-				},
-				// this is a suite of functions the editor should use to update all it's linked toolbars
-				editorFunctions: {
-					disable: function(){
-						// disable all linked toolbars
-						angular.forEach(_toolbars, function(toolbarScope){ toolbarScope.disabled = true; });
-					},
-					enable: function(){
-						// enable all linked toolbars
-						angular.forEach(_toolbars, function(toolbarScope){ toolbarScope.disabled = false; });
-					},
-					focus: function(){
-						// this should be called when the editor is focussed
-						angular.forEach(_toolbars, function(toolbarScope){
-							toolbarScope._parent = scope;
-							toolbarScope.disabled = false;
-							toolbarScope.focussed = true;
-							scope.focussed = true;
-						});
-					},
-					unfocus: function(){
-						// this should be called when the editor becomes unfocussed
-						angular.forEach(_toolbars, function(toolbarScope){
-							toolbarScope.disabled = true;
-							toolbarScope.focussed = false;
-						});
-						scope.focussed = false;
-					},
-					updateSelectedStyles: function(selectedElement){
-						// update the active state of all buttons on liked toolbars
-						angular.forEach(_toolbars, function(toolbarScope){
-							angular.forEach(toolbarScope.tools, function(toolScope){
-								if(toolScope.activeState){
-									toolbarScope._parent = scope;
-									toolScope.active = toolScope.activeState(selectedElement);
-								}
-							});
-						});
-					},
-					sendKeyCommand: function(event){
-						// we return true if we applied an action, false otherwise
-						var result = false;
-						if(event.ctrlKey || event.metaKey || event.specialKey) angular.forEach(taTools, function(tool, name){
-							if(tool.commandKeyCode && (tool.commandKeyCode === event.which || tool.commandKeyCode === event.specialKey)){
-								for(var _t = 0; _t < _toolbars.length; _t++){
-									if(_toolbars[_t].tools[name] !== undefined){
-										taToolExecuteAction.call(_toolbars[_t].tools[name], scope);
-										result = true;
-										break;
-									}
-								}
-							}
-						});
-						return result;
-					},
-					triggerElementSelect: function(event, element){
-						// search through the taTools to see if a match for the tag is made.
-						// if there is, see if the tool is on a registered toolbar and not disabled.
-						// NOTE: This can trigger on MULTIPLE tools simultaneously.
-						var elementHasAttrs = function(_element, attrs){
-							var result = true;
-							for(var i = 0; i < attrs.length; i++) result = result && _element.attr(attrs[i]);
-							return result;
-						};
-						var workerTools = [];
-						var unfilteredTools = {};
-						var result = false;
-						element = angular.element(element);
-						// get all valid tools by element name, keep track if one matches the
-						var onlyWithAttrsFilter = false;
-						angular.forEach(taTools, function(tool, name){
-							if(
-								tool.onElementSelect &&
-								tool.onElementSelect.element &&
-								tool.onElementSelect.element.toLowerCase() === element[0].tagName.toLowerCase() &&
-								(!tool.onElementSelect.filter || tool.onElementSelect.filter(element))
-							){
-								// this should only end up true if the element matches the only attributes
-								onlyWithAttrsFilter = onlyWithAttrsFilter ||
-									(angular.isArray(tool.onElementSelect.onlyWithAttrs) && elementHasAttrs(element, tool.onElementSelect.onlyWithAttrs));
-								if(!tool.onElementSelect.onlyWithAttrs || elementHasAttrs(element, tool.onElementSelect.onlyWithAttrs)) unfilteredTools[name] = tool;
-							}
-						});
-						// if we matched attributes to filter on, then filter, else continue
-						if(onlyWithAttrsFilter){
-							angular.forEach(unfilteredTools, function(tool, name){
-								if(tool.onElementSelect.onlyWithAttrs && elementHasAttrs(element, tool.onElementSelect.onlyWithAttrs)) workerTools.push({'name': name, 'tool': tool});
-							});
-							// sort most specific (most attrs to find) first
-							workerTools.sort(function(a,b){
-								return b.tool.onElementSelect.onlyWithAttrs.length - a.tool.onElementSelect.onlyWithAttrs.length;
-							});
-						}else{
-							angular.forEach(unfilteredTools, function(tool, name){
-								workerTools.push({'name': name, 'tool': tool});
-							});
-						}
-						// Run the actions on the first visible filtered tool only
-						if(workerTools.length > 0){
-							for(var _i = 0; _i < workerTools.length; _i++){
-								var tool = workerTools[_i].tool;
-								var name = workerTools[_i].name;
-								for(var _t = 0; _t < _toolbars.length; _t++){
-									if(_toolbars[_t].tools[name] !== undefined){
-										tool.onElementSelect.action.call(_toolbars[_t].tools[name], event, element, scope);
-										result = true;
-										break;
-									}
-								}
-								if(result) break;
-							}
-						}
-						return result;
-					}
-				}
-			};
-			return editors[name].editorFunctions;
-		},
-		// retrieve editor by name, largely used by testing suites only
-		retrieveEditor: function(name){
-			return editors[name];
-		},
-		unregisterEditor: function(name){
-			delete editors[name];
-		},
-		// registers a toolbar such that it can be linked to editors
-		registerToolbar: function(scope){
-			if(!scope) throw('textAngular Error: A toolbar requires a scope');
-			if(!scope.name || scope.name === '') throw('textAngular Error: A toolbar requires a name');
-			if(toolbars[scope.name]) throw('textAngular Error: A toolbar with name "' + scope.name + '" already exists');
-			toolbars[scope.name] = scope;
-			angular.forEach(editors, function(_editor){
-				_editor._registerToolbar(scope);
-			});
-		},
-		// retrieve toolbar by name, largely used by testing suites only
-		retrieveToolbar: function(name){
-			return toolbars[name];
-		},
-		// retrieve toolbars by editor name, largely used by testing suites only
-		retrieveToolbarsViaEditor: function(name){
-			var result = [], _this = this;
-			angular.forEach(this.retrieveEditor(name).toolbars, function(name){
-				result.push(_this.retrieveToolbar(name));
-			});
-			return result;
-		},
-		unregisterToolbar: function(name){
-			delete toolbars[name];
-		},
-		// functions for updating the toolbar buttons display
-		updateToolsDisplay: function(newTaTools){
-			// pass a partial struct of the taTools, this allows us to update the tools on the fly, will not change the defaults.
-			var _this = this;
-			angular.forEach(newTaTools, function(_newTool, key){
-				_this.updateToolDisplay(key, _newTool);
-			});
-		},
-		// this function resets all toolbars to their default tool definitions
-		resetToolsDisplay: function(){
-			var _this = this;
-			angular.forEach(taTools, function(_newTool, key){
-				_this.resetToolDisplay(key);
-			});
-		},
-		// update a tool on all toolbars
-		updateToolDisplay: function(toolKey, _newTool){
-			var _this = this;
-			angular.forEach(toolbars, function(toolbarScope, toolbarKey){
-				_this.updateToolbarToolDisplay(toolbarKey, toolKey, _newTool);
-			});
-		},
-		// resets a tool to the default/starting state on all toolbars
-		resetToolDisplay: function(toolKey){
-			var _this = this;
-			angular.forEach(toolbars, function(toolbarScope, toolbarKey){
-				_this.resetToolbarToolDisplay(toolbarKey, toolKey);
-			});
-		},
-		// update a tool on a specific toolbar
-		updateToolbarToolDisplay: function(toolbarKey, toolKey, _newTool){
-			if(toolbars[toolbarKey]) toolbars[toolbarKey].updateToolDisplay(toolKey, _newTool);
-			else throw('textAngular Error: No Toolbar with name "' + toolbarKey + '" exists');
-		},
-		// reset a tool on a specific toolbar to it's default starting value
-		resetToolbarToolDisplay: function(toolbarKey, toolKey){
-			if(toolbars[toolbarKey]) toolbars[toolbarKey].updateToolDisplay(toolKey, taTools[toolKey], true);
-			else throw('textAngular Error: No Toolbar with name "' + toolbarKey + '" exists');
-		},
-		// removes a tool from all toolbars and it's definition
-		removeTool: function(toolKey){
-			delete taTools[toolKey];
-			angular.forEach(toolbars, function(toolbarScope){
-				delete toolbarScope.tools[toolKey];
-				for(var i = 0; i < toolbarScope.toolbar.length; i++){
-					var toolbarIndex;
-					for(var j = 0; j < toolbarScope.toolbar[i].length; j++){
-						if(toolbarScope.toolbar[i][j] === toolKey){
-							toolbarIndex = {
-								group: i,
-								index: j
-							};
-							break;
-						}
-						if(toolbarIndex !== undefined) break;
-					}
-					if(toolbarIndex !== undefined){
-						toolbarScope.toolbar[toolbarIndex.group].slice(toolbarIndex.index, 1);
-						toolbarScope._$element.children().eq(toolbarIndex.group).children().eq(toolbarIndex.index).remove();
-					}
-				}
-			});
-		},
-		// toolkey, toolDefinition are required. If group is not specified will pick the last group, if index isnt defined will append to group
-		addTool: function(toolKey, toolDefinition, group, index){
-			taRegisterTool(toolKey, toolDefinition);
-			angular.forEach(toolbars, function(toolbarScope){
-				toolbarScope.addTool(toolKey, toolDefinition, group, index);
-			});
-		},
-		// adds a Tool but only to one toolbar not all
-		addToolToToolbar: function(toolKey, toolDefinition, toolbarKey, group, index){
-			taRegisterTool(toolKey, toolDefinition);
-			toolbars[toolbarKey].addTool(toolKey, toolDefinition, group, index);
-		},
-		// this is used when externally the html of an editor has been changed and textAngular needs to be notified to update the model.
-		// this will call a $digest if not already happening
-		refreshEditor: function(name){
-			if(editors[name]){
-				editors[name].scope.updateTaBindtaTextElement();
-				/* istanbul ignore else: phase catch */
-				if(!editors[name].scope.$$phase) editors[name].scope.$digest();
-			}else throw('textAngular Error: No Editor with name "' + name + '" exists');
-		},
-		// this is used by taBind to send a key command in response to a special key event
-		sendKeyCommand: function(scope, event){
-			var _editor = editors[scope._name];
-			/* istanbul ignore else: if nothing to do, do nothing */
-			if (_editor && _editor.editorFunctions.sendKeyCommand(event)) {
-				/* istanbul ignore else: don't run if already running */
-				if(!scope._bUpdateSelectedStyles){
-					scope.updateSelectedStyles();
-				}
-				event.preventDefault();
-				return false;
-			}
-		}
-	};
-}]);
-textAngular.directive('textAngularToolbar', [
-	'$compile', 'textAngularManager', 'taOptions', 'taTools', 'taToolExecuteAction', '$window',
-	function($compile, textAngularManager, taOptions, taTools, taToolExecuteAction, $window){
-		return {
-			scope: {
-				name: '@' // a name IS required
-			},
-			restrict: "EA",
-			link: function(scope, element, attrs){
-				if(!scope.name || scope.name === '') throw('textAngular Error: A toolbar requires a name');
-				angular.extend(scope, angular.copy(taOptions));
-				if(attrs.taToolbar)						scope.toolbar = scope.$parent.$eval(attrs.taToolbar);
-				if(attrs.taToolbarClass)				scope.classes.toolbar = attrs.taToolbarClass;
-				if(attrs.taToolbarGroupClass)			scope.classes.toolbarGroup = attrs.taToolbarGroupClass;
-				if(attrs.taToolbarButtonClass)			scope.classes.toolbarButton = attrs.taToolbarButtonClass;
-				if(attrs.taToolbarActiveButtonClass)	scope.classes.toolbarButtonActive = attrs.taToolbarActiveButtonClass;
-				if(attrs.taFocussedClass)				scope.classes.focussed = attrs.taFocussedClass;
-
-				scope.disabled = true;
-				scope.focussed = false;
-				scope._$element = element;
-				element[0].innerHTML = '';
-				element.addClass("ta-toolbar " + scope.classes.toolbar);
-
-				scope.$watch('focussed', function(){
-					if(scope.focussed) element.addClass(scope.classes.focussed);
-					else element.removeClass(scope.classes.focussed);
-				});
-
-				var setupToolElement = function(toolDefinition, toolScope){
-					var toolElement;
-					if(toolDefinition && toolDefinition.display){
-						toolElement = angular.element(toolDefinition.display);
-					}
-					else toolElement = angular.element("<button type='button'>");
-
-					if(toolDefinition && toolDefinition["class"]) toolElement.addClass(toolDefinition["class"]);
-					else toolElement.addClass(scope.classes.toolbarButton);
-
-					toolElement.attr('name', toolScope.name);
-					// important to not take focus from the main text/html entry
-					toolElement.attr('ta-button', 'ta-button');
-					toolElement.attr('ng-disabled', 'isDisabled()');
-					toolElement.attr('tabindex', '-1');
-					toolElement.attr('ng-click', 'executeAction()');
-					toolElement.attr('ng-class', 'displayActiveToolClass(active)');
-
-					if (toolDefinition && toolDefinition.tooltiptext) {
-						toolElement.attr('title', toolDefinition.tooltiptext);
-					}
-					if(toolDefinition && !toolDefinition.display && !toolScope._display){
-						// first clear out the current contents if any
-						toolElement[0].innerHTML = '';
-						// add the buttonText
-						if(toolDefinition.buttontext) toolElement[0].innerHTML = toolDefinition.buttontext;
-						// add the icon to the front of the button if there is content
-						if(toolDefinition.iconclass){
-							var icon = angular.element('<i>'), content = toolElement[0].innerHTML;
-							icon.addClass(toolDefinition.iconclass);
-							toolElement[0].innerHTML = '';
-							toolElement.append(icon);
-							if(content && content !== '') toolElement.append('&nbsp;' + content);
-						}
-					}
-
-					toolScope._lastToolDefinition = angular.copy(toolDefinition);
-
-					return $compile(toolElement)(toolScope);
-				};
-
-				// Keep a reference for updating the active states later
-				scope.tools = {};
-				// create the tools in the toolbar
-				// default functions and values to prevent errors in testing and on init
-				scope._parent = {
-					disabled: true,
-					showHtml: false,
-					queryFormatBlockState: function(){ return false; },
-					queryCommandState: function(){ return false; }
-				};
-				var defaultChildScope = {
-					$window: $window,
-					$editor: function(){
-						// dynamically gets the editor as it is set
-						return scope._parent;
-					},
-					isDisabled: function(){
-						// to set your own disabled logic set a function or boolean on the tool called 'disabled'
-						return ( // this bracket is important as without it it just returns the first bracket and ignores the rest
-							// when the button's disabled function/value evaluates to true
-							(typeof this.$eval('disabled') !== 'function' && this.$eval('disabled')) || this.$eval('disabled()') ||
-							// all buttons except the HTML Switch button should be disabled in the showHtml (RAW html) mode
-							(this.name !== 'html' && this.$editor().showHtml) ||
-							// if the toolbar is disabled
-							this.$parent.disabled ||
-							// if the current editor is disabled
-							this.$editor().disabled
-						);
-					},
-					displayActiveToolClass: function(active){
-						return (active)? scope.classes.toolbarButtonActive : '';
-					},
-					executeAction: taToolExecuteAction
-				};
-
-				angular.forEach(scope.toolbar, function(group){
-					// setup the toolbar group
-					var groupElement = angular.element("<div>");
-					groupElement.addClass(scope.classes.toolbarGroup);
-					angular.forEach(group, function(tool){
-						// init and add the tools to the group
-						// a tool name (key name from taTools struct)
-						//creates a child scope of the main angularText scope and then extends the childScope with the functions of this particular tool
-						// reference to the scope and element kept
-						scope.tools[tool] = angular.extend(scope.$new(true), taTools[tool], defaultChildScope, {name: tool});
-						scope.tools[tool].$element = setupToolElement(taTools[tool], scope.tools[tool]);
-						// append the tool compiled with the childScope to the group element
-						groupElement.append(scope.tools[tool].$element);
-					});
-					// append the group to the toolbar
-					element.append(groupElement);
-				});
-
-				// update a tool
-				// if a value is set to null, remove from the display
-				// when forceNew is set to true it will ignore all previous settings, used to reset to taTools definition
-				// to reset to defaults pass in taTools[key] as _newTool and forceNew as true, ie `updateToolDisplay(key, taTools[key], true);`
-				scope.updateToolDisplay = function(key, _newTool, forceNew){
-					var toolInstance = scope.tools[key];
-					if(toolInstance){
-						// get the last toolDefinition, then override with the new definition
-						if(toolInstance._lastToolDefinition && !forceNew) _newTool = angular.extend({}, toolInstance._lastToolDefinition, _newTool);
-						if(_newTool.buttontext === null && _newTool.iconclass === null && _newTool.display === null)
-							throw('textAngular Error: Tool Definition for updating "' + key + '" does not have a valid display/iconclass/buttontext value');
-
-						// if tool is defined on this toolbar, update/redo the tool
-						if(_newTool.buttontext === null){
-							delete _newTool.buttontext;
-						}
-						if(_newTool.iconclass === null){
-							delete _newTool.iconclass;
-						}
-						if(_newTool.display === null){
-							delete _newTool.display;
-						}
-
-						var toolElement = setupToolElement(_newTool, toolInstance);
-						toolInstance.$element.replaceWith(toolElement);
-						toolInstance.$element = toolElement;
-					}
-				};
-
-				// we assume here that all values passed are valid and correct
-				scope.addTool = function(key, _newTool, groupIndex, index){
-					scope.tools[key] = angular.extend(scope.$new(true), taTools[key], defaultChildScope, {name: key});
-					scope.tools[key].$element = setupToolElement(taTools[key], scope.tools[key]);
-					var group;
-					if(groupIndex === undefined) groupIndex = scope.toolbar.length - 1;
-					group = angular.element(element.children()[groupIndex]);
-
-					if(index === undefined){
-						group.append(scope.tools[key].$element);
-						scope.toolbar[groupIndex][scope.toolbar[groupIndex].length - 1] = key;
-					}else{
-						group.children().eq(index).after(scope.tools[key].$element);
-						scope.toolbar[groupIndex][index] = key;
-					}
-				};
-
-				textAngularManager.registerToolbar(scope);
-
-				scope.$on('$destroy', function(){
-					textAngularManager.unregisterToolbar(scope.name);
-				});
-			}
-		};
-	}
-]);
-
-/**
- * @license AngularJS v1.3.10
- * (c) 2010-2014 Google, Inc. http://angularjs.org
- * License: MIT
- */
-(function(window, angular, undefined) {'use strict';
-
-var $sanitizeMinErr = angular.$$minErr('$sanitize');
-
-/**
- * @ngdoc module
- * @name ngSanitize
- * @description
- *
- * # ngSanitize
- *
- * The `ngSanitize` module provides functionality to sanitize HTML.
- *
- *
- * <div doc-module-components="ngSanitize"></div>
- *
- * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
- */
-
-/*
- * HTML Parser By Misko Hevery (misko@hevery.com)
- * based on:  HTML Parser By John Resig (ejohn.org)
- * Original code by Erik Arvidsson, Mozilla Public License
- * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
- *
- * // Use like so:
- * htmlParser(htmlString, {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * });
- *
- */
-
-
-/**
- * @ngdoc service
- * @name $sanitize
- * @kind function
- *
- * @description
- *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
- *   then serialized back to properly escaped html string. This means that no unsafe input can make
- *   it into the returned string, however, since our parser is more strict than a typical browser
- *   parser, it's possible that some obscure input, which would be recognized as valid HTML by a
- *   browser, won't make it through the sanitizer. The input may also contain SVG markup.
- *   The whitelist is configured using the functions `aHrefSanitizationWhitelist` and
- *   `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider `$compileProvider`}.
- *
- * @param {string} html HTML input.
- * @returns {string} Sanitized HTML.
- *
- * @example
-   <example module="sanitizeExample" deps="angular-sanitize.js">
-   <file name="index.html">
-     <script>
-         angular.module('sanitizeExample', ['ngSanitize'])
-           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
-             $scope.snippet =
-               '<p style="color:blue">an html\n' +
-               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
-               'snippet</p>';
-             $scope.deliberatelyTrustDangerousSnippet = function() {
-               return $sce.trustAsHtml($scope.snippet);
-             };
-           }]);
-     </script>
-     <div ng-controller="ExampleController">
-        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-       <table>
-         <tr>
-           <td>Directive</td>
-           <td>How</td>
-           <td>Source</td>
-           <td>Rendered</td>
-         </tr>
-         <tr id="bind-html-with-sanitize">
-           <td>ng-bind-html</td>
-           <td>Automatically uses $sanitize</td>
-           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-           <td><div ng-bind-html="snippet"></div></td>
-         </tr>
-         <tr id="bind-html-with-trust">
-           <td>ng-bind-html</td>
-           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
-           <td>
-           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
-&lt;/div&gt;</pre>
-           </td>
-           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
-         </tr>
-         <tr id="bind-default">
-           <td>ng-bind</td>
-           <td>Automatically escapes</td>
-           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
-           <td><div ng-bind="snippet"></div></td>
-         </tr>
-       </table>
-       </div>
-   </file>
-   <file name="protractor.js" type="protractor">
-     it('should sanitize the html snippet by default', function() {
-       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
-         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
-     });
-
-     it('should inline raw snippet if bound to a trusted value', function() {
-       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
-         toBe("<p style=\"color:blue\">an html\n" +
-              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
-              "snippet</p>");
-     });
-
-     it('should escape snippet without any filter', function() {
-       expect(element(by.css('#bind-default div')).getInnerHtml()).
-         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
-              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
-              "snippet&lt;/p&gt;");
-     });
-
-     it('should update', function() {
-       element(by.model('snippet')).clear();
-       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
-       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
-         toBe('new <b>text</b>');
-       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
-         'new <b onclick="alert(1)">text</b>');
-       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
-         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
-     });
-   </file>
-   </example>
- */
-function $SanitizeProvider() {
-  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
-    return function(html) {
-      if (typeof arguments[1] != 'undefined') {
-        arguments[1].version = 'taSanitize';
-      }
-      var buf = [];
-      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
-        return !/^unsafe/.test($$sanitizeUri(uri, isImage));
-      }));
-      return buf.join('');
-    };
-  }];
-}
-
-function sanitizeText(chars) {
-  var buf = [];
-  var writer = htmlSanitizeWriter(buf, angular.noop);
-  writer.chars(chars);
-  return buf.join('');
-}
-
-
-// Regular Expressions for parsing tags and attributes
-var START_TAG_REGEXP =
-       /^<((?:[a-zA-Z])[\w:-]*)((?:\s+[\w:-]+(?:\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)\s*(>?)/,
-  END_TAG_REGEXP = /^<\/\s*([\w:-]+)[^>]*>/,
-  ATTR_REGEXP = /([\w:-]+)(?:\s*=\s*(?:(?:"((?:[^"])*)")|(?:'((?:[^'])*)')|([^>\s]+)))?/g,
-  BEGIN_TAG_REGEXP = /^</,
-  BEGING_END_TAGE_REGEXP = /^<\//,
-  COMMENT_REGEXP = /<!--(.*?)-->/g,
-  SINGLE_COMMENT_REGEXP = /(^<!--.*?-->)/,
-  DOCTYPE_REGEXP = /<!DOCTYPE([^>]*?)>/i,
-  CDATA_REGEXP = /<!\[CDATA\[(.*?)]]>/g,
-  SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
-  // Match everything outside of normal chars and " (quote character)
-  NON_ALPHANUMERIC_REGEXP = /([^\#-~| |!])/g,
-  WHITE_SPACE_REGEXP = /^(\s+)/;
-
-
-// Good source of info about elements and attributes
-// http://dev.w3.org/html5/spec/Overview.html#semantics
-// http://simon.html5.org/html-elements
-
-// Safe Void Elements - HTML5
-// http://dev.w3.org/html5/spec/Overview.html#void-elements
-var voidElements = makeMap("area,br,col,hr,img,wbr,input");
-
-// Elements that you can, intentionally, leave open (and which close themselves)
-// http://dev.w3.org/html5/spec/Overview.html#optional-tags
-var optionalEndTagBlockElements = makeMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
-    optionalEndTagInlineElements = makeMap("rp,rt"),
-    optionalEndTagElements = angular.extend({},
-                                            optionalEndTagInlineElements,
-                                            optionalEndTagBlockElements);
-
-// Safe Block Elements - HTML5
-var blockElements = angular.extend({}, optionalEndTagBlockElements, makeMap("address,article," +
-        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
-        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,script,section,table,ul"));
-
-// Inline Elements - HTML5
-var inlineElements = angular.extend({}, optionalEndTagInlineElements, makeMap("a,abbr,acronym,b," +
-        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
-        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
-
-// SVG Elements
-// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
-var svgElements = makeMap("animate,animateColor,animateMotion,animateTransform,circle,defs," +
-        "desc,ellipse,font-face,font-face-name,font-face-src,g,glyph,hkern,image,linearGradient," +
-        "line,marker,metadata,missing-glyph,mpath,path,polygon,polyline,radialGradient,rect,set," +
-        "stop,svg,switch,text,title,tspan,use");
-
-// Special Elements (can contain anything)
-var specialElements = makeMap("script,style");
-
-var validElements = angular.extend({},
-                                   voidElements,
-                                   blockElements,
-                                   inlineElements,
-                                   optionalEndTagElements,
-                                   svgElements);
-
-//Attributes that have href and hence need to be sanitized
-var uriAttrs = makeMap("background,cite,href,longdesc,src,usemap,xlink:href");
-
-var htmlAttrs = makeMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,'+
-    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,'+
-    'id,ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,'+
-    'scope,scrolling,shape,size,span,start,summary,target,title,type,'+
-    'valign,value,vspace,width');
-
-// SVG attributes (without "id" and "name" attributes)
-// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
-var svgAttrs = makeMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
-    'attributeName,attributeType,baseProfile,bbox,begin,by,calcMode,cap-height,class,color,' +
-    'color-rendering,content,cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,' +
-    'font-size,font-stretch,font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,' +
-    'gradientUnits,hanging,height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,' +
-    'keySplines,keyTimes,lang,marker-end,marker-mid,marker-start,markerHeight,markerUnits,' +
-    'markerWidth,mathematical,max,min,offset,opacity,orient,origin,overline-position,' +
-    'overline-thickness,panose-1,path,pathLength,points,preserveAspectRatio,r,refX,refY,' +
-    'repeatCount,repeatDur,requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,' +
-    'stemv,stop-color,stop-opacity,strikethrough-position,strikethrough-thickness,stroke,' +
-    'stroke-dasharray,stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,' +
-    'stroke-opacity,stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,' +
-    'underline-position,underline-thickness,unicode,unicode-range,units-per-em,values,version,' +
-    'viewBox,visibility,width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,' +
-    'xlink:show,xlink:title,xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,' +
-    'zoomAndPan');
-
-var validAttrs = angular.extend({},
-                                uriAttrs,
-                                svgAttrs,
-                                htmlAttrs);
-
-function makeMap(str) {
-  var obj = {}, items = str.split(','), i;
-  for (i = 0; i < items.length; i++) obj[items[i]] = true;
-  return obj;
-}
-
-
-/**
- * @example
- * htmlParser(htmlString, {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * });
- *
- * @param {string} html string
- * @param {object} handler
- */
-function htmlParser(html, handler) {
-  if (typeof html !== 'string') {
-    if (html === null || typeof html === 'undefined') {
-      html = '';
-    } else {
-      html = '' + html;
-    }
-  }
-  var index, chars, match, stack = [], last = html, text;
-  stack.last = function() { return stack[ stack.length - 1 ]; };
-
-  while (html) {
-    text = '';
-    chars = true;
-
-    // Make sure we're not in a script or style element
-    if (!stack.last() || !specialElements[ stack.last() ]) {
-
-      // White space
-      if (WHITE_SPACE_REGEXP.test(html)) {
-        match = html.match(WHITE_SPACE_REGEXP);
-
-        if (match) {
-          var mat = match[0];
-          if (handler.whitespace) handler.whitespace(match[0]);
-          html = html.replace(match[0], '');
-          chars = false;
-        }
-      //Comment
-      } else if (SINGLE_COMMENT_REGEXP.test(html)) {
-        match = html.match(SINGLE_COMMENT_REGEXP);
-
-        if (match) {
-          if (handler.comment) handler.comment(match[1]);
-          html = html.replace(match[0], '');
-          chars = false;
-        }
-      // DOCTYPE
-      } else if (DOCTYPE_REGEXP.test(html)) {
-        match = html.match(DOCTYPE_REGEXP);
-
-        if (match) {
-          html = html.replace(match[0], '');
-          chars = false;
-        }
-      // end tag
-      } else if (BEGING_END_TAGE_REGEXP.test(html)) {
-        match = html.match(END_TAG_REGEXP);
-
-        if (match) {
-          html = html.substring(match[0].length);
-          match[0].replace(END_TAG_REGEXP, parseEndTag);
-          chars = false;
-        }
-
-      // start tag
-      } else if (BEGIN_TAG_REGEXP.test(html)) {
-        match = html.match(START_TAG_REGEXP);
-
-        if (match) {
-          // We only have a valid start-tag if there is a '>'.
-          if (match[4]) {
-            html = html.substring(match[0].length);
-            match[0].replace(START_TAG_REGEXP, parseStartTag);
-          }
-          chars = false;
-        } else {
-          // no ending tag found --- this piece should be encoded as an entity.
-          text += '<';
-          html = html.substring(1);
-        }
-      }
-
-      if (chars) {
-        index = html.indexOf("<");
-
-        text += index < 0 ? html : html.substring(0, index);
-        html = index < 0 ? "" : html.substring(index);
-
-        if (handler.chars) handler.chars(decodeEntities(text));
-      }
-
-    } else {
-      html = html.replace(new RegExp("([^]*)<\\s*\\/\\s*" + stack.last() + "[^>]*>", 'i'),
-        function(all, text) {
-          text = text.replace(COMMENT_REGEXP, "$1").replace(CDATA_REGEXP, "$1");
-
-          if (handler.chars) handler.chars(decodeEntities(text));
-
-          return "";
-      });
-
-      parseEndTag("", stack.last());
-    }
-
-    if (html == last) {
-      throw $sanitizeMinErr('badparse', "The sanitizer was unable to parse the following block " +
-                                        "of html: {0}", html);
-    }
-    last = html;
-  }
-
-  // Clean up any remaining tags
-  parseEndTag();
-
-  function parseStartTag(tag, tagName, rest, unary) {
-    tagName = angular.lowercase(tagName);
-    if (blockElements[ tagName ]) {
-      while (stack.last() && inlineElements[ stack.last() ]) {
-        parseEndTag("", stack.last());
-      }
-    }
-
-    if (optionalEndTagElements[ tagName ] && stack.last() == tagName) {
-      parseEndTag("", tagName);
-    }
-
-    unary = voidElements[ tagName ] || !!unary;
-
-    if (!unary)
-      stack.push(tagName);
-
-    var attrs = {};
-
-    rest.replace(ATTR_REGEXP,
-      function(match, name, doubleQuotedValue, singleQuotedValue, unquotedValue) {
-        var value = doubleQuotedValue
-          || singleQuotedValue
-          || unquotedValue
-          || '';
-
-        attrs[name] = decodeEntities(value);
-    });
-    if (handler.start) handler.start(tagName, attrs, unary);
-  }
-
-  function parseEndTag(tag, tagName) {
-    var pos = 0, i;
-    tagName = angular.lowercase(tagName);
-    if (tagName)
-      // Find the closest opened tag of the same type
-      for (pos = stack.length - 1; pos >= 0; pos--)
-        if (stack[ pos ] == tagName)
-          break;
-
-    if (pos >= 0) {
-      // Close all the open elements, up the stack
-      for (i = stack.length - 1; i >= pos; i--)
-        if (handler.end) handler.end(stack[ i ]);
-
-      // Remove the open elements from the stack
-      stack.length = pos;
-    }
-  }
-}
-
-var hiddenPre=document.createElement("pre");
-var spaceRe = /^(\s*)([\s\S]*?)(\s*)$/;
-/**
- * decodes all entities into regular string
- * @param value
- * @returns {string} A string with decoded entities.
- */
-function decodeEntities(value) {
-  if (!value) { return ''; }
-
-  // Note: IE8 does not preserve spaces at the start/end of innerHTML
-  // so we must capture them and reattach them afterward
-  var parts = spaceRe.exec(value);
-  var spaceBefore = parts[1];
-  var spaceAfter = parts[3];
-  var content = parts[2];
-  if (content) {
-    hiddenPre.innerHTML=content.replace(/</g,"&lt;");
-    // innerText depends on styling as it doesn't display hidden elements.
-    // Therefore, it's better to use textContent not to cause unnecessary
-    // reflows. However, IE<9 don't support textContent so the innerText
-    // fallback is necessary.
-    content = 'textContent' in hiddenPre ?
-      hiddenPre.textContent : hiddenPre.innerText;
-  }
-  return spaceBefore + content + spaceAfter;
-}
-
-/**
- * Escapes all potentially dangerous characters, so that the
- * resulting string can be safely inserted into attribute or
- * element text.
- * @param value
- * @returns {string} escaped text
- */
-function encodeEntities(value) {
-  return value.
-    replace(/&/g, '&amp;').
-    replace(SURROGATE_PAIR_REGEXP, function(value) {
-      var hi = value.charCodeAt(0);
-      var low = value.charCodeAt(1);
-      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
-    }).
-    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
-      // unsafe chars are: \u0000-\u001f \u007f-\u009f \u00ad \u0600-\u0604 \u070f \u17b4 \u17b5 \u200c-\u200f \u2028-\u202f \u2060-\u206f \ufeff \ufff0-\uffff from jslint.com/lint.html
-      // decimal values are: 0-31, 127-159, 173, 1536-1540, 1807, 6068, 6069, 8204-8207, 8232-8239, 8288-8303, 65279, 65520-65535
-      var c = value.charCodeAt(0);
-      // if unsafe character encode
-      if(c <= 159 ||
-        c == 173 ||
-        (c >= 1536 && c <= 1540) ||
-        c == 1807 ||
-        c == 6068 ||
-        c == 6069 ||
-        (c >= 8204 && c <= 8207) ||
-        (c >= 8232 && c <= 8239) ||
-        (c >= 8288 && c <= 8303) ||
-        c == 65279 ||
-        (c >= 65520 && c <= 65535)) return '&#' + c + ';';
-      return value; // avoids multilingual issues
-    }).
-    replace(/</g, '&lt;').
-    replace(/>/g, '&gt;');
-}
-
-var trim = (function() {
-  // native trim is way faster: http://jsperf.com/angular-trim-test
-  // but IE doesn't have it... :-(
-  // TODO: we should move this into IE/ES5 polyfill
-  if (!String.prototype.trim) {
-    return function(value) {
-      return angular.isString(value) ? value.replace(/^\s\s*/, '').replace(/\s\s*$/, '') : value;
-    };
-  }
-  return function(value) {
-    return angular.isString(value) ? value.trim() : value;
-  };
-})();
-
-// Custom logic for accepting certain style options only - textAngular
-// Currently allows only the color, background-color, text-align, float, width and height attributes
-// all other attributes should be easily done through classes.
-function validStyles(styleAttr){
-	var result = '';
-	var styleArray = styleAttr.split(';');
-	angular.forEach(styleArray, function(value){
-		var v = value.split(':');
-		if(v.length == 2){
-			var key = trim(angular.lowercase(v[0]));
-			var value = trim(angular.lowercase(v[1]));
-			if(
-				(key === 'color' || key === 'background-color') && (
-					value.match(/^rgb\([0-9%,\. ]*\)$/i)
-					|| value.match(/^rgba\([0-9%,\. ]*\)$/i)
-					|| value.match(/^hsl\([0-9%,\. ]*\)$/i)
-					|| value.match(/^hsla\([0-9%,\. ]*\)$/i)
-					|| value.match(/^#[0-9a-f]{3,6}$/i)
-					|| value.match(/^[a-z]*$/i)
-				)
-			||
-				key === 'text-align' && (
-					value === 'left'
-					|| value === 'right'
-					|| value === 'center'
-					|| value === 'justify'
-				)
-			||
-                key === 'text-decoration' && (
-                    value === 'underline'
-                    || value === 'line-through'
-                )
-            || key === 'font-weight' && (
-                    value === 'bold'
-                )
-            ||
-				key === 'float' && (
-					value === 'left'
-					|| value === 'right'
-					|| value === 'none'
-				)
-			||
-				(key === 'width' || key === 'height') && (
-					value.match(/[0-9\.]*(px|em|rem|%)/)
-				)
-			|| // Reference #520
-				(key === 'direction' && value.match(/^ltr|rtl|initial|inherit$/))
-			) result += key + ': ' + value + ';';
-		}
-	});
-	return result;
-}
-
-// this function is used to manually allow specific attributes on specific tags with certain prerequisites
-function validCustomTag(tag, attrs, lkey, value){
-	// catch the div placeholder for the iframe replacement
-    if (tag === 'img' && attrs['ta-insert-video']){
-        if(lkey === 'ta-insert-video' || lkey === 'allowfullscreen' || lkey === 'frameborder' || (lkey === 'contenteditable' && value === 'false')) return true;
-    }
-    return false;
-}
-
-/**
- * create an HTML/XML writer which writes to buffer
- * @param {Array} buf use buf.jain('') to get out sanitized html string
- * @returns {object} in the form of {
- *     start: function(tag, attrs, unary) {},
- *     end: function(tag) {},
- *     chars: function(text) {},
- *     comment: function(text) {}
- * }
- */
-function htmlSanitizeWriter(buf, uriValidator) {
-  var ignore = false;
-  var out = angular.bind(buf, buf.push);
-  return {
-    start: function(tag, attrs, unary) {
-      tag = angular.lowercase(tag);
-      if (!ignore && specialElements[tag]) {
-        ignore = tag;
-      }
-      if (!ignore && validElements[tag] === true) {
-        out('<');
-        out(tag);
-        angular.forEach(attrs, function(value, key) {
-          var lkey=angular.lowercase(key);
-          var isImage=(tag === 'img' && lkey === 'src') || (lkey === 'background');
-          if ((lkey === 'style' && (value = validStyles(value)) !== '') || validCustomTag(tag, attrs, lkey, value) || validAttrs[lkey] === true &&
-            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
-            out(' ');
-            out(key);
-            out('="');
-            out(encodeEntities(value));
-            out('"');
-          }
-        });
-        out(unary ? '/>' : '>');
-      }
-    },
-    comment: function (com) {
-      out(com);
-    },
-    whitespace: function (ws) {
-      out(encodeEntities(ws));
-    },
-    end: function(tag) {
-        tag = angular.lowercase(tag);
-        if (!ignore && validElements[tag] === true) {
-          out('</');
-          out(tag);
-          out('>');
-        }
-        if (tag == ignore) {
-          ignore = false;
-        }
-      },
-    chars: function(chars) {
-        if (!ignore) {
-          out(encodeEntities(chars));
-        }
-      }
-  };
-}
-
-
-// define ngSanitize module and register $sanitize service
-angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
-
-/* global sanitizeText: false */
-
-/**
- * @ngdoc filter
- * @name linky
- * @kind function
- *
- * @description
- * Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
- * plain email address links.
- *
- * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
- *
- * @param {string} text Input text.
- * @param {string} target Window (_blank|_self|_parent|_top) or named frame to open links in.
- * @returns {string} Html-linkified text.
- *
- * @usage
-   <span ng-bind-html="linky_expression | linky"></span>
- *
- * @example
-   <example module="linkyExample" deps="angular-sanitize.js">
-     <file name="index.html">
-       <script>
-         angular.module('linkyExample', ['ngSanitize'])
-           .controller('ExampleController', ['$scope', function($scope) {
-             $scope.snippet =
-               'Pretty text with some links:\n'+
-               'http://angularjs.org/,\n'+
-               'mailto:us@somewhere.org,\n'+
-               'another@somewhere.org,\n'+
-               'and one more: ftp://127.0.0.1/.';
-             $scope.snippetWithTarget = 'http://angularjs.org/';
-           }]);
-       </script>
-       <div ng-controller="ExampleController">
-       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
-       <table>
-         <tr>
-           <td>Filter</td>
-           <td>Source</td>
-           <td>Rendered</td>
-         </tr>
-         <tr id="linky-filter">
-           <td>linky filter</td>
-           <td>
-             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
-           </td>
-           <td>
-             <div ng-bind-html="snippet | linky"></div>
-           </td>
-         </tr>
-         <tr id="linky-target">
-          <td>linky target</td>
-          <td>
-            <pre>&lt;div ng-bind-html="snippetWithTarget | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
-          </td>
-          <td>
-            <div ng-bind-html="snippetWithTarget | linky:'_blank'"></div>
-          </td>
-         </tr>
-         <tr id="escaped-html">
-           <td>no filter</td>
-           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
-           <td><div ng-bind="snippet"></div></td>
-         </tr>
-       </table>
-     </file>
-     <file name="protractor.js" type="protractor">
-       it('should linkify the snippet with urls', function() {
-         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
-             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
-                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
-         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
-       });
-
-       it('should not linkify snippet without the linky filter', function() {
-         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
-             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
-                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
-         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
-       });
-
-       it('should update', function() {
-         element(by.model('snippet')).clear();
-         element(by.model('snippet')).sendKeys('new http://link.');
-         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
-             toBe('new http://link.');
-         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
-         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
-             .toBe('new http://link.');
-       });
-
-       it('should work with the target property', function() {
-        expect(element(by.id('linky-target')).
-            element(by.binding("snippetWithTarget | linky:'_blank'")).getText()).
-            toBe('http://angularjs.org/');
-        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
-       });
-     </file>
-   </example>
- */
-angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
-  var LINKY_URL_REGEXP =
-        /((ftp|https?):\/\/|(www\.)|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"”’]/,
-      MAILTO_REGEXP = /^mailto:/;
-
-  return function(text, target) {
-    if (!text) return text;
-    var match;
-    var raw = text;
-    var html = [];
-    var url;
-    var i;
-    while ((match = raw.match(LINKY_URL_REGEXP))) {
-      // We can not end in these as they are sometimes found at the end of the sentence
-      url = match[0];
-      // if we did not match ftp/http/www/mailto then assume mailto
-      if (!match[2] && !match[4]) {
-        url = (match[3] ? 'http://' : 'mailto:') + url;
-      }
-      i = match.index;
-      addText(raw.substr(0, i));
-      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
-      raw = raw.substring(i + match[0].length);
-    }
-    addText(raw);
-    return $sanitize(html.join(''));
-
-    function addText(text) {
-      if (!text) {
-        return;
-      }
-      html.push(sanitizeText(text));
-    }
-
-    function addLink(url, text) {
-      html.push('<a ');
-      if (angular.isDefined(target)) {
-        html.push('target="',
-                  target,
-                  '" ');
-      }
-      html.push('href="',
-                url.replace(/"/g, '&quot;'),
-                '">');
-      addText(text);
-      html.push('</a>');
-    }
-  };
-}]);
-
-
-})(window, window.angular);
-
-
-// tests against the current jqLite/jquery implementation if this can be an element
-function validElementString(string){
-	try{
-		return angular.element(string).length !== 0;
-	}catch(any){
-		return false;
-	}
-}
-// setup the global contstant functions for setting up the toolbar
-
-// all tool definitions
-var taTools = {};
-/*
-	A tool definition is an object with the following key/value parameters:
-		action: [function(deferred, restoreSelection)]
-				a function that is executed on clicking on the button - this will allways be executed using ng-click and will
-				overwrite any ng-click value in the display attribute.
-				The function is passed a deferred object ($q.defer()), if this is wanted to be used `return false;` from the action and
-				manually call `deferred.resolve();` elsewhere to notify the editor that the action has finished.
-				restoreSelection is only defined if the rangy library is included and it can be called as `restoreSelection()` to restore the users
-				selection in the WYSIWYG editor.
-		display: [string]?
-				Optional, an HTML element to be displayed as the button. The `scope` of the button is the tool definition object with some additional functions
-				If set this will cause buttontext and iconclass to be ignored
-		class: [string]?
-				Optional, if set will override the taOptions.classes.toolbarButton class.
-		buttontext: [string]?
-				if this is defined it will replace the contents of the element contained in the `display` element
-		iconclass: [string]?
-				if this is defined an icon (<i>) will be appended to the `display` element with this string as it's class
-		tooltiptext: [string]?
-				Optional, a plain text description of the action, used for the title attribute of the action button in the toolbar by default.
-		activestate: [function(commonElement)]?
-				this function is called on every caret movement, if it returns true then the class taOptions.classes.toolbarButtonActive
-				will be applied to the `display` element, else the class will be removed
-		disabled: [function()]?
-				if this function returns true then the tool will have the class taOptions.classes.disabled applied to it, else it will be removed
-	Other functions available on the scope are:
-		name: [string]
-				the name of the tool, this is the first parameter passed into taRegisterTool
-		isDisabled: [function()]
-				returns true if the tool is disabled, false if it isn't
-		displayActiveToolClass: [function(boolean)]
-				returns true if the tool is 'active' in the currently focussed toolbar
-		onElementSelect: [Object]
-				This object contains the following key/value pairs and is used to trigger the ta-element-select event
-				element: [String]
-					an element name, will only trigger the onElementSelect action if the tagName of the element matches this string
-				filter: [function(element)]?
-					an optional filter that returns a boolean, if true it will trigger the onElementSelect.
-				action: [function(event, element, editorScope)]
-					the action that should be executed if the onElementSelect function runs
-*/
-// name and toolDefinition to add into the tools available to be added on the toolbar
-function registerTextAngularTool(name, toolDefinition){
-	if(!name || name === '' || taTools.hasOwnProperty(name)) throw('textAngular Error: A unique name is required for a Tool Definition');
-	if(
-		(toolDefinition.display && (toolDefinition.display === '' || !validElementString(toolDefinition.display))) ||
-		(!toolDefinition.display && !toolDefinition.buttontext && !toolDefinition.iconclass)
-	)
-		throw('textAngular Error: Tool Definition for "' + name + '" does not have a valid display/iconclass/buttontext value');
-	taTools[name] = toolDefinition;
-}
-
-angular.module('textAngularSetup', [])
-.constant('taRegisterTool', registerTextAngularTool)
-.value('taTools', taTools)
-// Here we set up the global display defaults, to set your own use a angular $provider#decorator.
-.value('taOptions',  {
-	//////////////////////////////////////////////////////////////////////////////////////
-    // forceTextAngularSanitize
-    // set false to allow the textAngular-sanitize provider to be replaced
-    // with angular-sanitize or a custom provider.
-	forceTextAngularSanitize: true,
-	///////////////////////////////////////////////////////////////////////////////////////
-	// keyMappings
-	// allow customizable keyMappings for specialized key boards or languages
-	//
-	// keyMappings provides key mappings that are attached to a given commandKeyCode.
-	// To modify a specific keyboard binding, simply provide function which returns true
-	// for the event you wish to map to.
-	// Or to disable a specific keyboard binding, provide a function which returns false.
-	// Note: 'RedoKey' and 'UndoKey' are internally bound to the redo and undo functionality.
-	// At present, the following commandKeyCodes are in use:
-	// 98, 'TabKey', 'ShiftTabKey', 105, 117, 'UndoKey', 'RedoKey'
-	//
-	// To map to an new commandKeyCode, add a new key mapping such as:
-	// {commandKeyCode: 'CustomKey', testForKey: function (event) {
-	//  if (event.keyCode=57 && event.ctrlKey && !event.shiftKey && !event.altKey) return true;
-	// } }
-	// to the keyMappings. This example maps ctrl+9 to 'CustomKey'
-	// Then where taRegisterTool(...) is called, add a commandKeyCode: 'CustomKey' and your
-	// tool will be bound to ctrl+9.
-	//
-	// To disble one of the already bound commandKeyCodes such as 'RedoKey' or 'UndoKey' add:
-	// {commandKeyCode: 'RedoKey', testForKey: function (event) { return false; } },
-	// {commandKeyCode: 'UndoKey', testForKey: function (event) { return false; } },
-	// to disable them.
-	//
-	keyMappings : [],
-	toolbar: [
-		['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
-		['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
-		['justifyLeft','justifyCenter','justifyRight','justifyFull','indent','outdent'],
-		['html', 'insertImage', 'insertLink', 'insertVideo', 'wordcount', 'charcount']
-	],
-	classes: {
-		focussed: "focussed",
-		toolbar: "btn-toolbar",
-		toolbarGroup: "btn-group",
-		toolbarButton: "btn btn-default",
-		toolbarButtonActive: "active",
-		disabled: "disabled",
-		textEditor: 'form-control',
-		htmlEditor: 'form-control'
-	},
-	defaultTagAttributes : {
-		a: {target:""}
-	},
-	setup: {
-		// wysiwyg mode
-		textEditorSetup: function($element){ /* Do some processing here */ },
-		// raw html
-		htmlEditorSetup: function($element){ /* Do some processing here */ }
-	},
-	defaultFileDropHandler:
-		/* istanbul ignore next: untestable image processing */
-		function(file, insertAction){
-			var reader = new FileReader();
-			if(file.type.substring(0, 5) === 'image'){
-				reader.onload = function() {
-					if(reader.result !== '') insertAction('insertImage', reader.result, true);
-				};
-
-				reader.readAsDataURL(file);
-				// NOTE: For async procedures return a promise and resolve it when the editor should update the model.
-				return true;
-			}
-			return false;
-		}
-})
-
-// This is the element selector string that is used to catch click events within a taBind, prevents the default and $emits a 'ta-element-select' event
-// these are individually used in an angular.element().find() call. What can go here depends on whether you have full jQuery loaded or just jQLite with angularjs.
-// div is only used as div.ta-insert-video caught in filter.
-.value('taSelectableElements', ['a','img'])
-
-// This is an array of objects with the following options:
-//				selector: <string> a jqLite or jQuery selector string
-//				customAttribute: <string> an attribute to search for
-//				renderLogic: <function(element)>
-// Both or one of selector and customAttribute must be defined.
-.value('taCustomRenderers', [
-	{
-		// Parse back out: '<div class="ta-insert-video" ta-insert-video src="' + urlLink + '" allowfullscreen="true" width="300" frameborder="0" height="250"></div>'
-		// To correct video element. For now only support youtube
-		selector: 'img',
-		customAttribute: 'ta-insert-video',
-		renderLogic: function(element){
-			var iframe = angular.element('<iframe></iframe>');
-			var attributes = element.prop("attributes");
-			// loop through element attributes and apply them on iframe
-			angular.forEach(attributes, function(attr) {
-				iframe.attr(attr.name, attr.value);
-			});
-			iframe.attr('src', iframe.attr('ta-insert-video'));
-			element.replaceWith(iframe);
-		}
-	}
-])
-
-.value('taTranslations', {
-	// moved to sub-elements
-	//toggleHTML: "Toggle HTML",
-	//insertImage: "Please enter a image URL to insert",
-	//insertLink: "Please enter a URL to insert",
-	//insertVideo: "Please enter a youtube URL to embed",
-	html: {
-		tooltip: 'Toggle html / Rich Text'
-	},
-	// tooltip for heading - might be worth splitting
-	heading: {
-		tooltip: 'Heading '
-	},
-	p: {
-		tooltip: 'Paragraph'
-	},
-	pre: {
-		tooltip: 'Preformatted text'
-	},
-	ul: {
-		tooltip: 'Unordered List'
-	},
-	ol: {
-		tooltip: 'Ordered List'
-	},
-	quote: {
-		tooltip: 'Quote/unquote selection or paragraph'
-	},
-	undo: {
-		tooltip: 'Undo'
-	},
-	redo: {
-		tooltip: 'Redo'
-	},
-	bold: {
-		tooltip: 'Bold'
-	},
-	italic: {
-		tooltip: 'Italic'
-	},
-	underline: {
-		tooltip: 'Underline'
-	},
-	strikeThrough:{
-		tooltip: 'Strikethrough'
-	},
-	justifyLeft: {
-		tooltip: 'Align text left'
-	},
-	justifyRight: {
-		tooltip: 'Align text right'
-	},
-	justifyFull: {
-		tooltip: 'Justify text'
-	},
-	justifyCenter: {
-		tooltip: 'Center'
-	},
-	indent: {
-		tooltip: 'Increase indent'
-	},
-	outdent: {
-		tooltip: 'Decrease indent'
-	},
-	clear: {
-		tooltip: 'Clear formatting'
-	},
-	insertImage: {
-		dialogPrompt: 'Please enter an image URL to insert',
-		tooltip: 'Insert image',
-		hotkey: 'the - possibly language dependent hotkey ... for some future implementation'
-	},
-	insertVideo: {
-		tooltip: 'Insert video',
-		dialogPrompt: 'Please enter a youtube URL to embed'
-	},
-	insertLink: {
-		tooltip: 'Insert / edit link',
-		dialogPrompt: "Please enter a URL to insert"
-	},
-	editLink: {
-		reLinkButton: {
-			tooltip: "Relink"
-		},
-		unLinkButton: {
-			tooltip: "Unlink"
-		},
-		targetToggle: {
-			buttontext: "Open in New Window"
-		}
-	},
-	wordcount: {
-		tooltip: 'Display words Count'
-	},
-		charcount: {
-		tooltip: 'Display characters Count'
-	}
-})
-.factory('taToolFunctions', ['$window','taTranslations', function($window, taTranslations) {
-	return {
-		imgOnSelectAction: function(event, $element, editorScope){
-			// setup the editor toolbar
-			// Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic/display
-			var finishEdit = function(){
-				editorScope.updateTaBindtaTextElement();
-				editorScope.hidePopover();
-			};
-			event.preventDefault();
-			editorScope.displayElements.popover.css('width', '375px');
-			var container = editorScope.displayElements.popoverContainer;
-			container.empty();
-			var buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
-			var fullButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">100% </button>');
-			fullButton.on('click', function(event){
-				event.preventDefault();
-				$element.css({
-					'width': '100%',
-					'height': ''
-				});
-				finishEdit();
-			});
-			var halfButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">50% </button>');
-			halfButton.on('click', function(event){
-				event.preventDefault();
-				$element.css({
-					'width': '50%',
-					'height': ''
-				});
-				finishEdit();
-			});
-			var quartButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">25% </button>');
-			quartButton.on('click', function(event){
-				event.preventDefault();
-				$element.css({
-					'width': '25%',
-					'height': ''
-				});
-				finishEdit();
-			});
-			var resetButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1">Reset</button>');
-			resetButton.on('click', function(event){
-				event.preventDefault();
-				$element.css({
-					width: '',
-					height: ''
-				});
-				finishEdit();
-			});
-			buttonGroup.append(fullButton);
-			buttonGroup.append(halfButton);
-			buttonGroup.append(quartButton);
-			buttonGroup.append(resetButton);
-			container.append(buttonGroup);
-
-			buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
-			var floatLeft = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-left"></i></button>');
-			floatLeft.on('click', function(event){
-				event.preventDefault();
-				// webkit
-				$element.css('float', 'left');
-				// firefox
-				$element.css('cssFloat', 'left');
-				// IE < 8
-				$element.css('styleFloat', 'left');
-				finishEdit();
-			});
-			var floatRight = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-right"></i></button>');
-			floatRight.on('click', function(event){
-				event.preventDefault();
-				// webkit
-				$element.css('float', 'right');
-				// firefox
-				$element.css('cssFloat', 'right');
-				// IE < 8
-				$element.css('styleFloat', 'right');
-				finishEdit();
-			});
-			var floatNone = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-justify"></i></button>');
-			floatNone.on('click', function(event){
-				event.preventDefault();
-				// webkit
-				$element.css('float', '');
-				// firefox
-				$element.css('cssFloat', '');
-				// IE < 8
-				$element.css('styleFloat', '');
-				finishEdit();
-			});
-			buttonGroup.append(floatLeft);
-			buttonGroup.append(floatNone);
-			buttonGroup.append(floatRight);
-			container.append(buttonGroup);
-
-			buttonGroup = angular.element('<div class="btn-group">');
-			var remove = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-trash-o"></i></button>');
-			remove.on('click', function(event){
-				event.preventDefault();
-				$element.remove();
-				finishEdit();
-			});
-			buttonGroup.append(remove);
-			container.append(buttonGroup);
-
-			editorScope.showPopover($element);
-			editorScope.showResizeOverlay($element);
-		},
-		aOnSelectAction: function(event, $element, editorScope){
-			// setup the editor toolbar
-			// Credit to the work at http://hackerwins.github.io/summernote/ for this editbar logic
-			event.preventDefault();
-			editorScope.displayElements.popover.css('width', '436px');
-			var container = editorScope.displayElements.popoverContainer;
-			container.empty();
-			container.css('line-height', '28px');
-			var link = angular.element('<a href="' + $element.attr('href') + '" target="_blank">' + $element.attr('href') + '</a>');
-			link.css({
-				'display': 'inline-block',
-				'max-width': '200px',
-				'overflow': 'hidden',
-				'text-overflow': 'ellipsis',
-				'white-space': 'nowrap',
-				'vertical-align': 'middle'
-			});
-			container.append(link);
-			var buttonGroup = angular.element('<div class="btn-group pull-right">');
-			var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.reLinkButton.tooltip + '"><i class="fa fa-edit icon-edit"></i></button>');
-			reLinkButton.on('click', function(event){
-				event.preventDefault();
-				var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, $element.attr('href'));
-				if(urlLink && urlLink !== '' && urlLink !== 'http://'){
-					$element.attr('href', urlLink);
-					editorScope.updateTaBindtaTextElement();
-				}
-				editorScope.hidePopover();
-			});
-			buttonGroup.append(reLinkButton);
-			var unLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.unLinkButton.tooltip + '"><i class="fa fa-unlink icon-unlink"></i></button>');
-			// directly before this click event is fired a digest is fired off whereby the reference to $element is orphaned off
-			unLinkButton.on('click', function(event){
-				event.preventDefault();
-				$element.replaceWith($element.contents());
-				editorScope.updateTaBindtaTextElement();
-				editorScope.hidePopover();
-			});
-			buttonGroup.append(unLinkButton);
-			var targetToggle = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on">' + taTranslations.editLink.targetToggle.buttontext + '</button>');
-			if($element.attr('target') === '_blank'){
-				targetToggle.addClass('active');
-			}
-			targetToggle.on('click', function(event){
-				event.preventDefault();
-				$element.attr('target', ($element.attr('target') === '_blank') ? '' : '_blank');
-				targetToggle.toggleClass('active');
-				editorScope.updateTaBindtaTextElement();
-			});
-			buttonGroup.append(targetToggle);
-			container.append(buttonGroup);
-			editorScope.showPopover($element);
-		},
-		extractYoutubeVideoId: function(url) {
-			var re = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i;
-			var match = url.match(re);
-			return (match && match[1]) || null;
-		}
-	};
-}])
-.run(['taRegisterTool', '$window', 'taTranslations', 'taSelection', 'taToolFunctions', '$sanitize', 'taOptions', function(taRegisterTool, $window, taTranslations, taSelection, taToolFunctions, $sanitize, taOptions){
-	// test for the version of $sanitize that is in use
-	// You can disable this check by setting taOptions.textAngularSanitize == false
-	var gv = {}; $sanitize('', gv);
-	/* istanbul ignore next, throws error */
-	if ((taOptions.forceTextAngularSanitize===true) && (gv.version !== 'taSanitize')) {
-		throw angular.$$minErr('textAngular')("textAngularSetup", "The textAngular-sanitize provider has been replaced by another -- have you included angular-sanitize by mistake?");
-	}
-	taRegisterTool("html", {
-		iconclass: 'fa fa-code',
-		tooltiptext: taTranslations.html.tooltip,
-		action: function(){
-			this.$editor().switchView();
-		},
-		activeState: function(){
-			return this.$editor().showHtml;
-		}
-	});
-	// add the Header tools
-	// convenience functions so that the loop works correctly
-	var _retActiveStateFunction = function(q){
-		return function(){ return this.$editor().queryFormatBlockState(q); };
-	};
-	var headerAction = function(){
-		return this.$editor().wrapSelection("formatBlock", "<" + this.name.toUpperCase() +">");
-	};
-	angular.forEach(['h1','h2','h3','h4','h5','h6'], function(h){
-		taRegisterTool(h.toLowerCase(), {
-			buttontext: h.toUpperCase(),
-			tooltiptext: taTranslations.heading.tooltip + h.charAt(1),
-			action: headerAction,
-			activeState: _retActiveStateFunction(h.toLowerCase())
-		});
-	});
-	taRegisterTool('p', {
-		buttontext: 'P',
-		tooltiptext: taTranslations.p.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("formatBlock", "<P>");
-		},
-		activeState: function(){ return this.$editor().queryFormatBlockState('p'); }
-	});
-	// key: pre -> taTranslations[key].tooltip, taTranslations[key].buttontext
-	taRegisterTool('pre', {
-		buttontext: 'pre',
-		tooltiptext: taTranslations.pre.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("formatBlock", "<PRE>");
-		},
-		activeState: function(){ return this.$editor().queryFormatBlockState('pre'); }
-	});
-	taRegisterTool('ul', {
-		iconclass: 'fa fa-list-ul',
-		tooltiptext: taTranslations.ul.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("insertUnorderedList", null);
-		},
-		activeState: function(){ return this.$editor().queryCommandState('insertUnorderedList'); }
-	});
-	taRegisterTool('ol', {
-		iconclass: 'fa fa-list-ol',
-		tooltiptext: taTranslations.ol.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("insertOrderedList", null);
-		},
-		activeState: function(){ return this.$editor().queryCommandState('insertOrderedList'); }
-	});
-	taRegisterTool('quote', {
-		iconclass: 'fa fa-quote-right',
-		tooltiptext: taTranslations.quote.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("formatBlock", "<BLOCKQUOTE>");
-		},
-		activeState: function(){ return this.$editor().queryFormatBlockState('blockquote'); }
-	});
-	taRegisterTool('undo', {
-		iconclass: 'fa fa-undo',
-		tooltiptext: taTranslations.undo.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("undo", null);
-		}
-	});
-	taRegisterTool('redo', {
-		iconclass: 'fa fa-repeat',
-		tooltiptext: taTranslations.redo.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("redo", null);
-		}
-	});
-	taRegisterTool('bold', {
-		iconclass: 'fa fa-bold',
-		tooltiptext: taTranslations.bold.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("bold", null);
-		},
-		activeState: function(){
-			return this.$editor().queryCommandState('bold');
-		},
-		commandKeyCode: 98
-	});
-	taRegisterTool('justifyLeft', {
-		iconclass: 'fa fa-align-left',
-		tooltiptext: taTranslations.justifyLeft.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("justifyLeft", null);
-		},
-		activeState: function(commonElement){
-			/* istanbul ignore next: */
-			if (commonElement && commonElement.nodeName === '#document') return false;
-			var result = false;
-			if (commonElement)
-				result =
-					commonElement.css('text-align') === 'left' ||
-					commonElement.attr('align') === 'left' ||
-					(
-						commonElement.css('text-align') !== 'right' &&
-						commonElement.css('text-align') !== 'center' &&
-						commonElement.css('text-align') !== 'justify' && !this.$editor().queryCommandState('justifyRight') && !this.$editor().queryCommandState('justifyCenter')
-					) && !this.$editor().queryCommandState('justifyFull');
-			result = result || this.$editor().queryCommandState('justifyLeft');
-			return result;
-		}
-	});
-	taRegisterTool('justifyRight', {
-		iconclass: 'fa fa-align-right',
-		tooltiptext: taTranslations.justifyRight.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("justifyRight", null);
-		},
-		activeState: function(commonElement){
-			/* istanbul ignore next: */
-			if (commonElement && commonElement.nodeName === '#document') return false;
-			var result = false;
-			if(commonElement) result = commonElement.css('text-align') === 'right';
-			result = result || this.$editor().queryCommandState('justifyRight');
-			return result;
-		}
-	});
-	taRegisterTool('justifyFull', {
-		iconclass: 'fa fa-align-justify',
-		tooltiptext: taTranslations.justifyFull.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("justifyFull", null);
-		},
-		activeState: function(commonElement){
-			var result = false;
-			if(commonElement) result = commonElement.css('text-align') === 'justify';
-			result = result || this.$editor().queryCommandState('justifyFull');
-			return result;
-		}
-	});
-	taRegisterTool('justifyCenter', {
-		iconclass: 'fa fa-align-center',
-		tooltiptext: taTranslations.justifyCenter.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("justifyCenter", null);
-		},
-		activeState: function(commonElement){
-			/* istanbul ignore next: */
-			if (commonElement && commonElement.nodeName === '#document') return false;
-			var result = false;
-			if(commonElement) result = commonElement.css('text-align') === 'center';
-			result = result || this.$editor().queryCommandState('justifyCenter');
-			return result;
-		}
-	});
-	taRegisterTool('indent', {
-		iconclass: 'fa fa-indent',
-		tooltiptext: taTranslations.indent.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("indent", null);
-		},
-		activeState: function(){
-			return this.$editor().queryFormatBlockState('blockquote');
-		},
-		commandKeyCode: 'TabKey'
-	});
-	taRegisterTool('outdent', {
-		iconclass: 'fa fa-outdent',
-		tooltiptext: taTranslations.outdent.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("outdent", null);
-		},
-		activeState: function(){
-			return false;
-		},
-		commandKeyCode: 'ShiftTabKey'
-	});
-	taRegisterTool('italics', {
-		iconclass: 'fa fa-italic',
-		tooltiptext: taTranslations.italic.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("italic", null);
-		},
-		activeState: function(){
-			return this.$editor().queryCommandState('italic');
-		},
-		commandKeyCode: 105
-	});
-	taRegisterTool('underline', {
-		iconclass: 'fa fa-underline',
-		tooltiptext: taTranslations.underline.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("underline", null);
-		},
-		activeState: function(){
-			return this.$editor().queryCommandState('underline');
-		},
-		commandKeyCode: 117
-	});
-	taRegisterTool('strikeThrough', {
-		iconclass: 'fa fa-strikethrough',
-		tooltiptext: taTranslations.strikeThrough.tooltip,
-		action: function(){
-			return this.$editor().wrapSelection("strikeThrough", null);
-		},
-		activeState: function(){
-			return document.queryCommandState('strikeThrough');
-		}
-	});
-	taRegisterTool('clear', {
-		iconclass: 'fa fa-ban',
-		tooltiptext: taTranslations.clear.tooltip,
-		action: function(deferred, restoreSelection){
-			var i;
-			this.$editor().wrapSelection("removeFormat", null);
-			var possibleNodes = angular.element(taSelection.getSelectionElement());
-			// remove lists
-			var removeListElements = function(list){
-				list = angular.element(list);
-				var prevElement = list;
-				angular.forEach(list.children(), function(liElem){
-					var newElem = angular.element('<p></p>');
-					newElem.html(angular.element(liElem).html());
-					prevElement.after(newElem);
-					prevElement = newElem;
-				});
-				list.remove();
-			};
-			angular.forEach(possibleNodes.find("ul"), removeListElements);
-			angular.forEach(possibleNodes.find("ol"), removeListElements);
-			if(possibleNodes[0].tagName.toLowerCase() === 'li'){
-				var _list = possibleNodes[0].parentNode.childNodes;
-				var _preLis = [], _postLis = [], _found = false;
-				for(i = 0; i < _list.length; i++){
-					if(_list[i] === possibleNodes[0]){
-						_found = true;
-					}else if(!_found) _preLis.push(_list[i]);
-					else _postLis.push(_list[i]);
-				}
-				var _parent = angular.element(possibleNodes[0].parentNode);
-				var newElem = angular.element('<p></p>');
-				newElem.html(angular.element(possibleNodes[0]).html());
-				if(_preLis.length === 0 || _postLis.length === 0){
-					if(_postLis.length === 0) _parent.after(newElem);
-					else _parent[0].parentNode.insertBefore(newElem[0], _parent[0]);
-
-					if(_preLis.length === 0 && _postLis.length === 0) _parent.remove();
-					else angular.element(possibleNodes[0]).remove();
-				}else{
-					var _firstList = angular.element('<'+_parent[0].tagName+'></'+_parent[0].tagName+'>');
-					var _secondList = angular.element('<'+_parent[0].tagName+'></'+_parent[0].tagName+'>');
-					for(i = 0; i < _preLis.length; i++) _firstList.append(angular.element(_preLis[i]));
-					for(i = 0; i < _postLis.length; i++) _secondList.append(angular.element(_postLis[i]));
-					_parent.after(_secondList);
-					_parent.after(newElem);
-					_parent.after(_firstList);
-					_parent.remove();
-				}
-				taSelection.setSelectionToElementEnd(newElem[0]);
-			}
-			// clear out all class attributes. These do not seem to be cleared via removeFormat
-			var $editor = this.$editor();
-			var recursiveRemoveClass = function(node){
-				node = angular.element(node);
-				if(node[0] !== $editor.displayElements.text[0]) node.removeAttr('class');
-				angular.forEach(node.children(), recursiveRemoveClass);
-			};
-			angular.forEach(possibleNodes, recursiveRemoveClass);
-			// check if in list. If not in list then use formatBlock option
-			if(possibleNodes[0].tagName.toLowerCase() !== 'li' &&
-				possibleNodes[0].tagName.toLowerCase() !== 'ol' &&
-				possibleNodes[0].tagName.toLowerCase() !== 'ul') this.$editor().wrapSelection("formatBlock", "default");
-			restoreSelection();
-		}
-	});
-
-
-	taRegisterTool('insertImage', {
-		iconclass: 'fa fa-picture-o',
-		tooltiptext: taTranslations.insertImage.tooltip,
-		action: function(){
-			var imageLink;
-			imageLink = $window.prompt(taTranslations.insertImage.dialogPrompt, 'http://');
-			if(imageLink && imageLink !== '' && imageLink !== 'http://'){
-				return this.$editor().wrapSelection('insertImage', imageLink, true);
-			}
-		},
-		onElementSelect: {
-			element: 'img',
-			action: taToolFunctions.imgOnSelectAction
-		}
-	});
-	taRegisterTool('insertVideo', {
-		iconclass: 'fa fa-youtube-play',
-		tooltiptext: taTranslations.insertVideo.tooltip,
-		action: function(){
-			var urlPrompt;
-			urlPrompt = $window.prompt(taTranslations.insertVideo.dialogPrompt, 'https://');
-			if (urlPrompt && urlPrompt !== '' && urlPrompt !== 'https://') {
-
-				videoId = taToolFunctions.extractYoutubeVideoId(urlPrompt);
-
-				/* istanbul ignore else: if it's invalid don't worry - though probably should show some kind of error message */
-				if(videoId){
-					// create the embed link
-					var urlLink = "https://www.youtube.com/embed/" + videoId;
-					// create the HTML
-					// for all options see: http://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
-					// maxresdefault.jpg seems to be undefined on some.
-					var embed = '<img class="ta-insert-video" src="https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg" ta-insert-video="' + urlLink + '" contenteditable="false" allowfullscreen="true" frameborder="0" />';
-					// insert
-					return this.$editor().wrapSelection('insertHTML', embed, true);
-				}
-			}
-		},
-		onElementSelect: {
-			element: 'img',
-			onlyWithAttrs: ['ta-insert-video'],
-			action: taToolFunctions.imgOnSelectAction
-		}
-	});
-	taRegisterTool('insertLink', {
-		tooltiptext: taTranslations.insertLink.tooltip,
-		iconclass: 'fa fa-link',
-		action: function(){
-			var urlLink;
-			urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
-			if(urlLink && urlLink !== '' && urlLink !== 'http://'){
-				return this.$editor().wrapSelection('createLink', urlLink, true);
-			}
-		},
-		activeState: function(commonElement){
-			if(commonElement) return commonElement[0].tagName === 'A';
-			return false;
-		},
-		onElementSelect: {
-			element: 'a',
-			action: taToolFunctions.aOnSelectAction
-		}
-	});
-	taRegisterTool('wordcount', {
-		display: '<div id="toolbarWC" style="display:block; min-width:100px;">Words: <span ng-bind="wordcount"></span></div>',
-		disabled: true,
-		wordcount: 0,
-		activeState: function(){ // this fires on keyup
-			var textElement = this.$editor().displayElements.text;
-			/* istanbul ignore next: will default to '' when undefined */
-			var workingHTML = textElement[0].innerHTML || '';
-			var noOfWords = 0;
-
-			/* istanbul ignore if: will default to '' when undefined */
-			if (workingHTML.replace(/\s*<[^>]*?>\s*/g, '') !== '') {
-				noOfWords = workingHTML.replace(/<\/?(b|i|em|strong|span|u|strikethrough|a|img|small|sub|sup|label)( [^>*?])?>/gi, '') // remove inline tags without adding spaces
-										.replace(/(<[^>]*?>\s*<[^>]*?>)/ig, ' ') // replace adjacent tags with possible space between with a space
-										.replace(/(<[^>]*?>)/ig, '') // remove any singular tags
-										.replace(/\s+/ig, ' ') // condense spacing
-										.match(/\S+/g).length; // count remaining non-space strings
-			}
-
-			//Set current scope
-			this.wordcount = noOfWords;
-			//Set editor scope
-			this.$editor().wordcount = noOfWords;
-
-			return false;
-		}
-	});
-	taRegisterTool('charcount', {
-		display: '<div id="toolbarCC" style="display:block; min-width:120px;">Characters: <span ng-bind="charcount"></span></div>',
-		disabled: true,
-		charcount: 0,
-		activeState: function(){ // this fires on keyup
-			var textElement = this.$editor().displayElements.text;
-			var sourceText = textElement[0].innerText || textElement[0].textContent; // to cover the non-jquery use case.
-
-			// Caculate number of chars
-			var noOfChars = sourceText.replace(/(\r\n|\n|\r)/gm,"").replace(/^\s+/g,' ').replace(/\s+$/g, ' ').length;
-			//Set current scope
-			this.charcount = noOfChars;
-			//Set editor scope
-			this.$editor().charcount = noOfChars;
-			return false;
-		}
-	});
-}]);
-
 /*
  * angucomplete-alt
  * Autocomplete directive for AngularJS
@@ -81560,6 +69270,7 @@ angular.module('textAngularSetup', [])
       var responseFormatter;
       var validState = null;
       var httpCanceller = null;
+      var httpCallInProgress = false;
       var dd = elem[0].querySelector('.angucomplete-dropdown');
       var isScrollOn = false;
       var mousedownOn = null;
@@ -81927,15 +69638,15 @@ angular.module('textAngularSetup', [])
       }
 
       function httpErrorCallback(errorRes, status, headers, config) {
-        scope.searching = false;
-
-        // cancelled/aborted
-        if (status === 0 || status === -1) { return; }
+        scope.searching = httpCallInProgress;
 
         // normalize return obejct from promise
         if (!status && !headers && !config) {
           status = errorRes.status;
         }
+
+        // cancelled/aborted
+        if (status === 0 || status === -1) { return; }
         if (scope.remoteUrlErrorCallback) {
           scope.remoteUrlErrorCallback(errorRes, status, headers, config);
         }
@@ -81965,9 +69676,11 @@ angular.module('textAngularSetup', [])
         cancelHttpRequest();
         httpCanceller = $q.defer();
         params.timeout = httpCanceller.promise;
+        httpCallInProgress = true;
         $http.get(url, params)
           .success(httpSuccessCallbackGen(str))
-          .error(httpErrorCallback);
+          .error(httpErrorCallback)
+          .finally(function(){httpCallInProgress=false;});
       }
 
       function getRemoteResultsWithCustomHandler(str) {
@@ -82108,12 +69821,15 @@ angular.module('textAngularSetup', [])
 
       function showAll() {
         if (scope.localData) {
+          scope.searching = false;
           processResults(scope.localData, '');
         }
         else if (scope.remoteApiHandler) {
+          scope.searching = true;
           getRemoteResultsWithCustomHandler('');
         }
         else {
+          scope.searching = true;
           getRemoteResults('');
         }
       }
@@ -82191,7 +69907,6 @@ angular.module('textAngularSetup', [])
           clearResults();
         }
         else if (str.length === 0 && minlength === 0) {
-          scope.searching = false;
           showAll();
         }
 
@@ -82250,7 +69965,7 @@ angular.module('textAngularSetup', [])
 
       // register events
       inputField.on('keydown', keydownHandler);
-      inputField.on('keyup', keyupHandler);
+      inputField.on('keyup compositionend', keyupHandler);
 
       // set response formatter
       responseFormatter = callFunctionOrIdentity('remoteUrlResponseFormatter');
@@ -82550,7 +70265,7 @@ angular.module('monospaced.elastic', [])
  * AngularJS file upload directives and services. Supoorts: file upload/drop/paste, resume, cancel/abort,
  * progress, resize, thumbnail, preview, validation and CORS
  * @author  Danial  <danial.farid@gmail.com>
- * @version 11.2.3
+ * @version 12.2.10
  */
 
 if (window.XMLHttpRequest && !(window.FileAPI && FileAPI.shouldLoad)) {
@@ -82571,14 +70286,14 @@ if (window.XMLHttpRequest && !(window.FileAPI && FileAPI.shouldLoad)) {
 
 var ngFileUpload = angular.module('ngFileUpload', []);
 
-ngFileUpload.version = '11.2.3';
+ngFileUpload.version = '12.2.10';
 
 ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
   var upload = this;
   upload.promisesCount = 0;
 
   this.isResumeSupported = function () {
-    return window.Blob && (window.Blob instanceof Function) && new window.Blob().slice;
+    return window.Blob && window.Blob.prototype.slice;
   };
 
   var resumeSupported = this.isResumeSupported();
@@ -82617,7 +70332,7 @@ ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, 
     if (!config.disableProgress) {
       config.headers.__setXHR_ = function () {
         return function (xhr) {
-          if (!xhr) return;
+          if (!xhr || !xhr.upload || !xhr.upload.addEventListener) return;
           config.__XHR = xhr;
           if (config.xhrFn) config.xhrFn(xhr);
           xhr.upload.addEventListener('progress', function (e) {
@@ -82638,10 +70353,12 @@ ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, 
     function uploadWithAngular() {
       $http(config).then(function (r) {
           if (resumeSupported && config._chunkSize && !config._finished && config._file) {
+            var fileSize = config._file && config._file.size || 0;
             notifyProgress({
-                loaded: config._end,
-                total: config._file && config._file.size,
-                config: config, type: 'progress'
+                loaded: Math.min(config._end, fileSize),
+                total: fileSize,
+                config: config,
+                type: 'progress'
               }
             );
             upload.upload(config, true);
@@ -82680,6 +70397,9 @@ ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, 
     } else if (config.resumeSize) {
       config.resumeSize().then(function (size) {
         config._start = size;
+        if (config._chunkSize) {
+          config._end = config._start + config._chunkSize;
+        }
         uploadWithAngular();
       }, function (e) {
         throw e;
@@ -82733,9 +70453,11 @@ ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, 
     };
 
     upload.promisesCount++;
-    promise['finally'](function () {
-      upload.promisesCount--;
-    });
+    if (promise['finally'] && promise['finally'] instanceof Function) {
+      promise['finally'](function () {
+        upload.promisesCount--;
+      });
+    }
     return promise;
   }
 
@@ -82895,11 +70617,11 @@ ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, 
   this.translateScalars = function (str) {
     if (angular.isString(str)) {
       if (str.search(/kb/i) === str.length - 2) {
-        return parseFloat(str.substring(0, str.length - 2) * 1000);
+        return parseFloat(str.substring(0, str.length - 2) * 1024);
       } else if (str.search(/mb/i) === str.length - 2) {
-        return parseFloat(str.substring(0, str.length - 2) * 1000000);
+        return parseFloat(str.substring(0, str.length - 2) * 1048576);
       } else if (str.search(/gb/i) === str.length - 2) {
-        return parseFloat(str.substring(0, str.length - 2) * 1000000000);
+        return parseFloat(str.substring(0, str.length - 2) * 1073741824);
       } else if (str.search(/b/i) === str.length - 1) {
         return parseFloat(str.substring(0, str.length - 1));
       } else if (str.search(/s/i) === str.length - 1) {
@@ -82919,9 +70641,11 @@ ngFileUpload.service('UploadBase', ['$http', '$q', '$timeout', function ($http, 
       var arrayBufferView = new Uint8Array(resp.data);
       var type = resp.headers('content-type') || 'image/WebP';
       var blob = new window.Blob([arrayBufferView], {type: type});
+      var matches = url.match(/.*\/(.+?)(\?.*)?$/);
+      if (matches.length > 1) {
+        blob.name = matches[1];
+      }
       defer.resolve(blob);
-      //var split = type.split('[/;]');
-      //blob.name = url.substring(0, 150).replace(/\W+/g, '') + '.' + (split.length > 1 ? split[1] : 'jpg');
     }, function (e) {
       defer.reject(e);
     });
@@ -82969,7 +70693,7 @@ ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadE
   };
 
   upload.shouldUpdateOn = function (type, attr, scope) {
-    var modelOptions = upload.attrGetter('ngModelOptions', attr, scope);
+    var modelOptions = upload.attrGetter('ngfModelOptions', attr, scope);
     if (modelOptions && modelOptions.updateOn) {
       return modelOptions.updateOn.split(' ').indexOf(type) > -1;
     }
@@ -83020,17 +70744,35 @@ ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadE
   }
 
   function resize(files, attr, scope) {
-    var param = upload.attrGetter('ngfResize', attr, scope);
-    if (!param || !angular.isObject(param) || !upload.isResizeSupported() || !files.length) return upload.emptyPromise();
+    var resizeVal = upload.attrGetter('ngfResize', attr, scope);
+    if (!resizeVal || !upload.isResizeSupported() || !files.length) return upload.emptyPromise();
+    if (resizeVal instanceof Function) {
+      var defer = $q.defer();
+      return resizeVal(files).then(function (p) {
+        resizeWithParams(p, files, attr, scope).then(function (r) {
+          defer.resolve(r);
+        }, function (e) {
+          defer.reject(e);
+        });
+      }, function (e) {
+        defer.reject(e);
+      });
+    } else {
+      return resizeWithParams(resizeVal, files, attr, scope);
+    }
+  }
+
+  function resizeWithParams(params, files, attr, scope) {
     var promises = [upload.emptyPromise()];
-    angular.forEach(files, function (f, i) {
+
+    function handleFile(f, i) {
       if (f.type.indexOf('image') === 0) {
-        if (param.pattern && !upload.validatePattern(f, param.pattern)) return;
-        var promise = upload.resize(f, param.width, param.height, param.quality,
-          param.type, param.ratio, param.centerCrop, function (width, height) {
-            return upload.attrGetter('ngfResizeIf', attr, scope,
-              {$width: width, $height: height, $file: f});
-          }, param.restoreExif !== false);
+        if (params.pattern && !upload.validatePattern(f, params.pattern)) return;
+        params.resizeIf = function (width, height) {
+          return upload.attrGetter('ngfResizeIf', attr, scope,
+            {$width: width, $height: height, $file: f});
+        };
+        var promise = upload.resize(f, params);
         promises.push(promise);
         promise.then(function (resizedFile) {
           files.splice(i, 1, resizedFile);
@@ -83039,43 +70781,20 @@ ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadE
           f.$errorParam = (e ? (e.message ? e.message : e) + ': ' : '') + (f && f.name);
         });
       }
-    });
-    return $q.all(promises);
-  }
-
-  function handleKeep(files, prevFiles, attr, scope) {
-    var dupFiles = [];
-    var keep = upload.attrGetter('ngfKeep', attr, scope);
-    if (keep) {
-      var hasNew = false;
-
-      if (keep === 'distinct' || upload.attrGetter('ngfKeepDistinct', attr, scope) === true) {
-        var len = prevFiles.length;
-        if (files) {
-          for (var i = 0; i < files.length; i++) {
-            for (var j = 0; j < len; j++) {
-              if (files[i].name === prevFiles[j].name) {
-                dupFiles.push(files[i]);
-                break;
-              }
-            }
-            if (j === len) {
-              prevFiles.push(files[i]);
-              hasNew = true;
-            }
-          }
-        }
-        files = prevFiles;
-      } else {
-        files = prevFiles.concat(files || []);
-      }
     }
-    return {files: files, dupFiles: dupFiles, keep: keep};
+
+    for (var i = 0; i < files.length; i++) {
+      handleFile(files[i], i);
+    }
+    return $q.all(promises);
   }
 
   upload.updateModel = function (ngModel, attr, scope, fileChange, files, evt, noDelay) {
     function update(files, invalidFiles, newFiles, dupFiles, isSingleModel) {
+      attr.$$ngfPrevValidFiles = files;
+      attr.$$ngfPrevInvalidFiles = invalidFiles;
       var file = files && files.length ? files[0] : null;
+      var invalidFile = invalidFiles && invalidFiles.length ? invalidFiles[0] : null;
 
       if (ngModel) {
         upload.applyModelValidation(ngModel, files);
@@ -83089,6 +70808,7 @@ ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadE
           $newFiles: newFiles,
           $duplicateFiles: dupFiles,
           $invalidFiles: invalidFiles,
+          $invalidFile: invalidFile,
           $event: evt
         });
       }
@@ -83096,7 +70816,7 @@ ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadE
       var invalidModel = upload.attrGetter('ngfModelInvalid', attr);
       if (invalidModel) {
         $timeout(function () {
-          $parse(invalidModel).assign(scope, invalidFiles);
+          $parse(invalidModel).assign(scope, isSingleModel ? invalidFile : invalidFiles);
         });
       }
       $timeout(function () {
@@ -83104,83 +70824,119 @@ ngFileUpload.service('Upload', ['$parse', '$timeout', '$compile', '$q', 'UploadE
       });
     }
 
-    var newFiles = files;
-    var prevFiles = ngModel && ngModel.$modelValue && (angular.isArray(ngModel.$modelValue) ?
-        ngModel.$modelValue : [ngModel.$modelValue]);
-    prevFiles = (prevFiles || attr.$$ngfPrevFiles || []).slice(0);
-    var keepResult = handleKeep(files, prevFiles, attr, scope);
-    files = keepResult.files;
-    var dupFiles = keepResult.dupFiles;
-    var isSingleModel = !upload.attrGetter('ngfMultiple', attr, scope) && !upload.attrGetter('multiple', attr) && !keepResult.keep;
+    var allNewFiles, dupFiles = [], prevValidFiles, prevInvalidFiles,
+      invalids = [], valids = [];
 
-    attr.$$ngfPrevFiles = files;
+    function removeDuplicates() {
+      function equals(f1, f2) {
+        return f1.name === f2.name && (f1.$ngfOrigSize || f1.size) === (f2.$ngfOrigSize || f2.size) &&
+          f1.type === f2.type;
+      }
 
-    if (keepResult.keep && (!newFiles || !newFiles.length)) return;
+      function isInPrevFiles(f) {
+        var j;
+        for (j = 0; j < prevValidFiles.length; j++) {
+          if (equals(f, prevValidFiles[j])) {
+            return true;
+          }
+        }
+        for (j = 0; j < prevInvalidFiles.length; j++) {
+          if (equals(f, prevInvalidFiles[j])) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      if (files) {
+        allNewFiles = [];
+        dupFiles = [];
+        for (var i = 0; i < files.length; i++) {
+          if (isInPrevFiles(files[i])) {
+            dupFiles.push(files[i]);
+          } else {
+            allNewFiles.push(files[i]);
+          }
+        }
+      }
+    }
+
+    function toArray(v) {
+      return angular.isArray(v) ? v : [v];
+    }
+
+    function resizeAndUpdate() {
+      function updateModel() {
+        $timeout(function () {
+          update(keep ? prevValidFiles.concat(valids) : valids,
+            keep ? prevInvalidFiles.concat(invalids) : invalids,
+            files, dupFiles, isSingleModel);
+        }, options && options.debounce ? options.debounce.change || options.debounce : 0);
+      }
+
+      resize(validateAfterResize ? allNewFiles : valids, attr, scope).then(function () {
+        if (validateAfterResize) {
+          upload.validate(allNewFiles, keep ? prevValidFiles.length : 0, ngModel, attr, scope)
+            .then(function (validationResult) {
+              valids = validationResult.validsFiles;
+              invalids = validationResult.invalidsFiles;
+              updateModel();
+            });
+        } else {
+          updateModel();
+        }
+      }, function (e) {
+        throw 'Could not resize files ' + e;
+      });
+    }
+
+    prevValidFiles = attr.$$ngfPrevValidFiles || [];
+    prevInvalidFiles = attr.$$ngfPrevInvalidFiles || [];
+    if (ngModel && ngModel.$modelValue) {
+      prevValidFiles = toArray(ngModel.$modelValue);
+    }
+
+    var keep = upload.attrGetter('ngfKeep', attr, scope);
+    allNewFiles = (files || []).slice(0);
+    if (keep === 'distinct' || upload.attrGetter('ngfKeepDistinct', attr, scope) === true) {
+      removeDuplicates(attr, scope);
+    }
+
+    var isSingleModel = !keep && !upload.attrGetter('ngfMultiple', attr, scope) && !upload.attrGetter('multiple', attr);
+
+    if (keep && !allNewFiles.length) return;
 
     upload.attrGetter('ngfBeforeModelChange', attr, scope, {
       $files: files,
       $file: files && files.length ? files[0] : null,
+      $newFiles: allNewFiles,
       $duplicateFiles: dupFiles,
       $event: evt
     });
 
     var validateAfterResize = upload.attrGetter('ngfValidateAfterResize', attr, scope);
-    var invalids = [];
-    function separateInvalids() {
-      var valids = [];
-      angular.forEach(files, function (file) {
-        if (file.$error) {
-          invalids.push(file);
-        } else {
-          valids.push(file);
-        }
-      });
-      files = valids;
-    }
 
-    upload.validate(newFiles, ngModel, attr, scope).then(function () {
+    var options = upload.attrGetter('ngfModelOptions', attr, scope);
+    upload.validate(allNewFiles, keep ? prevValidFiles.length : 0, ngModel, attr, scope)
+      .then(function (validationResult) {
       if (noDelay) {
-        update(files, [], newFiles, dupFiles, isSingleModel);
+        update(allNewFiles, [], files, dupFiles, isSingleModel);
       } else {
-        var options = upload.attrGetter('ngModelOptions', attr, scope);
         if ((!options || !options.allowInvalid) && !validateAfterResize) {
-          separateInvalids();
+          valids = validationResult.validFiles;
+          invalids = validationResult.invalidFiles;
+        } else {
+          valids = allNewFiles;
         }
-        var fixOrientation = upload.emptyPromise(files);
         if (upload.attrGetter('ngfFixOrientation', attr, scope) && upload.isExifSupported()) {
-          fixOrientation = applyExifRotations(files, attr, scope);
-        }
-        fixOrientation.then(function () {
-          function updateModel() {
-            $timeout(function () {
-              update(files, invalids, newFiles, dupFiles, isSingleModel);
-            }, options && options.debounce ? options.debounce.change || options.debounce : 0);
-          }
-          resize(files, attr, scope).then(function () {
-            if (validateAfterResize) {
-              upload.validate(files, ngModel, attr, scope).then(function () {
-                separateInvalids();
-                updateModel();
-              });
-            } else {
-              updateModel();
-            }
-          }, function (e) {
-            throw 'Could not resize files ' + e;
+          applyExifRotations(valids, attr, scope).then(function () {
+            resizeAndUpdate();
           });
-        });
+        } else {
+          resizeAndUpdate();
+        }
       }
     });
-
-    // cleaning object url memories
-    var l = prevFiles.length;
-    while (l--) {
-      var prevFile = prevFiles[l];
-      if (window.URL && prevFile.blobUrl) {
-        URL.revokeObjectURL(prevFile.blobUrl);
-        delete prevFile.blobUrl;
-      }
-    }
   };
 
   return upload;
@@ -83205,7 +70961,7 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
     /** @namespace attr.ngfSelect */
     /** @namespace attr.ngfChange */
     /** @namespace attr.ngModel */
-    /** @namespace attr.ngModelOptions */
+    /** @namespace attr.ngfModelOptions */
     /** @namespace attr.ngfMultiple */
     /** @namespace attr.ngfCapture */
     /** @namespace attr.ngfValidate */
@@ -83225,6 +70981,8 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
     function changeFn(evt) {
       if (upload.shouldUpdateOn('change', attr, scope)) {
         var fileList = evt.__files_ || (evt.target && evt.target.files), files = [];
+        /* Handle duplicate call in  IE11 */
+        if (!fileList) return;
         for (var i = 0; i < fileList.length; i++) {
           files.push(fileList[i]);
         }
@@ -83236,15 +70994,21 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
     upload.registerModelChangeValidator(ngModel, attr, scope);
 
     var unwatches = [];
-    unwatches.push(scope.$watch(attrGetter('ngfMultiple'), function () {
-      fileElem.attr('multiple', attrGetter('ngfMultiple', scope));
-    }));
-    unwatches.push(scope.$watch(attrGetter('ngfCapture'), function () {
-      fileElem.attr('capture', attrGetter('ngfCapture', scope));
-    }));
-    unwatches.push(scope.$watch(attrGetter('ngfAccept'), function () {
-      fileElem.attr('accept', attrGetter('ngfAccept', scope));
-    }));
+    if (attrGetter('ngfMultiple')) {
+      unwatches.push(scope.$watch(attrGetter('ngfMultiple'), function () {
+        fileElem.attr('multiple', attrGetter('ngfMultiple', scope));
+      }));
+    }
+    if (attrGetter('ngfCapture')) {
+      unwatches.push(scope.$watch(attrGetter('ngfCapture'), function () {
+        fileElem.attr('capture', attrGetter('ngfCapture', scope));
+      }));
+    }
+    if (attrGetter('ngfAccept')) {
+      unwatches.push(scope.$watch(attrGetter('ngfAccept'), function () {
+        fileElem.attr('accept', attrGetter('ngfAccept', scope));
+      }));
+    }
     attr.$observe('accept', function () {
       fileElem.attr('accept', attrGetter('accept'));
     });
@@ -83252,16 +71016,14 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
       if (attr.$$observers) delete attr.$$observers.accept;
     });
     function bindAttrToFileInput(fileElem) {
-      if (elem !== fileElem) {
-        for (var i = 0; i < elem[0].attributes.length; i++) {
-          var attribute = elem[0].attributes[i];
-          if (attribute.name !== 'type' && attribute.name !== 'class' && attribute.name !== 'style') {
-            if (attribute.value == null || attribute.value === '') {
-              if (attribute.name === 'required') attribute.value = 'required';
-              if (attribute.name === 'multiple') attribute.value = 'multiple';
-            }
-            fileElem.attr(attribute.name, attribute.name === 'id' ? 'ngf-' + attribute.value : attribute.value);
+      for (var i = 0; i < elem[0].attributes.length; i++) {
+        var attribute = elem[0].attributes[i];
+        if (attribute.name !== 'type' && attribute.name !== 'class' && attribute.name !== 'style') {
+          if (attribute.value == null || attribute.value === '') {
+            if (attribute.name === 'required') attribute.value = 'required';
+            if (attribute.name === 'multiple') attribute.value = 'multiple';
           }
+          fileElem.attr(attribute.name, attribute.name === 'id' ? 'ngf-' + attribute.value : attribute.value);
         }
       }
     }
@@ -83279,6 +71041,9 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
       label.css('visibility', 'hidden').css('position', 'absolute').css('overflow', 'hidden')
         .css('width', '0px').css('height', '0px').css('border', 'none')
         .css('margin', '0px').css('padding', '0px').attr('tabindex', '-1');
+      if (elem.attr('id')) {
+        label.attr('id', 'ngf-label-' + elem.attr('id'));
+      }
       generatedElems.push({el: elem, ref: label});
 
       document.body.appendChild(label.append(fileElem)[0]);
@@ -83286,13 +71051,12 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
       return fileElem;
     }
 
-    var initialTouchStartY = 0;
-
     function clickHandler(evt) {
       if (elem.attr('disabled')) return false;
       if (attrGetter('ngfSelectDisabled', scope)) return;
 
-      var r = handleTouch(evt);
+      var r = detectSwipe(evt);
+      // prevent the click if it is a swipe
       if (r != null) return r;
 
       resetModel(evt);
@@ -83301,7 +71065,7 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
       try {
         if (!isInputTypeFile() && !document.body.contains(fileElem[0])) {
           generatedElems.push({el: elem, ref: fileElem.parent()});
-          document.body.appendChild(fileElem[0].parent());
+          document.body.appendChild(fileElem.parent()[0]);
           fileElem.bind('change', changeFn);
         }
       } catch(e){/*ignore*/}
@@ -83317,19 +71081,30 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
       return false;
     }
 
-    function handleTouch(evt) {
-      var touches = evt.changedTouches || (evt.originalEvent && evt.originalEvent.changedTouches);
-      if (evt.type === 'touchstart') {
-        initialTouchStartY = touches ? touches[0].clientY : 0;
-        return true; // don't block event default
-      } else {
-        evt.stopPropagation();
-        evt.preventDefault();
 
-        // prevent scroll from triggering event
-        if (evt.type === 'touchend') {
-          var currentLocation = touches ? touches[0].clientY : 0;
-          if (Math.abs(currentLocation - initialTouchStartY) > 20) return false;
+    var initialTouchStartY = 0;
+    var initialTouchStartX = 0;
+
+    function detectSwipe(evt) {
+      var touches = evt.changedTouches || (evt.originalEvent && evt.originalEvent.changedTouches);
+      if (touches) {
+        if (evt.type === 'touchstart') {
+          initialTouchStartX = touches[0].clientX;
+          initialTouchStartY = touches[0].clientY;
+          return true; // don't block event default
+        } else {
+          // prevent scroll from triggering event
+          if (evt.type === 'touchend') {
+            var currentX = touches[0].clientX;
+            var currentY = touches[0].clientY;
+            if ((Math.abs(currentX - initialTouchStartX) > 20) ||
+            (Math.abs(currentY - initialTouchStartY) > 20)) {
+              evt.stopPropagation();
+              evt.preventDefault();
+              return false;
+            }
+          }
+          return true;
         }
       }
     }
@@ -83473,7 +71248,20 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
             }
             $timeout(function () {
               file.$ngfBlobUrl = url;
-              if (url) deferred.resolve(url, file);
+              if (url) {
+                deferred.resolve(url, file);
+                upload.blobUrls = upload.blobUrls || [];
+                upload.blobUrlsTotalSize = upload.blobUrlsTotalSize || 0;
+                upload.blobUrls.push({url: url, size: file.size});
+                upload.blobUrlsTotalSize += file.size || 0;
+                var maxMemory = upload.defaults.blobUrlsMaxMemory || 268435456;
+                var maxLength = upload.defaults.blobUrlsMaxQueueSize || 200;
+                while ((upload.blobUrlsTotalSize > maxMemory || upload.blobUrls.length > maxLength) && upload.blobUrls.length > 1) {
+                  var obj = upload.blobUrls.splice(0, 1)[0];
+                  URL.revokeObjectURL(obj.url);
+                  upload.blobUrlsTotalSize -= obj.size;
+                }
+              }
             });
           } else {
             var fileReader = new FileReader();
@@ -83481,6 +71269,9 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
               $timeout(function () {
                 file.$ngfDataUrl = e.target.result;
                 deferred.resolve(e.target.result, file);
+                $timeout(function () {
+                  delete file.$ngfDataUrl;
+                }, 1000);
               });
             };
             fileReader.onerror = function () {
@@ -83493,7 +71284,7 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
           }
         } else {
           $timeout(function () {
-            file[disallowObjectUrl ? 'dataUrl' : 'blobUrl'] = '';
+            file[disallowObjectUrl ? '$ngfDataUrl' : '$ngfBlobUrl'] = '';
             deferred.reject();
           });
         }
@@ -83544,7 +71335,8 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
         var size = resizeParams;
         if (directiveName === 'ngfThumbnail') {
           if (!size) {
-            size = {width: elem[0].clientWidth, height: elem[0].clientHeight};
+            size = {width: elem[0].naturalWidth || elem[0].clientWidth,
+              height: elem[0].naturalHeight || elem[0].clientHeight};
           }
           if (size.width === 0 && window.getComputedStyle) {
             var style = getComputedStyle(elem[0]);
@@ -83566,7 +71358,11 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
         if (file && file.type && file.type.search(getTagType(elem[0])) === 0 &&
           (!isBackground || file.type.indexOf('image') === 0)) {
           if (size && Upload.isResizeSupported()) {
-            Upload.resize(file, size.width, size.height, size.quality).then(
+            size.resizeIf = function (width, height) {
+              return Upload.attrGetter('ngfResizeIf', attr, scope,
+                {$width: width, $height: height, $file: file});
+            };
+            Upload.resize(file, size).then(
               function (f) {
                 constructDataUrl(f);
               }, function (e) {
@@ -83628,8 +71424,8 @@ ngFileUpload.directive('ngfSelect', ['$parse', '$timeout', '$compile', 'Upload',
   }]);
 
   ngFileUpload.config(['$compileProvider', function ($compileProvider) {
-    if ($compileProvider.imgSrcSanitizationWhitelist) $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|local|file|data|blob):/);
-    if ($compileProvider.aHrefSanitizationWhitelist) $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|local|file|data|blob):/);
+    if ($compileProvider.imgSrcSanitizationWhitelist) $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|webcal|local|file|data|blob):/);
+    if ($compileProvider.aHrefSanitizationWhitelist) $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|webcal|local|file|data|blob):/);
   }]);
 
   ngFileUpload.filter('ngfDataUrl', ['UploadDataUrl', '$sce', function (UploadDataUrl, $sce) {
@@ -83724,7 +71520,7 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
           if (files && !angular.isArray(files)) {
             files = [files];
           }
-          upload.validate(files, ngModel, attr, scope).then(function () {
+          upload.validate(files, 0, ngModel, attr, scope).then(function () {
             upload.applyModelValidation(ngModel, files);
           });
         }
@@ -83765,7 +71561,7 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
     return val;
   };
 
-  upload.validate = function (files, ngModel, attr, scope) {
+  upload.validate = function (files, prevLength, ngModel, attr, scope) {
     ngModel = ngModel || {};
     ngModel.$ngfValidations = ngModel.$ngfValidations || [];
 
@@ -83777,11 +71573,15 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
       return upload.attrGetter(name, attr, scope, params);
     };
 
+    var ignoredErrors = (upload.attrGetter('ngfIgnoreInvalid', attr, scope) || '').split(' ');
+    var runAllValidation = upload.attrGetter('ngfRunAllValidations', attr, scope);
+
     if (files == null || files.length === 0) {
-      return upload.emptyPromise(ngModel);
+      return upload.emptyPromise({'validFiles': files, 'invalidFiles': []});
     }
 
     files = files.length === undefined ? [files] : files.slice(0);
+    var invalidFiles = [];
 
     function validateSync(name, validationName, fn) {
       if (files) {
@@ -83791,11 +71591,21 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
           if (file) {
             var val = upload.getValidationAttr(attr, scope, name, validationName, file);
             if (val != null) {
-              if (!fn(file, val)) {
-                file.$error = name;
-                file.$errorParam = val;
-                files.splice(i, 1);
-                valid = false;
+              if (!fn(file, val, i)) {
+                if (ignoredErrors.indexOf(name) === -1) {
+                  file.$error = name;
+                  (file.$errorMessages = (file.$errorMessages || {}))[name] = true;
+                  file.$errorParam = val;
+                  if (invalidFiles.indexOf(file) === -1) {
+                    invalidFiles.push(file);
+                  }
+                  if (!runAllValidation) {
+                    files.splice(i, 1);
+                  }
+                  valid = false;
+                } else {
+                  files.splice(i, 1);
+                }
               }
             }
           }
@@ -83806,16 +71616,12 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
       }
     }
 
-    var filesLength = files.length;
-    validateSync('maxFiles', null, function (file, val) {
-      return filesLength <= val;
-    });
     validateSync('pattern', null, upload.validatePattern);
     validateSync('minSize', 'size.min', function (file, val) {
-      return file.size >= upload.translateScalars(val);
+      return file.size + 0.1 >= upload.translateScalars(val);
     });
     validateSync('maxSize', 'size.max', function (file, val) {
-      return file.size <= upload.translateScalars(val);
+      return file.size - 0.1 <= upload.translateScalars(val);
     });
     var totalSize = 0;
     validateSync('maxTotalSize', null, function (file, val) {
@@ -83832,42 +71638,58 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
     });
 
     if (!files.length) {
-      return upload.emptyPromise(ngModel, ngModel.$ngfValidations);
+      return upload.emptyPromise({'validFiles': [], 'invalidFiles': invalidFiles});
     }
 
     function validateAsync(name, validationName, type, asyncFn, fn) {
       function resolveResult(defer, file, val) {
+        function resolveInternal(fn) {
+          if (fn()) {
+            if (ignoredErrors.indexOf(name) === -1) {
+              file.$error = name;
+              (file.$errorMessages = (file.$errorMessages || {}))[name] = true;
+              file.$errorParam = val;
+              if (invalidFiles.indexOf(file) === -1) {
+                invalidFiles.push(file);
+              }
+              if (!runAllValidation) {
+                var i = files.indexOf(file);
+                if (i > -1) files.splice(i, 1);
+              }
+              defer.resolve(false);
+            } else {
+              var j = files.indexOf(file);
+              if (j > -1) files.splice(j, 1);
+              defer.resolve(true);
+            }
+          } else {
+            defer.resolve(true);
+          }
+        }
+
         if (val != null) {
           asyncFn(file, val).then(function (d) {
-            if (!fn(d, val)) {
-              file.$error = name;
-              file.$errorParam = val;
-              defer.reject();
-            } else {
-              defer.resolve();
-            }
+            resolveInternal(function () {
+              return !fn(d, val);
+            });
           }, function () {
-            if (attrGetter('ngfValidateForce', {$file: file})) {
-              file.$error = name;
-              file.$errorParam = val;
-              defer.reject();
-            } else {
-              defer.resolve();
-            }
+            resolveInternal(function () {
+              return attrGetter('ngfValidateForce', {$file: file});
+            });
           });
         } else {
-          defer.resolve();
+          defer.resolve(true);
         }
       }
 
-      var promises = [upload.emptyPromise()];
+      var promises = [upload.emptyPromise(true)];
       if (files) {
         files = files.length === undefined ? [files] : files;
         angular.forEach(files, function (file) {
           var defer = $q.defer();
           promises.push(defer.promise);
           if (type && (file.type == null || file.type.search(type) !== 0)) {
-            defer.resolve();
+            defer.resolve(true);
             return;
           }
           if (name === 'dimensions' && upload.attrGetter('ngfDimensions', attr) != null) {
@@ -83875,96 +71697,120 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
               resolveResult(defer, file,
                 attrGetter('ngfDimensions', {$file: file, $width: d.width, $height: d.height}));
             }, function () {
-              defer.reject();
+              defer.resolve(false);
             });
           } else if (name === 'duration' && upload.attrGetter('ngfDuration', attr) != null) {
             upload.mediaDuration(file).then(function (d) {
               resolveResult(defer, file,
                 attrGetter('ngfDuration', {$file: file, $duration: d}));
             }, function () {
-              defer.reject();
+              defer.resolve(false);
             });
           } else {
             resolveResult(defer, file,
               upload.getValidationAttr(attr, scope, name, validationName, file));
           }
         });
-        return $q.all(promises).then(function () {
-          ngModel.$ngfValidations.push({name: name, valid: true});
-        }, function () {
-          ngModel.$ngfValidations.push({name: name, valid: false});
-        });
       }
+      var deffer = $q.defer();
+      $q.all(promises).then(function (values) {
+        var isValid = true;
+        for (var i = 0; i < values.length; i++) {
+          if (!values[i]) {
+            isValid = false;
+            break;
+          }
+        }
+        ngModel.$ngfValidations.push({name: name, valid: isValid});
+        deffer.resolve(isValid);
+      });
+      return deffer.promise;
     }
 
     var deffer = $q.defer();
     var promises = [];
 
-    promises.push(upload.happyPromise(validateAsync('maxHeight', 'height.max', /image/,
+    promises.push(validateAsync('maxHeight', 'height.max', /image/,
       this.imageDimensions, function (d, val) {
         return d.height <= val;
-      })));
-    promises.push(upload.happyPromise(validateAsync('minHeight', 'height.min', /image/,
+      }));
+    promises.push(validateAsync('minHeight', 'height.min', /image/,
       this.imageDimensions, function (d, val) {
         return d.height >= val;
-      })));
-    promises.push(upload.happyPromise(validateAsync('maxWidth', 'width.max', /image/,
+      }));
+    promises.push(validateAsync('maxWidth', 'width.max', /image/,
       this.imageDimensions, function (d, val) {
         return d.width <= val;
-      })));
-    promises.push(upload.happyPromise(validateAsync('minWidth', 'width.min', /image/,
+      }));
+    promises.push(validateAsync('minWidth', 'width.min', /image/,
       this.imageDimensions, function (d, val) {
         return d.width >= val;
-      })));
-    promises.push(upload.happyPromise(validateAsync('dimensions', null, /image/,
+      }));
+    promises.push(validateAsync('dimensions', null, /image/,
       function (file, val) {
         return upload.emptyPromise(val);
       }, function (r) {
         return r;
-      })));
-    promises.push(upload.happyPromise(validateAsync('ratio', null, /image/,
+      }));
+    promises.push(validateAsync('ratio', null, /image/,
       this.imageDimensions, function (d, val) {
         var split = val.toString().split(','), valid = false;
         for (var i = 0; i < split.length; i++) {
-          if (Math.abs((d.width / d.height) - upload.ratioToFloat(split[i])) < 0.0001) {
+          if (Math.abs((d.width / d.height) - upload.ratioToFloat(split[i])) < 0.01) {
             valid = true;
           }
         }
         return valid;
-      })));
-    promises.push(upload.happyPromise(validateAsync('maxRatio', 'ratio.max', /image/,
+      }));
+    promises.push(validateAsync('maxRatio', 'ratio.max', /image/,
       this.imageDimensions, function (d, val) {
         return (d.width / d.height) - upload.ratioToFloat(val) < 0.0001;
-      })));
-    promises.push(upload.happyPromise(validateAsync('minRatio', 'ratio.min', /image/,
+      }));
+    promises.push(validateAsync('minRatio', 'ratio.min', /image/,
       this.imageDimensions, function (d, val) {
         return (d.width / d.height) - upload.ratioToFloat(val) > -0.0001;
-      })));
-    promises.push(upload.happyPromise(validateAsync('maxDuration', 'duration.max', /audio|video/,
+      }));
+    promises.push(validateAsync('maxDuration', 'duration.max', /audio|video/,
       this.mediaDuration, function (d, val) {
         return d <= upload.translateScalars(val);
-      })));
-    promises.push(upload.happyPromise(validateAsync('minDuration', 'duration.min', /audio|video/,
+      }));
+    promises.push(validateAsync('minDuration', 'duration.min', /audio|video/,
       this.mediaDuration, function (d, val) {
         return d >= upload.translateScalars(val);
-      })));
-    promises.push(upload.happyPromise(validateAsync('duration', null, /audio|video/,
+      }));
+    promises.push(validateAsync('duration', null, /audio|video/,
       function (file, val) {
         return upload.emptyPromise(val);
       }, function (r) {
         return r;
-      })));
+      }));
 
-    promises.push(upload.happyPromise(validateAsync('validateAsyncFn', null, null,
+    promises.push(validateAsync('validateAsyncFn', null, null,
       function (file, val) {
         return val;
       }, function (r) {
         return r === true || r === null || r === '';
-      })));
+      }));
 
-    return $q.all(promises).then(function () {
-      deffer.resolve(ngModel, ngModel.$ngfValidations);
+    $q.all(promises).then(function () {
+
+      if (runAllValidation) {
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          if (file.$error) {
+            files.splice(i--, 1);
+          }
+        }
+      }
+
+      runAllValidation = false;
+      validateSync('maxFiles', null, function (file, val, i) {
+        return prevLength + i < val;
+      });
+
+      deffer.resolve({'validFiles': files, 'invalidFiles': invalidFiles});
     });
+    return deffer.promise;
   };
 
   upload.imageDimensions = function (file) {
@@ -83984,11 +71830,13 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
         return;
       }
       upload.dataUrl(file).then(function (dataUrl) {
-        var img = angular.element('<img>').attr('src', dataUrl).css('visibility', 'hidden').css('position', 'fixed');
+        var img = angular.element('<img>').attr('src', dataUrl)
+          .css('visibility', 'hidden').css('position', 'fixed')
+          .css('max-width', 'none !important').css('max-height', 'none !important');
 
         function success() {
-          var width = img[0].clientWidth;
-          var height = img[0].clientHeight;
+          var width = img[0].naturalWidth || img[0].clientWidth;
+          var height = img[0].naturalHeight || img[0].clientHeight;
           img.remove();
           file.$ngfWidth = width;
           file.$ngfHeight = height;
@@ -84002,23 +71850,23 @@ ngFileUpload.service('UploadValidate', ['UploadDataUrl', '$q', '$timeout', funct
 
         img.on('load', success);
         img.on('error', error);
-        var count = 0;
 
-        function checkLoadError() {
+        var secondsCounter = 0;
+        function checkLoadErrorInCaseOfNoCallback() {
           $timeout(function () {
             if (img[0].parentNode) {
               if (img[0].clientWidth) {
                 success();
-              } else if (count > 10) {
+              } else if (secondsCounter++ > 10) {
                 error();
               } else {
-                checkLoadError();
+                checkLoadErrorInCaseOfNoCallback();
               }
             }
           }, 1000);
         }
 
-        checkLoadError();
+        checkLoadErrorInCaseOfNoCallback();
 
         angular.element(document.getElementsByTagName('body')[0]).append(img);
       }, function () {
@@ -84129,31 +71977,35 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
     var deferred = $q.defer();
     var canvasElement = document.createElement('canvas');
     var imageElement = document.createElement('img');
+    imageElement.setAttribute('style', 'visibility:hidden;position:fixed;z-index:-100000');
+    document.body.appendChild(imageElement);
 
     imageElement.onload = function () {
-      if (resizeIf != null && resizeIf(imageElement.width, imageElement.height) === false) {
+      var imgWidth = imageElement.width, imgHeight = imageElement.height;
+      imageElement.parentNode.removeChild(imageElement);
+      if (resizeIf != null && resizeIf(imgWidth, imgHeight) === false) {
         deferred.reject('resizeIf');
         return;
       }
       try {
         if (ratio) {
           var ratioFloat = upload.ratioToFloat(ratio);
-          var imgRatio = imageElement.width / imageElement.height;
+          var imgRatio = imgWidth / imgHeight;
           if (imgRatio < ratioFloat) {
-            width = imageElement.width;
+            width = imgWidth;
             height = width / ratioFloat;
           } else {
-            height = imageElement.height;
+            height = imgHeight;
             width = height * ratioFloat;
           }
         }
         if (!width) {
-          width = imageElement.width;
+          width = imgWidth;
         }
         if (!height) {
-          height = imageElement.height;
+          height = imgHeight;
         }
-        var dimensions = calculateAspectRatioFit(imageElement.width, imageElement.height, width, height, centerCrop);
+        var dimensions = calculateAspectRatioFit(imgWidth, imgHeight, width, height, centerCrop);
         canvasElement.width = Math.min(dimensions.width, width);
         canvasElement.height = Math.min(dimensions.height, height);
         var context = canvasElement.getContext('2d');
@@ -84166,13 +72018,14 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
       }
     };
     imageElement.onerror = function () {
+      imageElement.parentNode.removeChild(imageElement);
       deferred.reject();
     };
     imageElement.src = imagen;
     return deferred.promise;
   };
 
-  upload.dataUrltoBlob = function (dataurl, name) {
+  upload.dataUrltoBlob = function (dataurl, name, origSize) {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
     while (n--) {
@@ -84180,6 +72033,7 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
     }
     var blob = new window.Blob([u8arr], {type: mime});
     blob.name = name;
+    blob.$ngfOrigSize = origSize;
     return blob;
   };
 
@@ -84201,29 +72055,35 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
     });
   }
 
-  upload.resize = function (file, width, height, quality, type, ratio, centerCrop, resizeIf, restoreExif) {
+  upload.resize = function (file, options) {
     if (file.type.indexOf('image') !== 0) return upload.emptyPromise(file);
 
     var deferred = $q.defer();
     upload.dataUrl(file, true).then(function (url) {
-      resize(url, width, height, quality, type || file.type, ratio, centerCrop, resizeIf)
+      resize(url, options.width, options.height, options.quality, options.type || file.type,
+        options.ratio, options.centerCrop, options.resizeIf)
         .then(function (dataUrl) {
-          if (file.type === 'image/jpeg' && restoreExif) {
+          if (file.type === 'image/jpeg' && options.restoreExif !== false) {
             try {
               dataUrl = upload.restoreExif(url, dataUrl);
             } catch (e) {
               setTimeout(function () {throw e;}, 1);
             }
           }
-          deferred.resolve(upload.dataUrltoBlob(dataUrl, file.name));
+          try {
+            var blob = upload.dataUrltoBlob(dataUrl, file.name, file.size);
+            deferred.resolve(blob);
+          } catch (e) {
+            deferred.reject(e);
+          }
         }, function (r) {
           if (r === 'resizeIf') {
             deferred.resolve(file);
           }
-          deferred.reject();
+          deferred.reject(r);
         });
-    }, function () {
-      deferred.reject();
+    }, function (e) {
+      deferred.reject(e);
     });
     return deferred.promise;
   };
@@ -84232,13 +72092,13 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
 }]);
 
 (function () {
-  ngFileUpload.directive('ngfDrop', ['$parse', '$timeout', '$location', 'Upload', '$http', '$q',
-    function ($parse, $timeout, $location, Upload, $http, $q) {
+  ngFileUpload.directive('ngfDrop', ['$parse', '$timeout', '$window', 'Upload', '$http', '$q',
+    function ($parse, $timeout, $window, Upload, $http, $q) {
       return {
         restrict: 'AEC',
         require: '?ngModel',
         link: function (scope, elem, attr, ngModel) {
-          linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $location, Upload, $http, $q);
+          linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $window, Upload, $http, $q);
         }
       };
     }]);
@@ -84263,7 +72123,7 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
     };
   }]);
 
-  function linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $location, upload, $http, $q) {
+  function linkDrop(scope, elem, attr, ngModel, $parse, $timeout, $window, upload, $http, $q) {
     var available = dropAvailable();
 
     var attrGetter = function (name, scope, params) {
@@ -84339,12 +72199,19 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
       if (stopPropagation(scope)) evt.stopPropagation();
       if (actualDragOverClass) elem.removeClass(actualDragOverClass);
       actualDragOverClass = null;
-      extractFiles(evt, attrGetter('ngfAllowDir', scope) !== false,
+      var items = evt.dataTransfer.items;
+      var html;
+      try {
+        html = evt.dataTransfer && evt.dataTransfer.getData && evt.dataTransfer.getData('text/html');
+      } catch (e) {/* Fix IE11 that throw error calling getData */
+      }
+
+      extractFiles(items, evt.dataTransfer.files, attrGetter('ngfAllowDir', scope) !== false,
         attrGetter('multiple') || attrGetter('ngfMultiple', scope)).then(function (files) {
         if (files.length) {
           updateModel(files, evt);
         } else {
-          extractFilesFromHtml('dropUrl', evt.dataTransfer).then(function (files) {
+          extractFilesFromHtml('dropUrl', html).then(function (files) {
             updateModel(files, evt);
           });
         }
@@ -84388,13 +72255,8 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
       upload.updateModel(ngModel, attr, scope, attrGetter('ngfChange') || attrGetter('ngfDrop'), files, evt);
     }
 
-    function extractFilesFromHtml(updateOn, obj) {
-      var html;
-      try {
-        html = (obj && obj.getData && obj.getData('text/html'));
-      } catch (e) {/* Fix IE11 that throw error calling getData */
-      }
-      if (!upload.shouldUpdateOn(updateOn, attr, scope) || !html) return upload.rejectPromise([]);
+    function extractFilesFromHtml(updateOn, html) {
+      if (!upload.shouldUpdateOn(updateOn, attr, scope) || typeof html !== 'string') return upload.rejectPromise([]);
       var urls = [];
       html.replace(/<(img src|img [^>]* src) *=\"([^\"]*)\"/gi, function (m, n, src) {
         urls.push(src);
@@ -84414,6 +72276,7 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
         });
         return defer.promise;
       }
+      return upload.emptyPromise();
     }
 
     function calculateDragOverClass(scope, attr, evt, callback) {
@@ -84443,19 +72306,26 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
       callback(dClass);
     }
 
-    function extractFiles(evt, allowDir, multiple) {
-      var maxFiles = upload.getValidationAttr(attr, scope, 'maxFiles') || Number.MAX_VALUE;
-      var maxTotalSize = upload.getValidationAttr(attr, scope, 'maxTotalSize') || Number.MAX_VALUE;
+    function extractFiles(items, fileList, allowDir, multiple) {
+      var maxFiles = upload.getValidationAttr(attr, scope, 'maxFiles');
+      if (maxFiles == null) {
+        maxFiles = Number.MAX_VALUE;
+      }
+      var maxTotalSize = upload.getValidationAttr(attr, scope, 'maxTotalSize');
+      if (maxTotalSize == null) {
+        maxTotalSize = Number.MAX_VALUE;
+      }
       var includeDir = attrGetter('ngfIncludeDir', scope);
       var files = [], totalSize = 0;
+
       function traverseFileTree(entry, path) {
         var defer = $q.defer();
         if (entry != null) {
           if (entry.isDirectory) {
             var promises = [upload.emptyPromise()];
             if (includeDir) {
-              var file = {type : 'directory'};
-              file.name = file.path = (path || '') + entry.name + entry.name;
+              var file = {type: 'directory'};
+              file.name = file.path = (path || '') + entry.name;
               files.push(file);
             }
             var dirReader = entry.createReader();
@@ -84464,7 +72334,7 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
               dirReader.readEntries(function (results) {
                 try {
                   if (!results.length) {
-                    angular.forEach(entries.slice(0), function(e) {
+                    angular.forEach(entries.slice(0), function (e) {
                       if (files.length <= maxFiles && totalSize <= maxTotalSize) {
                         promises.push(traverseFileTree(e, (path ? path : '') + entry.name + '/'));
                       }
@@ -84509,8 +72379,7 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
 
       var promises = [upload.emptyPromise()];
 
-      var items = evt.dataTransfer.items;
-      if (items && items.length > 0 && $location.protocol() !== 'file') {
+      if (items && items.length > 0 && $window.location.protocol !== 'file:') {
         for (var i = 0; i < items.length; i++) {
           if (items[i].webkitGetAsEntry && items[i].webkitGetAsEntry() && items[i].webkitGetAsEntry().isDirectory) {
             var entry = items[i].webkitGetAsEntry();
@@ -84531,7 +72400,6 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
             (!multiple && files.length > 0)) break;
         }
       } else {
-        var fileList = evt.dataTransfer.files;
         if (fileList != null) {
           for (var j = 0; j < fileList.length; j++) {
             var file = fileList.item(j);
@@ -84547,12 +72415,12 @@ ngFileUpload.service('UploadResize', ['UploadValidate', '$q', function (UploadVa
 
       var defer = $q.defer();
       $q.all(promises).then(function () {
-        if (!multiple) {
+        if (!multiple && !includeDir && files.length) {
           var i = 0;
-          while (files.length && files[i].type === 'directory') i++;
+          while (files[i] && files[i].type === 'directory') i++;
           defer.resolve([files[i]]);
         } else {
-            defer.resolve(files);
+          defer.resolve(files);
         }
       }, function (e) {
         defer.reject(e);
@@ -84599,7 +72467,7 @@ ngFileUpload.service('UploadExif', ['UploadResize', '$q', function (UploadResize
   upload.readOrientation = function (file) {
     var defer = $q.defer();
     var reader = new FileReader();
-    var slicedFile = file.slice(0, 64 * 1024);
+    var slicedFile = file.slice ? file.slice(0, 64 * 1024) : file;
     reader.readAsArrayBuffer(slicedFile);
     reader.onerror = function (e) {
       return defer.reject(e);
@@ -84859,11 +72727,11 @@ ngFileUpload.service('UploadExif', ['UploadResize', '$q', function (UploadResize
 
 
 /**!
- * AngularJS file upload directives and services. Supoorts: file upload/drop/paste, resume, cancel/abort,
+ * AngularJS file upload directives and services. Supports: file upload/drop/paste, resume, cancel/abort,
  * progress, resize, thumbnail, preview, validation and CORS
  * FileAPI Flash shim for old browsers not supporting FormData
  * @author  Danial  <danial.farid@gmail.com>
- * @version 11.2.3
+ * @version 12.2.10
  */
 
 (function () {
@@ -92361,7 +80229,7 @@ angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInl
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); });
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.9 - 2016-06-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -92432,6 +80300,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           scope.$resetMatches();
           if (parentScope) parentScope.$digest();
           scope.$emit(options.prefixEvent + '.select', value, index, $typeahead);
+          if (angular.isDefined(options.onSelect) && angular.isFunction(options.onSelect)) {
+            options.onSelect(value, index, $typeahead);
+          }
         };
         $typeahead.$isVisible = function() {
           if (!options.minLength || !controller) {
@@ -92458,7 +80329,13 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           }
           if (evt.keyCode === 13 && scope.$matches.length) {
             $typeahead.select(scope.$activeIndex);
-          } else if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--; else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++; else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+          } else if (evt.keyCode === 38 && scope.$activeIndex > 0) {
+            scope.$activeIndex--;
+          } else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) {
+            scope.$activeIndex++;
+          } else if (angular.isUndefined(scope.$activeIndex)) {
+            scope.$activeIndex = 0;
+          }
           scope.$digest();
         };
         var show = $typeahead.show;
@@ -92507,6 +80384,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       restrict: 'EAC',
       require: 'ngModel',
       link: function postLink(scope, element, attr, controller) {
+        element.off('change');
         var options = {
           scope: scope
         };
@@ -92514,16 +80392,24 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'trimValue' ], function(key) {
+        angular.forEach([ 'html', 'container', 'trimValue', 'filter' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
         });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onSelect' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
+        });
         if (!element.attr('autocomplete')) element.attr('autocomplete', 'off');
-        var filter = options.filter || defaults.filter;
+        var filter = angular.isDefined(options.filter) ? options.filter : defaults.filter;
         var limit = options.limit || defaults.limit;
         var comparator = options.comparator || defaults.comparator;
         var bsOptions = attr.bsOptions;
-        if (filter) bsOptions += ' | ' + filter + ':$viewValue';
-        if (comparator) bsOptions += ':' + comparator;
+        if (filter) {
+          bsOptions += ' | ' + filter + ':$viewValue';
+          if (comparator) bsOptions += ':' + comparator;
+        }
         if (limit) bsOptions += ' | limitTo:' + limit;
         var parsedOptions = $parseOptions(bsOptions);
         var typeahead = $typeahead(element, controller, options);
@@ -92553,7 +80439,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           if (displayValue) {
             return displayValue;
           }
-          if (modelValue && typeof modelValue !== 'object') {
+          if (angular.isDefined(modelValue) && typeof modelValue !== 'object') {
             return modelValue;
           }
           return '';
@@ -92566,13 +80452,143 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           var selected = index !== -1 ? typeahead.$scope.$matches[index].label : controller.$viewValue;
           selected = angular.isObject(selected) ? parsedOptions.displayValue(selected) : selected;
           var value = selected ? selected.toString().replace(/<(?:.|\n)*?>/gm, '') : '';
+          var ss = element[0].selectionStart;
+          var sd = element[0].selectionEnd;
           element.val(options.trimValue === false ? value : value.trim());
+          element[0].setSelectionRange(ss, sd);
         };
         scope.$on('$destroy', function() {
           if (typeahead) typeahead.destroy();
           options = null;
           typeahead = null;
         });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      template: 'tab/tab.tpl.html',
+      navClass: 'nav-tabs',
+      activeClass: 'active'
+    };
+    var controller = this.controller = function($scope, $element, $attrs) {
+      var self = this;
+      self.$options = angular.copy(defaults);
+      angular.forEach([ 'animation', 'navClass', 'activeClass' ], function(key) {
+        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
+      });
+      $scope.$navClass = self.$options.navClass;
+      $scope.$activeClass = self.$options.activeClass;
+      self.$panes = $scope.$panes = [];
+      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
+      self.$push = function(pane) {
+        if (angular.isUndefined(self.$panes.$active)) {
+          $scope.$setActive(pane.name || 0);
+        }
+        self.$panes.push(pane);
+      };
+      self.$remove = function(pane) {
+        var index = self.$panes.indexOf(pane);
+        var active = self.$panes.$active;
+        var activeIndex;
+        if (angular.isString(active)) {
+          activeIndex = self.$panes.map(function(pane) {
+            return pane.name;
+          }).indexOf(active);
+        } else {
+          activeIndex = self.$panes.$active;
+        }
+        self.$panes.splice(index, 1);
+        if (index < activeIndex) {
+          activeIndex--;
+        } else if (index === activeIndex && activeIndex === self.$panes.length) {
+          activeIndex--;
+        }
+        if (activeIndex >= 0 && activeIndex < self.$panes.length) {
+          self.$setActive(self.$panes[activeIndex].name || activeIndex);
+        } else {
+          self.$setActive();
+        }
+      };
+      self.$setActive = $scope.$setActive = function(value) {
+        self.$panes.$active = value;
+        self.$activePaneChangeListeners.forEach(function(fn) {
+          fn();
+        });
+      };
+      self.$isActive = $scope.$isActive = function($pane, $index) {
+        return self.$panes.$active === $pane.name || self.$panes.$active === $index;
+      };
+    };
+    this.$get = function() {
+      var $tab = {};
+      $tab.defaults = defaults;
+      $tab.controller = controller;
+      return $tab;
+    };
+  }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', function($window, $animate, $tab, $parse) {
+    var defaults = $tab.defaults;
+    return {
+      require: [ '?ngModel', 'bsTabs' ],
+      transclude: true,
+      scope: true,
+      controller: [ '$scope', '$element', '$attrs', $tab.controller ],
+      templateUrl: function(element, attr) {
+        return attr.template || defaults.template;
+      },
+      link: function postLink(scope, element, attrs, controllers) {
+        var ngModelCtrl = controllers[0];
+        var bsTabsCtrl = controllers[1];
+        if (ngModelCtrl) {
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
+          });
+          ngModelCtrl.$formatters.push(function(modelValue) {
+            bsTabsCtrl.$setActive(modelValue);
+            return modelValue;
+          });
+        }
+        if (attrs.bsActivePane) {
+          var parsedBsActivePane = $parse(attrs.bsActivePane);
+          bsTabsCtrl.$activePaneChangeListeners.push(function() {
+            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
+          });
+          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
+            bsTabsCtrl.$setActive(newValue);
+          }, true);
+        }
+      }
+    };
+  } ]).directive('bsPane', [ '$window', '$animate', '$sce', function($window, $animate, $sce) {
+    return {
+      require: [ '^?ngModel', '^bsTabs' ],
+      scope: true,
+      link: function postLink(scope, element, attrs, controllers) {
+        var bsTabsCtrl = controllers[1];
+        element.addClass('tab-pane');
+        attrs.$observe('title', function(newValue, oldValue) {
+          scope.title = $sce.trustAsHtml(newValue);
+        });
+        scope.name = attrs.name;
+        if (bsTabsCtrl.$options.animation) {
+          element.addClass(bsTabsCtrl.$options.animation);
+        }
+        attrs.$observe('disabled', function(newValue, oldValue) {
+          scope.disabled = scope.$eval(newValue);
+        });
+        bsTabsCtrl.$push(scope);
+        scope.$on('$destroy', function() {
+          bsTabsCtrl.$remove(scope);
+        });
+        function render() {
+          var index = bsTabsCtrl.$panes.indexOf(scope);
+          $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
+        }
+        bsTabsCtrl.$activePaneChangeListeners.push(function() {
+          render();
+        });
+        render();
       }
     };
   } ]);
@@ -92587,7 +80603,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       placement: 'top',
       templateUrl: 'tooltip/tooltip.tpl.html',
       template: '',
-      contentTemplate: false,
+      titleTemplate: false,
       trigger: 'hover focus',
       keyboard: false,
       html: false,
@@ -92597,13 +80613,16 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       delay: 0,
       autoClose: false,
       bsEnabled: true,
+      mouseDownPreventDefault: true,
+      mouseDownStopPropagation: true,
       viewport: {
         selector: 'body',
         padding: 0
       }
     };
     this.$get = [ '$window', '$rootScope', '$bsCompiler', '$q', '$templateCache', '$http', '$animate', '$sce', 'dimensions', '$$rAF', '$timeout', function($window, $rootScope, $bsCompiler, $q, $templateCache, $http, $animate, $sce, dimensions, $$rAF, $timeout) {
-      var isTouch = 'createTouch' in $window.document;
+      var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
       var $body = angular.element($window.document);
       function TooltipFactory(element, config) {
         var $tooltip = {};
@@ -92699,6 +80718,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         $tooltip.show = function() {
           if (!options.bsEnabled || $tooltip.$isShown) return;
           scope.$emit(options.prefixEvent + '.show.before', $tooltip);
+          if (angular.isDefined(options.onBeforeShow) && angular.isFunction(options.onBeforeShow)) {
+            options.onBeforeShow($tooltip);
+          }
           var parent;
           var after;
           if (options.container) {
@@ -92756,6 +80778,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         };
         function enterAnimateCallback() {
           scope.$emit(options.prefixEvent + '.show', $tooltip);
+          if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
+            options.onShow($tooltip);
+          }
         }
         $tooltip.leave = function() {
           clearTimeout(timeout);
@@ -92774,6 +80799,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         $tooltip.hide = function(blur) {
           if (!$tooltip.$isShown) return;
           scope.$emit(options.prefixEvent + '.hide.before', $tooltip);
+          if (angular.isDefined(options.onBeforeHide) && angular.isFunction(options.onBeforeHide)) {
+            options.onBeforeHide($tooltip);
+          }
           _blur = blur;
           _tipToHide = tipElement;
           if (angular.version.minor <= 2) {
@@ -92792,6 +80820,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         };
         function leaveAnimateCallback() {
           scope.$emit(options.prefixEvent + '.hide', $tooltip);
+          if (angular.isDefined(options.onHide) && angular.isFunction(options.onHide)) {
+            options.onHide($tooltip);
+          }
           if (tipElement === _tipToHide) {
             if (_blur && options.trigger === 'focus') {
               return element[0].blur();
@@ -92799,7 +80830,10 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
             destroyTipElement();
           }
         }
-        $tooltip.toggle = function() {
+        $tooltip.toggle = function(evt) {
+          if (evt) {
+            evt.preventDefault();
+          }
           if ($tooltip.$isShown) {
             $tooltip.leave();
           } else {
@@ -92859,8 +80893,12 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           }
         };
         $tooltip.$onFocusElementMouseDown = function(evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
+          if (options.mouseDownPreventDefault) {
+            evt.preventDefault();
+          }
+          if (options.mouseDownStopPropagation) {
+            evt.stopPropagation();
+          }
           if ($tooltip.$isShown) {
             element[0].blur();
           } else {
@@ -92870,8 +80908,8 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         function bindTriggerEvents() {
           var triggers = options.trigger.split(' ');
           angular.forEach(triggers, function(trigger) {
-            if (trigger === 'click') {
-              element.on('click', $tooltip.toggle);
+            if (trigger === 'click' || trigger === 'contextmenu') {
+              element.on(trigger, $tooltip.toggle);
             } else if (trigger !== 'manual') {
               element.on(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.on(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
@@ -92885,8 +80923,8 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           var triggers = options.trigger.split(' ');
           for (var i = triggers.length; i--; ) {
             var trigger = triggers[i];
-            if (trigger === 'click') {
-              element.off('click', $tooltip.toggle);
+            if (trigger === 'click' || trigger === 'contextmenu') {
+              element.off(trigger, $tooltip.toggle);
             } else if (trigger !== 'manual') {
               element.off(trigger === 'hover' ? 'mouseenter' : 'focus', $tooltip.enter);
               element.off(trigger === 'hover' ? 'mouseleave' : 'blur', $tooltip.leave);
@@ -93119,7 +81157,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       }
       return TooltipFactory;
     } ];
-  }).directive('bsTooltip', [ '$window', '$location', '$sce', '$tooltip', '$$rAF', function($window, $location, $sce, $tooltip, $$rAF) {
+  }).directive('bsTooltip', [ '$window', '$location', '$sce', '$parse', '$tooltip', '$$rAF', function($window, $location, $sce, $parse, $tooltip, $$rAF) {
     return {
       restrict: 'EAC',
       scope: true,
@@ -93128,13 +81166,19 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         var options = {
           scope: scope
         };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'titleTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'backdropAnimation', 'type', 'customClass', 'id' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach([ 'html', 'container' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
           }
         });
         var dataTarget = element.attr('data-target');
@@ -93157,6 +81201,11 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
                 if (tooltip) tooltip.$applyPlacement();
               });
             }
+          }
+        });
+        attr.$observe('disabled', function(newValue) {
+          if (newValue && tooltip.$isShown) {
+            tooltip.hide();
           }
         });
         if (attr.bsTooltip) {
@@ -93213,6 +81262,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
   angular.module('mgcrea.ngStrap.timepicker', [ 'mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.helpers.dateFormatter', 'mgcrea.ngStrap.tooltip' ]).provider('$timepicker', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
+      defaultDate: 'auto',
       prefixClass: 'timepicker',
       placement: 'bottom-left',
       templateUrl: 'timepicker/timepicker.tpl.html',
@@ -93300,7 +81350,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           }
         };
         $timepicker.select = function(date, index, keep) {
-          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) controller.$dateValue = new Date(1970, 0, 1);
+          if (!controller.$dateValue || isNaN(controller.$dateValue.getTime())) {
+            controller.$dateValue = options.defaultDate === 'today' ? new Date() : new Date(1970, 0, 1);
+          }
           if (!angular.isDate(date)) date = new Date(date);
           if (index === 0) controller.$dateValue.setHours(date.getHours()); else if (index === 1) controller.$dateValue.setMinutes(date.getMinutes()); else if (index === 2) controller.$dateValue.setSeconds(date.getSeconds());
           controller.$setViewValue(angular.copy(controller.$dateValue));
@@ -93563,13 +81615,19 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         var options = {
           scope: scope
         };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'autoclose', 'timeType', 'timeFormat', 'timezone', 'modelTimeFormat', 'useNative', 'hourStep', 'minuteStep', 'secondStep', 'length', 'arrowBehavior', 'iconUp', 'iconDown', 'roundDisplay', 'id', 'prefixClass', 'prefixEvent', 'defaultDate' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach([ 'html', 'container', 'autoclose', 'useNative', 'roundDisplay' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
           }
         });
         if (isNative && (options.useNative || defaults.useNative)) options.timeFormat = 'HH:mm';
@@ -93671,529 +81729,6 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           if (timepicker) timepicker.destroy();
           options = null;
           timepicker = null;
-        });
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.tab', []).provider('$tab', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      template: 'tab/tab.tpl.html',
-      navClass: 'nav-tabs',
-      activeClass: 'active'
-    };
-    var controller = this.controller = function($scope, $element, $attrs) {
-      var self = this;
-      self.$options = angular.copy(defaults);
-      angular.forEach([ 'animation', 'navClass', 'activeClass' ], function(key) {
-        if (angular.isDefined($attrs[key])) self.$options[key] = $attrs[key];
-      });
-      $scope.$navClass = self.$options.navClass;
-      $scope.$activeClass = self.$options.activeClass;
-      self.$panes = $scope.$panes = [];
-      self.$activePaneChangeListeners = self.$viewChangeListeners = [];
-      self.$push = function(pane) {
-        if (angular.isUndefined(self.$panes.$active)) {
-          $scope.$setActive(pane.name || 0);
-        }
-        self.$panes.push(pane);
-      };
-      self.$remove = function(pane) {
-        var index = self.$panes.indexOf(pane);
-        var active = self.$panes.$active;
-        var activeIndex;
-        if (angular.isString(active)) {
-          activeIndex = self.$panes.map(function(pane) {
-            return pane.name;
-          }).indexOf(active);
-        } else {
-          activeIndex = self.$panes.$active;
-        }
-        self.$panes.splice(index, 1);
-        if (index < activeIndex) {
-          activeIndex--;
-        } else if (index === activeIndex && activeIndex === self.$panes.length) {
-          activeIndex--;
-        }
-        if (activeIndex >= 0 && activeIndex < self.$panes.length) {
-          self.$setActive(self.$panes[activeIndex].name || activeIndex);
-        } else {
-          self.$setActive();
-        }
-      };
-      self.$setActive = $scope.$setActive = function(value) {
-        self.$panes.$active = value;
-        self.$activePaneChangeListeners.forEach(function(fn) {
-          fn();
-        });
-      };
-      self.$isActive = $scope.$isActive = function($pane, $index) {
-        return self.$panes.$active === $pane.name || self.$panes.$active === $index;
-      };
-    };
-    this.$get = function() {
-      var $tab = {};
-      $tab.defaults = defaults;
-      $tab.controller = controller;
-      return $tab;
-    };
-  }).directive('bsTabs', [ '$window', '$animate', '$tab', '$parse', function($window, $animate, $tab, $parse) {
-    var defaults = $tab.defaults;
-    return {
-      require: [ '?ngModel', 'bsTabs' ],
-      transclude: true,
-      scope: true,
-      controller: [ '$scope', '$element', '$attrs', $tab.controller ],
-      templateUrl: function(element, attr) {
-        return attr.template || defaults.template;
-      },
-      link: function postLink(scope, element, attrs, controllers) {
-        var ngModelCtrl = controllers[0];
-        var bsTabsCtrl = controllers[1];
-        if (ngModelCtrl) {
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
-            ngModelCtrl.$setViewValue(bsTabsCtrl.$panes.$active);
-          });
-          ngModelCtrl.$formatters.push(function(modelValue) {
-            bsTabsCtrl.$setActive(modelValue);
-            return modelValue;
-          });
-        }
-        if (attrs.bsActivePane) {
-          var parsedBsActivePane = $parse(attrs.bsActivePane);
-          bsTabsCtrl.$activePaneChangeListeners.push(function() {
-            parsedBsActivePane.assign(scope, bsTabsCtrl.$panes.$active);
-          });
-          scope.$watch(attrs.bsActivePane, function(newValue, oldValue) {
-            bsTabsCtrl.$setActive(newValue);
-          }, true);
-        }
-      }
-    };
-  } ]).directive('bsPane', [ '$window', '$animate', '$sce', function($window, $animate, $sce) {
-    return {
-      require: [ '^?ngModel', '^bsTabs' ],
-      scope: true,
-      link: function postLink(scope, element, attrs, controllers) {
-        var bsTabsCtrl = controllers[1];
-        element.addClass('tab-pane');
-        attrs.$observe('title', function(newValue, oldValue) {
-          scope.title = $sce.trustAsHtml(newValue);
-        });
-        scope.name = attrs.name;
-        if (bsTabsCtrl.$options.animation) {
-          element.addClass(bsTabsCtrl.$options.animation);
-        }
-        attrs.$observe('disabled', function(newValue, oldValue) {
-          scope.disabled = scope.$eval(newValue);
-        });
-        bsTabsCtrl.$push(scope);
-        scope.$on('$destroy', function() {
-          bsTabsCtrl.$remove(scope);
-        });
-        function render() {
-          var index = bsTabsCtrl.$panes.indexOf(scope);
-          $animate[bsTabsCtrl.$isActive(scope, index) ? 'addClass' : 'removeClass'](element, bsTabsCtrl.$options.activeClass);
-        }
-        bsTabsCtrl.$activePaneChangeListeners.push(function() {
-          render();
-        });
-        render();
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions' ]).provider('$select', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      prefixClass: 'select',
-      prefixEvent: '$select',
-      placement: 'bottom-left',
-      templateUrl: 'select/select.tpl.html',
-      trigger: 'focus',
-      container: false,
-      keyboard: true,
-      html: false,
-      delay: 0,
-      multiple: false,
-      allNoneButtons: false,
-      sort: true,
-      caretHtml: '&nbsp;<span class="caret"></span>',
-      placeholder: 'Choose among the following...',
-      allText: 'All',
-      noneText: 'None',
-      maxLength: 3,
-      maxLengthHtml: 'selected',
-      iconCheckmark: 'glyphicon glyphicon-ok'
-    };
-    this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
-      var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
-      var isTouch = 'createTouch' in $window.document && isNative;
-      function SelectFactory(element, controller, config) {
-        var $select = {};
-        var options = angular.extend({}, defaults, config);
-        $select = $tooltip(element, options);
-        var scope = $select.$scope;
-        scope.$matches = [];
-        if (options.multiple) {
-          scope.$activeIndex = [];
-        } else {
-          scope.$activeIndex = -1;
-        }
-        scope.$isMultiple = options.multiple;
-        scope.$showAllNoneButtons = options.allNoneButtons && options.multiple;
-        scope.$iconCheckmark = options.iconCheckmark;
-        scope.$allText = options.allText;
-        scope.$noneText = options.noneText;
-        scope.$activate = function(index) {
-          scope.$$postDigest(function() {
-            $select.activate(index);
-          });
-        };
-        scope.$select = function(index, evt) {
-          scope.$$postDigest(function() {
-            $select.select(index);
-          });
-        };
-        scope.$isVisible = function() {
-          return $select.$isVisible();
-        };
-        scope.$isActive = function(index) {
-          return $select.$isActive(index);
-        };
-        scope.$selectAll = function() {
-          for (var i = 0; i < scope.$matches.length; i++) {
-            if (!scope.$isActive(i)) {
-              scope.$select(i);
-            }
-          }
-        };
-        scope.$selectNone = function() {
-          for (var i = 0; i < scope.$matches.length; i++) {
-            if (scope.$isActive(i)) {
-              scope.$select(i);
-            }
-          }
-        };
-        $select.update = function(matches) {
-          scope.$matches = matches;
-          $select.$updateActiveIndex();
-        };
-        $select.activate = function(index) {
-          if (options.multiple) {
-            if ($select.$isActive(index)) {
-              scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1);
-            } else {
-              scope.$activeIndex.push(index);
-            }
-            if (options.sort) scope.$activeIndex.sort(function(a, b) {
-              return a - b;
-            });
-          } else {
-            scope.$activeIndex = index;
-          }
-          return scope.$activeIndex;
-        };
-        $select.select = function(index) {
-          var value = scope.$matches[index].value;
-          scope.$apply(function() {
-            $select.activate(index);
-            if (options.multiple) {
-              controller.$setViewValue(scope.$activeIndex.map(function(index) {
-                if (angular.isUndefined(scope.$matches[index])) {
-                  return null;
-                }
-                return scope.$matches[index].value;
-              }));
-            } else {
-              controller.$setViewValue(value);
-              $select.hide();
-            }
-          });
-          scope.$emit(options.prefixEvent + '.select', value, index, $select);
-        };
-        $select.$updateActiveIndex = function() {
-          if (options.multiple) {
-            if (angular.isArray(controller.$modelValue)) {
-              scope.$activeIndex = controller.$modelValue.map(function(value) {
-                return $select.$getIndex(value);
-              });
-            } else {
-              scope.$activeIndex = [];
-            }
-          } else {
-            if (angular.isDefined(controller.$modelValue) && scope.$matches.length) {
-              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
-            } else {
-              scope.$activeIndex = -1;
-            }
-          }
-        };
-        $select.$isVisible = function() {
-          if (!options.minLength || !controller) {
-            return scope.$matches.length;
-          }
-          return scope.$matches.length && controller.$viewValue.length >= options.minLength;
-        };
-        $select.$isActive = function(index) {
-          if (options.multiple) {
-            return scope.$activeIndex.indexOf(index) !== -1;
-          }
-          return scope.$activeIndex === index;
-        };
-        $select.$getIndex = function(value) {
-          var index;
-          for (index = scope.$matches.length; index--; ) {
-            if (angular.equals(scope.$matches[index].value, value)) break;
-          }
-          return index;
-        };
-        $select.$onMouseDown = function(evt) {
-          evt.preventDefault();
-          evt.stopPropagation();
-          if (isTouch) {
-            var targetEl = angular.element(evt.target);
-            targetEl.triggerHandler('click');
-          }
-        };
-        $select.$onKeyDown = function(evt) {
-          if (!/(9|13|38|40)/.test(evt.keyCode)) return;
-          if (evt.keyCode !== 9) {
-            evt.preventDefault();
-            evt.stopPropagation();
-          }
-          if (options.multiple && evt.keyCode === 9) {
-            return $select.hide();
-          }
-          if (!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
-            return $select.select(scope.$activeIndex);
-          }
-          if (!options.multiple) {
-            if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--; else if (evt.keyCode === 38 && scope.$activeIndex < 0) scope.$activeIndex = scope.$matches.length - 1; else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++; else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
-            scope.$digest();
-          }
-        };
-        $select.$isIE = function() {
-          var ua = $window.navigator.userAgent;
-          return ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0 || ua.indexOf('Edge/') > 0;
-        };
-        $select.$selectScrollFix = function(e) {
-          if ($document[0].activeElement.tagName === 'UL') {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            e.target.focus();
-          }
-        };
-        var _show = $select.show;
-        $select.show = function() {
-          _show();
-          if (options.multiple) {
-            $select.$element.addClass('select-multiple');
-          }
-          $timeout(function() {
-            $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
-            if (options.keyboard) {
-              element.on('keydown', $select.$onKeyDown);
-            }
-          }, 0, false);
-        };
-        var _hide = $select.hide;
-        $select.hide = function() {
-          if (!options.multiple && angular.isUndefined(controller.$modelValue)) {
-            scope.$activeIndex = -1;
-          }
-          $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
-          if (options.keyboard) {
-            element.off('keydown', $select.$onKeyDown);
-          }
-          _hide(true);
-        };
-        return $select;
-      }
-      SelectFactory.defaults = defaults;
-      return SelectFactory;
-    } ];
-  }).directive('bsSelect', [ '$window', '$parse', '$q', '$select', '$parseOptions', function($window, $parse, $q, $select, $parseOptions) {
-    var defaults = $select.defaults;
-    return {
-      restrict: 'EAC',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = {
-          scope: scope,
-          placeholder: defaults.placeholder
-        };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'allNoneButtons', 'sort' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
-            options[key] = false;
-          }
-        });
-        var dataMultiple = element.attr('data-multiple');
-        if (angular.isDefined(dataMultiple)) {
-          if (falseValueRegExp.test(dataMultiple)) {
-            options.multiple = false;
-          } else {
-            options.multiple = dataMultiple;
-          }
-        }
-        if (element[0].nodeName.toLowerCase() === 'select') {
-          var inputEl = element;
-          inputEl.css('display', 'none');
-          element = angular.element('<button type="button" class="btn btn-default"></button>');
-          inputEl.after(element);
-        }
-        var parsedOptions = $parseOptions(attr.bsOptions);
-        var select = $select(element, controller, options);
-        if (select.$isIE()) {
-          element[0].addEventListener('blur', select.$selectScrollFix);
-        }
-        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
-        scope.$watch(watchedOptions, function(newValue, oldValue) {
-          parsedOptions.valuesFn(scope, controller).then(function(values) {
-            select.update(values);
-            controller.$render();
-          });
-        }, true);
-        scope.$watch(attr.ngModel, function(newValue, oldValue) {
-          select.$updateActiveIndex();
-          controller.$render();
-        }, true);
-        controller.$render = function() {
-          var selected;
-          var index;
-          if (options.multiple && angular.isArray(controller.$modelValue)) {
-            selected = controller.$modelValue.map(function(value) {
-              index = select.$getIndex(value);
-              return index !== -1 ? select.$scope.$matches[index].label : false;
-            }).filter(angular.isDefined);
-            if (selected.length > (options.maxLength || defaults.maxLength)) {
-              selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
-            } else {
-              selected = selected.join(', ');
-            }
-          } else {
-            index = select.$getIndex(controller.$modelValue);
-            selected = index !== -1 ? select.$scope.$matches[index].label : false;
-          }
-          element.html((selected ? selected : options.placeholder) + (options.caretHtml ? options.caretHtml : defaults.caretHtml));
-        };
-        if (options.multiple) {
-          controller.$isEmpty = function(value) {
-            return !value || value.length === 0;
-          };
-        }
-        scope.$on('$destroy', function() {
-          if (select) select.destroy();
-          options = null;
-          select = null;
-        });
-      }
-    };
-  } ]);
-  angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider('$popover', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      customClass: '',
-      container: false,
-      target: false,
-      placement: 'right',
-      templateUrl: 'popover/popover.tpl.html',
-      contentTemplate: false,
-      trigger: 'click',
-      keyboard: true,
-      html: false,
-      title: '',
-      content: '',
-      delay: 0,
-      autoClose: false
-    };
-    this.$get = [ '$tooltip', function($tooltip) {
-      function PopoverFactory(element, config) {
-        var options = angular.extend({}, defaults, config);
-        var $popover = $tooltip(element, options);
-        if (options.content) {
-          $popover.$scope.content = options.content;
-        }
-        return $popover;
-      }
-      return PopoverFactory;
-    } ];
-  }).directive('bsPopover', [ '$window', '$sce', '$popover', function($window, $sce, $popover) {
-    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
-    return {
-      restrict: 'EAC',
-      scope: true,
-      link: function postLink(scope, element, attr) {
-        var popover;
-        var options = {
-          scope: scope
-        };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
-          if (angular.isDefined(attr[key])) options[key] = attr[key];
-        });
-        var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'autoClose' ], function(key) {
-          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-        });
-        var dataTarget = element.attr('data-target');
-        if (angular.isDefined(dataTarget)) {
-          if (falseValueRegExp.test(dataTarget)) {
-            options.target = false;
-          } else {
-            options.target = dataTarget;
-          }
-        }
-        angular.forEach([ 'title', 'content' ], function(key) {
-          if (attr[key]) {
-            attr.$observe(key, function(newValue, oldValue) {
-              scope[key] = $sce.trustAsHtml(newValue);
-              if (angular.isDefined(oldValue)) {
-                requestAnimationFrame(function() {
-                  if (popover) popover.$applyPlacement();
-                });
-              }
-            });
-          }
-        });
-        if (attr.bsPopover) {
-          scope.$watch(attr.bsPopover, function(newValue, oldValue) {
-            if (angular.isObject(newValue)) {
-              angular.extend(scope, newValue);
-            } else {
-              scope.content = newValue;
-            }
-            if (angular.isDefined(oldValue)) {
-              requestAnimationFrame(function() {
-                if (popover) popover.$applyPlacement();
-              });
-            }
-          }, true);
-        }
-        if (attr.bsShow) {
-          scope.$watch(attr.bsShow, function(newValue, oldValue) {
-            if (!popover || !angular.isDefined(newValue)) return;
-            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
-            if (newValue === true) {
-              popover.show();
-            } else {
-              popover.hide();
-            }
-          });
-        }
-        if (attr.viewport) {
-          scope.$watch(attr.viewport, function(newValue) {
-            if (!popover || !angular.isDefined(newValue)) return;
-            popover.setViewport(newValue);
-          });
-        }
-        popover = $popover(element, options);
-        scope.$on('$destroy', function() {
-          if (popover) popover.destroy();
-          options = null;
-          popover = null;
         });
       }
     };
@@ -94328,7 +81863,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
               break;
             }
           }
-          trackedElements = trackedElements.splice(toDelete, 1);
+          trackedElements.splice(toDelete, 1);
         };
         $scrollspy.activate = function(i) {
           trackedElements[i].addClass('active');
@@ -94368,6 +81903,425 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         angular.forEach(children, function(child) {
           var childEl = angular.element(child);
           childEl.parent().attr('bs-scrollspy', '').attr('data-target', childEl.attr('href'));
+        });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.select', [ 'mgcrea.ngStrap.tooltip', 'mgcrea.ngStrap.helpers.parseOptions' ]).provider('$select', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'select',
+      prefixEvent: '$select',
+      placement: 'bottom-left',
+      templateUrl: 'select/select.tpl.html',
+      trigger: 'focus',
+      container: false,
+      keyboard: true,
+      html: false,
+      delay: 0,
+      multiple: false,
+      allNoneButtons: false,
+      sort: true,
+      caretHtml: '&nbsp;<span class="caret"></span>',
+      placeholder: 'Choose among the following...',
+      allText: 'All',
+      noneText: 'None',
+      maxLength: 3,
+      maxLengthHtml: 'selected',
+      iconCheckmark: 'glyphicon glyphicon-ok',
+      toggle: false
+    };
+    this.$get = [ '$window', '$document', '$rootScope', '$tooltip', '$timeout', function($window, $document, $rootScope, $tooltip, $timeout) {
+      var isNative = /(ip[ao]d|iphone|android)/gi.test($window.navigator.userAgent);
+      var isTouch = 'createTouch' in $window.document && isNative;
+      function SelectFactory(element, controller, config) {
+        var $select = {};
+        var options = angular.extend({}, defaults, config);
+        $select = $tooltip(element, options);
+        var scope = $select.$scope;
+        scope.$matches = [];
+        if (options.multiple) {
+          scope.$activeIndex = [];
+        } else {
+          scope.$activeIndex = -1;
+        }
+        scope.$isMultiple = options.multiple;
+        scope.$showAllNoneButtons = options.allNoneButtons && options.multiple;
+        scope.$iconCheckmark = options.iconCheckmark;
+        scope.$allText = options.allText;
+        scope.$noneText = options.noneText;
+        scope.$activate = function(index) {
+          scope.$$postDigest(function() {
+            $select.activate(index);
+          });
+        };
+        scope.$select = function(index, evt) {
+          scope.$$postDigest(function() {
+            $select.select(index);
+          });
+        };
+        scope.$isVisible = function() {
+          return $select.$isVisible();
+        };
+        scope.$isActive = function(index) {
+          return $select.$isActive(index);
+        };
+        scope.$selectAll = function() {
+          for (var i = 0; i < scope.$matches.length; i++) {
+            if (!scope.$isActive(i)) {
+              scope.$select(i);
+            }
+          }
+        };
+        scope.$selectNone = function() {
+          for (var i = 0; i < scope.$matches.length; i++) {
+            if (scope.$isActive(i)) {
+              scope.$select(i);
+            }
+          }
+        };
+        $select.update = function(matches) {
+          scope.$matches = matches;
+          $select.$updateActiveIndex();
+        };
+        $select.activate = function(index) {
+          if (options.multiple) {
+            if ($select.$isActive(index)) {
+              scope.$activeIndex.splice(scope.$activeIndex.indexOf(index), 1);
+            } else {
+              scope.$activeIndex.push(index);
+            }
+            if (options.sort) scope.$activeIndex.sort(function(a, b) {
+              return a - b;
+            });
+          } else {
+            scope.$activeIndex = index;
+          }
+          return scope.$activeIndex;
+        };
+        $select.select = function(index) {
+          if (angular.isUndefined(index) || index < 0 || index >= scope.$matches.length) {
+            return;
+          }
+          var value = scope.$matches[index].value;
+          scope.$apply(function() {
+            $select.activate(index);
+            if (options.multiple) {
+              controller.$setViewValue(scope.$activeIndex.map(function(index) {
+                if (angular.isUndefined(scope.$matches[index])) {
+                  return null;
+                }
+                return scope.$matches[index].value;
+              }));
+            } else {
+              if (options.toggle) {
+                controller.$setViewValue(value === controller.$modelValue ? undefined : value);
+              } else {
+                controller.$setViewValue(value);
+              }
+              $select.hide();
+            }
+          });
+          scope.$emit(options.prefixEvent + '.select', value, index, $select);
+          if (angular.isDefined(options.onSelect) && angular.isFunction(options.onSelect)) {
+            options.onSelect(value, index, $select);
+          }
+        };
+        $select.$updateActiveIndex = function() {
+          if (options.multiple) {
+            if (angular.isArray(controller.$modelValue)) {
+              scope.$activeIndex = controller.$modelValue.map(function(value) {
+                return $select.$getIndex(value);
+              });
+            } else {
+              scope.$activeIndex = [];
+            }
+          } else {
+            if (angular.isDefined(controller.$modelValue) && scope.$matches.length) {
+              scope.$activeIndex = $select.$getIndex(controller.$modelValue);
+            } else {
+              scope.$activeIndex = -1;
+            }
+          }
+        };
+        $select.$isVisible = function() {
+          if (!options.minLength || !controller) {
+            return scope.$matches.length;
+          }
+          return scope.$matches.length && controller.$viewValue.length >= options.minLength;
+        };
+        $select.$isActive = function(index) {
+          if (options.multiple) {
+            return scope.$activeIndex.indexOf(index) !== -1;
+          }
+          return scope.$activeIndex === index;
+        };
+        $select.$getIndex = function(value) {
+          var index;
+          for (index = scope.$matches.length; index--; ) {
+            if (angular.equals(scope.$matches[index].value, value)) break;
+          }
+          return index;
+        };
+        $select.$onMouseDown = function(evt) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          if (isTouch) {
+            var targetEl = angular.element(evt.target);
+            targetEl.triggerHandler('click');
+          }
+        };
+        $select.$onKeyDown = function(evt) {
+          if (!/(9|13|38|40)/.test(evt.keyCode)) return;
+          if (evt.keyCode !== 9) {
+            evt.preventDefault();
+            evt.stopPropagation();
+          }
+          if (options.multiple && evt.keyCode === 9) {
+            return $select.hide();
+          }
+          if (!options.multiple && (evt.keyCode === 13 || evt.keyCode === 9)) {
+            return $select.select(scope.$activeIndex);
+          }
+          if (!options.multiple) {
+            if (evt.keyCode === 38 && scope.$activeIndex > 0) scope.$activeIndex--; else if (evt.keyCode === 38 && scope.$activeIndex < 0) scope.$activeIndex = scope.$matches.length - 1; else if (evt.keyCode === 40 && scope.$activeIndex < scope.$matches.length - 1) scope.$activeIndex++; else if (angular.isUndefined(scope.$activeIndex)) scope.$activeIndex = 0;
+            scope.$digest();
+          }
+        };
+        $select.$isIE = function() {
+          var ua = $window.navigator.userAgent;
+          return ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0 || ua.indexOf('Edge/') > 0;
+        };
+        $select.$selectScrollFix = function(e) {
+          if ($document[0].activeElement.tagName === 'UL') {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.target.focus();
+          }
+        };
+        var _show = $select.show;
+        $select.show = function() {
+          _show();
+          if (options.multiple) {
+            $select.$element.addClass('select-multiple');
+          }
+          $timeout(function() {
+            $select.$element.on(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+            if (options.keyboard) {
+              element.on('keydown', $select.$onKeyDown);
+            }
+          }, 0, false);
+        };
+        var _hide = $select.hide;
+        $select.hide = function() {
+          if (!options.multiple && angular.isUndefined(controller.$modelValue)) {
+            scope.$activeIndex = -1;
+          }
+          $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
+          if (options.keyboard) {
+            element.off('keydown', $select.$onKeyDown);
+          }
+          _hide(true);
+        };
+        return $select;
+      }
+      SelectFactory.defaults = defaults;
+      return SelectFactory;
+    } ];
+  }).directive('bsSelect', [ '$window', '$parse', '$q', '$select', '$parseOptions', function($window, $parse, $q, $select, $parseOptions) {
+    var defaults = $select.defaults;
+    return {
+      restrict: 'EAC',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = {
+          scope: scope,
+          placeholder: defaults.placeholder
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'placeholder', 'allNoneButtons', 'maxLength', 'maxLengthHtml', 'allText', 'noneText', 'iconCheckmark', 'autoClose', 'id', 'sort', 'caretHtml', 'prefixClass', 'prefixEvent', 'toggle' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'html', 'container', 'allNoneButtons', 'sort' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
+            options[key] = false;
+          }
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide', 'onSelect' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
+        });
+        var dataMultiple = element.attr('data-multiple');
+        if (angular.isDefined(dataMultiple)) {
+          if (falseValueRegExp.test(dataMultiple)) {
+            options.multiple = false;
+          } else {
+            options.multiple = dataMultiple;
+          }
+        }
+        if (element[0].nodeName.toLowerCase() === 'select') {
+          var inputEl = element;
+          inputEl.css('display', 'none');
+          element = angular.element('<button type="button" class="btn btn-default"></button>');
+          inputEl.after(element);
+        }
+        var parsedOptions = $parseOptions(attr.bsOptions);
+        var select = $select(element, controller, options);
+        if (select.$isIE()) {
+          element[0].addEventListener('blur', select.$selectScrollFix);
+        }
+        var watchedOptions = parsedOptions.$match[7].replace(/\|.+/, '').trim();
+        scope.$watch(watchedOptions, function(newValue, oldValue) {
+          parsedOptions.valuesFn(scope, controller).then(function(values) {
+            select.update(values);
+            controller.$render();
+          });
+        }, true);
+        scope.$watch(attr.ngModel, function(newValue, oldValue) {
+          select.$updateActiveIndex();
+          controller.$render();
+        }, true);
+        controller.$render = function() {
+          var selected;
+          var index;
+          if (options.multiple && angular.isArray(controller.$modelValue)) {
+            selected = controller.$modelValue.map(function(value) {
+              index = select.$getIndex(value);
+              return index !== -1 ? select.$scope.$matches[index].label : false;
+            }).filter(angular.isDefined);
+            if (selected.length > (options.maxLength || defaults.maxLength)) {
+              selected = selected.length + ' ' + (options.maxLengthHtml || defaults.maxLengthHtml);
+            } else {
+              selected = selected.join(', ');
+            }
+          } else {
+            index = select.$getIndex(controller.$modelValue);
+            selected = index !== -1 ? select.$scope.$matches[index].label : false;
+          }
+          element.html((selected || options.placeholder) + (options.caretHtml || defaults.caretHtml));
+        };
+        if (options.multiple) {
+          controller.$isEmpty = function(value) {
+            return !value || value.length === 0;
+          };
+        }
+        scope.$on('$destroy', function() {
+          if (select) select.destroy();
+          options = null;
+          select = null;
+        });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.popover', [ 'mgcrea.ngStrap.tooltip' ]).provider('$popover', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      customClass: '',
+      container: false,
+      target: false,
+      placement: 'right',
+      templateUrl: 'popover/popover.tpl.html',
+      contentTemplate: false,
+      trigger: 'click',
+      keyboard: true,
+      html: false,
+      title: '',
+      content: '',
+      delay: 0,
+      autoClose: false
+    };
+    this.$get = [ '$tooltip', function($tooltip) {
+      function PopoverFactory(element, config) {
+        var options = angular.extend({}, defaults, config);
+        var $popover = $tooltip(element, options);
+        if (options.content) {
+          $popover.$scope.content = options.content;
+        }
+        return $popover;
+      }
+      return PopoverFactory;
+    } ];
+  }).directive('bsPopover', [ '$window', '$sce', '$popover', function($window, $sce, $popover) {
+    var requestAnimationFrame = $window.requestAnimationFrame || $window.setTimeout;
+    return {
+      restrict: 'EAC',
+      scope: true,
+      link: function postLink(scope, element, attr) {
+        var popover;
+        var options = {
+          scope: scope
+        };
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'customClass', 'autoClose', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+          if (angular.isDefined(attr[key])) options[key] = attr[key];
+        });
+        var falseValueRegExp = /^(false|0|)$/i;
+        angular.forEach([ 'html', 'container', 'autoClose' ], function(key) {
+          if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
+        });
+        var dataTarget = element.attr('data-target');
+        if (angular.isDefined(dataTarget)) {
+          if (falseValueRegExp.test(dataTarget)) {
+            options.target = false;
+          } else {
+            options.target = dataTarget;
+          }
+        }
+        angular.forEach([ 'title', 'content' ], function(key) {
+          if (attr[key]) {
+            attr.$observe(key, function(newValue, oldValue) {
+              scope[key] = $sce.trustAsHtml(newValue);
+              if (angular.isDefined(oldValue)) {
+                requestAnimationFrame(function() {
+                  if (popover) popover.$applyPlacement();
+                });
+              }
+            });
+          }
+        });
+        if (attr.bsPopover) {
+          scope.$watch(attr.bsPopover, function(newValue, oldValue) {
+            if (angular.isObject(newValue)) {
+              angular.extend(scope, newValue);
+            } else {
+              scope.content = newValue;
+            }
+            if (angular.isDefined(oldValue)) {
+              requestAnimationFrame(function() {
+                if (popover) popover.$applyPlacement();
+              });
+            }
+          }, true);
+        }
+        if (attr.bsShow) {
+          scope.$watch(attr.bsShow, function(newValue, oldValue) {
+            if (!popover || !angular.isDefined(newValue)) return;
+            if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(popover),?/i);
+            if (newValue === true) {
+              popover.show();
+            } else {
+              popover.hide();
+            }
+          });
+        }
+        if (attr.viewport) {
+          scope.$watch(attr.viewport, function(newValue) {
+            if (!popover || !angular.isDefined(newValue)) return;
+            popover.setViewport(newValue);
+          });
+        }
+        popover = $popover(element, options);
+        scope.$on('$destroy', function() {
+          if (popover) popover.destroy();
+          options = null;
+          popover = null;
         });
       }
     };
@@ -94429,7 +82383,8 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       backdrop: true,
       keyboard: true,
       html: false,
-      show: true
+      show: true,
+      size: null
     };
     this.$get = [ '$window', '$rootScope', '$bsCompiler', '$animate', '$timeout', '$sce', 'dimensions', function($window, $rootScope, $bsCompiler, $animate, $timeout, $sce, dimensions) {
       var forEach = angular.forEach;
@@ -94438,6 +82393,10 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       var backdropCount = 0;
       var dialogBaseZindex = 1050;
       var backdropBaseZindex = 1040;
+      var validSizes = {
+        lg: 'modal-lg',
+        sm: 'modal-sm'
+      };
       function ModalFactory(config) {
         var $modal = {};
         var options = $modal.$options = angular.extend({}, defaults, config);
@@ -94527,11 +82486,17 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           if (scope.$emit(options.prefixEvent + '.show.before', $modal).defaultPrevented) {
             return;
           }
+          if (angular.isDefined(options.onBeforeShow) && angular.isFunction(options.onBeforeShow)) {
+            options.onBeforeShow($modal);
+          }
           modalElement.css({
             display: 'block'
           }).addClass(options.placement);
           if (options.customClass) {
             modalElement.addClass(options.customClass);
+          }
+          if (options.size && validSizes[options.size]) {
+            angular.element(findElement('.modal-dialog', modalElement[0])).addClass(validSizes[options.size]);
           }
           if (options.animation) {
             if (options.backdrop) {
@@ -94562,14 +82527,17 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         };
         function enterAnimateCallback() {
           scope.$emit(options.prefixEvent + '.show', $modal);
+          if (angular.isDefined(options.onShow) && angular.isFunction(options.onShow)) {
+            options.onShow($modal);
+          }
         }
         $modal.hide = function() {
           if (!$modal.$isShown) return;
-          if (options.backdrop) {
-            backdropCount--;
-          }
           if (scope.$emit(options.prefixEvent + '.hide.before', $modal).defaultPrevented) {
             return;
+          }
+          if (angular.isDefined(options.onBeforeHide) && angular.isFunction(options.onBeforeHide)) {
+            options.onBeforeHide($modal);
           }
           if (angular.version.minor <= 2) {
             $animate.leave(modalElement, leaveAnimateCallback);
@@ -94577,6 +82545,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
             $animate.leave(modalElement).then(leaveAnimateCallback);
           }
           if (options.backdrop) {
+            backdropCount--;
             $animate.leave(backdropElement);
           }
           $modal.$isShown = scope.$isShown = false;
@@ -94586,6 +82555,9 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         };
         function leaveAnimateCallback() {
           scope.$emit(options.prefixEvent + '.hide', $modal);
+          if (angular.isDefined(options.onHide) && angular.isFunction(options.onHide)) {
+            options.onHide($modal);
+          }
           bodyElement.removeClass(options.prefixClass + '-open');
           if (options.animation) {
             bodyElement.removeClass(options.prefixClass + '-with-' + options.animation);
@@ -94666,7 +82638,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       }
       return ModalFactory;
     } ];
-  }).directive('bsModal', [ '$window', '$sce', '$modal', function($window, $sce, $modal) {
+  }).directive('bsModal', [ '$window', '$sce', '$parse', '$modal', function($window, $sce, $parse, $modal) {
     return {
       restrict: 'EAC',
       scope: true,
@@ -94676,7 +82648,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           element: element,
           show: false
         };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'contentTemplate', 'placement', 'backdrop', 'keyboard', 'html', 'container', 'animation', 'backdropAnimation', 'id', 'prefixEvent', 'prefixClass', 'customClass', 'modalClass', 'size' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         if (options.modalClass) {
@@ -94685,6 +82657,12 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach([ 'backdrop', 'keyboard', 'html', 'container' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
         });
         angular.forEach([ 'title', 'content' ], function(key) {
           if (attr[key]) {
@@ -94709,6 +82687,130 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           options = null;
           modal = null;
         });
+      }
+    };
+  } ]);
+  angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider('$dropdown', function() {
+    var defaults = this.defaults = {
+      animation: 'am-fade',
+      prefixClass: 'dropdown',
+      prefixEvent: 'dropdown',
+      placement: 'bottom-left',
+      templateUrl: 'dropdown/dropdown.tpl.html',
+      trigger: 'click',
+      container: false,
+      keyboard: true,
+      html: false,
+      delay: 0
+    };
+    this.$get = [ '$window', '$rootScope', '$tooltip', '$timeout', function($window, $rootScope, $tooltip, $timeout) {
+      var bodyEl = angular.element($window.document.body);
+      var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
+      function DropdownFactory(element, config) {
+        var $dropdown = {};
+        var options = angular.extend({}, defaults, config);
+        $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
+        $dropdown = $tooltip(element, options);
+        var parentEl = element.parent();
+        $dropdown.$onKeyDown = function(evt) {
+          if (!/(38|40)/.test(evt.keyCode)) return;
+          evt.preventDefault();
+          evt.stopPropagation();
+          var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
+          if (!items.length) return;
+          var index;
+          angular.forEach(items, function(el, i) {
+            if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
+          });
+          if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (angular.isUndefined(index)) index = 0;
+          items.eq(index)[0].focus();
+        };
+        var show = $dropdown.show;
+        $dropdown.show = function() {
+          show();
+          $timeout(function() {
+            if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
+            bodyEl.on('click', onBodyClick);
+          }, 0, false);
+          if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
+        };
+        var hide = $dropdown.hide;
+        $dropdown.hide = function() {
+          if (!$dropdown.$isShown) return;
+          if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
+          bodyEl.off('click', onBodyClick);
+          if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
+          hide();
+        };
+        var destroy = $dropdown.destroy;
+        $dropdown.destroy = function() {
+          bodyEl.off('click', onBodyClick);
+          destroy();
+        };
+        function onBodyClick(evt) {
+          if (evt.target === element[0]) return;
+          return evt.target !== element[0] && $dropdown.hide();
+        }
+        return $dropdown;
+      }
+      return DropdownFactory;
+    } ];
+  }).directive('bsDropdown', [ '$window', '$sce', '$dropdown', function($window, $sce, $dropdown) {
+    return {
+      restrict: 'EAC',
+      scope: true,
+      compile: function(tElement, tAttrs) {
+        if (!tAttrs.bsDropdown) {
+          var nextSibling = tElement[0].nextSibling;
+          while (nextSibling && nextSibling.nodeType !== 1) {
+            nextSibling = nextSibling.nextSibling;
+          }
+          if (nextSibling && nextSibling.className.split(' ').indexOf('dropdown-menu') >= 0) {
+            tAttrs.template = nextSibling.outerHTML;
+            tAttrs.templateUrl = undefined;
+            nextSibling.parentNode.removeChild(nextSibling);
+          }
+        }
+        return function postLink(scope, element, attr) {
+          var options = {
+            scope: scope
+          };
+          angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose' ], function(key) {
+            if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
+          });
+          var falseValueRegExp = /^(false|0|)$/i;
+          angular.forEach([ 'html', 'container' ], function(key) {
+            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+          });
+          angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+            var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+            if (angular.isDefined(attr[bsKey])) {
+              options[key] = scope.$eval(attr[bsKey]);
+            }
+          });
+          if (attr.bsDropdown) {
+            scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
+              scope.content = newValue;
+            }, true);
+          }
+          var dropdown = $dropdown(element, options);
+          if (attr.bsShow) {
+            scope.$watch(attr.bsShow, function(newValue, oldValue) {
+              if (!dropdown || !angular.isDefined(newValue)) return;
+              if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
+              if (newValue === true) {
+                dropdown.show();
+              } else {
+                dropdown.hide();
+              }
+            });
+          }
+          scope.$on('$destroy', function() {
+            if (dropdown) dropdown.destroy();
+            options = null;
+            dropdown = null;
+          });
+        };
       }
     };
   } ]);
@@ -95298,10 +83400,17 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       } else {
         throw new Error('Missing `template` / `templateUrl` option.');
       }
+      if (options.titleTemplate) {
+        resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.titleTemplate) ]).then(function(templates) {
+          var templateEl = angular.element(templates[0]);
+          findElement('[ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          return templateEl[0].outerHTML;
+        });
+      }
       if (options.contentTemplate) {
         resolve.$template = $q.all([ resolve.$template, fetchTemplate(options.contentTemplate) ]).then(function(templates) {
           var templateEl = angular.element(templates[0]);
-          var contentEl = findElement('[ng-bind="content"], [ng-bind="title"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
+          var contentEl = findElement('[ng-bind="content"]', templateEl[0]).removeAttr('ng-bind').html(templates[1]);
           if (!options.templateUrl) contentEl.next().remove();
           return templateEl[0].outerHTML;
         });
@@ -95348,124 +83457,6 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       });
     }
   }
-  angular.module('mgcrea.ngStrap.dropdown', [ 'mgcrea.ngStrap.tooltip' ]).provider('$dropdown', function() {
-    var defaults = this.defaults = {
-      animation: 'am-fade',
-      prefixClass: 'dropdown',
-      prefixEvent: 'dropdown',
-      placement: 'bottom-left',
-      templateUrl: 'dropdown/dropdown.tpl.html',
-      trigger: 'click',
-      container: false,
-      keyboard: true,
-      html: false,
-      delay: 0
-    };
-    this.$get = [ '$window', '$rootScope', '$tooltip', '$timeout', function($window, $rootScope, $tooltip, $timeout) {
-      var bodyEl = angular.element($window.document.body);
-      var matchesSelector = Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector;
-      function DropdownFactory(element, config) {
-        var $dropdown = {};
-        var options = angular.extend({}, defaults, config);
-        $dropdown.$scope = options.scope && options.scope.$new() || $rootScope.$new();
-        $dropdown = $tooltip(element, options);
-        var parentEl = element.parent();
-        $dropdown.$onKeyDown = function(evt) {
-          if (!/(38|40)/.test(evt.keyCode)) return;
-          evt.preventDefault();
-          evt.stopPropagation();
-          var items = angular.element($dropdown.$element[0].querySelectorAll('li:not(.divider) a'));
-          if (!items.length) return;
-          var index;
-          angular.forEach(items, function(el, i) {
-            if (matchesSelector && matchesSelector.call(el, ':focus')) index = i;
-          });
-          if (evt.keyCode === 38 && index > 0) index--; else if (evt.keyCode === 40 && index < items.length - 1) index++; else if (angular.isUndefined(index)) index = 0;
-          items.eq(index)[0].focus();
-        };
-        var show = $dropdown.show;
-        $dropdown.show = function() {
-          show();
-          $timeout(function() {
-            if (options.keyboard && $dropdown.$element) $dropdown.$element.on('keydown', $dropdown.$onKeyDown);
-            bodyEl.on('click', onBodyClick);
-          }, 0, false);
-          if (parentEl.hasClass('dropdown')) parentEl.addClass('open');
-        };
-        var hide = $dropdown.hide;
-        $dropdown.hide = function() {
-          if (!$dropdown.$isShown) return;
-          if (options.keyboard && $dropdown.$element) $dropdown.$element.off('keydown', $dropdown.$onKeyDown);
-          bodyEl.off('click', onBodyClick);
-          if (parentEl.hasClass('dropdown')) parentEl.removeClass('open');
-          hide();
-        };
-        var destroy = $dropdown.destroy;
-        $dropdown.destroy = function() {
-          bodyEl.off('click', onBodyClick);
-          destroy();
-        };
-        function onBodyClick(evt) {
-          if (evt.target === element[0]) return;
-          return evt.target !== element[0] && $dropdown.hide();
-        }
-        return $dropdown;
-      }
-      return DropdownFactory;
-    } ];
-  }).directive('bsDropdown', [ '$window', '$sce', '$dropdown', function($window, $sce, $dropdown) {
-    return {
-      restrict: 'EAC',
-      scope: true,
-      compile: function(tElement, tAttrs) {
-        if (!tAttrs.bsDropdown) {
-          var nextSibling = tElement[0].nextSibling;
-          while (nextSibling && nextSibling.nodeType !== 1) {
-            nextSibling = nextSibling.nextSibling;
-          }
-          if (nextSibling && nextSibling.classList.contains('dropdown-menu')) {
-            tAttrs.template = nextSibling.outerHTML;
-            tAttrs.templateUrl = undefined;
-            nextSibling.parentNode.removeChild(nextSibling);
-          }
-        }
-        return function postLink(scope, element, attr) {
-          var options = {
-            scope: scope
-          };
-          angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'keyboard', 'html', 'animation', 'id', 'autoClose' ], function(key) {
-            if (angular.isDefined(tAttrs[key])) options[key] = tAttrs[key];
-          });
-          var falseValueRegExp = /^(false|0|)$/i;
-          angular.forEach([ 'html', 'container' ], function(key) {
-            if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
-          });
-          if (attr.bsDropdown) {
-            scope.$watch(attr.bsDropdown, function(newValue, oldValue) {
-              scope.content = newValue;
-            }, true);
-          }
-          var dropdown = $dropdown(element, options);
-          if (attr.bsShow) {
-            scope.$watch(attr.bsShow, function(newValue, oldValue) {
-              if (!dropdown || !angular.isDefined(newValue)) return;
-              if (angular.isString(newValue)) newValue = !!newValue.match(/true|,?(dropdown),?/i);
-              if (newValue === true) {
-                dropdown.show();
-              } else {
-                dropdown.hide();
-              }
-            });
-          }
-          scope.$on('$destroy', function() {
-            if (dropdown) dropdown.destroy();
-            options = null;
-            dropdown = null;
-          });
-        };
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.datepicker', [ 'mgcrea.ngStrap.helpers.dateParser', 'mgcrea.ngStrap.helpers.dateFormatter', 'mgcrea.ngStrap.tooltip' ]).provider('$datepicker', function() {
     var defaults = this.defaults = {
       animation: 'am-fade',
@@ -95495,6 +83486,8 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       minView: 0,
       startWeek: 0,
       daysOfWeekDisabled: '',
+      hasToday: false,
+      hasClear: false,
       iconLeft: 'glyphicon glyphicon-chevron-left',
       iconRight: 'glyphicon glyphicon-chevron-right'
     };
@@ -95514,6 +83507,8 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         scope.$mode = options.startView;
         scope.$iconLeft = options.iconLeft;
         scope.$iconRight = options.iconRight;
+        scope.$hasToday = options.hasToday;
+        scope.$hasClear = options.hasClear;
         var $picker = $datepicker.$views[scope.$mode];
         scope.$select = function(date) {
           $datepicker.select(date);
@@ -95523,6 +83518,22 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         };
         scope.$toggleMode = function() {
           $datepicker.setMode((scope.$mode + 1) % $datepicker.$views.length);
+        };
+        scope.$setToday = function() {
+          if (options.autoclose) {
+            $datepicker.setMode(0);
+            $datepicker.select(new Date());
+          } else {
+            $datepicker.select(new Date(), true);
+          }
+        };
+        scope.$clear = function() {
+          if (options.autoclose) {
+            $datepicker.setMode(0);
+            $datepicker.select(null);
+          } else {
+            $datepicker.select(null, true);
+          }
         };
         $datepicker.update = function(date) {
           if (angular.isDate(date) && !isNaN(date.getTime())) {
@@ -95538,7 +83549,13 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
           }
         };
         $datepicker.select = function(date, keep) {
-          if (!angular.isDate(controller.$dateValue)) controller.$dateValue = new Date(date);
+          if (angular.isDate(date)) {
+            if (!angular.isDate(controller.$dateValue) || isNaN(controller.$dateValue.getTime())) {
+              controller.$dateValue = new Date(date);
+            }
+          } else {
+            controller.$dateValue = null;
+          }
           if (!scope.$mode || keep) {
             controller.$setViewValue(angular.copy(date));
             controller.$render();
@@ -95677,13 +83694,19 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         var options = {
           scope: scope
         };
-        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent' ], function(key) {
+        angular.forEach([ 'template', 'templateUrl', 'controller', 'controllerAs', 'placement', 'container', 'delay', 'trigger', 'html', 'animation', 'autoclose', 'dateType', 'dateFormat', 'timezone', 'modelDateFormat', 'dayFormat', 'strictFormat', 'startWeek', 'startDate', 'useNative', 'lang', 'startView', 'minView', 'iconLeft', 'iconRight', 'daysOfWeekDisabled', 'id', 'prefixClass', 'prefixEvent', 'hasToday', 'hasClear' ], function(key) {
           if (angular.isDefined(attr[key])) options[key] = attr[key];
         });
         var falseValueRegExp = /^(false|0|)$/i;
-        angular.forEach([ 'html', 'container', 'autoclose', 'useNative' ], function(key) {
+        angular.forEach([ 'html', 'container', 'autoclose', 'useNative', 'hasToday', 'hasClear' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) {
             options[key] = false;
+          }
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
           }
         });
         var datepicker = $datepicker(element, controller, options);
@@ -95880,6 +83903,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
             scope.showLabels = true;
             scope.labels = weekDaysLabelsHtml;
             scope.rows = split(days, this.split);
+            scope.isTodayDisabled = this.isDisabled(new Date());
             this.built = true;
           },
           isSelected: function(date) {
@@ -96029,6 +84053,129 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       };
     } ];
   });
+  angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
+    var defaults = this.defaults = {
+      activeClass: 'active',
+      toggleEvent: 'click'
+    };
+    this.$get = function() {
+      return {
+        defaults: defaults
+      };
+    };
+  }).directive('bsCheckboxGroup', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      compile: function postLink(element, attr) {
+        element.attr('data-toggle', 'buttons');
+        element.removeAttr('ng-model');
+        var children = element[0].querySelectorAll('input[type="checkbox"]');
+        angular.forEach(children, function(child) {
+          var childEl = angular.element(child);
+          childEl.attr('bs-checkbox', '');
+          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
+        });
+      }
+    };
+  }).directive('bsCheckbox', [ '$button', '$$rAF', function($button, $$rAF) {
+    var defaults = $button.defaults;
+    var constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = defaults;
+        var isInput = element[0].nodeName === 'INPUT';
+        var activeElement = isInput ? element.parent() : element;
+        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
+        if (constantValueRegExp.test(attr.trueValue)) {
+          trueValue = scope.$eval(attr.trueValue);
+        }
+        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
+        if (constantValueRegExp.test(attr.falseValue)) {
+          falseValue = scope.$eval(attr.falseValue);
+        }
+        var hasExoticValues = typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
+        if (hasExoticValues) {
+          controller.$parsers.push(function(viewValue) {
+            return viewValue ? trueValue : falseValue;
+          });
+          controller.$formatters.push(function(modelValue) {
+            return angular.equals(modelValue, trueValue);
+          });
+          scope.$watch(attr.ngModel, function(newValue, oldValue) {
+            controller.$render();
+          });
+        }
+        controller.$render = function() {
+          var isActive = angular.equals(controller.$modelValue, trueValue);
+          $$rAF(function() {
+            if (isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+        element.bind(options.toggleEvent, function() {
+          scope.$apply(function() {
+            if (!isInput) {
+              controller.$setViewValue(!activeElement.hasClass('active'));
+            }
+            if (!hasExoticValues) {
+              controller.$render();
+            }
+          });
+        });
+      }
+    };
+  } ]).directive('bsRadioGroup', function() {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      compile: function postLink(element, attr) {
+        element.attr('data-toggle', 'buttons');
+        element.removeAttr('ng-model');
+        var children = element[0].querySelectorAll('input[type="radio"]');
+        angular.forEach(children, function(child) {
+          angular.element(child).attr('bs-radio', '');
+          angular.element(child).attr('ng-model', attr.ngModel);
+        });
+      }
+    };
+  }).directive('bsRadio', [ '$button', '$$rAF', function($button, $$rAF) {
+    var defaults = $button.defaults;
+    var constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        var options = defaults;
+        var isInput = element[0].nodeName === 'INPUT';
+        var activeElement = isInput ? element.parent() : element;
+        var value;
+        attr.$observe('value', function(v) {
+          if (typeof v !== 'boolean' && constantValueRegExp.test(v)) {
+            value = scope.$eval(v);
+          } else {
+            value = v;
+          }
+          controller.$render();
+        });
+        controller.$render = function() {
+          var isActive = angular.equals(controller.$modelValue, value);
+          $$rAF(function() {
+            if (isInput) element[0].checked = isActive;
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+        element.bind(options.toggleEvent, function() {
+          scope.$apply(function() {
+            controller.$setViewValue(value);
+            controller.$render();
+          });
+        });
+      }
+    };
+  } ]);
   angular.module('mgcrea.ngStrap.collapse', []).provider('$collapse', function() {
     var defaults = this.defaults = {
       animation: 'am-collapse',
@@ -96105,7 +84252,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       }
       function isActive(value) {
         var activeItems = self.$targets.$active;
-        return activeItems.indexOf(value) === -1 ? false : true;
+        return activeItems.indexOf(value) !== -1;
       }
       function deactivateItem(value) {
         var index = self.$targets.$active.indexOf(value);
@@ -96209,125 +84356,6 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
       }
     };
   } ]);
-  angular.module('mgcrea.ngStrap.button', []).provider('$button', function() {
-    var defaults = this.defaults = {
-      activeClass: 'active',
-      toggleEvent: 'click'
-    };
-    this.$get = function() {
-      return {
-        defaults: defaults
-      };
-    };
-  }).directive('bsCheckboxGroup', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      compile: function postLink(element, attr) {
-        element.attr('data-toggle', 'buttons');
-        element.removeAttr('ng-model');
-        var children = element[0].querySelectorAll('input[type="checkbox"]');
-        angular.forEach(children, function(child) {
-          var childEl = angular.element(child);
-          childEl.attr('bs-checkbox', '');
-          childEl.attr('ng-model', attr.ngModel + '.' + childEl.attr('value'));
-        });
-      }
-    };
-  }).directive('bsCheckbox', [ '$button', '$$rAF', function($button, $$rAF) {
-    var defaults = $button.defaults;
-    var constantValueRegExp = /^(true|false|\d+)$/;
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = defaults;
-        var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
-        var trueValue = angular.isDefined(attr.trueValue) ? attr.trueValue : true;
-        if (constantValueRegExp.test(attr.trueValue)) {
-          trueValue = scope.$eval(attr.trueValue);
-        }
-        var falseValue = angular.isDefined(attr.falseValue) ? attr.falseValue : false;
-        if (constantValueRegExp.test(attr.falseValue)) {
-          falseValue = scope.$eval(attr.falseValue);
-        }
-        var hasExoticValues = typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
-        if (hasExoticValues) {
-          controller.$parsers.push(function(viewValue) {
-            return viewValue ? trueValue : falseValue;
-          });
-          controller.$formatters.push(function(modelValue) {
-            return angular.equals(modelValue, trueValue);
-          });
-          scope.$watch(attr.ngModel, function(newValue, oldValue) {
-            controller.$render();
-          });
-        }
-        controller.$render = function() {
-          var isActive = angular.equals(controller.$modelValue, trueValue);
-          $$rAF(function() {
-            if (isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
-          });
-        };
-        element.bind(options.toggleEvent, function() {
-          scope.$apply(function() {
-            if (!isInput) {
-              controller.$setViewValue(!activeElement.hasClass('active'));
-            }
-            if (!hasExoticValues) {
-              controller.$render();
-            }
-          });
-        });
-      }
-    };
-  } ]).directive('bsRadioGroup', function() {
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      compile: function postLink(element, attr) {
-        element.attr('data-toggle', 'buttons');
-        element.removeAttr('ng-model');
-        var children = element[0].querySelectorAll('input[type="radio"]');
-        angular.forEach(children, function(child) {
-          angular.element(child).attr('bs-radio', '');
-          angular.element(child).attr('ng-model', attr.ngModel);
-        });
-      }
-    };
-  }).directive('bsRadio', [ '$button', '$$rAF', function($button, $$rAF) {
-    var defaults = $button.defaults;
-    var constantValueRegExp = /^(true|false|\d+)$/;
-    return {
-      restrict: 'A',
-      require: 'ngModel',
-      link: function postLink(scope, element, attr, controller) {
-        var options = defaults;
-        var isInput = element[0].nodeName === 'INPUT';
-        var activeElement = isInput ? element.parent() : element;
-        var value;
-        attr.$observe('value', function(v) {
-          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
-          controller.$render();
-        });
-        controller.$render = function() {
-          var isActive = angular.equals(controller.$modelValue, value);
-          $$rAF(function() {
-            if (isInput) element[0].checked = isActive;
-            activeElement.toggleClass(options.activeClass, isActive);
-          });
-        };
-        element.bind(options.toggleEvent, function() {
-          scope.$apply(function() {
-            controller.$setViewValue(value);
-            controller.$render();
-          });
-        });
-      }
-    };
-  } ]);
   angular.module('mgcrea.ngStrap.aside', [ 'mgcrea.ngStrap.modal' ]).provider('$aside', function() {
     var defaults = this.defaults = {
       animation: 'am-fade-and-slide-right',
@@ -96368,6 +84396,12 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach([ 'backdrop', 'keyboard', 'html', 'container' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
         });
         angular.forEach([ 'title', 'content' ], function(key) {
           if (attr[key]) {
@@ -96449,6 +84483,12 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
         var falseValueRegExp = /^(false|0|)$/i;
         angular.forEach([ 'keyboard', 'html', 'container', 'dismissable' ], function(key) {
           if (angular.isDefined(attr[key]) && falseValueRegExp.test(attr[key])) options[key] = false;
+        });
+        angular.forEach([ 'onBeforeShow', 'onShow', 'onBeforeHide', 'onHide' ], function(key) {
+          var bsKey = 'bs' + key.charAt(0).toUpperCase() + key.slice(1);
+          if (angular.isDefined(attr[bsKey])) {
+            options[key] = scope.$eval(attr[bsKey]);
+          }
         });
         if (!scope.hasOwnProperty('title')) {
           scope.title = '';
@@ -96663,7 +84703,7 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
 })(window, document);
 /**
  * angular-strap
- * @version v2.3.7 - 2016-01-16
+ * @version v2.3.9 - 2016-06-10
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes <olivier@mg-crea.com> (https://github.com/mgcrea)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -96671,13 +84711,13 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
 (function(window, document, undefined) {
   'use strict';
   angular.module('mgcrea.ngStrap.alert').run([ '$templateCache', function($templateCache) {
-    $templateCache.put('alert/alert.tpl.html', '<div class="alert" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-if="dismissable" ng-click="$hide()">&times;</button> <strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></div>');
+    $templateCache.put('alert/alert.tpl.html', '<div class="alert" ng-class="[type ? \'alert-\' + type : null]"><button type="button" class="close" ng-if="dismissable" ng-click="$hide()">&times;</button> <span ng-if="title"><strong ng-bind="title"></strong>&nbsp;<span ng-bind-html="content"></span></span> <span ng-if="!title" ng-bind-html="content"></span></div>');
   } ]);
   angular.module('mgcrea.ngStrap.aside').run([ '$templateCache', function($templateCache) {
     $templateCache.put('aside/aside.tpl.html', '<div class="aside" tabindex="-1" role="dialog"><div class="aside-dialog"><div class="aside-content"><div class="aside-header" ng-show="title"><button type="button" class="close" ng-click="$hide()">&times;</button><h4 class="aside-title" ng-bind="title"></h4></div><div class="aside-body" ng-bind="content"></div><div class="aside-footer"><button type="button" class="btn btn-default" ng-click="$hide()">Close</button></div></div></div></div>');
   } ]);
   angular.module('mgcrea.ngStrap.datepicker').run([ '$templateCache', function($templateCache) {
-    $templateCache.put('datepicker/datepicker.tpl.html', '<div class="dropdown-menu datepicker" ng-class="\'datepicker-mode-\' + $mode" style="max-width: 320px"><table style="table-layout: fixed; height: 100%; width: 100%"><thead><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$selectPane(-1)"><i class="{{$iconLeft}}"></i></button></th><th colspan="{{ rows[0].length - 2 }}"><button tabindex="-1" type="button" class="btn btn-default btn-block text-strong" ng-click="$toggleMode()"><strong style="text-transform: capitalize" ng-bind="title"></strong></button></th><th><button tabindex="-1" type="button" class="btn btn-default pull-right" ng-click="$selectPane(+1)"><i class="{{$iconRight}}"></i></button></th></tr><tr ng-if="showLabels" ng-bind-html="labels"></tr></thead><tbody><tr ng-repeat="(i, row) in rows" height="{{ 100 / rows.length }}%"><td class="text-center" ng-repeat="(j, el) in row"><button tabindex="-1" type="button" class="btn btn-default" style="width: 100%" ng-class="{\'btn-primary\': el.selected, \'btn-info btn-today\': el.isToday && !el.selected}" ng-click="$select(el.date)" ng-disabled="el.disabled"><span ng-class="{\'text-muted\': el.muted}" ng-bind="el.label"></span></button></td></tr></tbody></table></div>');
+    $templateCache.put('datepicker/datepicker.tpl.html', '<div class="dropdown-menu datepicker" ng-class="\'datepicker-mode-\' + $mode" style="max-width: 320px"><table style="table-layout: fixed; height: 100%; width: 100%"><thead><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$selectPane(-1)"><i class="{{$iconLeft}}"></i></button></th><th colspan="{{ rows[0].length - 2 }}"><button tabindex="-1" type="button" class="btn btn-default btn-block text-strong" ng-click="$toggleMode()"><strong style="text-transform: capitalize" ng-bind="title"></strong></button></th><th><button tabindex="-1" type="button" class="btn btn-default pull-right" ng-click="$selectPane(+1)"><i class="{{$iconRight}}"></i></button></th></tr><tr ng-if="showLabels" ng-bind-html="labels"></tr></thead><tbody><tr ng-repeat="(i, row) in rows" height="{{ 100 / rows.length }}%"><td class="text-center" ng-repeat="(j, el) in row"><button tabindex="-1" type="button" class="btn btn-default" style="width: 100%" ng-class="{\'btn-primary\': el.selected, \'btn-info btn-today\': el.isToday && !el.selected}" ng-click="$select(el.date)" ng-disabled="el.disabled"><span ng-class="{\'text-muted\': el.muted}" ng-bind="el.label"></span></button></td></tr></tbody><tfoot><tr><td colspan="{{ rows[0].length }}"><div class="btn-group btn-group-justified" role="group"><div class="btn-group" role="group" ng-if="$hasToday"><button type="button" class="btn btn-default today" ng-click="$setToday()" ng-disabled="isTodayDisabled"><strong style="text-transform: capitalize">Today</strong></button></div><div class="btn-group" role="group" ng-if="$hasClear"><button type="button" class="btn btn-default clear" ng-click="$clear()"><strong style="text-transform: capitalize">Clear</strong></button></div></div></td></tr></tfoot></table></div>');
   } ]);
   angular.module('mgcrea.ngStrap.dropdown').run([ '$templateCache', function($templateCache) {
     $templateCache.put('dropdown/dropdown.tpl.html', '<ul tabindex="-1" class="dropdown-menu" role="menu" ng-show="content && content.length"><li role="presentation" ng-class="{divider: item.divider, active: item.active}" ng-repeat="item in content"><a role="menuitem" tabindex="-1" ng-href="{{item.href}}" ng-if="!item.divider && item.href" target="{{item.target || \'\'}}" ng-bind="item.text"></a> <a role="menuitem" tabindex="-1" href="javascript:void(0)" ng-if="!item.divider && item.click" ng-click="$eval(item.click);$hide()" ng-bind="item.text"></a></li></ul>');
@@ -96691,14 +84731,14 @@ angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInli
   angular.module('mgcrea.ngStrap.select').run([ '$templateCache', function($templateCache) {
     $templateCache.put('select/select.tpl.html', '<ul tabindex="-1" class="select dropdown-menu" ng-show="$isVisible()" role="select"><li ng-if="$showAllNoneButtons"><div class="btn-group" style="margin-bottom: 5px; margin-left: 5px"><button type="button" class="btn btn-default btn-xs" ng-click="$selectAll()">{{$allText}}</button> <button type="button" class="btn btn-default btn-xs" ng-click="$selectNone()">{{$noneText}}</button></div></li><li role="presentation" ng-repeat="match in $matches" ng-class="{active: $isActive($index)}"><a style="cursor: default" role="menuitem" tabindex="-1" ng-click="$select($index, $event)"><i class="{{$iconCheckmark}} pull-right" ng-if="$isMultiple && $isActive($index)"></i> <span ng-bind="match.label"></span></a></li></ul>');
   } ]);
-  angular.module('mgcrea.ngStrap.tab').run([ '$templateCache', function($templateCache) {
-    $templateCache.put('tab/tab.tpl.html', '<ul class="nav" ng-class="$navClass" role="tablist"><li role="presentation" ng-repeat="$pane in $panes track by $index" ng-class="[ $isActive($pane, $index) ? $activeClass : \'\', $pane.disabled ? \'disabled\' : \'\' ]"><a role="tab" data-toggle="tab" ng-click="!$pane.disabled && $setActive($pane.name || $index)" data-index="{{ $index }}" ng-bind-html="$pane.title" aria-controls="$pane.title"></a></li></ul><div ng-transclude class="tab-content"></div>');
-  } ]);
   angular.module('mgcrea.ngStrap.timepicker').run([ '$templateCache', function($templateCache) {
-    $templateCache.put('timepicker/timepicker.tpl.html', '<div class="dropdown-menu timepicker" style="min-width: 0px;width: auto"><table height="100%"><thead><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 0)"><i class="{{ $iconUp }}"></i></button></th><th>&nbsp;</th><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 1)"><i class="{{ $iconUp }}"></i></button></th><th>&nbsp;</th><th><button ng-if="showSeconds" tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 2)"><i class="{{ $iconUp }}"></i></button></th></tr></thead><tbody><tr ng-repeat="(i, row) in rows"><td class="text-center"><button tabindex="-1" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[0].selected}" ng-click="$select(row[0].date, 0)" ng-disabled="row[0].disabled"><span ng-class="{\'text-muted\': row[0].muted}" ng-bind="row[0].label"></span></button></td><td><span ng-bind="i == midIndex ? timeSeparator : \' \'"></span></td><td class="text-center"><button tabindex="-1" ng-if="row[1].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[1].selected}" ng-click="$select(row[1].date, 1)" ng-disabled="row[1].disabled"><span ng-class="{\'text-muted\': row[1].muted}" ng-bind="row[1].label"></span></button></td><td><span ng-bind="i == midIndex ? timeSeparator : \' \'"></span></td><td class="text-center"><button tabindex="-1" ng-if="showSeconds && row[2].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[2].selected}" ng-click="$select(row[2].date, 2)" ng-disabled="row[2].disabled"><span ng-class="{\'text-muted\': row[2].muted}" ng-bind="row[2].label"></span></button></td><td ng-if="showAM">&nbsp;</td><td ng-if="showAM"><button tabindex="-1" ng-show="i == midIndex - !isAM * 1" style="width: 100%" type="button" ng-class="{\'btn-primary\': !!isAM}" class="btn btn-default" ng-click="$switchMeridian()" ng-disabled="el.disabled">AM</button> <button tabindex="-1" ng-show="i == midIndex + 1 - !isAM * 1" style="width: 100%" type="button" ng-class="{\'btn-primary\': !isAM}" class="btn btn-default" ng-click="$switchMeridian()" ng-disabled="el.disabled">PM</button></td></tr></tbody><tfoot><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 0)"><i class="{{ $iconDown }}"></i></button></th><th>&nbsp;</th><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 1)"><i class="{{ $iconDown }}"></i></button></th><th>&nbsp;</th><th><button ng-if="showSeconds" tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 2)"><i class="{{ $iconDown }}"></i></button></th></tr></tfoot></table></div>');
+    $templateCache.put('timepicker/timepicker.tpl.html', '<div class="dropdown-menu timepicker" style="min-width: 0px;width: auto"><table height="100%"><thead><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 0)"><i class="{{ $iconUp }}"></i></button></th><th>&nbsp;</th><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 1)"><i class="{{ $iconUp }}"></i></button></th><th ng-if="showSeconds">&nbsp;</th><th ng-if="showSeconds"><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(-1, 2)"><i class="{{ $iconUp }}"></i></button></th></tr></thead><tbody><tr ng-repeat="(i, row) in rows"><td class="text-center"><button tabindex="-1" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[0].selected}" ng-click="$select(row[0].date, 0)" ng-disabled="row[0].disabled"><span ng-class="{\'text-muted\': row[0].muted}" ng-bind="row[0].label"></span></button></td><td><span ng-bind="i == midIndex ? timeSeparator : \' \'"></span></td><td class="text-center"><button tabindex="-1" ng-if="row[1].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[1].selected}" ng-click="$select(row[1].date, 1)" ng-disabled="row[1].disabled"><span ng-class="{\'text-muted\': row[1].muted}" ng-bind="row[1].label"></span></button></td><td ng-if="showSeconds"><span ng-bind="i == midIndex ? timeSeparator : \' \'"></span></td><td ng-if="showSeconds" class="text-center"><button tabindex="-1" ng-if="row[2].date" style="width: 100%" type="button" class="btn btn-default" ng-class="{\'btn-primary\': row[2].selected}" ng-click="$select(row[2].date, 2)" ng-disabled="row[2].disabled"><span ng-class="{\'text-muted\': row[2].muted}" ng-bind="row[2].label"></span></button></td><td ng-if="showAM">&nbsp;</td><td ng-if="showAM"><button tabindex="-1" ng-show="i == midIndex - !isAM * 1" style="width: 100%" type="button" ng-class="{\'btn-primary\': !!isAM}" class="btn btn-default" ng-click="$switchMeridian()" ng-disabled="el.disabled">AM</button> <button tabindex="-1" ng-show="i == midIndex + 1 - !isAM * 1" style="width: 100%" type="button" ng-class="{\'btn-primary\': !isAM}" class="btn btn-default" ng-click="$switchMeridian()" ng-disabled="el.disabled">PM</button></td></tr></tbody><tfoot><tr class="text-center"><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 0)"><i class="{{ $iconDown }}"></i></button></th><th>&nbsp;</th><th><button tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 1)"><i class="{{ $iconDown }}"></i></button></th><th ng-if="showSeconds">&nbsp;</th><th ng-if="showSeconds"><button ng-if="showSeconds" tabindex="-1" type="button" class="btn btn-default pull-left" ng-click="$arrowAction(1, 2)"><i class="{{ $iconDown }}"></i></button></th></tr></tfoot></table></div>');
   } ]);
   angular.module('mgcrea.ngStrap.tooltip').run([ '$templateCache', function($templateCache) {
     $templateCache.put('tooltip/tooltip.tpl.html', '<div class="tooltip in" ng-show="title"><div class="tooltip-arrow"></div><div class="tooltip-inner" ng-bind="title"></div></div>');
+  } ]);
+  angular.module('mgcrea.ngStrap.tab').run([ '$templateCache', function($templateCache) {
+    $templateCache.put('tab/tab.tpl.html', '<ul class="nav" ng-class="$navClass" role="tablist"><li role="presentation" ng-repeat="$pane in $panes track by $index" ng-class="[ $isActive($pane, $index) ? $activeClass : \'\', $pane.disabled ? \'disabled\' : \'\' ]"><a role="tab" data-toggle="tab" ng-click="!$pane.disabled && $setActive($pane.name || $index)" data-index="{{ $index }}" ng-bind-html="$pane.title" aria-controls="$pane.title" href=""></a></li></ul><div ng-transclude class="tab-content"></div>');
   } ]);
   angular.module('mgcrea.ngStrap.typeahead').run([ '$templateCache', function($templateCache) {
     $templateCache.put('typeahead/typeahead.tpl.html', '<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()" role="select"><li role="presentation" ng-repeat="match in $matches" ng-class="{active: $index == $activeIndex}"><a role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind="match.label"></a></li></ul>');
@@ -96913,7 +84953,7 @@ if (typeof module !== "undefined" && typeof exports !== "undefined" && module.ex
   } ]);
 })(angular);
 /**
- * @license AngularJS v1.4.9
+ * @license AngularJS v1.4.12
  * (c) 2010-2015 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -96953,16 +84993,17 @@ angular.module('ngCookies', ['ng']).
      * The object may have following properties:
      *
      * - **path** - `{string}` - The cookie will be available only for this path and its
-     *   sub-paths. By default, this would be the URL that appears in your base tag.
+     *   sub-paths. By default, this is the URL that appears in your `<base>` tag.
      * - **domain** - `{string}` - The cookie will be available only for this domain and
-     *   its sub-domains. For obvious security reasons the user agent will not accept the
-     *   cookie if the current domain is not a sub domain or equals to the requested domain.
+     *   its sub-domains. For security reasons the user agent will not accept the cookie
+     *   if the current domain is not a sub-domain of this domain or equal to it.
      * - **expires** - `{string|Date}` - String of the form "Wdy, DD Mon YYYY HH:MM:SS GMT"
      *   or a Date object indicating the exact date/time this cookie will expire.
-     * - **secure** - `{boolean}` - The cookie will be available only in secured connection.
+     * - **secure** - `{boolean}` - If `true`, then the cookie will only be available through a
+     *   secured connection.
      *
-     * Note: by default the address that appears in your `<base>` tag will be used as path.
-     * This is important so that cookies will be visible for all routes in case html5mode is enabled
+     * Note: By default, the address that appears in your `<base>` tag will be used as the path.
+     * This is important so that cookies will be visible for all routes when html5mode is enabled.
      *
      **/
     var defaults = this.defaults = {};
@@ -97236,7 +85277,7 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 /**
  * State-based routing for AngularJS
- * @version v0.2.17
+ * @version v0.2.18
  * @link http://angular-ui.github.com/
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -97759,7 +85800,7 @@ function $Resolve(  $q,    $injector) {
    * propagated immediately. Once the `$resolve` promise has been rejected, no 
    * further invocables will be called.
    * 
-   * Cyclic dependencies between invocables are not permitted and will caues `$resolve`
+   * Cyclic dependencies between invocables are not permitted and will cause `$resolve`
    * to throw an error. As a special case, an injectable can depend on a parameter 
    * with the same name as the injectable, which will be fulfilled from the `parent` 
    * injectable of the same name. This allows inherited values to be decorated. 
@@ -98506,7 +86547,7 @@ function $UrlMatcherFactory() {
   function valFromString(val) { return val != null ? val.toString().replace(/~2F/g, "/").replace(/~~/g, "~") : val; }
 
   var $types = {}, enqueue = true, typeQueue = [], injector, defaultTypes = {
-    string: {
+    "string": {
       encode: valToString,
       decode: valFromString,
       // TODO: in 1.0, make string .is() return false if value is undefined/null by default.
@@ -98514,19 +86555,19 @@ function $UrlMatcherFactory() {
       is: function(val) { return val == null || !isDefined(val) || typeof val === "string"; },
       pattern: /[^/]*/
     },
-    int: {
+    "int": {
       encode: valToString,
       decode: function(val) { return parseInt(val, 10); },
       is: function(val) { return isDefined(val) && this.decode(val.toString()) === val; },
       pattern: /\d+/
     },
-    bool: {
+    "bool": {
       encode: function(val) { return val ? 1 : 0; },
       decode: function(val) { return parseInt(val, 10) !== 0; },
       is: function(val) { return val === true || val === false; },
       pattern: /0|1/
     },
-    date: {
+    "date": {
       encode: function (val) {
         if (!this.is(val))
           return undefined;
@@ -98545,14 +86586,14 @@ function $UrlMatcherFactory() {
       pattern: /[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])/,
       capture: /([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/
     },
-    json: {
+    "json": {
       encode: angular.toJson,
       decode: angular.fromJson,
       is: angular.isObject,
       equals: angular.equals,
       pattern: /[^/]*/
     },
-    any: { // does not encode/decode
+    "any": { // does not encode/decode
       encode: angular.identity,
       decode: angular.identity,
       equals: angular.equals,
@@ -99294,12 +87335,6 @@ function $UrlRouterProvider(   $locationProvider,   $urlMatcherFactory) {
       return listener;
     }
 
-    rules.sort(function(ruleA, ruleB) {
-      var aLength = ruleA.prefix ? ruleA.prefix.length : 0;
-      var bLength = ruleB.prefix ? ruleB.prefix.length : 0;
-      return bLength - aLength;
-    });
-
     if (!interceptDeferred) listen();
 
     return {
@@ -99502,7 +87537,8 @@ function $StateProvider(   $urlRouterProvider,   $urlMatcherFactory) {
 
     // Derive parameters for this state and ensure they're a super-set of parent's parameters
     params: function(state) {
-      return state.parent && state.parent.params ? extend(state.parent.params.$$new(), state.ownParams) : new $$UMFP.ParamSet();
+      var ownParams = pick(state.ownParams, state.ownParams.$$keys());
+      return state.parent && state.parent.params ? extend(state.parent.params.$$new(), ownParams) : new $$UMFP.ParamSet();
     },
 
     // If there is no explicit multi-view configuration, make one up so we don't have
@@ -100994,6 +89030,8 @@ function $ViewScrollProvider() {
 
 angular.module('ui.router.state').provider('$uiViewScroll', $ViewScrollProvider);
 
+var ngMajorVer = angular.version.major;
+var ngMinorVer = angular.version.minor;
 /**
  * @ngdoc directive
  * @name ui.router.state.directive:ui-view
@@ -101017,6 +89055,9 @@ angular.module('ui.router.state').provider('$uiViewScroll', $ViewScrollProvider)
  * when a view is populated. By default, $anchorScroll is overridden by ui-router's custom scroll
  * service, {@link ui.router.state.$uiViewScroll}. This custom service let's you
  * scroll ui-view elements into view when they are populated during a state activation.
+ *
+ * @param {string=} noanimation If truthy, the non-animated renderer will be selected (no animations
+ * will be applied to the ui-view)
  *
  * *Note: To revert back to old [`$anchorScroll`](http://docs.angularjs.org/api/ng.$anchorScroll)
  * functionality, call `$uiViewScrollProvider.useAnchorScroll()`.*
@@ -101129,24 +89170,35 @@ function $ViewDirective(   $state,   $injector,   $uiViewScroll,   $interpolate)
   // Returns a set of DOM manipulation functions based on which Angular version
   // it should use
   function getRenderer(attrs, scope) {
-    var statics = function() {
-      return {
-        enter: function (element, target, cb) { target.after(element); cb(); },
-        leave: function (element, cb) { element.remove(); cb(); }
-      };
+    var statics = {
+      enter: function (element, target, cb) { target.after(element); cb(); },
+      leave: function (element, cb) { element.remove(); cb(); }
     };
 
+    if (!!attrs.noanimation) return statics;
+
+    function animEnabled(element) {
+      if (ngMajorVer === 1 && ngMinorVer >= 4) return !!$animate.enabled(element);
+      if (ngMajorVer === 1 && ngMinorVer >= 2) return !!$animate.enabled();
+      return (!!$animator);
+    }
+
+    // ng 1.2+
     if ($animate) {
       return {
         enter: function(element, target, cb) {
-          if (angular.version.minor > 2) {
+          if (!animEnabled(element)) {
+            statics.enter(element, target, cb);
+          } else if (angular.version.minor > 2) {
             $animate.enter(element, null, target).then(cb);
           } else {
             $animate.enter(element, null, target, cb);
           }
         },
         leave: function(element, cb) {
-          if (angular.version.minor > 2) {
+          if (!animEnabled(element)) {
+            statics.leave(element, cb);
+          } else if (angular.version.minor > 2) {
             $animate.leave(element).then(cb);
           } else {
             $animate.leave(element, cb);
@@ -101155,6 +89207,7 @@ function $ViewDirective(   $state,   $injector,   $uiViewScroll,   $interpolate)
       };
     }
 
+    // ng 1.1.5
     if ($animator) {
       var animate = $animator && $animator(scope, attrs);
 
@@ -101164,7 +89217,7 @@ function $ViewDirective(   $state,   $injector,   $uiViewScroll,   $interpolate)
       };
     }
 
-    return statics();
+    return statics;
   }
 
   var directive = {
@@ -101509,7 +89562,7 @@ function $StateRefDynamicDirective($state, $timeout) {
         def.state = group[0]; def.params = group[1]; def.options = group[2];
         def.href = $state.href(def.state, def.params, def.options);
 
-        if (active) active.$$addStateInfo(ref.state, def.params);
+        if (active) active.$$addStateInfo(def.state, def.params);
         if (def.href) attrs.$set(type.attr, def.href);
       }
 

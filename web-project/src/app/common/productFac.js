@@ -98,8 +98,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   function getLatestTrip(product) {
-    $log.log("getLatestTrip");
-    $log.log(product);
+    if (!product.stopDay) {
+      product.stopDay = 0;
+    }
     var price = product.price;
     var date = new Date();
     date.setDate(date.getDate() + product.stopDay);
@@ -126,13 +127,14 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function removeExpiredPrice(product) {
     var date = new Date();
+    if (!product.stopDay) {
+      product.stopDay = 0;
+    }
     date.setDate(date.getDate() + product.stopDay);
     for (var year in product.price) {
       for (var month in product.price[year]) {
         for (var day in product.price[year][month]) {
           var newDate = new Date(year, month, day);
-          $log.log(newDate);
-          $log.log(date);
           if (newDate - date < 0) {
             delete product.price[year][month][day];
           }
@@ -148,6 +150,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     var events = price[startYear];
     for (var month = startMonth; month < 12; month++) {
       if (!(month in events)) {
+        startDay = 1;
         continue;
       }
       var monthEvents = events[month];
@@ -189,12 +192,6 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     var month = date.getMonth();
     var day = date.getDate();
     var price = getPrice(year, month, day, product);
-    $log.log(year);
-    $log.log(month);
-    $log.log(day);
-    $log.log("=======");
-    $log.log(date);
-    $log.log(price);
     if (price && Object.keys(price).length > 3) {
       var content = {};
       content["同行"] = "¥" + price.adultCompanyCompetitorPrice || "";
@@ -212,8 +209,6 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   function getPrice(year, month, day, product) {
-    $log.log("get product in price");
-    $log.log(product);
     var price = product.price || {};
     price = price[year] || {};
     price = price[month] || {};
