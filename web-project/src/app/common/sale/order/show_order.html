@@ -12,28 +12,28 @@
         全部订单
       </md-button>
       <md-button ng-click="allOrder(orderStatus.UNPAID_UNVERIFIED)" class="md-primary">
-        未付款订单(等待计调确认)
+        未付款订单(等待计调确认)({{ count[orderStatus.UNPAID_UNVERIFIED] }})
       </md-button>
       <md-button ng-click="allOrder(orderStatus.UNPAID_VERIFIED)" class="md-primary">
-        未付款订单(计调已经确认)
+        未付款订单(计调已经确认)({{ count[orderStatus.UNPAID_VERIFIED] }})
       </md-button>
       <md-button ng-click="allOrder(orderStatus.PAID)" class="md-primary">
-        已付款订单(等待计调确认)
+        已付款订单(等待计调确认)({{ count[orderStatus.PAID] }})
       </md-button>
-      <md-button ng-click="allOrder(orderStatus.PAID_VERIFIED)" class="md-primary">
+      <!--md-button ng-click="allOrder(orderStatus.PAID_VERIFIED)" class="md-primary">
         已付款订单(等待供应商确认)
-      </md-button>
+      </md-button-->
       <md-button ng-click="allOrder(orderStatus.FINISHED)" class="md-primary">
-        已完成订单
+        已完成订单({{ count[orderStatus.PAID] }})
       </md-button>
       <md-button ng-click="allOrder(orderStatus.REVOKE)" class="md-primary">
-        申请退款订单
+        申请退款订单({{ count[orderStatus.REVOKE] }})
       </md-button>
       <md-button ng-click="allOrder(orderStatus.CANCEL)" class="md-primary">
-        申请取消订单
+        申请取消订单({{ count[orderStatus.CANCEL] }})
       </md-button>
       <md-button ng-click="allOrder(orderStatus.CANCELLED)" class="md-primary">
-        已取消订单
+        已取消订单({{ count[orderStatus.CANCELLED] }})
       </md-button>
     </div>
   </md-sidenav>
@@ -111,8 +111,8 @@
             <div class="order-title">
               <span>订单号: {{order.objectId}}</span>
               <span>下单时间: <span ng-bind="order.createdAt | date:'yyyy-MM-dd HH:mm'"></span></span>
-              <span ng-if="level != 1">供应商: {{ order.provider.nickname }}</span>
-              <a ng-if="level != 2" ng-click="showContact(order);">和我联系</a>
+              <a ng-if="level != 1">供应商: {{ order.provider.nickname }}</a>
+              <a style="margin-left: 20px;" ng-if="level == 3 || level == 0" ng-click="showContact(order);">联系分销商</a>
             </div>
           </td>
         </tr>
@@ -165,8 +165,8 @@
               <md-button ng-if="(level == 1) && order.status == 1" ng-click="editOrder(order.objectId);" class="md-raised md-primary">修改客户信息</md-button>
               <md-button ng-if="(level == 0 || level == 3) && order.status == 1" ng-click="verifyUnpaid(order);" class="md-raised md-primary">审核通过</md-button>
               <md-button ng-if="(level == 1) && order.status == 2" ng-click="paid(order);" class="md-raised md-primary">确认付款</md-button>
-              <md-button ng-if="(level == 0 || level == 3) && order.status == 3" ng-click="verifyPaid(order);" class="md-raised md-primary">付款审核通过</md-button>
-              <md-button ng-if="(level == 2) && order.status == 8" ng-click="verifyFinished(order);" class="md-raised md-primary">确认交易完成</md-button>
+              <md-button ng-if="(level == 0 || level == 3) && order.status == 3" ng-click="verifyFinished(order);" class="md-raised md-primary">确认交易完成</md-button>
+              <!--md-button ng-if="(level == 2) && order.status == 8" ng-click="verifyFinished(order);" class="md-raised md-primary">确认交易完成</md-button-->
               <md-button ng-if="(level == 0 || level == 3) && order.status == 5" ng-click="confirmRevoke(order);" class="md-raised md-primary">确认退款</md-button>
               <md-button ng-if="(level == 0 || level == 3) && order.status == 6" ng-click="confirmRevoke(order);" class="md-raised md-primary">确认取消订单</md-button>
             </div>
@@ -183,6 +183,7 @@
                  ui-sref-opts="{ absolute: true }">显示详情</a>
               <!--a ng-if="!admin" ng-click="printReceipt();">打印发票</a-->
               <a ng-if="level == 1 && order.status == 1" ng-click="cancelOrder(order);">取消订单</a>
+              <a ng-if="level == 3 || level == 0 && order.status == 1" ng-click="cancelUnpaid(order);">取消订单</a>
               <a ng-if="level == 1 && order.status == 2" ng-click="applyCancel(order);">申请取消订单</a>
               <a ng-if="level == 1 && (order.status == 3 || order.status == 4 || order.status == 5)"
                  ng-click="applyRevoke(order);">申请退款</a>

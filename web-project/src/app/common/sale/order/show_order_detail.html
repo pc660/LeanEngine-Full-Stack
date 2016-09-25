@@ -69,6 +69,61 @@
   </tr>
   <tr>
     <td colspan="99" class="title">
+      团费
+    </td>
+  </tr>
+  <tr>
+    <td>类型</td>
+    <td>数量</td>
+    <td>单价</td>
+    <td>小计</td>
+  </tr>
+  <tr>
+    <td>成人</td>
+    <td>
+      {{ order.adult }}
+    </td>
+    <td>
+      {{ order.price.adultCompanySalePrice }}
+    </td>
+    <td>{{ order.price.adultCompanySalePrice * order.adult}}</td>
+  </tr>
+  <tr>
+    <td>儿童</td>
+    <td>
+      {{ order.child }}
+    </td>
+    <td>
+      {{ order.price.childCompanySalePrice }}
+    </td>
+    <td>
+      {{ order.price.childCompanySalePrice * order.child }}
+    </td>
+  </tr>
+  <tr ng-if="order.extraRoomNumber">
+    <td>全程单房差</td>
+    <td>
+      {{ order.extraRoomNumber }}
+    </td>
+    <td>
+      {{ order.price.singleRoomDifference }}
+    </td>
+    <td>
+      {{ order.price.singleRoomDifference * order.extraRoomNumber }}
+    </td>
+  </tr>
+  <tr>
+    <td>总计</td>
+    <td>
+    </td>
+    <td>
+    </td>
+    <td>
+      {{ order.totalPrice }}
+    </td>
+  </tr>
+  <tr>
+    <td colspan="99" class="title">
       游客信息
     </td>
   </tr>
@@ -107,6 +162,7 @@
     <td>
       <p ng-if="customer.needShare">需要拼房</p>
       <p ng-if="customer.needVisa">需要签证</p>
+      <p ng-if="customer.needExtra">需要补房</p>
     </td>
   </tr>
   <tr ng-if="isEditing" ng-repeat="customer in order.customers">
@@ -167,6 +223,10 @@
         <input type="checkbox" ng-model="customer.needShare">
         需要拼房
       </div>
+      <div>
+        <input type="checkbox" ng-model="customer.needExtra">
+        需要补房
+      </div>
     </td>
   </tr>
   <tr ng-if="order.revoke">
@@ -177,6 +237,10 @@
   <tr ng-if="order.revoke">
     <td>退款理由</td>
     <td colspan="99">{{ order.revoke.reason }}</td>
+  </tr>
+  <tr ng-if="order.revoke && level != 2">
+    <td>客人损失金额</td>
+    <td colspan="99">{{ order.revoke.lostmoney }}</td>
   </tr>
   <tr ng-if="order.revoke">
     <td>申请人</td>

@@ -117,10 +117,15 @@
             </tr>
           </tbody>
         </table>
-        <table ng-if="!isEditing">
+        <table ng-if="provider.objectId">
           <tr>
             <td colspan="99" class="title">
-              联系信息
+              联系人列表
+            </td>
+          </tr>
+          <tr ng-if="loading">
+            <td>
+              <p>正在读取联系人列表...</p>
             </td>
           </tr>
           <tr>
@@ -138,6 +143,11 @@
             <td>{{ contact.position }}</td>
             <td>{{ contact.qqnumber }}</td>
             <td>{{ contact.wechat }}</td>
+          </tr>
+          <tr ng-if="isEditing">
+            <td colspan="99">
+              <md-button class="md-raised md-primary" ng-click="addContact();">添加商户联系人</md-button>
+            </td>
           </tr>
         </table>
         <div class="submit">

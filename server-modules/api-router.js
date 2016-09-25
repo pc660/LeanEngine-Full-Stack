@@ -66,6 +66,7 @@ router.post('/order/cancel', order.cancel);
 router.post('/order/revoke', order.revoke);
 router.post('/order/getRevoke', order.getRevoke);
 router.post('/order/verify', order.verify);
+router.post('/order/getCount', order.getCount);
 
 // router user.
 router.post('/user/get',  user.get);

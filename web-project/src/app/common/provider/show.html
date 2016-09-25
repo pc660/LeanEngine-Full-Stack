@@ -18,6 +18,8 @@
         ui-sref-opts="{ absolute: true }">显示详情</a>
     </td>
     <td>
+      <a ng-if="level == 3" ng-click="edit(provider);">编辑</a>
+      <p ng-if="level == 3"> / </p>
       <a ng-click="delete(provider);">删除</a>
     </td>
   </tr>

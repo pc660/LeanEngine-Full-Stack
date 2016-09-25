@@ -97,6 +97,7 @@ providerApi.addProvider = (provider, res, user, contact) => {
     isNew = false;
   } else {
     providerAV = AV.Object.new('Provider');
+    providerAV.set("createdBy", user);
   }
   // 设置地址
   providerAV.set('address', provider.address);
@@ -120,10 +121,11 @@ providerApi.addProvider = (provider, res, user, contact) => {
   // Find the files.
 
   var filename = provider.licenseFilename;
+  var level = user.get("level");
   if (!filename) {
     providerAV.save().then(function (provider) {
       res.send();
-      if (isNew) {
+      if (isNew && level == 2) {
         user.set("provider", provider);
         user.save();
       }
@@ -148,7 +150,7 @@ providerApi.addProvider = (provider, res, user, contact) => {
     providerAV.save().then(function(provider) {
       tool.l("success");
       res.send();
-      if (isNew) {
+      if (isNew && level == 2) {
         user.set("provider", provider);
         user.save();
       }
@@ -218,10 +220,19 @@ providerApi.get = (req, res) => {
   }
 
   for (var key in queryParameters) {
-    tool.l(key);
     query.equalTo(key, queryParameters[key]);
   }
 
+  var user = req.user;
+  if (!user) {
+    res.send(404);
+    return;
+  }
+
+  var level = user.get("level");
+  if (level != 0) {
+    query.equalTo("createdBy", user);
+  }
   query.find().then(function(results) {
     // 处理返回的结果数据
     // Extract user contact information.

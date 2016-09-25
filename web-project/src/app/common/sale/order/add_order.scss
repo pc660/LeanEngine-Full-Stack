@@ -5,17 +5,18 @@
 }
 
 .customers {
-  min-width: 800px;
-  min-height: 500px;
   td {
-    padding: 10px;
+    padding: 0;
+    md-input-container {
+      width: 30px;
+    }
   }
   input {
-    max-width: 150px;
+    max-width: 120px;
   }
   .extra {
     div {
-      width: 150px;
+      width: 120px;
       input[type='checkbox'] {
         transform: scale(2);
         margin-right: 10px;

@@ -85,7 +85,6 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
         product.fileUrl = $sce.trustAsResourceUrl(product.itineraryFile.url);
         return productFac.getLatestTrip(product);
       });
-      $log.log("fucking" + $scope.products.length + "========");
       for (var i = 0; i < $scope.products.length; i++) {
         $scope.products[i].provider = results.providers[i];
       }

@@ -29,7 +29,6 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function addContact(contactList, providerId) {
     var items = angular.copy(formConfig.data["商户联系人"])
-    $log.log(items);
     var modalInstance = $uibModal.open({
       animation: true,
       templateUrl: 'app/common/directives/form/form.html',
@@ -46,9 +45,11 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
     modalInstance.result.then(function (items) {
       var contact = convertItemsToContact(items, providerId);
-      addContactList(contact).then(function(result) {
-        contactList.push(result);
-      });
+      if (providerId) {
+        addContactList(contact).then(function(result) {
+          contactList.push(result);
+        });
+      }
     }, function () {
     });
   }
@@ -88,7 +89,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     items.forEach(function(item) {
       contact[item.name] = item.value;
     });
-    contact.providerId = providerId;
+    if (providerId) {
+      contact.providerId = providerId;
+    }
     return contact;
   }
 

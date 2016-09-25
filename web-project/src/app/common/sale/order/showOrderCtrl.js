@@ -5,10 +5,19 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   $scope.orderStatus = lcConfig.orderStatus;
   $scope.admin = ($scope.level == lcConfig.orderStatus.ADMIN);
   $scope.isLoading = false;
+  $scope.count = {};
   // Init.
   userFac.getSaleusers().then(function(results) {
     $scope.saleList = results;
   })
+
+  orderFac.getCount().then(function(results) {
+    var index = 0;
+    for (var i in lcConfig.orderStatus) {
+      $scope.count[lcConfig.orderStatus[i]] = results[index];
+      index++;
+    }
+  });
 
   $scope.search = () => {
     $scope.allOrder($scope.currentStatus);
@@ -49,6 +58,7 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
     }
     $scope.currentStatus = status;
     orderFac.getAllOrder(status, $scope.currentPage - 1, $scope.query).then(function(results) {
+      $log.log(results);
       $scope.setOrder(results);
       $scope.totalOrders = results.count;
       $scope.isLoading = false;
@@ -149,5 +159,23 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   $scope.pageChanged = () => {
     $log.log($scope.currentPage);
     $scope.allOrder($scope.currentStatus);
+  };
+
+  $scope.cancelUnpaid = (order) => {
+    SweetAlert.swal({
+        title: "取消该未付款订单",
+        text: "该操作不可取消,完成后请与分销商确认",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",confirmButtonText: "确认取消",
+        cancelButtonText: "取消该操作",
+        closeOnConfirm: true,
+        closeOnCancel: true },
+      function(isConfirm){
+        if (isConfirm) {
+          $scope.cancelOrder(order);
+        } else {
+        }
+      });
   };
 };

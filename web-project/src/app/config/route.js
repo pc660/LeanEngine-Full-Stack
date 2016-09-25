@@ -109,7 +109,7 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       url: '/add-provider',
       templateUrl: 'app/common/provider/add.html',
       controller: 'addProviderCtrl',
-      authenticate: [lcConfig.userLevel.PROVIDER],
+      authenticate: [lcConfig.userLevel.PROVIDER,lcConfig.userLevel.ORGANIZER ],
       params: {
         provider: null,
       },

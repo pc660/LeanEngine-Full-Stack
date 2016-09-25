@@ -42,11 +42,11 @@ let config = {
     UNPAID_UNVERIFIED: 1,
     UNPAID_VERIFIED: 2,
     PAID: 3,
-    PAID_VERIFIED: 8,
     FINISHED: 4,
     REVOKE: 5,
     CANCEL: 6,
     CANCELLED: 7,
+    PAID_VERIFIED: 8,
   }
 };
 

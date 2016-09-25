@@ -328,10 +328,7 @@ productApi.search = (req, res) => {
 
   // TODO: add start date.
   // TODO: add days.
-  tool.l("doing query here");
   Promise.all(queries).then(function (results) {
-    tool.l("success!!!");
-    tool.l(results);
     var searchResultSet = {};
     // If there is no search query.
     if (results.length > 1) {
@@ -361,7 +358,6 @@ productApi.search = (req, res) => {
       })
       products = filterProducts;
     }
-    tool.l("products length " + products.length);
 
     if (params.start) {
       filterProducts = [];
@@ -382,7 +378,6 @@ productApi.search = (req, res) => {
       return product.get("provider");
     });
 
-    tool.l(products.length);
     res.send({products: products, responsible: responsible, providers: providers});
     return;
   }, function (error) {
@@ -391,8 +386,6 @@ productApi.search = (req, res) => {
 };
 
 productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
-  tool.l("checkPriceWithinDate");
-  tool.l(priceMap);
   // Make the startDate as the current time + stopDay.
   var startDate = new Date();
   startDate.setDate(startDate.getDate() + stopDay);
@@ -414,8 +407,6 @@ productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
   }
 
   var years = Object.keys(priceMap).sort();
-  tool.l(startDate);
-  tool.l(endDate);
   return years.some(function(year) {
     if (year >= startDate.getFullYear() && year <= endDate.getFullYear()) {
       var monthPrice = priceMap[year];
@@ -449,8 +440,6 @@ productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
           }
 
           if (dayPrice[day] && Object.keys(dayPrice[day]).length > 0)  {
-            tool.l("hey I get this");
-            tool.l(priceMap);
             return true;
           }
         }

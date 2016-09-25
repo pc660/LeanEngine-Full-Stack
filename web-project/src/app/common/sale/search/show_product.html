@@ -174,8 +174,8 @@
     </md-tab>
     <md-tab label="预订须知">
       <div class="tab-item">
-        <div class="detail">
-          <div template key="reserveInfo"></div>
+        <div class="visa-info">
+          {{ product.reserveInfo }}
         </div>
       </div>
       <div class="tab-item">
@@ -185,7 +185,7 @@
           </span>
         </div>
         <div class="detail">
-          <div template key="restriction"></div>
+          {{ product.restriction }}
         </div>
       </div>
     </md-tab>

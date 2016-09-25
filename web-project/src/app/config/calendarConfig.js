@@ -11,8 +11,6 @@ var calendarConfig = {
       {type: "number", name: 'totalPeople', value: '入库数'},
       {type: "number", name: 'minimumPeople', value: '最低成团人数'},
       {type: "date", name: 'signupStart', value: '报名开始'},
-      {type: "number", name: 'emergentValue', value: '预警值'},
-      {type: "number", name: 'airticketEmergentValue', value: '机票预警值'},
     ],
     "库存管理": [
       {type: "number", name: 'totalPeople', value: '入库数'},

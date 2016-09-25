@@ -32,6 +32,7 @@ export default ($rootScope, $log, $state, $window, formConfig) => {
         scope.items.forEach(function(item) {
           scope.model[item.name] = item.value;
         });
+        scope.$emit("setCurrentPrice");
       };
 
       scope.clear = () => {
@@ -39,7 +40,7 @@ export default ($rootScope, $log, $state, $window, formConfig) => {
           item.value = "";
           delete scope.model[item.name];
         });
-        $log.log(scope.model);
+        scope.$emit("setCurrentPrice");
       };
     }
   };

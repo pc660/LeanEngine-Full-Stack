@@ -13,11 +13,11 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
       }
       $scope.product.platformcontact = result.platformcontact;
       productFac.getLatestTrip($scope.product);
-      $log.log("getting result");
       $log.log(result);
       // Set the current Date.
       $scope.$broadcast("updateMaterialCalendar");
       $scope.$broadcast("updateTemplate", {params: $scope.product});
+      $scope.updatePriceMap();
     }, function(error) {
       // TODO: handle failure.
     });
@@ -92,21 +92,28 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
     });
   };
 
+  $scope.updatePriceMap = () => {
+    var price = $scope.product.price;
+    for (var year in price) {
+      for (var month in price[year]) {
+        for (var day in price[year][month]) {
+          var currentPrice = productFac.getPrice(year, month, day, $scope.product);
+          if (currentPrice) {
+            var date = new Date(year, month, day);
+            $scope.priceMap[date] = currentPrice;
+          }
+        }
+      }
+    }
+  }
+
   $scope.setDayContent = function(date) {
-    // You would inject any HTML you wanted for
-    // that particular date here.
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-    // Check if date in price map.
-    var price = productFac.getPrice(year, month, day, $scope.product);
+    var price = $scope.priceMap[date];
     if (price) {
-      $log.log(price);
       if (price.adultCompanySalePrice) {
-        $scope.priceMap[date] = price;
-        return '<p class="cal-price">' + "销售价: ￥" + price.adultCompanySalePrice + "</p>" +
+        return '<div class="price-container"><p class="cal-price">' + "销售价: ￥" + price.adultCompanySalePrice + "</p>" +
           '<p class="cal-price next">' + "同行价: ￥" + price.adultCompanyCompetitorPrice + "</p>" +
-          '<p class="cal-price second">' + "余位: " + price.restPeopleNumber + "</p>";
+          '<p class="cal-price second">' + "余位: " + price.restPeopleNumber + "</p></div>";
       }
     }
     return "<p></p>";

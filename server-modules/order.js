@@ -56,7 +56,7 @@ orderApi.getAll = (req, res) => {
     var query = new AV.Query('Order');
     query.limit(config.items_per_page);
     query.skip(index * config.items_per_page);
-    query.include("product.fullName", "product.prefix", "provider.provider");
+    query.include("product.fullName", "product.prefix", "provider.provider", "product.platformcontact");
     if (req.body.status) {
         query.equalTo("status", parseInt(req.body.status));
     }
@@ -104,7 +104,6 @@ orderApi.getAll = (req, res) => {
         })
 
         // Filter start date and end date.
-
         var product = result.map(function(order) {
             return order.get("product");
         })
@@ -204,6 +203,9 @@ orderApi.add = (req, res) => {
     orderAV.set("email", order.email);
     orderAV.set("price", order.price);
     orderAV.set("createdBy", req.user);
+    if (order.extraRoomNumber) {
+        orderAV.set("extraRoomNumber", order.extraRoomNumber);
+    }
 
     // TODO: Maybe we should store customer info. Now we just store an array.
     orderAV.set("customers", order.customers);
@@ -337,6 +339,46 @@ orderApi.cancel = (req, res) => {
             return;
         });
     });
+};
+
+orderApi.getCount = (req, res) => {
+    tool.l("orderApi.getCount");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "orderApi.getCount");
+    log.set("user", req.user);
+    log.save();
+    var user = req.user;
+    if (!user) {
+        tool.e("user undefined when orderApi.getCount");
+        res.send(404);
+        return;
+    }
+    var level = user.get("level");
+    var params = {};
+    if (level == config.userLevel.SALE) {
+        params.createdBy = req.user;
+    } else if (level == config.userLevel.ORGANIZER) {
+        params.responsible = req.user;
+    } else if (level == config.userLevel.PROVIDER) {
+        params.provider = req.user.get("provider");
+    } else if (level != config.userLevel.ADMIN) {
+        tool.e("undefined user level in order.getCount");
+        res.status(404).send();
+    }
+
+    var queries = [];
+    // For all order status, get count.
+    for (var i in config.orderStatus) {
+        var query = new AV.Query('Order');
+        query.equalTo("status", config.orderStatus[i]);
+        for (var key in params) {
+            query.equalTo(key, params[key]);
+        }
+        queries.push(query.count());
+    }
+    Promise.all(queries).then(function(results) {
+        res.send(results);
+    })
 };
 
 orderApi.getRevoke = (req, res) => {

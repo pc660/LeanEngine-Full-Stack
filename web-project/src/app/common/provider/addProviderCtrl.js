@@ -1,16 +1,19 @@
-export default (SweetAlert, $state, $log,$rootScope, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
+export default (SweetAlert, $state, userFac, $log,$rootScope, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
   'ngInject';
     var url = lcConfig.apiHost + "/api/provider/add";
     $scope.addUrl = url;
     $scope.isEditing = true;
     $scope.confirmed = false;
+    $scope.contactList = [];
+    $scope.loading = false;
     if ($state.params.provider) {
       $scope.provider = $state.params.provider;
-      $log.log("getting provider");
-      $log.log($scope.provider.start);
-      $log.log($scope.provider.destination);
-      $log.log($scope.provider.address);
       $rootScope.$broadcast("addressUpdate", {address: $scope.provider.address});
+      $scope.loading = true;
+      providerFac.getContactList($scope.provider.objectId).then(function(results) {
+        $scope.contactList = results;
+        $scope.loading = false;
+      })
     }
 
     $scope.upload = (file) => {
@@ -40,4 +43,8 @@ export default (SweetAlert, $state, $log,$rootScope, $scope, $document, $timeout
 
       });
     };
+
+  $scope.addContact = () => {
+    userFac.addContact($scope.contactList, $scope.provider.objectId);
+  };
 };

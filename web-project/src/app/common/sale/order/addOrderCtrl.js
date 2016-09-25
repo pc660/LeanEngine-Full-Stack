@@ -55,11 +55,25 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
     }
   });
 
+  $scope.$watch("order.customers", function(newValue, oldValue) {
+    $log.log($scope.order.customers);
+    $scope.order.extraRoomNumber = 0;
+    for (var index in $scope.order.customers) {
+      var customer = $scope.order.customers[index];
+      if (customer.needExtra) {
+        $scope.order.extraRoomNumber++;
+      }
+    }
+    $scope.updateTotalPrice();
+  }, true);
+
   $scope.updateTotalPrice = () => {
     if ($scope.order) {
       $scope.order.totalPrice = $scope.order.adult * $scope.order.price.adultCompanySalePrice +
         $scope.order.child * $scope.order.price.childCompanySalePrice;
-      $log.log($scope.order);
+      if ( $scope.order.extraRoomNumber) {
+        $scope.order.totalPrice += $scope.order.extraRoomNumber * $scope.order.price.singleRoomDifference;
+      }
     } else {
       $scope.order = {};
       $scope.order.totalPrice = 0;

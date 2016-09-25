@@ -1,4 +1,4 @@
-export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, lcConfig, $window, fileFac, SweetAlert) => {
+export default ( $state, $log, $scope, $stateParams, providerFac, $document, $timeout, lcConfig, $window, fileFac, SweetAlert) => {
   'ngInject';
   $scope.providers = [];
   var PER_PAGE = 50;
@@ -34,6 +34,10 @@ export default ( $log, $scope, $stateParams, providerFac, $document, $timeout, l
     }, function(error) {
       SweetAlert.swal("无法删除,请下架所有产品");
     });
+  };
+
+  $scope.edit = (provider) => {
+    $state.go("home.add-provider", {"provider": provider});
   };
 };
 

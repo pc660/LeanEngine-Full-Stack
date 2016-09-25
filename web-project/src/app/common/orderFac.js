@@ -10,6 +10,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.search = search;
   service.cancelUnpaidOrder = cancelUnpaidOrder;
   service.updateCustomerInfo = updateCustomerInfo;
+  service.getCount = getCount;
   return service;
 
   function submitOrder(order, customers) {
@@ -57,5 +58,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function search(query) {
     return $http.post('/api/order/search', {query: query});
+  }
+
+  function getCount() {
+    return $http.post('/api/order/getCount');
   }
 };

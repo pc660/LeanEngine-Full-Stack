@@ -23,6 +23,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
   $scope.types = menuConfig.data["类型"];
   $scope.areas = menuConfig.data["大区"];
   $scope.priceItems = calendarConfig.data["团期报价"];
+  $scope.cachedPrice = {};
 
   if ($stateParams.productId) {
     // Update product.
@@ -43,8 +44,6 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
       $scope.$broadcast("updateMaterialCalendar");
     });
   }
-  $log.log($stateParams);
-  $log.log($state.params);
 
   $scope.$watch("product.duration", function(newValue, oldValue) {
     if ( $scope.firstUpdates) {
@@ -63,9 +62,27 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
     $log.log($scope.product.itinerary);
   });
 
+  $scope.checkProductPrice = () => {
+    var price = $scope.product.price;
+    for (var year in price) {
+      for (var month in price[year]) {
+        for (var day in price[year][month]) {
+          if (Object.keys(price[year][month][day]).length > 3) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
   $scope.submitProduct = () => {
     $log.log($scope.product);
 
+    // Check if price exists.
+    if (!$scope.checkProductPrice()) {
+      SweetAlert.swal("发布失败", "至少输入一个团期", "error");
+    }
     productFac.uploadProduct($scope.product)
     .then(function(result) {
         $log.log("upload product success");
@@ -134,6 +151,9 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
     var month = date.getMonth();
     var day = date.getDate();
     $scope.currentPrice = productFac.getPrice(year, month, day, $scope.product);
+    if (Object.keys($scope.currentPrice).length == 0) {
+      $scope.currentPrice = angular.copy($scope.cachedPrice);
+    }
     $scope.currentPrice.year = year;
     $scope.currentPrice.month = month;
     $scope.currentPrice.day = day;
@@ -151,9 +171,14 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
     if ($scope.currentPrice && Object.keys($scope.currentPrice).length > 0) {
       commonSer.addProps($scope.product.price, [year, month, day], $scope.currentPrice);
     }
+    $log.log($scope.product.price);
+    $scope.cachedPrice = angular.copy($scope.currentPrice);
+    delete $scope.cachedPrice.year;
+    delete $scope.cachedPrice.month;
+    delete $scope.cachedPrice.day;
   };
 
-  $scope.$watch("currentPrice", function(newValue, oldValue) {
+  $scope.$on("setCurrentPrice", function() {
     // Set day content.
     if ($scope.currentPrice) {
       $scope.setPrice();
