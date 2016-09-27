@@ -13,16 +13,20 @@ export default ($log, $rootScope, $state, $window, cityData) => {
     require: "ngModel",
     link: function(scope, element, attr) {
       scope.address = {};
-      if (scope.model) {
-        scope.province = scope.model.province;
-        scope.city = scope.model.city;
-        scope.county = scope.model.county;
-        scope.detail = scope.model.detail;
-      }
-
       scope.provinces = cityData.province;
-      scope.cities = cityData.province[0].city;
-      scope.counties = scope.cities[0].county;
+      scope.province = "上海市";
+      scope.city = "市辖区";
+      scope.$watch("model", function(model) {
+        scope.province = scope.model.province;
+        var index = scope.findProvinceIndex(scope.province);
+        $log.log(index);
+        if (index < 0) {
+          return;
+        }
+        scope.cities = cityData.province[index].city;
+        scope.city = scope.model.city;
+        scope.detail = scope.model.detail;
+      });
 
       scope.provinceListener = scope.$watch("province", function(province) {
         if (!province) {
@@ -34,13 +38,6 @@ export default ($log, $rootScope, $state, $window, cityData) => {
           return;
         }
         scope.cities = cityData.province[index].city;
-        scope.city = null;
-        scope.count = null;
-        // If there is no cities in the province, then we should reset the county.
-        if (scope.cities === undefined) {
-          scope.counties = null;
-          scope.county = null;
-        }
       });
 
       scope.cityListener = scope.$watch("city", function(city) {
@@ -48,25 +45,10 @@ export default ($log, $rootScope, $state, $window, cityData) => {
           return;
         }
         scope.address.city = city;
-        var index = scope.findCityIndex(city);
-        if (index < 0) {
-          return;
-        }
-        scope.counties = scope.cities[index].county;
-        scope.county = nul;
       });
 
-      /*
-      scope.countyListener = scope.$watch("county", function(county) {
-        if (county) {
-          return;
-        }
-        $log.log(county);
-        scope.address.county = county;
-      });*/
-
       scope.$watch("detail", function(detail) {
-        if (detail) {
+        if (!detail) {
           return;
         }
         scope.address.detail = detail;

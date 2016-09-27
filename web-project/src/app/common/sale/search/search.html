@@ -105,7 +105,7 @@
         <span ng-if="product.start.city != '市辖区'">出发地: {{ product.start.city }}</span>
         <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span>
         <span>最近班期：
-          <em>{{ product.latestDate }}</em>
+          <em ng-repeat="date in product.priceDate" class="date">{{ date }}</em>
         </span>
       </div>
       <div class="metadata">
@@ -116,7 +116,7 @@
       <div class="pricebox">
         <span>
           门市价
-          <em><span class="large">{{ product.latestAdultCompanySalePrice }}</span></em>
+          <em><span class="large">￥{{ product.latestAdultCompanySalePrice }}</span></em>
         </span>
       </div>
       <div>
@@ -125,5 +125,6 @@
         </a>
       </div>
     </div>
+    <hr>
   </div>
 </div>

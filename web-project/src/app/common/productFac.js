@@ -108,19 +108,29 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     var month = date.getMonth();
     var day = date.getDate();
     removeExpiredPrice(product);
-    for (var i = 0; i < Object.keys(price).length; i++) {
-      var event = findNextInOneYear(price, year + i, month, day);
-      if (event && Object.keys(event).length > 1) {
-        product.latestDate = event.date;
-        product.latestAdultCompanySalePrice = event.event.adultCompanySalePrice;
-        product.latestAdultCompanyCompetitorPrice = event.event.adultCompanyCompetitorPrice;
-        product.latestAdultCompanyPrice = event.event.adultCompanyPrice;
-        product.latestChildCompanySalePrice = event.event.childCompanySalePrice;
-        return true;
-      } else {
-        month = 0;
-        day = 1;
+
+    product.priceDate = [];
+    for (var year in price) {
+      for (var month = 0; month < 12; month++) {
+        if (!price[year][month]) {
+          continue;
+        }
+        for (var day = 1; day <= 31; day++) {
+          var event = price[year][month][day];
+          if (event && Object.keys(event).length > 1) {
+            var dateString = year + "年" + (month + 1) + "月" + day + "日";
+            product.priceDate.push(dateString);
+            if (!product.latestAdultCompanySalePrice) {
+              product.latestAdultCompanySalePrice = 99999999;
+            }
+            product.latestAdultCompanySalePrice = Math.min(product.latestAdultCompanySalePrice, event.adultCompanySalePrice);
+          }
+        }
       }
+    }
+    $log.log(product.priceDate);
+    if (product.priceDate.length > 0) {
+      return true;
     }
     return false;
   }

@@ -83,6 +83,7 @@ productApi.add = (req, res) => {
     return;
   }
   var product = req.body.product;
+  tool.l(product);
   var productAV = {};
   if (product.objectId) {
     var productAV =  AV.Object.createWithoutData('Product', product.objectId);
@@ -139,16 +140,25 @@ productApi.constructItinerayParams = (product) => {
     if (!params.itinerary[i].food.hasmorning) {
       params.itinerary[i].food.morning = "无";
     } else {
+      if (params.itinerary[i].food.morning) {
+        params.itinerary[i].food.morning = params.itinerary[i].food.morning.trim();
+      }
       params.itinerary[i].food.morning = params.itinerary[i].food.morning || "提供"
     }
     if (!params.itinerary[i].food.hasnoon) {
       params.itinerary[i].food.noon = "无";
     } else {
+      if (params.itinerary[i].food.noon) {
+        params.itinerary[i].food.noon = params.itinerary[i].food.noon.trim();
+      }
       params.itinerary[i].food.noon = params.itinerary[i].food.noon || "提供"
     }
     if (!params.itinerary[i].food.hasevening) {
       params.itinerary[i].food.evening = "无";
     } else {
+      if (params.itinerary[i].food.evening) {
+        params.itinerary[i].food.evening = params.itinerary[i].food.evening.trim();
+      }
       params.itinerary[i].food.evening = params.itinerary[i].food.evening || "提供"
     }
     tool.l(params.itinerary[i].food);

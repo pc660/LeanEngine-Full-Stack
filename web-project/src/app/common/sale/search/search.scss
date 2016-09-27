@@ -28,6 +28,7 @@
       }
       .selected-tag {
         background-color: #f90;
+        color: white;
       }
     }
   }
@@ -40,6 +41,7 @@
   outline: none;
   &:hover {
     background-color: #f90;
+    color: white;
     cursor:pointer;
   }
 }
@@ -98,12 +100,16 @@
 }
 
 .products {
+  .product:first-child {
+    padding-top: 40px !important;
+  }
   .product {
     padding-top: 20px;
     padding-left: 10px;
     .left {
       .product-title {
-        font-size: 25px;
+        color: #06c;
+        font-size: 20px;
       }
       display: inline-block;
       width: 75%;
@@ -111,6 +117,11 @@
         padding-top: 5px;
         span {
           padding-right: 15px;
+          .date {
+            font-weight: bold;
+            color: #f90;
+            margin-right: 10px;
+          }
         }
       }
     }
@@ -120,6 +131,14 @@
       left: 30px;
       display: inline-block;
       width: 20%;
+      .pricebox {
+        font-size: 13px;
+        .large {
+          color: #f60;
+          font-weight: 500;
+          font-size: 16px;
+        }
+      }
     }
   }
 }

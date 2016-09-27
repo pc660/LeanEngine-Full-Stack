@@ -1,4 +1,4 @@
-<div class="address" layout="row" ayout-align='start center'>
+<div class="address" layout="row" layout-align='start center'>
   <div layout="row"  layout-align='start center'>
     <div class="label">省份:</div>
     <md-input-container>
@@ -24,21 +24,9 @@
     </md-input-container>
     <p class="value" ng-if="!isEditing">{{ city }}</p>
   </div>
-  <!--div layout-align='start center' layout="row" ng-show="showCounty">
-    <div  class="label">区县:</div>
-    <md-input-container>
-      <md-select class="margin" ng-if="isEditing"
-                 ng-model="$parent.county">
-        <md-option  ng-value="county.name" ng-repeat="county in counties">
-          {{county.name}}
-        </md-option>
-      </md-select>
-    </md-input-container>
-    <p class="value" ng-if="!isEditing">{{ county }}</p>
-  </div-->
   <div layout="row" layout-align='start center'>
     <div class="margin label">地址:</div>
-    <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" name="address" type="text" ng-model="$parent.detail">
+    <input ng-if="isEditing" class="margin" ng-disabled="!isEditing" type="text" ng-model="$parent.detail">
     <div ng-if="!isEditing">
       {{ detail }}
     </div>

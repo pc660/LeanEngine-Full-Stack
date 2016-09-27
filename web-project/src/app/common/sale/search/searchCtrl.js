@@ -82,7 +82,9 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
       $scope.products = results.products;
       $scope.products = $scope.products.filter(function(product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
-        product.fileUrl = $sce.trustAsResourceUrl(product.itineraryFile.url);
+        if (product.itineraryFile) {
+          product.fileUrl = $sce.trustAsResourceUrl(product.itineraryFile.url);
+        }
         return productFac.getLatestTrip(product);
       });
       for (var i = 0; i < $scope.products.length; i++) {
