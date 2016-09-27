@@ -78,7 +78,6 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
 
   $scope.submitProduct = () => {
     $log.log($scope.product);
-    return;
     // Check if price exists.
     if (!$scope.checkProductPrice()) {
       SweetAlert.swal("发布失败", "至少输入一个团期", "error");
