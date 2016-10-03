@@ -24,6 +24,10 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
   $scope.areas = menuConfig.data["大区"];
   $scope.priceItems = calendarConfig.data["团期报价"];
   $scope.cachedPrice = {};
+  $scope.existList = [];
+  productFac.getSelfPaidList().then(function(results) {
+    $scope.existList = results;
+  });
 
   if ($stateParams.productId) {
     // Update product.
@@ -90,14 +94,13 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
             title: "发布成功",
             text: "请到我的账号中我发布的产品去查看更新.",
             type: "success",
-            confirmButtonColor: "#DD6B55",
             confirmButtonText: "确认",
             closeOnConfirm: true},
           function(){
             $state.go('home');
           });
     }, function(error) {
-        SweetAlert.swal("发布失败", " 请重新登陆.", "error ");
+        SweetAlert.swal("发布失败", " 请重新登陆.", "error");
     });
   };
 
@@ -185,4 +188,23 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
       $scope.$broadcast("updateMaterialCalendar");
     }
   }, true);
+
+  $scope.createList = () => {
+    if (!$scope.product.newList.name) {
+      SweetAlert.swal("请输入列表名称");
+      return;
+    }
+    var newList = {name: $scope.product.newList.name, items: []};
+    $scope.existList.push(newList);
+    $scope.product.selfPaidList = newList;
+  };
+
+  $scope.addItem = (item) => {
+    var newItem = angular.copy(item);
+    $scope.product.selfPaidList.items.push(newItem);
+  };
+
+  $scope.deleteItem = (index) => {
+    $scope.product.selfPaidList.items.splice(index, 1);
+  };
 };

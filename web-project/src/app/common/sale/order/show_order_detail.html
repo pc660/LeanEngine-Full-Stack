@@ -112,6 +112,12 @@
       {{ order.price.singleRoomDifference * order.extraRoomNumber }}
     </td>
   </tr>
+  <tr ng-repeat="item in order.extraItems">
+    <td>{{ item.name }}</td>
+    <td>{{ item.count }}</td>
+    <td>{{ item.price }}</td>
+    <td>{{ item.totalPrice }}</td>
+  </tr>
   <tr>
     <td>总计</td>
     <td>

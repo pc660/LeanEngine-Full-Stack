@@ -59,14 +59,52 @@ function setProduct(productAV, product) {
 
   // set unpassed
   productAV.set("status", config.productStatus.UNPOSTED);
-  // Also store the itinerary and html data.
-  productAV.set("itinerary", product.itinerary);
-  productAV.set("priceInclude", product.priceInclude);
-  productAV.set("priceExclude", product.priceExclude);
-  productAV.set("selfPaid", product.selfPaid);
-  productAV.set("visaInfo", product.visaInfo);
-  productAV.set("reserveInfo", product.reserveInfo);
-  productAV.set("restriction", product.restriction);
+
+  var selfPaidList = product.selfPaidList;
+  var selfPaidAV = AV.Object.new("SelfPaid");
+  // Need to create a new list.
+  if (selfPaidList.objectId) {
+    tool.l("using the existing one");
+    selfPaidAV = AV.Object.createWithoutData('SelfPaid', selfPaidList.objectId);
+  }
+
+  var clonedList =JSON.parse(JSON.stringify(selfPaidList));
+  var productPaidList = {};
+  productPaidList.items = [];
+  for (var i = 0; i < clonedList.items.length; i++) {
+    var item = clonedList.items[i];
+    if (item.picked) {
+      productPaidList.items.push(item);
+    }
+  }
+  productAV.set("selfPaidList", productPaidList);
+  productAV.set("selfPaid", constructSelfPaidContent(productPaidList));
+  product.selfPaid = constructSelfPaidContent(productPaidList);
+  for (var i = 0; i < selfPaidList.items.length; i++) {
+    selfPaidList.items[i].picked = false;
+  }
+
+  // Only do this if not changing product.
+  if (!product.objectId) {
+    selfPaidAV.set("name", selfPaidList.name);
+    selfPaidAV.set("items", selfPaidList.items);
+    selfPaidAV.save();
+  }
+}
+
+function constructSelfPaidContent(productPaidList) {
+  var items = productPaidList.items;
+  var content = "";
+  for (var i = 0; i < items.length; i++) {
+    if (i == 0) {
+      content += "\n";
+    }
+    var item = items[i];
+    content += "项目名称: " + item.name + "\n";
+    content += "项目描述: " + item.description + "\n";
+    content += "项目费用: " + item.fee + "\n";
+  }
+  return content;
 }
 
 productApi.add = (req, res) => {
@@ -75,7 +113,7 @@ productApi.add = (req, res) => {
   log.set("operation", "product.add");
   log.set("data", {"product": req.body.product});
   log.set("user", req.user);
-  log.save();
+
   var user = req.user;
   if (!user) {
     tool.e("user is undefined when product.add");
@@ -702,6 +740,17 @@ function toUTF8Array(str) {
   return utf8;
 }
 
-
+productApi.getSelfPaid = (req, res) => {
+  tool.l('product.getSelfPaid');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.getSelfPaid");
+  log.set("user", req.user);
+  log.save();
+  var query = new AV.Query('SelfPaid');
+  query.find().then(function(results) {
+    res.send(results);
+    return;
+  })
+}
 
 module.exports = productApi;

@@ -13,13 +13,11 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   $scope.order.date = $scope.reserve.date;
   $scope.order.adult = $scope.reserve.adult || 0;
   $scope.order.child = $scope.reserve.child || 0;
-  $log.log($scope.reserve);
-  $log.log("get scope order");
-  $log.log($scope.order);
   if (!$scope.order) {
     $scope.order = {};
   }
   $scope.order.customers = [];
+  $scope.order.extraItems = [];
   var length = 0;
   if ($scope.order) {
     length = $scope.order.adult + $scope.order.child;
@@ -74,6 +72,9 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
       if ( $scope.order.extraRoomNumber) {
         $scope.order.totalPrice += $scope.order.extraRoomNumber * $scope.order.price.singleRoomDifference;
       }
+      for (var i = 0; i < $scope.order.extraItems.length; i++) {
+        $scope.order.totalPrice += $scope.order.extraItems[i].totalPrice;
+      }
     } else {
       $scope.order = {};
       $scope.order.totalPrice = 0;
@@ -91,5 +92,24 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
     }, function(error) {
       SweetAlert.swal("订单添加失败", "请联系计调员确认是否有余位", "warning");
     });
+  };
+
+  $scope.addItem = () => {
+    var extraItem = $scope.extraItem;
+    if (!(extraItem.name && extraItem.count && extraItem.price)) {
+      SweetAlert.swal("请完整输入补差价项目", "", "warning");
+      return;
+    }
+
+    extraItem.totalPrice = extraItem.count * extraItem.price;
+    $scope.order.totalPrice += extraItem.totalPrice;
+    $scope.order.extraItems.push(extraItem);
+    $scope.extraItem = {};
+  };
+
+  $scope.deleteItem = (index) => {
+    var extraItem = $scope.order.extraItems[index];
+    $scope.order.totalPrice -= extraItem.totalPrice;
+    $scope.order.extraItems.splice(index, 1);
   };
 };

@@ -281,10 +281,6 @@
             <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.priceExclude"></textarea>
           </div>
           <div class="extra-item" layout="column">
-            <label>自费项目</label>
-            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.selfPaid"></textarea>
-          </div>
-          <div class="extra-item" layout="column">
             <label>预定须知</label>
             <textarea class="msd-elastic: \n\n;" ng-model="product.reserveInfo"></textarea>
           </div>
@@ -303,6 +299,61 @@
           <div class="extra-item" layout="column">
             <label>购物信息</label>
             <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.shoppingInfo"></textarea>
+          </div>
+          <div class="extra-item" layout="column">
+            <label>自费项目</label>
+            <md-button class="md-raised md-primary" style="width: 150px;" ng-click="addingList = true">创建新自费列表</md-button>
+            <div ng-show="addingList">
+              <p>列表名称</p>
+              <input ng-model="product.newList.name">
+              <div style="display: inline-block">
+                <a ng-click="createList();">确认</a>
+                <p> / </p>
+                <a ng-click="addingList = false">取消</a>
+              </div>
+            </div>
+            <md-input-container ng-if="isEditing && !product.objectId">
+              <md-select
+                placeholder="请选择已有的自费项目列表"
+                ng-model="product.selfPaidList">
+                <md-option
+                  ng-value="paidList"
+                  ng-repeat="paidList in existList">
+                  {{paidList.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+            <table ng-if="product.selfPaidList">
+              <tr>
+                <th>选中</th>
+                <th>项目</th>
+                <th>内容描述</th>
+                <th>费用</th>
+                <th>操作</th>
+              </tr>
+              <tr ng-repeat="item in product.selfPaidList.items track by $index">
+                <td><input style="width: 20px;" type="checkbox" ng-model="item.picked"></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.fee }}</td>
+                <td><a ng-click="deleteItem($index);">删除</a></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                  <input style="width: 250px;" ng-model="newItem.name">
+                </td>
+                <td>
+                  <textarea style="width: 300px;" ng-model="newItem.description"></textarea>
+                </td>
+                <td>
+                  <input style="width: 80px" ng-model="newItem.fee">
+                </td>
+                <td>
+                  <a ng-click="addItem(newItem);">添加</a>
+                </td>
+              </tr>
+            </table>
           </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">

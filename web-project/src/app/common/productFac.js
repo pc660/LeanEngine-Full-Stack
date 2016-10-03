@@ -23,6 +23,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.setStorageContent = setStorageContent;
   service.parseDate = parseDate;
   service.deleteProduct = deleteProduct;
+  service.getSelfPaidList = getSelfPaidList;
   return service;
 
   function uploadProduct(product) {
@@ -263,5 +264,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function deleteProduct (productId) {
     return $http.post('/api/product/delete', {productId: productId});
+  }
+
+  function getSelfPaidList () {
+    return $http.post('/api/product/getSelfPaid');
   }
 };

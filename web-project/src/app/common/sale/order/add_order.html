@@ -72,6 +72,18 @@
       {{ order.price.singleRoomDifference * order.extraRoomNumber }}
     </td>
   </tr>
+  <tr ng-repeat="item in order.extraItems">
+    <td>{{ item.name }}</td>
+    <td>{{ item.count }}</td>
+    <td>{{ item.price }}</td>
+    <td>{{ item.totalPrice }} <a ng-click="deleteItem($index);">删除</a></td>
+  </tr>
+  <tr>
+    <td><input ng-model="extraItem.name" placeholder="补差价项目"></td>
+    <td><input ng-model="extraItem.count" placeholder="数量"></td>
+    <td><input ng-model="extraItem.price" placeholder="单价"></td>
+    <td><a ng-click="addItem();">确定</a></td>
+  </tr>
   <tr>
     <td>总计</td>
     <td>

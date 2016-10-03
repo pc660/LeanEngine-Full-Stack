@@ -156,6 +156,27 @@
           {{ product.priceExclude }}
         </div>
       </div>
+      <div class="tab-item">
+        <div class="fyitem-wrapper">
+          <span class="fyitem">
+            自费项目
+          </span>
+        </div>
+        <div class="detail" style="width: 80%;">
+          <table>
+            <tr>
+              <th>项目</th>
+              <th>内容</th>
+              <th>费用</th>
+            </tr>
+            <tr ng-repeat="item in product.selfPaidList.items">
+              <td>{{ item.name }}</td>
+              <td>{{ item.description }}</td>
+              <td>{{ item.fee }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </md-tab>
     <md-tab label="签证信息">
       <div class="visa-info">

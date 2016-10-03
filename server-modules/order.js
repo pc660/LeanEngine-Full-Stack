@@ -81,13 +81,12 @@ orderApi.getAll = (req, res) => {
 
     var promises = [query.find(), query.count()];
     Promise.all(promises).then(function(results) {
+        tool.l("find order success");
         var result = results[0];
         var count = results[1];
-
+        tool.l(result);
         result = result.filter(function(order) {
-            tool.l("getting order");
             var date = parseDate(order.get("startDate"));
-            tool.l(date);
             if (params.startDate) {
                 var queryDate = parseDate(params.startDate);
                 if (queryDate > date) {
@@ -110,7 +109,6 @@ orderApi.getAll = (req, res) => {
         var provider = result.map(function(order) {
             return order.get("provider");
         })
-        tool.l(count);
         res.send({order: result, product: product, provider: provider, count: count});
         return;
     }, function(error) {
@@ -202,6 +200,7 @@ orderApi.add = (req, res) => {
     orderAV.set("cellphone", order.cellphone);
     orderAV.set("email", order.email);
     orderAV.set("price", order.price);
+    orderAV.set("extraItems", order.extraItems);
     orderAV.set("createdBy", req.user);
     if (order.extraRoomNumber) {
         orderAV.set("extraRoomNumber", order.extraRoomNumber);
@@ -426,8 +425,10 @@ orderApi.verify = (req, res) => {
 orderApi.setOrderQuery = (query, params) => {
     tool.l("order.setOrderQuery");
     if (params.orderId) {
+        tool.l("set order");
         var id = params.orderId;
-        query.equalTo("objectId", id);
+        tool.l(id);
+        query.equalTo("orderId", parseInt(id));
         return;
     }
 
