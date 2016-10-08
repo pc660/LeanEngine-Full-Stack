@@ -86,7 +86,7 @@ router.post('/auth/authenticate', passport.authenticate('login', { failWithError
     var user = {};
     user['id'] = req.user.id;
     user['level'] = req.user.get("level");
-    res.cookie('user', JSON.stringify(user), {httpOnly: false});
+    res.cookie('user', JSON.stringify(user), {httpOnly: false, expires: new Date(Date.now() + 900000)});
     res.sendStatus(200);
   }, function(err, req, res, next) {
     tool.l(err);
