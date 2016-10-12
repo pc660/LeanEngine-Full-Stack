@@ -40,7 +40,6 @@ export default (SweetAlert, $state, userFac, $log,$rootScope, $scope, $document,
         SweetAlert.swal("注册商添加成功", " 请到我的账号中我发布的产品去查看更新.", "success");
         $state.go("home");
       }, function(error) {
-
       });
     };
 
