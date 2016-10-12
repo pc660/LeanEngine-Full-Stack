@@ -116,6 +116,7 @@ productApi.add = (req, res) => {
   log.set("operation", "product.add");
   log.set("data", {"product": req.body.product});
   log.set("user", req.user);
+  log.save();
 
   var user = req.user;
   if (!user) {
