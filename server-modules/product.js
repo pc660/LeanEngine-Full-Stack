@@ -63,32 +63,35 @@ function setProduct(productAV, product) {
   var selfPaidList = product.selfPaidList;
   var selfPaidAV = AV.Object.new("SelfPaid");
   // Need to create a new list.
-  if (selfPaidList.objectId) {
-    tool.l("using the existing one");
-    selfPaidAV = AV.Object.createWithoutData('SelfPaid', selfPaidList.objectId);
-  }
+  if (selfPaidList) {
 
-  var clonedList =JSON.parse(JSON.stringify(selfPaidList));
-  var productPaidList = {};
-  productPaidList.items = [];
-  for (var i = 0; i < clonedList.items.length; i++) {
-    var item = clonedList.items[i];
-    if (item.picked) {
-      productPaidList.items.push(item);
+    if (selfPaidList.objectId) {
+      tool.l("using the existing one");
+      selfPaidAV = AV.Object.createWithoutData('SelfPaid', selfPaidList.objectId);
     }
-  }
-  productAV.set("selfPaidList", productPaidList);
-  productAV.set("selfPaid", constructSelfPaidContent(productPaidList));
-  product.selfPaid = constructSelfPaidContent(productPaidList);
-  for (var i = 0; i < selfPaidList.items.length; i++) {
-    selfPaidList.items[i].picked = false;
-  }
 
-  // Only do this if not changing product.
-  if (!product.objectId) {
-    selfPaidAV.set("name", selfPaidList.name);
-    selfPaidAV.set("items", selfPaidList.items);
-    selfPaidAV.save();
+    var clonedList =JSON.parse(JSON.stringify(selfPaidList));
+    var productPaidList = {};
+    productPaidList.items = [];
+    for (var i = 0; i < clonedList.items.length; i++) {
+      var item = clonedList.items[i];
+      if (item.picked) {
+        productPaidList.items.push(item);
+      }
+    }
+    productAV.set("selfPaidList", productPaidList);
+    productAV.set("selfPaid", constructSelfPaidContent(productPaidList));
+    product.selfPaid = constructSelfPaidContent(productPaidList);
+    for (var i = 0; i < selfPaidList.items.length; i++) {
+      selfPaidList.items[i].picked = false;
+    }
+
+    // Only do this if not changing product.
+    if (!product.objectId) {
+      selfPaidAV.set("name", selfPaidList.name);
+      selfPaidAV.set("items", selfPaidList.items);
+      selfPaidAV.save();
+    }
   }
 }
 
