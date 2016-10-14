@@ -13,11 +13,11 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
       }
       $scope.product.platformcontact = result.platformcontact;
       productFac.getLatestTrip($scope.product);
-      $log.log(result);
+      $log.log("getting result finish*****");
       // Set the current Date.
+      $scope.updatePriceMap();
       $scope.$broadcast("updateMaterialCalendar");
       $scope.$broadcast("updateTemplate", {params: $scope.product});
-      $scope.updatePriceMap();
     }, function(error) {
       // TODO: handle failure.
     });

@@ -20,7 +20,7 @@ var multiChoiceConfig = {
       {name: "ouzhou", value: '欧洲'},
       {name: "meizhou", value: '美洲'},
       {name: 'aouzhou', value: '澳洲'},
-      {name: 'riben', value: '日本'},
+      {name: 'riben', value: '日韩'},
       {name: 'zhongya', value: '中亚'},
       {name: 'guoneichangxian', value: '国内长线'},
       {name: 'guoneizhoubian', value: '国内周边'},
