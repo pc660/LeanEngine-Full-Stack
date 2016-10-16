@@ -1,4 +1,4 @@
-export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcConfig, itineraryFac, productFac, menuConfig, providerFac) => {
+export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $activityIndicator, lcConfig, itineraryFac, productFac, menuConfig, providerFac) => {
   'ngInject';
 
   $scope.openSearchBox = () => {
@@ -13,12 +13,14 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
     "类型": -1,
     "供应商": -1,
     "行程天数": -1,
+    "大区": -1,
   };
 
   $scope.tags = {
     "酒店标准": menuConfig.data["酒店标准"],
     "交通方式": menuConfig.data["交通方式"],
     "类型": menuConfig.data["类型"],
+    "大区": menuConfig.data["大区"],
     "供应商": [],
     "行程天数": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   };
@@ -77,8 +79,10 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
       query.startDate = date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + (date.getDate()) + "日";
     }
 
+    $activityIndicator.startAnimating();
     productFac.searchProduct(query).then(function(results) {
       $log.log("success");
+      $activityIndicator.stopAnimating();
       $scope.products = results.products;
       $scope.products = $scope.products.filter(function(product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
@@ -128,6 +132,8 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, lcCo
         return "stopDay";
       case "供应商":
         return "provider";
+      case "大区":
+        return "area";
       default:
         return "";
     }

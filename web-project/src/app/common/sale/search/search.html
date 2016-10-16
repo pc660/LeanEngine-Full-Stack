@@ -73,6 +73,13 @@
       <span class="unlimited" ng-class="{'selected-tag': $index==index['类型']}" ng-click="pick('类型', $index)" ng-repeat="type in tags['类型']">{{ type }}</span>
     </td>
   </tr>
+  <tr  class="selectable">
+    <td>大区</td>
+    <td>
+      <span class="unlimited" ng-class="{'selected-tag': index['大区'] == -1}" ng-click="pick('大区', -1)">不限</span>
+      <span class="unlimited" ng-class="{'selected-tag': $index==index['大区']}" ng-click="pick('大区', $index)" ng-repeat="type in tags['大区']">{{ type }}</span>
+    </td>
+  </tr>
   <tr>
     <td>
       目的地
@@ -87,6 +94,7 @@
 </table>
 
 <div class="products">
+  <div ng-activity-indicator class="activity-indicator"></div>
   <div class="product" ng-repeat="product in products">
     <div class="left">
       <a class="product-title"

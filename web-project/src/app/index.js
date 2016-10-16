@@ -94,7 +94,7 @@ import integrationTest from './test/integration/adminFlow';
 angular.module('webProject',
   ['ngAnimate', 'ngCookies', 'ui.router', 'ngMaterial', 'base64', 'mgcrea.ngStrap',
     'ngFileUpload', 'angular-md5', 'ui.bootstrap', 'monospaced.elastic', 'angucomplete-alt',
-    'materialCalendar', 'oitozero.ngSweetAlert', 'monospaced.elastic'])
+    'materialCalendar', 'oitozero.ngSweetAlert', 'monospaced.elastic', 'ngActivityIndicator'])
   // 配置全局常量
   .constant('lcConfig', config)
   .constant('moment', window.moment)

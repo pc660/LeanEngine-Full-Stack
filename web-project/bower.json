@@ -2,6 +2,7 @@
   "name": "ztg",
   "version": "1.0.0",
   "dependencies": {
+    "ngActivityIndicator": "latest",
     "angular-sweetalert": "latest",
     "material-calendar": "latest",
     "angucomplete-alt": "latest",

@@ -351,6 +351,9 @@ productApi.search = (req, res) => {
       case "type":
         query.equalTo("type", params["type"]);
         break;
+      case "area":
+        query.equalTo("area", params["area"]);
+        break;
       case "status":
         query.equalTo("status", parseInt(params["status"]));
         break;
