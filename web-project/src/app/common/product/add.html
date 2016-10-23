@@ -24,13 +24,7 @@
             </tr>
             <tr>
               <td>商户联系人</td>
-              <td ng-if="product.pickedProvider">
-                <md-input-container ng-if="isEditing">
-                  <md-select
-                    ng-change="pickContact();"
-                    ng-model="product.contact">
-                    <md-option
-                      ng-selected="$first"
+              <td ng-if="product.pickedProvider"xxxccccc-0-------------------------------------------------------
                       ng-value="contact"
                       ng-repeat="contact in product.pickedProvider.contactList">
                       {{contact.contactname}}

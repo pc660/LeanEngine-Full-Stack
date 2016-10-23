@@ -135,4 +135,6 @@
     </div>
     <hr>
   </div>
+  <div>共找到 {{ totalProducts }} 个结果</div>
+  <ul uib-pagination total-items="totalProducts" items-per-page="10" ng-model="currentPage" ng-change="pageChanged()"></ul>
 </div>

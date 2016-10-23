@@ -321,6 +321,9 @@ productApi.search = (req, res) => {
   log.save();
   var query = new AV.Query('Product');
   var params = req.body.query;
+  if (params.searchQuery) {
+    query.contains("fullName", params.searchQuery);
+  }
   // Must login and do stuff.
   tool.l(params);
   // TODO: uncomment this.
@@ -328,7 +331,7 @@ productApi.search = (req, res) => {
   if (!user) {
    res.status(404).send();
    return;
-   }
+  }
 
   // Some special handling for search params.
   if (params.self) {
@@ -338,6 +341,14 @@ productApi.search = (req, res) => {
     query.equalTo("responsible", user);
     delete(params.myResponsible);
   }
+
+  var index = 0;
+  if (params.index) {
+    index = params.index - 1;
+    delete(params.index);
+  }
+  query.limit(config.items_per_page);
+  query.skip(index * config.items_per_page);
 
   // Check all query parameters.
   for (var key in params) {
@@ -371,35 +382,13 @@ productApi.search = (req, res) => {
   }
 
   query.include("responsible", "provider");
-  var queries = [query.find()];
-  // Do search query.
-  if (params.searchQuery) {
-    tool.l("search Query");
-    var searchQuery = new AV.SearchQuery('Product');
-    //searchQuery.queryString(params.searchQuery);
-    searchQuery.queryString(params.searchQuery);
-    queries.push(searchQuery.find());
-  }
+  var queries = [query.find(), query.count()];
 
   // TODO: add start date.
   // TODO: add days.
   Promise.all(queries).then(function (results) {
-    var searchResultSet = {};
-    // If there is no search query.
-    if (results.length > 1) {
-      results[1].forEach(function (result) {
-        searchResultSet[result.id] = true;
-      });
-    }
 
-    var products = results[0].filter(function (product) {
-      if (results.length > 1 && searchResultSet[product.id]) {
-        return true;
-      } else if (results.length == 1) {
-        return true;
-      }
-      return false;
-    });
+    var products = results[0];
 
     // Need to check min date and max date.
     if (params.startDate || params.endDate) {
@@ -407,7 +396,6 @@ productApi.search = (req, res) => {
       products.forEach(function (product) {
         var price = product.get("price");
         if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate, product.get("stopDay"))) {
-          tool.l("pushing ====================")
           filterProducts.push(product);
         }
       })
@@ -433,7 +421,7 @@ productApi.search = (req, res) => {
       return product.get("provider");
     });
 
-    res.send({products: products, responsible: responsible, providers: providers});
+    res.send({products: products, responsible: responsible, providers: providers, count: results[1]});
     return;
   }, function (error) {
     tool.l(error);

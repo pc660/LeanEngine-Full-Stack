@@ -1,10 +1,6 @@
 export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $activityIndicator, lcConfig, itineraryFac, productFac, menuConfig, providerFac) => {
   'ngInject';
 
-  $scope.openSearchBox = () => {
-    // Show all cities.
-  };
-
   $scope.selectedTags = {};
 
   $scope.index = {
@@ -43,7 +39,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
 
   $scope.search = () => {
     // Construct the query based on selected tag.
-    $log.log($scope.start);
+    $scope.products = [];
     var query = {};
     for (var key in $scope.selectedTags) {
       var value = $scope.selectedTags[key];
@@ -57,6 +53,9 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
       }
     }
 
+    if ($scope.currentPage) {
+      query.index = $scope.currentPage;
+    }
     query.status = 3;
     query.searchQuery = $scope.destination;
 
@@ -83,6 +82,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     productFac.searchProduct(query).then(function(results) {
       $log.log("success");
       $activityIndicator.stopAnimating();
+      $scope.totalProducts = results.count;
       $scope.products = results.products;
       $scope.products = $scope.products.filter(function(product) {
         product.prefixArray = productFac.convertProductPrefix(product.prefix);
@@ -118,6 +118,10 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     // Need to update index.
     delete $scope.selectedTags[key];
     $scope.index[key] = -1;
+  };
+
+  $scope.pageChanged = () => {
+    $scope.search();
   };
 
   function getKeyName(key) {

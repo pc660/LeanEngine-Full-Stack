@@ -92,7 +92,7 @@ orderApi.getAll = (req, res) => {
                 if (queryDate > date) {
                     return false;
                 }
-            }
+            }count
             if (params.endDate) {
                 var queryDate = parseDate(params.endDate);
                 if (queryDate < date) {
