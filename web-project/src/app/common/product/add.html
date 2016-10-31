@@ -1,73 +1,67 @@
 <section layout="row" flex>
-<provider-side-bar ng-if="isEditing"></provider-side-bar>
 <md-content flex layout-padding>
     <div class="product">
       <md-tabs md-dynamic-height  md-border-bottom>
         <md-tab class="tab-button" label="选择供应商">
-          <table>
-            <tr>
-              <td colspan="99" class="title">
-                供应商基本信息
-              </td>
-            </tr>
-            <tr ng-if="isEditing">
-              <td>
-                <md-button type="button" ng-click="toggleLeft()"
-                           class="md-primary">
-                  选择供应商
-                </md-button>
-              </td>
-            </tr>
-            <tr ng-if="product.pickedProvider">
-              <td>供应商</td>
-              <td>{{ product.pickedProvider.companyname }} ({{ product.pickedProvider.nickname }})</td>
-            </tr>
-            <tr>
-              <td>商户联系人</td>
-              <td ng-if="product.pickedProvider"xxxccccc-0-------------------------------------------------------
-                      ng-value="contact"
-                      ng-repeat="contact in product.pickedProvider.contactList">
-                      {{contact.contactname}}
-                    </md-option>
+          <div layout="row">
+            <provider-side-bar ng-if="isEditing"></provider-side-bar>
+            <table>
+              <tr>
+                <td colspan="99" class="title">
+                  供应商基本信息
+                </td>
+              </tr>
+              <tr ng-if="product.pickedProvider">
+                <td>供应商</td>
+                <td>{{ product.pickedProvider.companyname }} ({{ product.pickedProvider.nickname }})</td>
+              </tr>
+              <tr>
+                <td>商户联系人</td>
+                <td ng-if="product.pickedProvider"xxxccccc-0-------------------------------------------------------
+                    ng-value="contact"
+                    ng-repeat="contact in product.pickedProvider.contactList">
+                  {{contact.contactname}}
+                  </md-option>
                   </md-select>
-                </md-input-container>
-                <md-button ng-if="isEditing" class="md-raised md-primary addcontact" ng-click="addContact();">添加商户联系人</md-button>
-                <p ng-if="!isEditing">{{ product.contact.contactname }}</p>
-              </td>
-            </tr>
-            <tr ng-if="product.contact">
-              <td>手机</td>
-              <td>
-                <div>
-                  {{ product.contact.cellphone }}
-                </div>
-              </td>
-            </tr>
-            <tr ng-if="product.contact">
-              <td>座机</td>
-              <td>
-                <div>
-                  {{ product.contact.homephone }}
-                </div>
-              </td>
-            </tr>
-            <tr ng-if="product.contact">
-              <td>QQ号码</td>
-              <td>
-                <div>
-                  {{ product.contact.qqnumber }}
-                </div>
-              </td>
-            </tr>
-            <tr ng-if="product.contact">
-              <td>微信</td>
-              <td>
-                <div>
-                  {{ product.contact.wechat }}
-                </div>
-              </td>
-            </tr>
-          </table>
+                  </md-input-container>
+                  <md-button ng-if="isEditing" class="md-raised md-primary addcontact" ng-click="addContact();">添加商户联系人</md-button>
+                  <p ng-if="!isEditing">{{ product.contact.contactname }}</p>
+                </td>
+              </tr>
+              <tr ng-if="product.contact">
+                <td>手机</td>
+                <td>
+                  <div>
+                    {{ product.contact.cellphone }}
+                  </div>
+                </td>
+              </tr>
+              <tr ng-if="product.contact">
+                <td>座机</td>
+                <td>
+                  <div>
+                    {{ product.contact.homephone }}
+                  </div>
+                </td>
+              </tr>
+              <tr ng-if="product.contact">
+                <td>QQ号码</td>
+                <td>
+                  <div>
+                    {{ product.contact.qqnumber }}
+                  </div>
+                </td>
+              </tr>
+              <tr ng-if="product.contact">
+                <td>微信</td>
+                <td>
+                  <div>
+                    {{ product.contact.wechat }}
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
         </md-tab>
         <md-tab class="tab-button" label="基本信息">
           <table>

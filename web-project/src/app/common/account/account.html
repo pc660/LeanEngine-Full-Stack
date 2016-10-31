@@ -78,6 +78,8 @@
                 </td>
               </tr>
             </table>
+            <p ng-if="isLoading">正在加载...请稍等</p>
+            <ul uib-pagination total-items="totalProducts" items-per-page="10" ng-model="currentPage" ng-change="pageChanged()"></ul>
           </md-content>
         </section>
       </md-tab>

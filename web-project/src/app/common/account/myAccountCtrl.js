@@ -3,6 +3,7 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
   $scope.changePass = false;
   $scope.level = authFac.getUserLevel();
   $scope.isProvider = (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER);
+  $scope.query = {};
 
   if ($scope.$parent.unfinished) {
     $scope.unfinished = "(有未处理产品)";
@@ -38,51 +39,42 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
 
   $scope.showUnverified = () => {
     $scope.unverified = true;
-    var query = {};
-    query.myResponsible = true;
-    query.status = lcConfig.productStatus.UNVERIFIED;
-    productFac.searchProduct(query).then(function(results) {
+    $scope.query = {};
+    $scope.query.myResponsible = true;
+    $scope.query.status = lcConfig.productStatus.UNVERIFIED;
+    $scope.search();
+  };
+
+  $scope.search = () => {
+    $scope.isLoading = true;
+    $scope.query.index = $scope.currentPage;
+    productFac.searchProduct($scope.query).then(function(results) {
+      $scope.isLoading = false;
       $scope.products = results.products;
+      $scope.totalProducts = results.count;
       for (var i = 0; i < $scope.products.length; i++) {
         $scope.products[i].responsible = results.responsible[i];
         productFac.getLatestTrip($scope.products[i]);
-        $log.log($scope.products[i]);
       }
     }, function(error) {
     });
   };
 
+
   $scope.showVerified = () => {
     $scope.unverified = true;
-    var query = {};
-    query.myResponsible = true;
-    query.status = lcConfig.productStatus.VERIFIED;
-    productFac.searchProduct(query).then(function(results) {
-      $scope.products = results.products;
-      for (var i = 0; i < $scope.products.length; i++) {
-        $scope.products[i].responsible = results.responsible[i];
-        productFac.getLatestTrip($scope.products[i]);
-      }
-    }, function(error) {
-    });
+    $scope.query = {};
+    $scope.query.myResponsible = true;
+    $scope.query.status = lcConfig.productStatus.VERIFIED;
+    $scope.search();
   };
 
   $scope.showMyProducts = () => {
     $scope.unverified = false;
     // Construct the query.
-    var query = {};
-    query.self = true;
-    productFac.searchProduct(query).then(function(results) {
-      $scope.products = results.products;
-      for (var i = 0; i < $scope.products.length; i++) {
-        $scope.products[i].responsible = results.responsible[i];
-      }
-      $scope.products.forEach(function(product) {
-        productFac.getLatestTrip(product);
-      });
-    }, function(error) {
-
-    });
+    $scope.query = {};
+    $scope.query.self = true;
+    $scope.search();
   };
 
   $scope.deleteContact = (index) => {
@@ -218,5 +210,10 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
     productFac.deleteProduct(product.objectId).then(function(value) {
       SweetAlert.swal("删除成功", "请刷新网页", "success");
     });
+  };
+
+  $scope.pageChanged = () => {
+    $scope.products = [];
+    $scope.search();
   };
 };

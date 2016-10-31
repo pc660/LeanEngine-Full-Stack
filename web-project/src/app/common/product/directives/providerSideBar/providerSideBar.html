@@ -1,5 +1,6 @@
 <md-sidenav class="md-sidenav-left"
   md-component-id="provider-side-bar"
+  md-is-locked-open="true"
   md-whiteframe="4">
   <md-toolbar class="md-theme-indigo search">
     <h1 class="md-toolbar-tools">选择供应商</h1>
@@ -13,12 +14,12 @@
               local-search="searchProvider"
               title-field="nickname,companyname"
               auto-match=true
-              minlength="1"
+              minlength="0"
               input-class="form-control form-control-small">
     </div>
   <div>
     <md-content layout-padding ng-repeat="provider in filterProviders">
-      <md-button ng-click="pickProvider($index)" class="md-primary">
+      <md-button ng-click="pickProvider($index)" class="md-primary button">
         {{ provider.nickname }} ({{ provider.companyname}})
       </md-button>
     </md-content>

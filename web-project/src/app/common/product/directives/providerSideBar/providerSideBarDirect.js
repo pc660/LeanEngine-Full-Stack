@@ -5,25 +5,6 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
     templateUrl: 'app/common/product/directives/providerSideBar/providerSideBar.html',
     replace: true,
     link: function(scope, element, attr) {
-
-      $log.log("123");
-      scope.filterProviders = [];
-      scope.$on("sidebarOpen", function() {
-        // TODO: Maybe cache the value.
-        $log.log(scope.providers);
-        if (scope.providers) {
-          scope.filterProviders = scope.providers;
-        } else {
-          scope.initializeSidebar();
-        }
-      });
-
-      // Initalize.
-      scope.initializeSidebar = () => {
-        scope.providers = [];
-        scope.getProviderList();
-      };
-
       // TODO: Check how many providers we have. If too much, we need to do
       // index.
       scope.getProviderList = () => {
@@ -33,6 +14,7 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
         if (level === 0 || level == 3) {
           providerFac.getProvider(query)
             .then(function(results) {
+              $log.log(results);
               for (var i = 0; i < results.providers.length; i++) {
                 results.providers[i].contactList = results.contacts[i];
               }
@@ -63,8 +45,17 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
 
       // Maybe use some query handling logic.
       scope.searchProvider = (query) => {
+        $log.log(query);
+        if (!query) {
+          $log.log("here");
+          scope.filterProviders = scope.providers;
+          return;
+        }
         scope.filterProviders = [];
         scope.providers.forEach(function(provider) {
+          $log.log(provider);
+          provider.nickname = provider.nickname || "";
+          provider.companyname = provider.companyname || "";
           if (provider.nickname.toLowerCase().indexOf(query) >=0 ||
             provider.companyname.toLowerCase().indexOf(query) >=0) {
               scope.filterProviders.push(provider);
@@ -74,6 +65,7 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
       };
 
       scope.selectProvider = (selected) => {
+        $log.log(selected);
         scope.filterProviders = [selected.originalObject];
         $log.log(scope.filterProviders);
       };
@@ -113,6 +105,9 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
         }, function () {
         });
       };
+      scope.filterProviders = [];
+      scope.providers = [];
+      scope.getProviderList();
     }
   };
 };

@@ -25,6 +25,7 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
   $scope.priceItems = calendarConfig.data["团期报价"];
   $scope.cachedPrice = {};
   $scope.existList = [];
+  $scope.toggleLeft();
   productFac.getSelfPaidList().then(function(results) {
     $scope.existList = results;
   });
@@ -106,7 +107,6 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
 
   function buildToggler(navID) {
       return function() {
-        $log.log("open sidebar");
         $scope.$broadcast("sidebarOpen");
         $mdSidenav(navID)
           .toggle()
