@@ -74,6 +74,8 @@ import saleAccountCtrl from './common/sale/account/accountCtrl.js';
 import formCtrl from './common/directives/form/formCtrl.js';
 import applyRevokeCtrl from './common/sale/order/applyRevokeCtrl.js';
 
+import showEmployeeCtrl from './common/employee/showEmployeeCtrl.js';
+
 // factory
 import authFac from './common/authFac';
 import fileFac from './common/fileFac';
@@ -160,6 +162,8 @@ angular.module('webProject',
   .controller('saleAccountCtrl', saleAccountCtrl)
 
   .controller('applyRevokeCtrl', applyRevokeCtrl)
+
+  .controller('showEmployeeCtrl', showEmployeeCtrl)
 
 
   // factory

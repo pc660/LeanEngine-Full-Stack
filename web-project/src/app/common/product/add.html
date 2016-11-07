@@ -171,20 +171,23 @@
             <tr>
               <td>出发地</td>
               <td>
-                <address ng-if="isEditing" is-editing="isEditing" show-county="false" ng-model="product.start"></address>
-                <div ng-if="!isEditing">
-                  <p>{{ product.start.province }}</p>
-                  <p ng-if="product.start.city != '市辖区'">{{ product.start.city }}</p>
-                  <p>{{ product.start.detail }}</p>
-                </div>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-selected="product.startCity != 'undefined' && $first" ng-model="product.startCity">
+                    <md-option ng-value="start" ng-repeat="start in startCities">
+                      {{start}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.startCity }}</p>
               </td>
             </tr>
             <tr>
               <td>类型</td>
               <td>
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-selected="product.type != 'undefined' && $first" ng-model="product.type">
-                    <md-option ng-value="type" ng-repeat="type in types">
+                  <md-select ng-model="product.type">
+                    <md-option ng-selected="product.type != 'undefined' && $first"
+                               ng-value="type" ng-repeat="type in types">
                       {{type}}
                     </md-option>
                   </md-select>
@@ -196,9 +199,9 @@
               <td>大区</td>
               <td>
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-model="product.area"
-                             ng-selected="product.area != 'undefined' && $first">
-                    <md-option ng-value="area" ng-repeat="area in areas">
+                  <md-select ng-model="product.area">
+                    <md-option ng-selected="product.area != 'undefined' && $first"
+                               ng-value="area" ng-repeat="area in areas">
                       {{area}}
                     </md-option>
                   </md-select>

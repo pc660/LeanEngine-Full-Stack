@@ -1,0 +1,20 @@
+<table>
+  <tr>
+    <th>姓名</th>
+    <th>供应商数量</th>
+    <th>产品数量</th>
+    <th>订单数</th>
+  </tr>
+  <tr ng-repeat="employee in employeeList">
+    <td>{{ employee.contactname }}</td>
+    <td>{{ employee.providerCount }}</td>
+    <td>
+      <div>已上架:{{ employee.productVerifiedCount }}</div>
+      <div>在审核:{{ employee.productUnvierifedCount }}</div>
+      <div>下架:{{ employee.productUnpostedCount }}</div>
+    </td>
+    <td>
+      <div>订单数: {{ employee.orderCount }}</div>
+    </td>
+  </tr>
+</table>

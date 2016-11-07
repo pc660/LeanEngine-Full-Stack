@@ -1,9 +1,10 @@
-export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, orderFac, formConfig, providerFac, SweetAlert) => {
+export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uibModal, userFac, lcConfig, $window, productFac, orderFac, formConfig, providerFac, menuConfig, SweetAlert) => {
   'ngInject';
   $scope.changePass = false;
   $scope.level = authFac.getUserLevel();
   $scope.isProvider = (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER);
   $scope.query = {};
+  $scope.categoryList = menuConfig.data["线路分类"];
 
   if ($scope.$parent.unfinished) {
     $scope.unfinished = "(有未处理产品)";
@@ -19,14 +20,10 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
   });
 
   providerFac.getMyProvider().then(function(result) {
-    $log.log("success");
     $scope.fetchedProvider = true;
     // There should be only one provider.
     $scope.provider = result.provider;
     $scope.contactList = result.contacts;
-    $log.log(result);
-    $log.log("getting result");
-    $log.log($scope.provider);
   }, function (error) {
     $scope.fetchedProvider = true;
   });
@@ -49,13 +46,15 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
     $scope.isLoading = true;
     $scope.query.index = $scope.currentPage;
     productFac.searchProduct($scope.query).then(function(results) {
+      $log.log(results);
       $scope.isLoading = false;
       $scope.products = results.products;
       $scope.totalProducts = results.count;
-      for (var i = 0; i < $scope.products.length; i++) {
-        $scope.products[i].responsible = results.responsible[i];
-        productFac.getLatestTrip($scope.products[i]);
-      }
+      $scope.products.forEach(function(product, i) {
+        product.responsible = results.responsible[i];
+        productFac.getLatestTrip(product);
+        product.updateCategory = false;
+      })
     }, function(error) {
     });
   };
@@ -69,11 +68,29 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
     $scope.search();
   };
 
-  $scope.showMyProducts = () => {
+  $scope.showMyProducts = (category) => {
     $scope.unverified = false;
     // Construct the query.
     $scope.query = {};
+    $scope.query.status = lcConfig.productStatus.VERIFIED;
     $scope.query.self = true;
+    if (category) {
+      $scope.query.category = category;
+    }
+    $scope.search();
+  };
+
+  $scope.showMyVerifyProducts = () => {
+    $scope.query = {};
+    $scope.query.self = true;
+    $scope.query.status = lcConfig.productStatus.UNVERIFIED;
+    $scope.search();
+  };
+
+  $scope.showMyUnpostedProducts = () => {
+    $scope.query = {};
+    $scope.query.self = true;
+    $scope.query.status = lcConfig.productStatus.UNPOSTED;
     $scope.search();
   };
 
@@ -215,5 +232,23 @@ export default ($rootScope, authFac, $log,$sce,  $state, $scope, $uibModal, user
   $scope.pageChanged = () => {
     $scope.products = [];
     $scope.search();
+  };
+
+  $scope.updateCategory = (product) => {
+    //if (!product.updateCategory) {
+    //  product.updateCategory = true;
+    //  return;
+    //}
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+      .title("该更改可能会实时更改前台结果,请再次确认.")
+      .ok("确认")
+      .cancel("取消");
+      $mdDialog.show(confirm).then(function() {
+      productFac.updateCategory(product.objectId, product.category).then(function() {
+        SweetAlert.swal("更新成功", "请通知前台核实", "success");
+      });
+    }, function() {
+    });
   };
 };

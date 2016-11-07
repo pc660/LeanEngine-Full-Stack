@@ -8,7 +8,7 @@
     <th>操作</th>
   </tr>
   <tr ng-repeat="provider in providers">
-    <td>{{ provider.objectId }}</td>
+    <td>{{ provider.ProviderId }}</td>
     <td>{{ provider.nickname }}</td>
     <td>{{ provider.companyname }}</td>
     <td><a ng-if="provider.licenseFile.url" download=".pdf" href="{{ provider.licenseFile.url }}"> 点击下载</a></td>

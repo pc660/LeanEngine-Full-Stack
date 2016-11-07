@@ -8,16 +8,6 @@
 
 <table class="search-option">
   <tr>
-    <td>出发城市</td>
-    <td class="address-tag">
-      <div>
-        <span ng-class="{'selected-tag': !showAddress}" ng-click="showAddress = false" class="unlimited">不限</span>
-        <span ng-class="{'selected-tag': showAddress}" ng-click="showAddress = true" class="unlimited">选择城市</span>
-        <address ng-show="showAddress" class="address" show-county=false is-editing="true" ng-model="start"></address>
-      </div>
-    </td>
-  </tr>
-  <tr>
     <td>出发日期</td>
     <td>
       <span ng-class="{'selected-tag': !showDate}" ng-click="showDate = false" class="unlimited">不限</span>
@@ -41,6 +31,13 @@
           data-date-format="mediumDate"
           data-autoclose="true">
       </div>
+    </td>
+  </tr>
+  <tr class="selectable">
+    <td>出发城市</td>
+    <td>
+      <span class="unlimited" ng-class="{'selected-tag': index['出发城市'] == -1}" ng-click="pick('出发城市', -1)">不限</span>
+      <span class="unlimited" ng-class="{'selected-tag': $index==index['出发城市']}" ng-click="pick('出发城市', $index)" ng-repeat="start in tags['出发城市']">{{ start }}</span>
     </td>
   </tr>
   <tr>
@@ -109,8 +106,7 @@
         <span>{{product.fullName}}</span>
       </a>
       <div class="metadata">
-        <span ng-if="product.start.city == '市辖区'">出发地: {{ product.start.province }}</span>
-        <span ng-if="product.start.city != '市辖区'">出发地: {{ product.start.city }}</span>
+        <span>出发地: {{ product.startCity }}</span>
         <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span>
         <span>最近班期：
           <em ng-repeat="date in product.priceDate" class="date">{{ date }}</em>

@@ -4,6 +4,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
   $scope.selectedTags = {};
 
   $scope.index = {
+    "出发城市": -1,
     "酒店标准": -1,
     "交通方式": -1,
     "类型": -1,
@@ -13,6 +14,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
   };
 
   $scope.tags = {
+    "出发城市": menuConfig.data["出发城市"],
     "酒店标准": menuConfig.data["酒店标准"],
     "交通方式": menuConfig.data["交通方式"],
     "类型": menuConfig.data["类型"],
@@ -138,6 +140,8 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
         return "provider";
       case "大区":
         return "area";
+      case "出发城市":
+        return "start";
       default:
         return "";
     }

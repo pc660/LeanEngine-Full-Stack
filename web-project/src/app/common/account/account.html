@@ -20,14 +20,26 @@
       <md-tab class="dot" label="我的产品">
         <section layout="row" flex>
           <md-sidenav
-            class="md-sidenav-left shadow"
+            class="md-sidenav-left shadow show-product-nav"
             md-component-id="showProduct"
             md-is-locked-open="true"
             md-disable-backdrop
             md-whiteframe="4">
             <div class="sidebar-button">
               <md-button ng-click="showMyProducts()" class="md-primary">
-                我发布的产品
+                常规产品(已上架)
+              </md-button>
+              <md-button ng-click="showMyProducts('促销')" class="md-primary">
+                促销产品(已上架)
+              </md-button>
+              <md-button ng-click="showMyProducts('过期')" class="md-primary">
+                过期产品(已上架)
+              </md-button>
+              <md-button ng-click="showMyVerifyProducts();" class="md-primary">
+                正在审核的产品
+              </md-button>
+              <md-button ng-click="showMyUnpostedProducts();" class="md-primary">
+                下架产品
               </md-button>
               <md-button ng-if="level == 0 || level == 3" ng-click="showUnverified()" class="md-primary">
                 需要我审核的产品
@@ -46,6 +58,7 @@
                 <th>负责人</th>
                 <th>详情</th>
                 <th>状态</th>
+                <th style="width: 150px;">分类</th>
                 <th>操作</th>
               </tr>
               <tr ng-repeat="product in products">
@@ -67,6 +80,17 @@
                   <p ng-if="product.status == 1">下架</p>
                   <p ng-if="product.status == 2">未审核</p>
                   <p ng-if="product.status == 3">已审核</p>
+                </td>
+                <td>
+                  <md-input-container style="width: 80px;">
+                    <md-select ng-model="product.category"
+                               ng-change="updateCategory(product);">
+                      <md-option ng-value="category"
+                                 ng-repeat="category in categoryList">
+                        {{category}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
                 </td>
                 <td>
                   <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>

@@ -9,6 +9,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getProvider = getProvider;
   service.showContact = showContact;
   service.getSaleusers = getSaleusers;
+  service.getEmployeeList = getEmployeeList;
   return service;
 
   function getCurrentUserInfo() {
@@ -101,6 +102,11 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   // User a const value maybe.
   function getSaleusers() {
-    return $http.post('/api/user/get', {query: {level : [1]}});
+    return $http.post('/api/user/get', {query: {level : [lcConfig.userLevel.SALE]}});
+  }
+
+  // Include: ["provider", "product", "order"].
+  function getEmployeeList(include) {
+    return $http.post('/api/user/get', {include: include, query: {level : [lcConfig.userLevel.ORGANIZER]}});
   }
 };

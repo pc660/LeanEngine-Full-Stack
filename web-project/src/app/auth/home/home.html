@@ -6,6 +6,7 @@
         <li><a ui-sref=".add-product">发布产品</a></li>
         <li ng-if="level == 0"><a ui-sref=".show-products">产品管理</a></li>
         <li ng-if="level == 0 || level == 3"><a ui-sref=".show-providers">供应商管理</a></li>
+        <li ng-if="level == 0"><a ui-sref=".show-employees">计调管理</a></li>
         <li ng-if="level == 3"><a ui-sref=".add-provider">添加供应商</a></li>
         <li ng-if="level == 0 || level == 2"><a ui-sref=".show-orders">订单管理</a></li>
         <li ng-if="level == 3"><a ui-sref=".show-orders">订单审核</a></li>

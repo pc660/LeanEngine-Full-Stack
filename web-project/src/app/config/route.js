@@ -170,6 +170,12 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       templateUrl: 'app/common/account/account.html',
       controller: 'myAccountCtrl',
       authenticate: [lcConfig.userLevel.PROVIDER, lcConfig.userLevel.ORGANIZER],
+    })
+    .state('home.show-employees', {
+      url: '/show-employees',
+      templateUrl: 'app/common/employee/show.html',
+      controller: 'showEmployeeCtrl',
+      authenticate: [lcConfig.userLevel.ADMIN],
     });
 
   $urlRouterProvider.otherwise('/login');

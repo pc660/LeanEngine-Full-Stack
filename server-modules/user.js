@@ -2,10 +2,24 @@
 
 const AV = require('leanengine');
 const tool = require('./tool');
+const config = require('./config');
 let userApi = {};
 
 const INTERNAL = 0;
 const PROVIDER_LEVLE = 1;
+
+// {"all"}
+function getPromises(promiseMap) {
+    //tool.l("getPromises");
+    //tool.l(promiseMap);
+    var promises = [];
+    var keys = [];
+    for (var key in promiseMap) {
+        promises.push(promiseMap[key]);
+        keys.push(key);
+    }
+    return [promises, keys];
+};
 
 userApi.get = (req, res) => {
     tool.l("userApi.get");
@@ -14,18 +28,103 @@ userApi.get = (req, res) => {
     log.set("data", {query: req.body.query});
     log.set("user", req.user);
     log.save();
+
     var query = new AV.Query('_User');
     var levelList = req.body.query.level;
     query.select(["contactname", "objectId"])
-    //query.equalTo('level', level);
     for (var i = 0; i < levelList.length; i++) {
         query.equalTo('level', levelList[i]);
     }
-    query.find().then(function(results) {
-        res.send(results);
+    query.find().then(function(employeeList) {
+        if (!req.body.include) {
+            res.send(employeeList);
+            return;
+        }
+        var countResults = {};
+        var totalCount = employeeList.length;
+
+        employeeList.forEach(function(employee) {
+            countResults[employee.id] = {};
+            var include = req.body.include;
+            var count = include.length;
+            include.forEach(function(item) {
+                var includeMap = parseInclude(item, employee);
+                for (var includeKey in includeMap) {
+                    var promiseAndKey = getPromises(includeMap[includeKey]);
+                    //tool.l(promiseAndKey[0]);
+                    Promise.all(promiseAndKey[0]).then(function(promiseResults) {
+                        countResults[employee.id][includeKey] = {};
+                        promiseResults.forEach(function(promiseResult, i) {
+                            countResults[employee.id][includeKey][promiseAndKey[1][i]] = promiseResult;
+                        });
+                        if (Object.keys(countResults[employee.id]).length == count) {
+                            totalCount--;
+                        }
+                        if (totalCount == 0) {
+                            res.send({employeeList: employeeList, employeeMap: countResults});
+                            return;
+                        }
+
+                    }, function(error) {
+                        tool.l(error);
+                    });
+                }
+            });
+        });
+
     }, function(error) {
         tool.e(error);
     });
+}
+
+function parseInclude(item, user) {
+    var returnMap = {};
+    if (item) {
+        switch(item) {
+            case "product":
+                returnMap.product = getUserProductPromise(user);
+                break;
+            case "provider":
+                returnMap.provider = getProviderQuery(user);
+                break;
+            case "order":
+                returnMap.order = getOrderQuery(user);
+                break;
+        }
+    }
+    return returnMap;
+}
+
+// Only return the status and count.
+function getUserProductPromise(user) {
+    var returnMap = {};
+    for (var key in config.productStatus) {
+        returnMap[config.productStatus[key]] = productCountQuery(config.productStatus[key], user);
+    }
+    return returnMap;
+}
+
+function getProviderQuery(user) {
+    var returnMap = {};
+    var query = new AV.Query('Provider');
+    query.equalTo("createdBy", user);
+    returnMap.all = query.count();
+    return returnMap;
+}
+
+function productCountQuery(status, user) {
+    var query = new AV.Query('Product');
+    query.equalTo("createdBy", user);
+    query.equalTo("status", status);
+    return query.count();
+}
+
+function getOrderQuery(user) {
+    var returnMap = {};
+    var query = new AV.Query('Order');
+    query.equalTo("productCreator", user);
+    returnMap.all = query.count();
+    return returnMap;
 }
 
 userApi.getCurrentUserInfo = (req, res) => {

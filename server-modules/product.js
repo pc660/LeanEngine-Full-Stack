@@ -15,8 +15,11 @@ const multiChoiceConfig = require('./config/multiChoiceConfig');
 function setProduct(productAV, product) {
   productAV.set('productName', product.productName);
   productAV.set('fullName', product.fullName);
-  productAV.set('start', product.start);
+  productAV.set('startCity', product.startCity);
   productAV.set('type', product.type);
+  if (product.category) {
+    productAV.set('category', "促销");
+  }
   //productAV.set('responsible', product.responsible);
   if (product.responsible) {
     var responsibleAV = AV.Object.createWithoutData('_User', product.responsible.objectId);
@@ -37,8 +40,11 @@ function setProduct(productAV, product) {
   productAV.set('duration', product.duration);
   productAV.set('hotelDuration', product.hotelDuration);
 
-  var provider = AV.Object.createWithoutData('Provider', product.pickedProvider.objectId);
-  productAV.set('provider', provider);
+  if (product.pickedProvider) {
+    tool.l("runnign here provider");
+    var provider = AV.Object.createWithoutData('Provider', product.pickedProvider.objectId);
+    productAV.set('provider', provider);
+  }
 
   // HTML
   productAV.set("description", product.description);
@@ -110,6 +116,28 @@ function constructSelfPaidContent(productPaidList) {
   return content;
 }
 
+productApi.updateCategory = (req, res) => {
+  tool.l('product.updateCategory');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.updateCategory");
+  log.set("data", {"product": req.body.productId, "category": req.body.category});
+  log.set("user", req.user);
+  log.save();
+
+  var user = req.user;
+  if (!user) {
+    tool.e("user is undefined when product.add");
+    res.send(404);
+    return;
+  }
+
+  var productAV =  AV.Object.createWithoutData('Product', req.body.productId);
+  productAV.set("category", req.body.category);
+  productAV.save().then(function() {
+    res.send();
+  });
+};
+
 productApi.add = (req, res) => {
   tool.l('product.add');
   var log = AV.Object.new("AccessLog");
@@ -124,18 +152,22 @@ productApi.add = (req, res) => {
     res.send(404);
     return;
   }
+
   var product = req.body.product;
   tool.l(product);
   var productAV = {};
   if (product.objectId) {
     var productAV =  AV.Object.createWithoutData('Product', product.objectId);
+    tool.l("editing");
   } else {
     var productAV = AV.Object.new('Product');
     productAV.set("createdBy",  user);
   }
   setProduct(productAV, product);
 
+  tool.l("running here");
   productAV.save().then(function(productResult) {
+      tool.l(productResult);
       tool.l("success");
       res.send("success");
       // Now we store thte pdf file.
@@ -147,6 +179,7 @@ productApi.add = (req, res) => {
 
       generateItinerary(params, productResult);
   }, function(error) {
+    tool.l(error);
       res.send(error);
     });
 };
@@ -172,8 +205,6 @@ productApi.constructItinerayParams = (product) => {
   params.title = product.productName;
   params.description = product.description;
   params.itinerary = product.itinerary;
-  tool.l("getting iteriner");
-  tool.l( product.itinerary);
   for (var i = 0; i < params.itinerary.length; i++) {
     params.itinerary[i].index = i + 1;
     if (!params.itinerary[i].food) {
@@ -359,6 +390,9 @@ productApi.search = (req, res) => {
       case "transportStandard":
         query.equalTo("transportStandard", params["transportStandard"]);
         break;
+      case "start":
+        query.equalTo("startCity", params.start);
+        break;
       case "type":
         query.equalTo("type", params["type"]);
         break;
@@ -378,6 +412,9 @@ productApi.search = (req, res) => {
       case "maxDay":
         query.lessThanOrEqualTo("duration", params["maxDay"]);
         break;
+      case "category":
+        query.equalTo("category", params.category);
+        break;
     }
   }
 
@@ -396,17 +433,6 @@ productApi.search = (req, res) => {
       products.forEach(function (product) {
         var price = product.get("price");
         if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate, product.get("stopDay"))) {
-          filterProducts.push(product);
-        }
-      })
-      products = filterProducts;
-    }
-
-    if (params.start) {
-      filterProducts = [];
-      products.forEach(function (product) {
-        var start = product.get("start");
-        if (start.province === params.start.province && start.city === params.start.city) {
           filterProducts.push(product);
         }
       })

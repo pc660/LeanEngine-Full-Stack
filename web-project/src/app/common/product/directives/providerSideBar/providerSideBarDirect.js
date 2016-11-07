@@ -11,15 +11,15 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
         var query = {};
         var level = authFac.getUserLevel();
         // ADMIN or 计调员.
+        scope.isLoading = true;
         if (level === 0 || level == 3) {
           providerFac.getProvider(query)
             .then(function(results) {
-              $log.log(results);
               for (var i = 0; i < results.providers.length; i++) {
                 results.providers[i].contactList = results.contacts[i];
               }
               scope.filterProviders = scope.providers = results.providers;
-              $log.log(scope.providers);
+              scope.isLoading = false;
             }, function(error) {
               // TODO: error.
             });
@@ -28,6 +28,7 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
             $log.log(result);
             result.provider.contactList = result.contacts;
             scope.filterProviders = scope.providers = [result.provider];
+            $scope.isLoading = false;
           });
         }
       };

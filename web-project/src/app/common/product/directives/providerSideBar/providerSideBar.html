@@ -4,19 +4,19 @@
   md-whiteframe="4">
   <md-toolbar class="md-theme-indigo search">
     <h1 class="md-toolbar-tools">选择供应商</h1>
-
   </md-toolbar>
-     <div ng-if="providers.length > 0" angucomplete-alt id="ex1"
-              placeholder="搜索供应商"
-              pause="100"
-              selected-object="selectProvider"
-              local-data="providers"
-              local-search="searchProvider"
-              title-field="nickname,companyname"
-              auto-match=true
-              minlength="0"
-              input-class="form-control form-control-small">
-    </div>
+  <p ng-if="isLoading">正在加载请稍等...若加载过慢,请刷新.</p>
+   <div ng-if="providers.length > 0 && !isLoading" angucomplete-alt id="ex1"
+            placeholder="搜索供应商"
+            pause="100"
+            selected-object="selectProvider"
+            local-data="providers"
+            local-search="searchProvider"
+            title-field="nickname,companyname"
+            auto-match=true
+            minlength="0"
+            input-class="form-control form-control-small">
+  </div>
   <div>
     <md-content layout-padding ng-repeat="provider in filterProviders">
       <md-button ng-click="pickProvider($index)" class="md-primary button">

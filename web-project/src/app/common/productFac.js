@@ -24,12 +24,17 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.parseDate = parseDate;
   service.deleteProduct = deleteProduct;
   service.getSelfPaidList = getSelfPaidList;
+  service.updateCategory = updateCategory;
   return service;
+
+  // A sperate function to imporve performance.
+  function updateCategory(productId, category) {
+    return $http.post('/api/product/updateCategory', {productId: productId, category: category});
+  }
 
   function uploadProduct(product) {
     // Handle all the serilize things here.
     // Save an additional field to accerlate search speed.
-    $log.log(product);
     return $http.post('/api/product/add', {product: product});
   }
 
