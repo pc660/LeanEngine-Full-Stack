@@ -30,7 +30,14 @@ function setProduct(productAV, product) {
     productAV.set('platformcontact', platformcontactAV);
   }
 
-  var price = setDefaultPriceMap(product.price);
+  tool.l("======:" + product.price);
+  var price = product.price;
+  setDefaultPriceMap(price);
+  var minMaxDate = getMinMaxDate(price);
+  if (minMaxDate.length > 1) {
+    productAV.set("minDate", new Date(minMaxDate[0]));
+    productAV.set("maxDate", new Date(minMaxDate[1]));
+  }
   productAV.set('price', product.price);
   productAV.set('hotelStandard', product.hotelStandard);
   productAV.set('transportStandard', product.transportStandard);
@@ -41,7 +48,6 @@ function setProduct(productAV, product) {
   productAV.set('hotelDuration', product.hotelDuration);
 
   if (product.pickedProvider) {
-    tool.l("runnign here provider");
     var provider = AV.Object.createWithoutData('Provider', product.pickedProvider.objectId);
     productAV.set('provider', provider);
   }
@@ -72,7 +78,6 @@ function setProduct(productAV, product) {
   if (selfPaidList) {
 
     if (selfPaidList.objectId) {
-      tool.l("using the existing one");
       selfPaidAV = AV.Object.createWithoutData('SelfPaid', selfPaidList.objectId);
     }
 
@@ -154,21 +159,16 @@ productApi.add = (req, res) => {
   }
 
   var product = req.body.product;
-  tool.l(product);
   var productAV = {};
   if (product.objectId) {
     var productAV =  AV.Object.createWithoutData('Product', product.objectId);
-    tool.l("editing");
   } else {
     var productAV = AV.Object.new('Product');
     productAV.set("createdBy",  user);
   }
   setProduct(productAV, product);
 
-  tool.l("running here");
   productAV.save().then(function(productResult) {
-      tool.l(productResult);
-      tool.l("success");
       res.send("success");
       // Now we store thte pdf file.
       // Need to be careful to set this. This is not safe.
@@ -188,7 +188,6 @@ productApi.constructItinerayParams = (product) => {
   var params = {};
   var price = product.price;
   var priceArray = productApi.parsePriceMap(price, product.duration);
-  tool.l(priceArray);
   params.priceArray = priceArray;
   var prefixArray = Object.keys(product.prefix);
   // Construct the prefixArray from multiChoiceConfig.
@@ -234,7 +233,6 @@ productApi.constructItinerayParams = (product) => {
       }
       params.itinerary[i].food.evening = params.itinerary[i].food.evening || "提供"
     }
-    tool.l(params.itinerary[i].food);
   }
   params.priceInclude = product.priceInclude;
   params.priceExclude = product.priceExclude;
@@ -355,9 +353,6 @@ productApi.search = (req, res) => {
   if (params.searchQuery) {
     query.contains("fullName", params.searchQuery);
   }
-  // Must login and do stuff.
-  tool.l(params);
-  // TODO: uncomment this.
   var user = req.user;
   if (!user) {
    res.status(404).send();
@@ -415,6 +410,14 @@ productApi.search = (req, res) => {
       case "category":
         query.equalTo("category", params.category);
         break;
+      case "startDate":
+        var startDate = tool.parseDate(params.startDate);
+        query.greaterThanOrEqualTo("maxDate", startDate);
+        break;
+      case "endDate":
+        var endDate = tool.parseDate(params.endDate);
+        query.lessThanOrEqualTo("minDate", endDate);
+        break;
     }
   }
 
@@ -424,21 +427,7 @@ productApi.search = (req, res) => {
   // TODO: add start date.
   // TODO: add days.
   Promise.all(queries).then(function (results) {
-
     var products = results[0];
-
-    // Need to check min date and max date.
-    if (params.startDate || params.endDate) {
-      var filterProducts = [];
-      products.forEach(function (product) {
-        var price = product.get("price");
-        if (productApi.checkPriceWithinDate(product.get("price"), params.startDate, params.endDate, product.get("stopDay"))) {
-          filterProducts.push(product);
-        }
-      })
-      products = filterProducts;
-    }
-
     // Also need to retrieve user information.
     var responsible = products.map(function (product) {
       return product.get("responsible");
@@ -446,86 +435,11 @@ productApi.search = (req, res) => {
     var providers = products.map(function (product) {
       return product.get("provider");
     });
-
     res.send({products: products, responsible: responsible, providers: providers, count: results[1]});
     return;
   }, function (error) {
     tool.l(error);
   });
-};
-
-productApi.checkPriceWithinDate = (priceMap, minDate, maxDate, stopDay) => {
-  // Make the startDate as the current time + stopDay.
-  var startDate = new Date();
-  startDate.setDate(startDate.getDate() + stopDay);
-  if (minDate) {
-    var minParsedDate = productApi.parseDate(minDate);
-    minParsedDate.setDate(minParsedDate.getDate());
-    if (minParsedDate - startDate > 0) {
-      startDate = minParsedDate;
-    }
-  }
-
-  var endDate = new Date(2050, 1, 1);
-  if (maxDate) {
-    var maxParsedDate = productApi.parseDate(maxDate);
-    maxParsedDate.setDate(maxParsedDate.getDate());
-    if (maxParsedDate - endDate < 0) {
-      endDate = maxParsedDate;
-    }
-  }
-
-  var years = Object.keys(priceMap).sort();
-  return years.some(function(year) {
-    if (year >= startDate.getFullYear() && year <= endDate.getFullYear()) {
-      var monthPrice = priceMap[year];
-      var startMonth = 0;
-      var endMonth = 11;
-      if (year == startDate.getFullYear()) {
-        startMonth = startDate.getMonth();
-      }
-      if (year == endDate.getFullYear()) {
-        endMonth = endDate.getMonth();
-      }
-
-      for (var month = startMonth; month <= endMonth; month++) {
-        if (! (month in monthPrice)) {
-          continue;
-        }
-
-        var dayPrice = monthPrice[month];
-        var startDay = 0;
-        var endDay = 31;
-        if (month == startMonth && year == startDate.getFullYear()) {
-          startDay = startDate.getDate();
-        }
-        if (month == endMonth && year == endDate.getFullYear()) {
-          endDay = endDate.getDate();
-        }
-
-        for (var day = startDay; day <= endDay; day++) {
-          if (! (day in dayPrice)) {
-            continue;
-          }
-
-          if (dayPrice[day] && Object.keys(dayPrice[day]).length > 0)  {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  })
-};
-
-productApi.parseDate = (dateString) => {
-  var re = /([0-9]+)年([0-9]+)月([0-9]+)日/;
-  var match = dateString.match(re);
-  if (match.length == 4) {
-    return new Date(match[1], match[2] - 1, match[3]);
-  }
-
-  return null;
 };
 
 productApi.getResponsibles = (products) => {
@@ -605,7 +519,6 @@ productApi.hasUnfinished = (req, res) => {
   log.set("user", req.user);
   log.save();
   var user = req.user;
-  tool.l(user);
   if (user === undefined) {
     res.status(404).send();
     return;
@@ -615,7 +528,6 @@ productApi.hasUnfinished = (req, res) => {
   query.equalTo("responsible", user);
   query.equalTo("status", config.productStatus.UNVERIFIED);
   query.count().then(function(value) {
-    tool.l(value);
     res.send({count: value});
   }, function(error) {
     tool.l(error);
@@ -674,13 +586,25 @@ productApi.getProductsCount = (req, res) => {
   });
 };
 
+function getMinMaxDate(priceMap) {
+  var dateList = []
+  for (var year in priceMap) {
+    for (var month in priceMap[year]) {
+      for (var day in priceMap[year][month]) {
+        var date = new Date(year, month, day);
+        dateList.push(date);
+      }
+    }
+  }
+  return [Math.min.apply(null, dateList), Math.max.apply(null, dateList)];
+}
+
 function setDefaultPriceMap(priceMap) {
   for (var year in priceMap) {
     for (var month in priceMap[year]) {
       for (var day in priceMap[year][month]) {
         var event = priceMap[year][month][day];
-        tool.l("event!!!");
-        tool.l(Object.keys(event));
+        tool.l(event);
         if (Object.keys(event).length > 3) {
           event.reservedPeopleNumber = 0;
           event.paidPeopleNumber = 0;

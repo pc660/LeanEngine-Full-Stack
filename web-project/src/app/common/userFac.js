@@ -106,7 +106,15 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   }
 
   // Include: ["provider", "product", "order"].
-  function getEmployeeList(include) {
-    return $http.post('/api/user/get', {include: include, query: {level : [lcConfig.userLevel.ORGANIZER]}});
+  function getEmployeeList(include, options) {
+    var query = {level : [lcConfig.userLevel.ORGANIZER]};
+    options = options || {};
+    if (options.startDate) {
+      query.startDate = options.startDate;
+    }
+    if (options.endDate) {
+      query.endDate = options.endDate;
+    }
+    return $http.post('/api/user/get', {include: include, query: query});
   }
 };

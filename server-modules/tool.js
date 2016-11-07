@@ -52,4 +52,14 @@ pub.sanitize = (string) => {
   return substr.substring(1, lastIndex).trim();
 };
 
+pub.parseDate = (dateString) => {
+  var re = /([0-9]+)年([0-9]+)月([0-9]+)日/;
+  var match = dateString.match(re);
+  if (match.length == 4) {
+    return new Date(match[1], match[2] - 1, match[3]);
+  }
+
+  return null;
+};
+
 module.exports = pub;

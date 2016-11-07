@@ -19,12 +19,29 @@ testApi.clear = (req, res) => {
     query.limit(1000);
     query.find().then(function(results) {
         tool.l(results.length);
-        results.forEach(function(result, i){
-            result.set("category", "普通");
+        results.forEach(function(result) {
+            var price = result.get("price");
+            var minMax = getMinMaxDate(price);
+            result.set("minDate", new Date(minMax[0]));
+            result.set("maxDate", new Date(minMax[1]));
             result.save();
         });
     });
 }
 
+function getMinMaxDate(priceMap) {
+    var dateList = []
+    for (var year in priceMap) {
+        for (var month in priceMap[year]) {
+            for (var day in priceMap[year][month]) {
+                var date = new Date(year, month, day);
+                dateList.push(date);
+            }
+        }
+    }
+    tool.l(dateList);
+    tool.l(Math.min.apply(null, dateList));
+    return [Math.min.apply(null, dateList), Math.max.apply(null, dateList)];
+}
 
 module.exports = testApi;

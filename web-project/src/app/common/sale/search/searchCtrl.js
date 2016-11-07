@@ -83,6 +83,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     $activityIndicator.startAnimating();
     productFac.searchProduct(query).then(function(results) {
       $log.log("success");
+      $log.log(results);
       $activityIndicator.stopAnimating();
       $scope.totalProducts = results.count;
       $scope.products = results.products;

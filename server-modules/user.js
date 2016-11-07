@@ -10,8 +10,6 @@ const PROVIDER_LEVLE = 1;
 
 // {"all"}
 function getPromises(promiseMap) {
-    //tool.l("getPromises");
-    //tool.l(promiseMap);
     var promises = [];
     var keys = [];
     for (var key in promiseMap) {
@@ -30,6 +28,7 @@ userApi.get = (req, res) => {
     log.save();
 
     var query = new AV.Query('_User');
+    tool.l(req.body.query);
     var levelList = req.body.query.level;
     query.select(["contactname", "objectId"])
     for (var i = 0; i < levelList.length; i++) {
@@ -48,10 +47,9 @@ userApi.get = (req, res) => {
             var include = req.body.include;
             var count = include.length;
             include.forEach(function(item) {
-                var includeMap = parseInclude(item, employee);
+                var includeMap = parseInclude(item, employee, req.body.query);
                 for (var includeKey in includeMap) {
                     var promiseAndKey = getPromises(includeMap[includeKey]);
-                    //tool.l(promiseAndKey[0]);
                     Promise.all(promiseAndKey[0]).then(function(promiseResults) {
                         countResults[employee.id][includeKey] = {};
                         promiseResults.forEach(function(promiseResult, i) {
@@ -77,18 +75,18 @@ userApi.get = (req, res) => {
     });
 }
 
-function parseInclude(item, user) {
+function parseInclude(item, user, queryOptions) {
     var returnMap = {};
     if (item) {
         switch(item) {
             case "product":
-                returnMap.product = getUserProductPromise(user);
+                returnMap.product = getUserProductPromise(user, queryOptions);
                 break;
             case "provider":
-                returnMap.provider = getProviderQuery(user);
+                returnMap.provider = getProviderQuery(user, queryOptions);
                 break;
             case "order":
-                returnMap.order = getOrderQuery(user);
+                returnMap.order = getOrderQuery(user, queryOptions);
                 break;
         }
     }
@@ -96,34 +94,54 @@ function parseInclude(item, user) {
 }
 
 // Only return the status and count.
-function getUserProductPromise(user) {
+function getUserProductPromise(user, queryOptions) {
     var returnMap = {};
     for (var key in config.productStatus) {
-        returnMap[config.productStatus[key]] = productCountQuery(config.productStatus[key], user);
+        returnMap[config.productStatus[key]] = productCountQuery(config.productStatus[key], user, queryOptions);
     }
     return returnMap;
 }
 
-function getProviderQuery(user) {
+function setQueryOption(queryOptions, query) {
+    if (queryOptions.startDate) {
+        var date = tool.parseDate(queryOptions.startDate);
+        query.greaterThan("createdAt", date);
+    }
+    if (queryOptions.endDate) {
+        var date = tool.parseDate(queryOptions.endDate);
+        query.lessThan("createdAt", date);
+    }
+}
+
+function getProviderQuery(user, queryOptions) {
     var returnMap = {};
     var query = new AV.Query('Provider');
     query.equalTo("createdBy", user);
+    setQueryOption(queryOptions, query);
     returnMap.all = query.count();
     return returnMap;
 }
 
-function productCountQuery(status, user) {
+function productCountQuery(status, user, queryOptions) {
     var query = new AV.Query('Product');
     query.equalTo("createdBy", user);
     query.equalTo("status", status);
+    setQueryOption(queryOptions, query);
     return query.count();
 }
 
-function getOrderQuery(user) {
-    var returnMap = {};
+function orderCountQuery(status, user, queryOptions) {
     var query = new AV.Query('Order');
     query.equalTo("productCreator", user);
-    returnMap.all = query.count();
+    query.equalTo("status", status);
+    setQueryOption(queryOptions, query);
+    return query.count();
+}
+
+function getOrderQuery(user, queryOptions) {
+    var returnMap = {};
+    returnMap[config.orderStatus.FINISHED] = orderCountQuery(config.orderStatus.FINISHED, user, queryOptions);
+    returnMap[config.orderStatus.CANCELLED] = orderCountQuery(config.orderStatus.CANCELLED, user, queryOptions);
     return returnMap;
 }
 
@@ -244,7 +262,6 @@ userApi.getProvider = (req, res) => {
         var query = new AV.Query('Contact');
         query.equalTo("provider", result);
         query.find().then(function(contactList) {
-            tool.l(contactList);
             res.send({ "provider": result, "contacts": contactList});
         })
         return;

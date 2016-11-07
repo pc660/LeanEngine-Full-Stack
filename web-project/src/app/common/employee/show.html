@@ -1,4 +1,33 @@
-<table>
+<table class="organizer-search search-option">
+  <tr>
+    <td style="width: 200px;">搜索日期</td>
+    <td>
+      <span ng-class="{'selected-tag': !showDate}" ng-click="showDate = false" class="unlimited">不限</span>
+      <span ng-class="{'selected-tag': showDate}" ng-click="showDate = true" class="unlimited">选择搜索日期</span>
+      <div ng-show="showDate" class="date-wrapper" layout="row">
+        <input
+          ng-model="query.startDate"
+          type="text"
+          data-date-type="string"
+          data-model-date-format="mediumDate"
+          bs-datepicker
+          data-date-format="mediumDate"
+          data-autoclose="true">
+        <div class="separator"> - </div>
+        <input
+          ng-model="query.endDate"
+          type="text"
+          data-date-type="string"
+          data-model-date-format="mediumDate"
+          bs-datepicker
+          data-date-format="mediumDate"
+          data-autoclose="true">
+      </div>
+      <md-button class="md-raised md-primary search-button" ng-click="search();">确认搜索</md-button>
+    </td>
+  </tr>
+</table>
+<table class="organizer-table">
   <tr>
     <th>姓名</th>
     <th>供应商数量</th>
@@ -9,12 +38,13 @@
     <td>{{ employee.contactname }}</td>
     <td>{{ employee.providerCount }}</td>
     <td>
-      <div>已上架:{{ employee.productVerifiedCount }}</div>
-      <div>在审核:{{ employee.productUnvierifedCount }}</div>
-      <div>下架:{{ employee.productUnpostedCount }}</div>
+      <div>已上架:<strong>{{ employee.productVerifiedCount }}</strong></div>
+      <div>在审核:<strong>{{ employee.productUnvierifedCount }}</strong></div>
+      <div>下架:<strong>{{ employee.productUnpostedCount }}</strong></div>
     </td>
     <td>
-      <div>订单数: {{ employee.orderCount }}</div>
+      <div>已完成订单数: <strong>{{ employee.finishOrderCount }}</strong></div>
+      <div>已取消订单数: <strong>{{ employee.cancelOrderCount }}</strong></div>
     </td>
   </tr>
 </table>
