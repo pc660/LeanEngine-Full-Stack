@@ -17,8 +17,8 @@ function setProduct(productAV, product) {
   productAV.set('fullName', product.fullName);
   productAV.set('startCity', product.startCity);
   productAV.set('type', product.type);
-  if (product.category) {
-    productAV.set('category', "促销");
+  if (!product.category) {
+    productAV.set('category', "普通");
   }
   //productAV.set('responsible', product.responsible);
   if (product.responsible) {
@@ -42,6 +42,10 @@ function setProduct(productAV, product) {
   productAV.set('hotelStandard', product.hotelStandard);
   productAV.set('transportStandard', product.transportStandard);
   productAV.set('area', product.area);
+  productAV.set('subarea', product.subarea);
+  if (product.detailArea) {
+    productAV.set('detailArea', product.detailArea);
+  }
   productAV.set('stopDay', product.stopDay);
   productAV.set('prefix', Object.keys(product.prefix));
   productAV.set('duration', product.duration);
@@ -169,7 +173,7 @@ productApi.add = (req, res) => {
   setProduct(productAV, product);
 
   productAV.save().then(function(productResult) {
-      res.send("success");
+      res.send(productResult);
       // Now we store thte pdf file.
       // Need to be careful to set this. This is not safe.
       // We probably have to check any javascript stuff or link stuff here.

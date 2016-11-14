@@ -20,7 +20,14 @@ export default (
   service.logout = logout;
   service.cookie = null;
   service.changePass = changePass;
+  service.getUser = getUser;
   return service;
+
+  function getUser() {
+    var cookie = $cookies.get('user');
+    service.cookie = JSON.parse(cookie);
+    return service.cookie;
+  }
 
   function getUserLevel() {
     if (!isLoggedin()) {

@@ -8,12 +8,31 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
     scope: {
       other: "@",
       type: "@",
+      dynamicType: "=",
       isEditing: "=",
       model: '=ngModel',
     },
     link: function(scope, element, attr) {
       scope.types = {};
-      scope.options = multiChoiceConfig.data[attr.type];
+      scope.options = [];
+
+      scope.$watch("dynamicType", function(value) {
+        if (value) {
+          scope.options = [];
+          if (value in multiChoiceConfig.data) {
+            scope.options = multiChoiceConfig.data[value];
+          }
+        }
+      });
+
+      if (attr.type) {
+        scope.options = multiChoiceConfig.data[attr.type];
+      } else {
+        if (scope.dynamicType in multiChoiceConfig.data) {
+          scope.options = multiChoiceConfig.data[scope.dynamicType];
+        }
+      }
+      $log.log(scope.options);
       for (var i = 0; i < scope.options.length; i++) {
         scope.options[i].state = false;
       }
@@ -21,14 +40,10 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
       // TODO: Model should be the same type.
       // Now we take into an array and convert to an object.
       scope.$watch("model", function() {
-        $log.log("watching ");
-        $log.log(scope.model);
         if(Object.prototype.toString.call(scope.model) !== '[object Array]' ) {
-          $log.log("not array");
           return;
         }
 
-        $log.log("changing model");
         for (var i = 0; i < scope.options.length; i++) {
           var option = scope.options[i];
           // If option is contained in the model.
@@ -36,7 +51,6 @@ export default ($rootScope, $log, $state, $window, multiChoiceConfig) => {
             option.state = true;
           }
         }
-        $log.log(scope.options);
         //optionsListener();
       }, true);
 

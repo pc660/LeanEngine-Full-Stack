@@ -73,13 +73,13 @@
             <!--Only id if in non editing mode-->
             <tr ng-if="!isEditing">
               <td>产品编号</td>
-              <td>
+              <td colspan="4">
                 <p>{{ product.objectId }}</p>
               </td>
             </tr>
             <tr>
               <td>线路名称</td>
-              <td>
+              <td colspan="4">
                 <input ng-if="isEditing" type="text" ng-model="product.fullName">
                 <div ng-if="!isEditing">
                   <span ng-repeat="prefix in product.prefixArray">
@@ -93,20 +93,20 @@
             </tr>
             <tr>
               <td>供应商产品名称</td>
-              <td>
+              <td colspan="4">
                 <input ng-if="isEditing" type="text" ng-model="product.productName">
                 <p ng-if="!isEditing">{{ product.productName }}</p>
               </td>
             </tr>
             <tr ng-if="isEditing">
               <td>线路名称前缀</td>
-              <td>
+              <td colspan="4">
                 <multi-choice is-editing="isEditing" type="线路前缀" ng-model="product.prefix"></multi-choice>
               </td>
             </tr>
             <tr>
               <td>酒店标准</td>
-              <td>
+              <td colspan="4">
                 <md-input-container ng-if="isEditing">
                   <md-select ng-selected="product.hotelStandard != 'undefined' && $first" ng-if="isEditing" ng-model="product.hotelStandard">
                     <md-option ng-value="hotel" ng-repeat="hotel in hotels">
@@ -119,7 +119,7 @@
             </tr>
             <tr>
               <td>交通方式</td>
-              <td>
+              <td colspan="4">
                 <md-input-container ng-if="isEditing">
                   <md-select ng-selected="product.transportStandard != 'undefined' && $first" ng-if="isEditing" ng-model="product.transportStandard">
                     <md-option ng-value="transport" ng-repeat="transport in transports">
@@ -132,7 +132,7 @@
             </tr>
             <tr>
               <td>产品负责人</td>
-              <td>
+              <td colspan="4">
                 <md-input-container ng-if="isEditing && !isExisting">
                   <md-select ng-model="product.responsible">
                     <md-option ng-selected="$first" ng-value="response" ng-repeat="response in responses track by $index">
@@ -145,21 +145,21 @@
             </tr>
             <tr>
               <td>行程天数</td>
-              <td>
+              <td colspan="4">
                 <counter ng-if="isEditing" ng-model="product.duration"></counter>
               <p ng-if="!isEditing">{{ product.duration }}</p>
               </td>
             </tr>
             <tr>
               <td>酒店入住天数</td>
-              <td>
+              <td colspan="4">
                 <counter ng-if="isEditing" ng-model="product.hotelDuration"></counter>
                 <p ng-if="!isEditing">{{ product.hotelDuration }}</p>
               </td>
             </tr>
             <tr>
               <td>报名截止</td>
-              <td>
+              <td colspan="4">
                 <div>
                   <span>出团前</span>
                   <counter ng-if="isEditing" ng-if="isEditing" ng-model="product.stopDay"></counter>
@@ -170,7 +170,7 @@
             </tr>
             <tr>
               <td>出发地</td>
-              <td>
+              <td colspan="4">
                 <md-input-container ng-if="isEditing">
                   <md-select ng-selected="product.startCity != 'undefined' && $first" ng-model="product.startCity">
                     <md-option ng-value="start" ng-repeat="start in startCities">
@@ -183,7 +183,7 @@
             </tr>
             <tr>
               <td>类型</td>
-              <td>
+              <td colspan="4">
                 <md-input-container ng-if="isEditing">
                   <md-select ng-model="product.type">
                     <md-option ng-selected="product.type != 'undefined' && $first"
@@ -209,9 +209,29 @@
                 <p ng-if="!isEditing">{{ product.area }}</p>
               </td>
             </tr>
+            <tr ng-if="subareas">
+              <td>分区</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.subarea">
+                    <md-option ng-selected="product.subarea != 'undefined' && $first"
+                               ng-value="subarea" ng-repeat="subarea in subareas">
+                      {{subarea}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.area }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>小区(可不选或多选)</td>
+              <td>
+                <multi-choice is-editing="isEditing" dynamic-type='product.subarea' ng-model="product.detailArea"></multi-choice>
+              </td>
+            </tr>
             <tr>
               <td>平台联系人</td>
-              <td>
+              <td colspan="4">
                 <md-input-container ng-if="isEditing && !isExisting">
                   <md-select ng-model="product.platformcontact">
                     <md-option ng-selected="$first" ng-value="response" ng-repeat="response in responses track by $index">
@@ -223,6 +243,9 @@
               </td>
             </tr>
           </table>
+          <div class="submit">
+            <md-button ng-if="isEditing" ng-click="save();" class="md-raised md-primary">保存</md-button>
+          </div>
         </md-tab>
         <!--md-tab class="tab-button" ng-if="!isEditing" label="行程表">
           <a  target="_self" href="{{ fileUrl }}" download="行程.doc">下载</a>
@@ -256,6 +279,9 @@
               <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="itineraryItem.detail"></textarea>
             </div>
             <hr>
+          </div>
+          <div class="submit">
+            <md-button ng-if="isEditing" ng-click="save();" class="md-raised md-primary">保存</md-button>
           </div>
         </md-tab>
         <md-tab class="tab-button" ng-if="isEditing" label="其他信息">
@@ -345,6 +371,9 @@
                 </td>
               </tr>
             </table>
+          </div>
+          <div class="submit">
+            <md-button ng-if="isEditing" ng-click="save();" class="md-raised md-primary">保存</md-button>
           </div>
         </md-tab>
       <md-tab class="tab-button" label="团期报价">

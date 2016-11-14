@@ -1,10 +1,11 @@
-export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig, calendarConfig) => {
+export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonSer, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig, calendarConfig) => {
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
   // Too hacky.
   $scope.firstUpdates = false;
   $scope.product = {};
+  $scope.product.subarea = "东南亚";
   $scope.product.price = {};
   $scope.toggleLeft = buildToggler('provider-side-bar');
   $scope.pickedProviders = [];
@@ -91,7 +92,6 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
     }
     productFac.uploadProduct($scope.product)
     .then(function(result) {
-        $log.log("upload product success");
         SweetAlert.swal({
             title: "发布成功",
             text: "请到我的账号中我发布的产品去查看更新.",
@@ -136,9 +136,13 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
 
   productFac.getInternalUsers().then(function(result) {
     $scope.responses = [];
-    $log.log(result);
     for (var i = 0; i < result.length; i++) {
       $scope.responses.push(result[i]);
+    }
+    if (authFac.getUserLevel() == lcConfig.userLevel.ORGANIZER) {
+      $scope.responses = $scope.responses.filter(function(response) {
+        return response.objectId == authFac.getUser().id;
+      });
     }
   }, function(error) {
 
@@ -208,4 +212,15 @@ export default ($log, SweetAlert, $state, $scope, $stateParams, commonSer, provi
   $scope.deleteItem = (index) => {
     $scope.product.selfPaidList.items.splice(index, 1);
   };
+
+  $scope.save = () => {
+    productFac.uploadProduct($scope.product)
+      .then(function(result) {
+        $scope.product.objectId = result.objectId;
+      });
+  }
+
+  $scope.$watch("product.area", function(value) {
+    $scope.subareas = menuConfig.data[value];
+  });
 };
