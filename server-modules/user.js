@@ -109,6 +109,7 @@ function setQueryOption(queryOptions, query) {
     }
     if (queryOptions.endDate) {
         var date = tool.parseDate(queryOptions.endDate);
+        date.setDate(date.getDate() + 1);
         query.lessThan("createdAt", date);
     }
 }
