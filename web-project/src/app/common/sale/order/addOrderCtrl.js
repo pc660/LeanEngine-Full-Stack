@@ -6,36 +6,54 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   $scope.sexList = ["男", "女"];
   $scope.types = ["成人", "小孩"];
   $scope.order = {};
-  $scope.reserve = $state.params.reserve;
-  $scope.product = $state.params.product;
-  var productId = $state.params.productId;
-  $scope.order.price = $scope.reserve.price;
-  $scope.order.date = $scope.reserve.date;
-  $scope.order.adult = $scope.reserve.adult || 0;
-  $scope.order.child = $scope.reserve.child || 0;
-  if (!$scope.order) {
-    $scope.order = {};
-  }
-  $scope.order.customers = [];
-  $scope.order.extraItems = [];
-  var length = 0;
-  if ($scope.order) {
-    length = $scope.order.adult + $scope.order.child;
-  }
-  $log.log(length);
-  for (var i = 0; i < length; i++) {
-    $scope.order.customers.push({"index": i + 1});
+  $scope.isEditing = false;
+  if ($state.params.orderId) {
+    $scope.isEditing = $state.params.isEditing;
+    orderFac.getOrder($state.params.orderId).then(function(result) {
+      $scope.order = result.order;
+      $scope.order.date = result.order.startDate;
+      $scope.product = result.product;
+      $scope.product.platformcontact = result.platformcontact;
+    });
+  } else {
+    initFromScratch();
   }
 
-  // TODO: Need to pick one.
-  if (!$scope.product) {
-    productFac.getProductDetail(productId).then(function(result) {
-      $scope.product = result.product;
-      $scope.product.provider = result.provider;
-    });
+  function initFromScratch() {
+    $scope.reserve = $state.params.reserve;
+    $scope.product = $state.params.product;
+    var productId = $state.params.productId;
+    $scope.order.price = $scope.reserve.price;
+    $scope.order.date = $scope.reserve.date;
+    $scope.order.adult = $scope.reserve.adult || 0;
+    $scope.order.child = $scope.reserve.child || 0;
+    if (!$scope.order) {
+      $scope.order = {};
+    }
+    $scope.order.customers = [];
+    $scope.order.extraItems = [];
+    var length = 0;
+    if ($scope.order) {
+      length = $scope.order.adult + $scope.order.child;
+    }
+    for (var i = 0; i < length; i++) {
+      $scope.order.customers.push({"index": i + 1});
+    }
+
+    // TODO: Need to pick one.
+    if (!$scope.product) {
+      productFac.getProductDetail(productId).then(function(result) {
+        $scope.product = result.product;
+        $scope.product.provider = result.provider;
+      });
+    }
   }
 
   $scope.$watch("order.adult", function(newValue, oldValue) {
+    if ($scope.isEditing) {
+      $scope.isEditing = false;
+      return;
+    }
     $scope.updateTotalPrice();
     if (oldValue < newValue) {
       $scope.order.customers.push({});
@@ -45,6 +63,10 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   });
 
   $scope.$watch("order.child", function(newValue, oldValue) {
+    if ($scope.isEditing) {
+      $scope.isEditing = false;
+      return;
+    }
     $scope.updateTotalPrice();
     if (oldValue < newValue) {
       $scope.order.customers.push({});
@@ -66,7 +88,7 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
   }, true);
 
   $scope.updateTotalPrice = () => {
-    if ($scope.order) {
+    if ($scope.order && $scope.order.price) {
       $scope.order.totalPrice = $scope.order.adult * $scope.order.price.adultCompanySalePrice +
         $scope.order.child * $scope.order.price.childCompanySalePrice;
       if ( $scope.order.extraRoomNumber) {
@@ -83,8 +105,6 @@ export default (SweetAlert, $log, $scope, $state, $window, lcConfig, productFac,
 
   $scope.submitOrder = () => {
     $scope.order.productId = $scope.product.objectId;
-    $log.log($scope.order.productId);
-    $log.log($scope.order);
     orderFac.submitOrder($scope.order, $scope.reserve).then(function(result) {
       $log.log("success");
       SweetAlert.swal("订单成功", "订单编号: " + result.objectId + " 请及时联系平台负责人确认订单情况.", "success");

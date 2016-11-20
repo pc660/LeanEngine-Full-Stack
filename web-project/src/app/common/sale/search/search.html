@@ -77,6 +77,13 @@
       <span class="unlimited" ng-class="{'selected-tag': $index==index['大区']}" ng-click="pick('大区', $index)" ng-repeat="type in tags['大区']">{{ type }}</span>
     </td>
   </tr>
+  <tr class="selectable" ng-if="tags['分区'].length > 0">
+    <td>分区</td>
+    <td>
+      <span class="unlimited" ng-class="{'selected-tag': index['分区'] == -1}" ng-click="pick('分区', -1)">不限</span>
+      <span class="unlimited" ng-class="{'selected-tag': $index==index['分区']}" ng-click="pick('分区', $index)" ng-repeat="type in tags['分区']">{{ type }}</span>
+    </td>
+  </tr>
   <tr>
     <td>
       目的地
@@ -127,7 +134,23 @@
         <a href="{{ product.fileUrl }}">
          <md-button class="md-raised md-primary">打印行程单</md-button>
         </a>
+        <a ng-show="!product.show" ng-click="product.show = true">查询报价</a>
+        <a ng-show="product.show" ng-click="product.show = false">隐藏报价</a>
       </div>
+    </div>
+    <div ng-show="product.show">
+      <table>
+        <tr>
+          <th>出发日期</th>
+          <th>市场价</th>
+          <th>余位</th>
+        </tr>
+        <tr ng-repeat="price in product.priceArray">
+          <td>{{ price.startDate }}</td>
+          <td>{{ price.adultCompanySalePrice }}</td>
+          <td>{{ price.restPeopleNumber }}</td>
+        </tr>
+      </table>
     </div>
     <hr>
   </div>

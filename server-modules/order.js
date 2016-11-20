@@ -22,11 +22,11 @@ orderApi.get = (req, res) => {
         return;
     }
     var order = AV.Object.createWithoutData('Order', req.body.id);
-    order.fetch({ include: "product.platformcontact"}, null).then(function(result) {
+    order.fetch({ include: "product"}, null).then(function(result) {
         var product = {};
-        product.fullName = result.get("product").get("fullName");
-        product.prefix = result.get("product").get("prefix");
-        res.send({order: result, product: product, platformcontact: result.get("product").get("platformcontact")});
+        //product.fullName = result.get("product").get("fullName");
+        //product.prefix = result.get("product").get("prefix");
+        res.send({order: result, product: result.get("product"), platformcontact: result.get("product").get("platformcontact")});
         return;
     }, function(error) {
         tool.l(error);
@@ -188,8 +188,12 @@ orderApi.add = (req, res) => {
     log.set("user", req.user);
     log.save();
     var order = req.body.order;
-    //var customers = req.body.customers;
-    var orderAV = AV.Object.new('Order');
+    var orderAV;
+    if (order.objectId) {
+        orderAV = AV.Object.createWithoutData('Order', order.objectId);
+    } else {
+        orderAV = AV.Object.new('Order');
+    }
     orderAV.set("adult", order.adult);
     orderAV.set("child", order.child);
     orderAV.set("adultPrice", order.adultCompanySalePrice);

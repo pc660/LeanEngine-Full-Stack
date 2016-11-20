@@ -10,7 +10,6 @@ export default ($rootScope, $log, $state, $window) => {
     },
     link: function(scope, element, attr) {
       scope.value = 0;
-      $log.log("counter");
       if (!scope.model) {
         scope.model = 0;
       }
@@ -33,6 +32,8 @@ export default ($rootScope, $log, $state, $window) => {
       };
 
       scope.$watch("model", function(value) {
+        $log.log("counter value change");
+        $log.log(scope.model);
         scope.value = scope.model;
       });
     }

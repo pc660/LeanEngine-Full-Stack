@@ -153,7 +153,7 @@ export default (SweetAlert, authFac, $log, $scope, $state, $window, $sce, $uibMo
   };
 
   $scope.editOrder = (orderId) => {
-    $state.go('sale.show-order-detail', {orderId: orderId, isEditing: true});
+    $state.go('sale.add-order', {orderId: orderId, isEditing: true});
   };
 
   $scope.pageChanged = () => {

@@ -116,6 +116,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     removeExpiredPrice(product);
 
     product.priceDate = [];
+    product.priceArray = [];
     for (var year in price) {
       for (var month = 0; month < 12; month++) {
         if (!price[year][month]) {
@@ -125,6 +126,11 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
           var event = price[year][month][day];
           if (event && Object.keys(event).length > 1) {
             var dateString = year + "年" + (month + 1) + "月" + day + "日";
+            var priceObject = {};
+            priceObject.startDate = dateString;
+            priceObject.adultCompanySalePrice = event.adultCompanySalePrice;
+            priceObject.restPeopleNumber = event.restPeopleNumber;
+            product.priceArray.push(priceObject);
             product.priceDate.push(dateString);
             if (!product.latestAdultCompanySalePrice) {
               product.latestAdultCompanySalePrice = 99999999;

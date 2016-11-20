@@ -11,6 +11,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     "供应商": -1,
     "行程天数": -1,
     "大区": -1,
+    "分区": -1,
   };
 
   $scope.tags = {
@@ -19,6 +20,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     "交通方式": menuConfig.data["交通方式"],
     "类型": menuConfig.data["类型"],
     "大区": menuConfig.data["大区"],
+    "分区": [],
     "供应商": [],
     "行程天数": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   };
@@ -73,7 +75,6 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
       query.endDate = $scope.endDate;
     }
 
-    $log.log(query);
     // Set start date.
     if (!query.startDate) {
       var date = new Date();
@@ -115,6 +116,9 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     } else {
       $scope.selectedTags[key] = $scope.tags[key][index];
     }
+    if (key == "大区") {
+      $scope.tags["分区"] = menuConfig.data[$scope.selectedTags[key]];
+    }
   };
 
   $scope.removeTag = (key) => {
@@ -132,7 +136,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
       case "酒店标准":
         return "hotelStandard";
       case "交通方式":
-        return "transportStandard";
+        return "transph4tStandard";
       case "类型":
         return "type";
       case "行程天数":
@@ -141,6 +145,8 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
         return "provider";
       case "大区":
         return "area";
+      case "分区":
+        return "subarea";
       case "出发城市":
         return "start";
       default:

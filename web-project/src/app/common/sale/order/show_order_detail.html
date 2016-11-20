@@ -53,7 +53,7 @@
         {{ product.fullName }}
       </p>
     </td>
-    <td>上海</td>
+    <td>{{ product.startCity }}</td>
     <td>
       <span>成人: {{ order.adult }}人</span>
       <span>/</span>
@@ -81,7 +81,8 @@
   <tr>
     <td>成人</td>
     <td>
-      {{ order.adult }}
+      <counter ng-show="isEditing" ng-model="order.adult"></counter>
+      <p ng-if="!isEditing">{{ order.adult }}</p>
     </td>
     <td>
       {{ order.price.adultCompanySalePrice }}
@@ -91,7 +92,8 @@
   <tr>
     <td>儿童</td>
     <td>
-      {{ order.child }}
+      <counter ng-show="isEditing" ng-model="order.child"></counter>
+      <p ng-if="!isEditing">{{ order.child }}</p>
     </td>
     <td>
       {{ order.price.childCompanySalePrice }}

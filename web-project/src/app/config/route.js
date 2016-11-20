@@ -62,6 +62,8 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       params: {
         product: null,
         reserve: null,
+        orderId: null,
+        isEditing: null,
       },
       authenticate: [lcConfig.userLevel.SALE],
     })

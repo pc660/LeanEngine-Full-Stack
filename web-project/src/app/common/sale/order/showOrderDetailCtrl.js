@@ -23,5 +23,4 @@ export default (SweetAlert, $log, authFac, $scope, $state, $window, orderFac, pr
       $state.go("sale");
     });
   };
-
 };

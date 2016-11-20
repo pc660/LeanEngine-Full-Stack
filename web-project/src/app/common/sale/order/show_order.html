@@ -162,7 +162,7 @@
                 <strong ng-if="order.status == 6">申请取消</strong>
                 <strong ng-if="order.status == 7">订单已取消</strong>
               </p>
-              <md-button ng-if="(level == 1) && order.status == 1" ng-click="editOrder(order.objectId);" class="md-raised md-primary">修改客户信息</md-button>
+              <!--md-button ng-if="(level == 1) && order.status == 1" ng-click="editOrder(order.objectId);" class="md-raised md-primary">修改客户信息</md-button-->
               <md-button ng-if="(level == 0 || level == 3) && order.status == 1" ng-click="verifyUnpaid(order);" class="md-raised md-primary">审核通过</md-button>
               <md-button ng-if="(level == 1) && order.status == 2" ng-click="paid(order);" class="md-raised md-primary">确认付款</md-button>
               <md-button ng-if="(level == 0 || level == 3) && order.status == 3" ng-click="verifyFinished(order);" class="md-raised md-primary">确认交易完成</md-button>
@@ -182,6 +182,7 @@
                  ui-sref="home.show-order-detail({orderId: '{{order.objectId}}' })"
                  ui-sref-opts="{ absolute: true }">显示详情</a>
               <!--a ng-if="!admin" ng-click="printReceipt();">打印发票</a-->
+              <a ng-if="(level == 1) && order.status == 1" ng-click="editOrder(order.objectId);" class="md-raised md-primary">修改订单</a>
               <a ng-if="level == 1 && order.status == 1" ng-click="cancelOrder(order);">取消订单</a>
               <a ng-if="level == 3 || level == 0 && order.status == 1" ng-click="cancelUnpaid(order);">取消订单</a>
               <a ng-if="level == 1 && order.status == 2" ng-click="applyCancel(order);">申请取消订单</a>
