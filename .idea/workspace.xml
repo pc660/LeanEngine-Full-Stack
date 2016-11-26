@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36d602e2-4574-40ef-8ee6-5cc17e2c110f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputForm.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputForm.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputFormDirect.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputFormDirect.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/product.js" afterPath="$PROJECT_DIR$/server-modules/product.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/menuConfig.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/menuConfig.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="LeanEngine-Full-Stack.iws" />
@@ -148,41 +147,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="add_order.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/add_order.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-5.9166665">
-                  <caret line="201" column="6" selection-start-line="201" selection-start-column="6" selection-end-line="201" selection-end-column="6" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="addOrderCtrl.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/addOrderCtrl.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="106" column="53" selection-start-line="106" selection-start-column="53" selection-end-line="106" selection-end-column="53" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="show_order.scss" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order.scss">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.0">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="add.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-4.6666665">
-                  <caret line="396" column="96" selection-start-line="396" selection-start-column="84" selection-end-line="396" selection-end-column="96" />
+                <state vertical-scroll-proportion="-1.7254902">
+                  <caret line="216" column="31" selection-start-line="216" selection-start-column="31" selection-end-line="216" selection-end-column="31" />
                   <folding>
                     <element signature="n#style#0;n#md-button#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
@@ -191,6 +160,46 @@
                     <element signature="n#style#0;n#textarea#0;n#td#2;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#input#0;n#td#3;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="add.scss" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-0.0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="multiChoiceConfig.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="menuConfig.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/web-project/src/app/config/menuConfig.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-8.555555">
+                  <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="app-34daa42fca.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/public/scripts/app-34daa42fca.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-3.0">
+                  <caret line="741" column="11" selection-start-line="741" selection-start-column="8" selection-end-line="741" selection-end-column="11" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -218,8 +227,8 @@
           <file leaf-file-name="addProductCtrl.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.44672132">
-                  <caret line="233" column="9" selection-start-line="233" selection-start-column="9" selection-end-line="233" selection-end-column="9" />
+                <state vertical-scroll-proportion="0.4918033">
+                  <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
                   <folding />
                 </state>
               </provider>
@@ -230,16 +239,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
                   <caret line="42" column="36" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="36" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="applyRevokeCtrl.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/order/applyRevokeCtrl.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -292,11 +291,9 @@
         <option value="$PROJECT_DIR$/web-project/src/app/common/employee/show.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/authFac.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
-        <option value="$PROJECT_DIR$/web-project/src/app/config/menuConfig.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/directives/multiChoice/multiChoiceDirect.js" />
         <option value="$PROJECT_DIR$/server-modules/user.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/directives/counter/counterDirect.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/show_order_detail.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/order/showOrderDetailCtrl.js" />
@@ -314,6 +311,8 @@
         <option value="$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputForm.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputFormDirect.js" />
         <option value="$PROJECT_DIR$/server-modules/product.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/config/menuConfig.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
       </list>
     </option>
@@ -1039,7 +1038,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js</url>
-          <line>85</line>
+          <line>84</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
@@ -1048,13 +1047,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/employee/show.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/employee/show.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1130,13 +1122,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/menuConfig.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="98" column="13" selection-start-line="98" selection-start-column="13" selection-end-line="98" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1200,13 +1185,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/show.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.5">
@@ -1232,13 +1210,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1396,21 +1367,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.6666665">
-          <caret line="396" column="96" selection-start-line="396" selection-start-column="84" selection-end-line="396" selection-end-column="96" />
-          <folding>
-            <element signature="n#style#0;n#md-button#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#0;n#tr#1;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#1;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#textarea#0;n#td#2;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#3;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/directives/inputForm/inputForm.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-17.166666">
@@ -1435,10 +1391,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/scripts/app-34daa42fca.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.0">
+          <caret line="741" column="11" selection-start-line="741" selection-start-column="8" selection-end-line="741" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/menuConfig.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.555555">
+          <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.7254902">
+          <caret line="216" column="31" selection-start-line="216" selection-start-column="31" selection-end-line="216" selection-end-column="31" />
+          <folding>
+            <element signature="n#style#0;n#md-button#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#td#0;n#tr#1;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#td#1;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#textarea#0;n#td#2;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#td#3;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44672132">
-          <caret line="233" column="9" selection-start-line="233" selection-start-column="9" selection-end-line="233" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.4918033">
+          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
           <folding />
         </state>
       </provider>

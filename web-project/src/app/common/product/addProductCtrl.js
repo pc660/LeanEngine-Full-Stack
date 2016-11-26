@@ -5,7 +5,6 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
   // Too hacky.
   $scope.firstUpdates = false;
   $scope.product = {};
-  $scope.product.subarea = "东南亚";
   $scope.product.price = {};
   $scope.toggleLeft = buildToggler('provider-side-bar');
   $scope.pickedProviders = [];
@@ -236,5 +235,6 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
 
   $scope.$watch("product.area", function(value) {
     $scope.subareas = menuConfig.data[value];
+    //$scope.product.subarea = "东北";
   });
 };

@@ -214,8 +214,7 @@
               <td>
                 <md-input-container ng-if="isEditing">
                   <md-select ng-model="product.subarea">
-                    <md-option ng-selected="product.subarea != 'undefined' && $first"
-                               ng-value="subarea" ng-repeat="subarea in subareas">
+                    <md-option ng-value="subarea" ng-repeat="subarea in subareas">
                       {{subarea}}
                     </md-option>
                   </md-select>
