@@ -159,9 +159,6 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
     var month = date.getMonth();
     var day = date.getDate();
     $scope.currentPrice = productFac.getPrice(year, month, day, $scope.product);
-    if (Object.keys($scope.currentPrice).length == 0) {
-      $scope.currentPrice = angular.copy($scope.cachedPrice);
-    }
     $scope.currentPrice.year = year;
     $scope.currentPrice.month = month;
     $scope.currentPrice.day = day;
@@ -179,12 +176,27 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
     if ($scope.currentPrice && Object.keys($scope.currentPrice).length > 0) {
       commonSer.addProps($scope.product.price, [year, month, day], $scope.currentPrice);
     }
-    $log.log($scope.product.price);
-    $scope.cachedPrice = angular.copy($scope.currentPrice);
-    delete $scope.cachedPrice.year;
-    delete $scope.cachedPrice.month;
-    delete $scope.cachedPrice.day;
   };
+
+  $scope.$on("copy", function() {
+    // Set day content.
+    $scope.cachedPrice = angular.copy($scope.currentPrice);
+  }, true);
+
+  $scope.$on("paste", function() {
+    // Set day content.
+    if ($scope.cachedPrice) {
+      // Keep the year, month, day
+      var year = $scope.currentPrice.year;
+      var month = $scope.currentPrice.month;
+      var day = $scope.currentPrice.day;
+      $scope.currentPrice = angular.copy($scope.cachedPrice);
+      $scope.currentPrice.year = year;
+      $scope.currentPrice.month = month;
+      $scope.currentPrice.day = day;
+      $scope.$broadcast("updateMaterialCalendar");
+    }
+  }, true);
 
   $scope.$on("setCurrentPrice", function() {
     // Set day content.
@@ -217,6 +229,8 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
     productFac.uploadProduct($scope.product)
       .then(function(result) {
         $scope.product.objectId = result.objectId;
+        SweetAlert.swal("保存成功", "请继续操作", "success");
+        return;
       });
   }
 

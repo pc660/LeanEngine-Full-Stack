@@ -246,8 +246,9 @@ productApi.constructItinerayParams = (product) => {
   params.restriction = product.restriction;
   params.shoppingInfo = product.shoppingInfo;
   params.reminder = product.reminder;
-
-  params.account = product.pickedProvider.companyname;
+  if (product.pickedProvider) {
+    params.account = product.pickedProvider.companyname;
+  }
   return params;
 };
 

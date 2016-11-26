@@ -42,6 +42,14 @@ export default ($rootScope, $log, $state, $window, formConfig) => {
         });
         scope.$emit("setCurrentPrice");
       };
+
+      scope.copy = () => {
+        scope.$emit("copy");
+      };
+
+      scope.paste = () => {
+        scope.$emit("paste");
+      };
     }
   };
 };
