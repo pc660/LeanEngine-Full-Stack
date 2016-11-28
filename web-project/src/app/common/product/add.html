@@ -17,12 +17,19 @@
               </tr>
               <tr>
                 <td>商户联系人</td>
-                <td ng-if="product.pickedProvider"xxxccccc-0-------------------------------------------------------
-                    ng-value="contact"
-                    ng-repeat="contact in product.pickedProvider.contactList">
-                  {{contact.contactname}}
-                  </md-option>
-                  </md-select>
+                <td>
+                  <md-input-container ng-if="isEditing">
+                    <md-select
+                      ng-if="isEditing"
+                      ng-model="product.contact">
+                      <md-option
+                        ng-selected="product.contact"
+                        ng-if="product.pickedProvider"
+                        ng-value="contact"
+                        ng-repeat="contact in product.pickedProvider.contactList">
+                        {{contact.contactname}}
+                      </md-option>
+                    </md-select>
                   </md-input-container>
                   <md-button ng-if="isEditing" class="md-raised md-primary addcontact" ng-click="addContact();">添加商户联系人</md-button>
                   <p ng-if="!isEditing">{{ product.contact.contactname }}</p>
