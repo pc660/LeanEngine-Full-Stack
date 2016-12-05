@@ -1,11 +1,24 @@
 <md-sidenav class="md-sidenav-left"
   md-component-id="provider-side-bar"
   md-is-locked-open="true"
-  md-whiteframe="4">
+  md-whiteframe="6">
   <md-toolbar class="md-theme-indigo search">
     <h1 class="md-toolbar-tools">选择供应商</h1>
   </md-toolbar>
-  <p ng-if="isLoading">正在加载请稍等...若加载过慢,请刷新.</p>
+  <p style="margin-bottom: 20px;" ng-if="isLoading">正在加载请稍等...若加载过慢,请刷新.</p>
+  <div>
+    <p>选择供应商类型</p>
+    <md-input-container>
+      <md-select ng-model="tag"
+                 ng-change="updateTag();">
+        <md-option ng-value="area"
+                   ng-selected = "$first"
+                   ng-repeat="area in areas">
+          {{ area }}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
    <div ng-if="providers.length > 0 && !isLoading" angucomplete-alt id="ex1"
             placeholder="搜索供应商"
             pause="100"

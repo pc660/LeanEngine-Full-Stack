@@ -1,10 +1,12 @@
-export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window, providerFac, $uibModal, productFac) => {
+export default ($log, authFac, menuConfig, userFac, $rootScope, $mdSidenav, $state, $window, providerFac, $uibModal, productFac) => {
   'ngInject';
   return {
     restrict: 'E',
     templateUrl: 'app/common/product/directives/providerSideBar/providerSideBar.html',
     replace: true,
     link: function(scope, element, attr) {
+      scope.areas = angular.copy(menuConfig.data["大区"]);
+      scope.areas.unshift("全部类型");
       // TODO: Check how many providers we have. If too much, we need to do
       // index.
       scope.getProviderList = () => {
@@ -109,6 +111,17 @@ export default ($log, authFac, userFac, $rootScope, $mdSidenav, $state, $window,
       scope.filterProviders = [];
       scope.providers = [];
       scope.getProviderList();
+
+      scope.$watch("tag", function(value) {
+        $log.log(scope.tag);
+        scope.filterProviders = scope.providers.filter(function(provider) {
+          if (scope.tag == "全部类型") {
+            return true;
+          }
+          $log.log(provider.area);
+          return provider.area == scope.tag;
+        })
+      });
     }
   };
 };

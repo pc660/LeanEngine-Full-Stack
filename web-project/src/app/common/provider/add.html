@@ -53,6 +53,22 @@
                 </div>
               </td>
             </tr>
+            <tr>
+              <td>公司类别</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-if="isEditing" ng-model="provider.area">
+                    <md-option
+                      ng-value="area" ng-repeat="area in areas">
+                      {{ area }}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <div ng-if="!isEditing">
+                  {{ provider.area }}
+                </div>
+              </td>
+            </tr>
             <tr ng-if="!provider.objectId && isEditing">
               <td colspan="2" class="title">
                 联系信息

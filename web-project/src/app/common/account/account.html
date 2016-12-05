@@ -94,6 +94,7 @@
                 </td>
                 <td>
                   <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>
+                  <md-button class="md-raised md-primary" ng-click="clone($index);">复制线路</md-button>
                   <md-button class="md-raised md-primary" ng-click="deleteProduct($index);" ng-if="product.status == 1">删除产品</md-button>
                   <md-button class="md-raised md-primary" ng-click="editProduct($index);" ng-if="product.status == 1">修改</md-button>
                   <md-button class="md-raised md-primary" ng-click="editProduct($index);" ng-if="product.status == 2 && !unverified">修改</md-button>

@@ -115,8 +115,10 @@
               <td>酒店标准</td>
               <td colspan="4">
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-selected="product.hotelStandard != 'undefined' && $first" ng-if="isEditing" ng-model="product.hotelStandard">
-                    <md-option ng-value="hotel" ng-repeat="hotel in hotels">
+                  <md-select ng-if="isEditing" ng-model="product.hotelStandard">
+                    <md-option
+                      ng-selected="product.hotelStandard != 'undefined' && $first"
+                      ng-value="hotel" ng-repeat="hotel in hotels">
                       {{hotel}}
                     </md-option>
                   </md-select>
@@ -128,8 +130,10 @@
               <td>交通方式</td>
               <td colspan="4">
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-selected="product.transportStandard != 'undefined' && $first" ng-if="isEditing" ng-model="product.transportStandard">
-                    <md-option ng-value="transport" ng-repeat="transport in transports">
+                  <md-select ng-if="isEditing" ng-model="product.transportStandard">
+                    <md-option
+                      ng-selected="product.transportStandard != 'undefined' && $first"
+                      ng-value="transport" ng-repeat="transport in transports">
                       {{transport}}
                     </md-option>
                   </md-select>
@@ -179,8 +183,10 @@
               <td>出发地</td>
               <td colspan="4">
                 <md-input-container ng-if="isEditing">
-                  <md-select ng-selected="product.startCity != 'undefined' && $first" ng-model="product.startCity">
-                    <md-option ng-value="start" ng-repeat="start in startCities">
+                  <md-select ng-model="product.startCity">
+                    <md-option
+                      ng-selected="product.startCity != 'undefined' && $first"
+                      ng-value="start" ng-repeat="start in startCities">
                       {{start}}
                     </md-option>
                   </md-select>

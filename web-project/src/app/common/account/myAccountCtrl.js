@@ -191,6 +191,13 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
     });
   };
 
+  $scope.clone = (index) => {
+    var product = $scope.products[index];
+    productFac.clone(product.objectId).then(function(value) {
+      SweetAlert.swal("提交成功", "请刷新后进行修改", "success");
+    });
+  }
+
   // TODO.
   $scope.remind = (index) => {
 

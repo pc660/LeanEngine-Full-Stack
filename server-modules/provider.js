@@ -105,6 +105,7 @@ providerApi.addProvider = (provider, res, user, contact) => {
   // 设置基本信息.
   providerAV.set('nickname', provider.nickname);
   providerAV.set('companyname', provider.companyname);
+  providerAV.set('area', provider.area);
 
   // 设置主营业务.
   providerAV.set('destination', Object.keys(provider.destination));

@@ -706,4 +706,28 @@ productApi.getSelfPaid = (req, res) => {
   })
 }
 
+productApi.clone = (req, res) => {
+  tool.l('product.clone');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.clone");
+  log.set("user", req.user);
+  log.save();
+  var productId = req.body.productId;
+  var product = AV.Object.createWithoutData('Product', productId);
+  product.fetch().then(function(result) {
+    var newProduct = result.clone();
+    // Set addition params.
+    newProduct.set("status", 1);
+    newProduct.save().then(function(result) {
+      var price = product.get("price");
+      setDefaultPriceMap(price);
+      product.set("price", price);
+      product.save().then(function(result) {
+        res.send(result);
+        return;
+      })
+    });
+  })
+}
+
 module.exports = productApi;

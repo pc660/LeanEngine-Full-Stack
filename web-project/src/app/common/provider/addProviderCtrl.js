@@ -1,8 +1,9 @@
-export default (SweetAlert, $state, userFac, $log,$rootScope, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
+export default (SweetAlert, $state, userFac,menuConfig,  $log,$rootScope, $scope, $document, $timeout, lcConfig, $window, providerFac, fileFac, Upload) => {
   'ngInject';
     var url = lcConfig.apiHost + "/api/provider/add";
     $scope.addUrl = url;
     $scope.isEditing = true;
+    $scope.areas = menuConfig.data["大区"];
     $scope.confirmed = false;
     $scope.contactList = [];
     $scope.loading = false;

@@ -25,6 +25,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.deleteProduct = deleteProduct;
   service.getSelfPaidList = getSelfPaidList;
   service.updateCategory = updateCategory;
+  service.clone = clone;
   return service;
 
   // A sperate function to imporve performance.
@@ -279,5 +280,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function getSelfPaidList () {
     return $http.post('/api/product/getSelfPaid');
+  }
+
+  function clone(productId) {
+    return $http.post('/api/product/clone', {productId: productId});
   }
 };
