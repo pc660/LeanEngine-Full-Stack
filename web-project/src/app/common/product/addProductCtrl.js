@@ -168,6 +168,17 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
     return productFac.setDayContent(date, $scope.product);
   };
 
+  $scope.clearPrice = () => {
+    var year = $scope.currentPrice.year;
+    var month = $scope.currentPrice.month;
+    var day = $scope.currentPrice.day;
+    $scope.currentPrice = {};
+    $scope.currentPrice.year = year;
+    $scope.currentPrice.month = month;
+    $scope.currentPrice.day = day;
+    delete $scope.product.price[year][month][day];
+  }
+
   $scope.setPrice = () => {
     var year = $scope.currentPrice.year;
     var month = $scope.currentPrice.month;
@@ -205,6 +216,14 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
     }
   }, true);
 
+  $scope.$on("clearCurrentPrice", function() {
+    // Set day content.
+    if ($scope.currentPrice) {
+      $scope.clearPrice();
+      $scope.$broadcast("updateMaterialCalendar");
+    }
+  }, true);
+
   $scope.createList = () => {
     if (!$scope.product.newList.name) {
       SweetAlert.swal("请输入列表名称");
@@ -235,6 +254,5 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
 
   $scope.$watch("product.area", function(value) {
     $scope.subareas = menuConfig.data[value];
-    //$scope.product.subarea = "东北";
   });
 };

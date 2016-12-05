@@ -40,7 +40,7 @@ export default ($rootScope, $log, $state, $window, formConfig) => {
           item.value = "";
           delete scope.model[item.name];
         });
-        scope.$emit("setCurrentPrice");
+        scope.$emit("clearCurrentPrice");
       };
 
       scope.copy = () => {
