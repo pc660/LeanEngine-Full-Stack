@@ -222,7 +222,7 @@
                 <p ng-if="!isEditing">{{ product.area }}</p>
               </td>
             </tr>
-            <tr ng-if="subareas">
+            <tr ng-if="subareas || product.subarea">
               <td>分区</td>
               <td>
                 <md-input-container ng-if="isEditing">
@@ -232,7 +232,7 @@
                     </md-option>
                   </md-select>
                 </md-input-container>
-                <p ng-if="!isEditing">{{ product.area }}</p>
+                <p ng-if="!isEditing">{{ product.subarea }}</p>
               </td>
             </tr>
             <tr>
