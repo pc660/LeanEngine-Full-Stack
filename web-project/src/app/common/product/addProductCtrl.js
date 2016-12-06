@@ -41,10 +41,12 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
       $scope.product.responsible = result.responsible;
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.pickedProvider = result.provider;
-      $scope.product.contact = result.contact;
-      $log.log(result);
+      //$scope.product.contact = result.contact;
       providerFac.getContactList($scope.product.pickedProvider.objectId).then(function(contactList) {
         $scope.product.pickedProvider.contactList = contactList;
+        $scope.product.contact = contactList.find(function(contact) {
+          return contact.objectId == result.contact.objectId;
+        })
       });
 
       $scope.$broadcast("updateMaterialCalendar");

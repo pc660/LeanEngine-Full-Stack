@@ -23,8 +23,6 @@
                       ng-if="isEditing"
                       ng-model="product.contact">
                       <md-option
-                        ng-selected="product.contact"
-                        ng-if="product.pickedProvider"
                         ng-value="contact"
                         ng-repeat="contact in product.pickedProvider.contactList">
                         {{contact.contactname}}
