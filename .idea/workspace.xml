@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="36d602e2-4574-40ef-8ee6-5cc17e2c110f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/account/account.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="LeanEngine-Full-Stack.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,11 +27,11 @@
     <splitter split-orientation="vertical" split-proportion="0.57843137">
       <split-first>
         <leaf>
-          <file leaf-file-name="account.html" pinned="false" current-in-tab="false">
+          <file leaf-file-name="account.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-10.0">
-                  <caret line="112" column="21" selection-start-line="112" selection-start-column="21" selection-end-line="112" selection-end-column="21" />
+                <state vertical-scroll-proportion="0.33333334">
+                  <caret line="136" column="64" selection-start-line="136" selection-start-column="59" selection-end-line="136" selection-end-column="64" />
                   <folding>
                     <element signature="n#style#0;n#th#0;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#th#1;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
@@ -88,10 +85,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="multiChoiceConfig.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="multiChoiceConfig.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-11.666667">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="28" column="47" selection-start-line="28" selection-start-column="47" selection-end-line="28" selection-end-column="47" />
                   <folding />
                 </state>
@@ -152,11 +149,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="add.html" pinned="false" current-in-tab="true">
+          <file leaf-file-name="add.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.8301887">
-                  <caret line="402" column="67" selection-start-line="402" selection-start-column="67" selection-end-line="402" selection-end-column="67" />
+                <state vertical-scroll-proportion="0.21568628">
+                  <caret line="389" column="36" selection-start-line="389" selection-start-column="30" selection-end-line="389" selection-end-column="36" />
                   <folding>
                     <element signature="n#style#0;n#md-button#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
@@ -229,11 +226,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="add.scss" pinned="false" current-in-tab="false">
+          <file leaf-file-name="add.scss" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.0">
-                  <caret line="5" column="2" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
+                <state vertical-scroll-proportion="-1.6386554">
+                  <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
                   <folding />
                 </state>
               </provider>
@@ -324,11 +321,11 @@
         <option value="$PROJECT_DIR$/server-modules/config.js" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/sale/search/search.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" />
         <option value="$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js" />
-        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
         <option value="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.scss" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
+        <option value="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
       </list>
     </option>
   </component>
@@ -724,6 +721,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -950,32 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.0">
-          <caret line="112" column="21" selection-start-line="112" selection-start-column="21" selection-end-line="112" selection-end-column="21" />
-          <folding>
-            <element signature="n#style#0;n#th#0;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#1;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#2;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#3;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#4;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#5;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#6;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#7;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#3;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#4;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#5;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#6;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#md-input-container#0;n#td#6;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#7;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/itineraryFac.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1024,34 +996,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="2" selection-start-line="5" selection-start-column="2" selection-end-line="5" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.666667">
-          <caret line="28" column="47" selection-start-line="28" selection-start-column="47" selection-end-line="28" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/itinerary.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.625">
           <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="47.333332">
-          <caret line="162" column="19" selection-start-line="162" selection-start-column="19" selection-end-line="162" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -1064,10 +1012,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/config/multiChoiceConfig.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="47" selection-start-line="28" selection-start-column="47" selection-end-line="28" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="136" column="64" selection-start-line="136" selection-start-column="59" selection-end-line="136" selection-end-column="64" />
+          <folding>
+            <element signature="n#style#0;n#th#0;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#2;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#3;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#4;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#5;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#6;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#7;n#tr#0;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#2;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#3;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#4;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#5;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#6;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#md-input-container#0;n#td#6;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#7;n#tr#1;n#table#0;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="47.333332">
+          <caret line="162" column="19" selection-start-line="162" selection-start-column="19" selection-end-line="162" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8301887">
-          <caret line="402" column="67" selection-start-line="402" selection-start-column="67" selection-end-line="402" selection-end-column="67" />
+        <state vertical-scroll-proportion="0.21568628">
+          <caret line="389" column="36" selection-start-line="389" selection-start-column="30" selection-end-line="389" selection-end-column="36" />
           <folding>
             <element signature="n#style#0;n#md-button#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
@@ -1076,6 +1066,14 @@
             <element signature="n#style#0;n#textarea#0;n#td#2;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#td#3;n#tr#2;n#table#0;n#div#8;n#md-tab#3;n#md-tabs#0;n#div#0;n#md-content#0;n#section#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.6386554">
+          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+          <folding />
         </state>
       </provider>
     </entry>
