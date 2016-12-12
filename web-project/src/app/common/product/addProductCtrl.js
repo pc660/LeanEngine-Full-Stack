@@ -27,6 +27,10 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
   $scope.cachedPrice = {};
   $scope.existList = [];
   $scope.toggleLeft();
+  var date = new Date();
+  $scope.test = "2015";
+  $scope.startYear = date.getYear();
+  $scope.startMonth = date.getMonth();
   productFac.getSelfPaidList().then(function(results) {
     $scope.existList = results;
   });
@@ -41,6 +45,7 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
       $scope.product.responsible = result.responsible;
       $scope.product.platformcontact = result.platformcontact;
       $scope.product.pickedProvider = result.provider;
+      $scope.startYear = 2018;
       //$scope.product.contact = result.contact;
       providerFac.getContactList($scope.product.pickedProvider.objectId).then(function(contactList) {
         $scope.product.pickedProvider.contactList = contactList;

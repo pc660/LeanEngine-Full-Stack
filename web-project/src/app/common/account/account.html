@@ -87,7 +87,7 @@
               <tr>
                 <th style="width: 100px;">产品编号</th>
                 <th style="width: 150px;">产品名称</th>
-                <th style="width: 150px;">最近出发班期价格</th>
+                <th style="width: 100px;">最近出发班期</th>
                 <th style="width: 100px;">负责人</th>
                 <th style="width: 50px;">详情</th>
                 <th style="width: 50px;">状态</th>
@@ -97,11 +97,8 @@
               <tr ng-repeat="product in products">
                 <td style="width: 100px;">{{ product.productId }}</td>
                 <td style="width: 150px;">{{ product.productName }}</td>
-                <td style="width: 150px;">
-                  <div>日期: {{ product.latestDate }}</div>
-                  <div>门市价(成人): {{ product.latestAdultCompanySalePrice }}</div>
-                  <div>同行价(成人): {{ product.latestAdultCompanyCompetitorPrice }}</div>
-                  <div>结算价(成人): {{ product.latestAdultCompanyPrice }}</div>
+                <td style="width: 100px;">
+                  <p ng-repeat="date in product.priceDate" ng-show="$index<3">{{ date }}</p>
                 </td>
                 <td style="width: 100px;">{{ product.responsible.contactname }}</td>
                 <td style="width: 50px;">

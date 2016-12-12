@@ -66,6 +66,7 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
       $scope.products.forEach(function(product, i) {
         product.responsible = results.responsible[i];
         productFac.getLatestTrip(product);
+        $log.log(product);
         product.updateCategory = false;
       })
     }, function(error) {

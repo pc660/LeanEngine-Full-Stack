@@ -21,6 +21,7 @@ var multiChoiceConfig = {
       {name: "meizhou", value: '美洲'},
       {name: 'aouzhou', value: '澳洲'},
       {name: 'dayangzhou', value: '大洋洲'},
+      {name: 'zhongdongfei', value: '中东非'},
       {name: 'dongnanya', value: '东南亚'},
       {name: 'youlun', value: '邮轮'},
       {name: 'haidao', value: '海岛'},
@@ -30,7 +31,6 @@ var multiChoiceConfig = {
       {name: 'ziyouxing', value: '自由行'},
       {name: 'zijiayou', value: '自驾游'},
       {name: 'gangaotai', value: '港澳台'},
-
     ],
     "主营口岸": [
       {name: 'shanghai', value: '上海'},
