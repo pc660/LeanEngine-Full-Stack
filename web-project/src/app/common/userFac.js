@@ -9,6 +9,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.getProvider = getProvider;
   service.showContact = showContact;
   service.getSaleusers = getSaleusers;
+  service.update = update;
   service.getEmployeeList = getEmployeeList;
   return service;
 
@@ -26,6 +27,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   function editContactList(contact) {
     return $http.post('/api/user/editContactList', {contact: contact});
+  }
+
+  function update (user) {
+    return $http.post('/api/user/update', {user: user});
   }
 
   function addContact(contactList, providerId) {

@@ -79,6 +79,7 @@ router.post('/user/addContactList',  user.addContactList);
 router.post('/user/getContactList',  user.getContactList);
 router.post('/user/editContactList',  user.editContactList);
 router.post('/user/deleteContactList',  user.deleteContactList);
+router.post('/user/update', user.update);
 
 router.get('/test/clear', test.clear);
 

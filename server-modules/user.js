@@ -270,4 +270,27 @@ userApi.getProvider = (req, res) => {
 
 }
 
+userApi.update = (req, res) => {
+    tool.l("userapi.update");
+    var log = AV.Object.new("AccessLog");
+    log.set("operation", "userApi.update");
+    log.set("user", req.user);
+    log.save();
+    var user = userApi.getCurrentUser(req);
+    tool.l(user);
+    if (!user) {
+        res.send(202);
+        return;
+    }
+
+    var data = req.body.user;
+    user.set("cellphone", data.cellphone || "");
+    user.set("email", data.email || "");
+    user.set("contactname", data.contactname || "");
+    user.save().then(function(result ) {
+        res.send(result);
+        return;
+    });
+};
+
 module.exports = userApi;

@@ -7,7 +7,7 @@
 
 let config = {
 
-  items_per_page: 10,
+  items_per_page: 20,
 
   // http 请求超时时间
   httpTimeout: 20000,

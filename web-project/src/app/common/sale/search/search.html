@@ -120,7 +120,7 @@
         </span>
       </div>
       <div class="metadata">
-        <span>线路编号：{{ product.objectId }}</span>
+        <span>线路编号：{{ product.productId }}</span>
       </div>
     </div>
     <div class="right">
@@ -155,5 +155,5 @@
     <hr>
   </div>
   <div>共找到 {{ totalProducts }} 个结果</div>
-  <ul uib-pagination total-items="totalProducts" items-per-page="10" ng-model="currentPage" ng-change="pageChanged()"></ul>
+  <ul uib-pagination total-items="totalProducts" items-per-page="20" ng-model="currentPage" ng-change="pageChanged()"></ul>
 </div>

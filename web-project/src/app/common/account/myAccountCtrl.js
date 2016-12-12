@@ -5,6 +5,19 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
   $scope.isProvider = (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER);
   $scope.query = {};
   $scope.categoryList = menuConfig.data["线路分类"];
+  $scope.editProfile = false;
+
+  $scope.edit = () => {
+    $scope.editProfile = true;
+  };
+
+  $scope.save = () => {
+    userFac.update($scope.user).then(function(result) {
+      $scope.editProfile = false;
+      SweetAlert.swal("更新成功");
+      return;
+    });
+  };
 
   if ($scope.$parent.unfinished) {
     $scope.unfinished = "(有未处理产品)";

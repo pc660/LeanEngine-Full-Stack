@@ -11,7 +11,7 @@
 
 let config = {
 
-  items_per_page: 10,
+  items_per_page: 20,
 
   // 服务端 host
   host: 'http://localhost:3000',

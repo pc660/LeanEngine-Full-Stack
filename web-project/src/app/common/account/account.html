@@ -7,7 +7,7 @@
             <td>用户名</td>
             <td>{{ user.username }}</td>
           </tr>
-          <tr>
+          <tr ng-if="editProfile">
             <td>密码</td>
             <td>
               <md-button ng-click="changePass();" class="md-raised md-primary">
@@ -15,7 +15,40 @@
               </md-button>
             </td>
           </tr>
+          <tr>
+            <td>姓名</td>
+            <td>
+              <div ng-if="!editProfile">{{ user.contactname }}</div>
+              <div ng-if="editProfile">
+                <input ng-model="user.contactname">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>邮箱</td>
+            <td>
+              <div ng-if="!editProfile">{{ user.email }}</div>
+              <div ng-if="editProfile">
+                <input ng-model="user.email">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>手机</td>
+            <td>
+              <div ng-if="!editProfile">{{ user.cellphone }}</div>
+              <div ng-if="editProfile">
+                <input ng-model="user.cellphone">
+              </div>
+            </td>
+          </tr>
         </table>
+        <md-button ng-if="!editProfile" ng-click="edit();" class="md-raised md-primary">
+          更改信息
+        </md-button>
+        <md-button ng-if="editProfile" ng-click="save();" class="md-raised md-primary">
+          确定
+        </md-button>
       </md-tab>
       <md-tab class="dot" label="我的产品">
         <section layout="row" flex>
@@ -50,38 +83,38 @@
             </div>
           </md-sidenav>
           <md-content flex layout-padding>
-            <table>
+            <table cellspacing="0" cellpadding="0" class="account-product">
               <tr>
-                <th>产品编号</th>
-                <th>产品名称</th>
-                <th>最近出发班期价格</th>
-                <th>负责人</th>
-                <th>详情</th>
-                <th>状态</th>
-                <th style="width: 150px;">分类</th>
-                <th>操作</th>
+                <th style="width: 100px;">产品编号</th>
+                <th style="width: 150px;">产品名称</th>
+                <th style="width: 150px;">最近出发班期价格</th>
+                <th style="width: 100px;">负责人</th>
+                <th style="width: 50px;">详情</th>
+                <th style="width: 50px;">状态</th>
+                <th style="width: 100px;">分类</th>
+                <th style="width: 100px;">操作</th>
               </tr>
               <tr ng-repeat="product in products">
-                <td>{{ product.objectId }}</td>
-                <td>{{ product.productName }}</td>
-                <td>
+                <td style="width: 100px;">{{ product.productId }}</td>
+                <td style="width: 150px;">{{ product.productName }}</td>
+                <td style="width: 150px;">
                   <div>日期: {{ product.latestDate }}</div>
                   <div>门市价(成人): {{ product.latestAdultCompanySalePrice }}</div>
                   <div>同行价(成人): {{ product.latestAdultCompanyCompetitorPrice }}</div>
                   <div>结算价(成人): {{ product.latestAdultCompanyPrice }}</div>
                 </td>
-                <td>{{ product.responsible.contactname }}</td>
-                <td>
+                <td style="width: 100px;">{{ product.responsible.contactname }}</td>
+                <td style="width: 50px;">
                   <a target="_blank"
                      ui-sref="home.show-product-detail({productId: '{{product.objectId}}' })"
                      ui-sref-opts="{ absolute: true }">显示详情</a>
                 </td>
-                <td>
+                <td style="width: 50px;">
                   <p ng-if="product.status == 1">下架</p>
                   <p ng-if="product.status == 2">未审核</p>
                   <p ng-if="product.status == 3">已审核</p>
                 </td>
-                <td>
+                <td style="width: 100px;">
                   <md-input-container style="width: 80px;">
                     <md-select ng-model="product.category"
                                ng-change="updateCategory(product);">
@@ -92,7 +125,7 @@
                     </md-select>
                   </md-input-container>
                 </td>
-                <td>
+                <td style="width: 100px;">
                   <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>
                   <md-button class="md-raised md-primary" ng-click="clone($index);">复制线路</md-button>
                   <md-button class="md-raised md-primary" ng-click="deleteProduct($index);" ng-if="product.status == 1">删除产品</md-button>
