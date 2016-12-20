@@ -256,11 +256,6 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
   };
 
   $scope.updateCategory = (product) => {
-    //if (!product.updateCategory) {
-    //  product.updateCategory = true;
-    //  return;
-    //}
-    // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
       .title("该更改可能会实时更改前台结果,请再次确认.")
       .ok("确认")
@@ -272,4 +267,17 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
     }, function() {
     });
   };
+
+  $scope.updateIndex = (product) => {
+    var confirm = $mdDialog.confirm()
+      .title("该更改可能会实时更改前台结果,请再次确认.")
+      .ok("确认")
+      .cancel("取消");
+    $mdDialog.show(confirm).then(function() {
+      productFac.updateIndex(product.objectId, product.indexPage).then(function() {
+        SweetAlert.swal("更新成功", "请通知前台核实", "success");
+      });
+    }, function() {
+    });
+  }
 };

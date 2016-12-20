@@ -2,6 +2,7 @@
   "name": "ztg",
   "version": "1.0.0",
   "dependencies": {
+    "angular-advanced-searchbox": "latest",
     "ngActivityIndicator": "latest",
     "angular-sweetalert": "latest",
     "material-calendar": "latest",

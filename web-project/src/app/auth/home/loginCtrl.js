@@ -2,6 +2,12 @@
 export default (SweetAlert, $state, errorFac, lcConfig, $location, $scope, $window, $log, commonSer, helloSer, authFac) => {
   'ngInject';
 
+  $scope.data = ["test1", "test2"];
+  $scope.$watch("selectedItem", function() {
+    $log.log($scope.selectedItem);
+  });
+
+  $scope.selectedItem = "selected";
   $log.log("getting levels");
   $scope.levels = [
     {level: 2, value: "供应商"},

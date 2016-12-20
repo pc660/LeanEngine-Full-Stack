@@ -1,0 +1,18 @@
+.selectabe-tag  {
+  .unlimited {
+    margin-right: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    outline: none;
+    &:hover {
+      background-color: #f90;
+      color: white;
+      cursor:pointer;
+    }
+  }
+
+  .selected-tag {
+    background-color: #f90;
+    color: white;
+  }
+}

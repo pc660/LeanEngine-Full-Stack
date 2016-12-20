@@ -121,6 +121,10 @@
                       </md-option>
                     </md-select>
                   </md-input-container>
+                  <div layout="row">
+                    <input type="checkbox"  ng-change="updateIndex(product);" ng-model="product.indexPage">
+                    <p>是否在首页</p>
+                  </div>
                 </td>
                 <td style="width: 100px;">
                   <md-button class="md-raised md-primary" ng-click="post($index);" ng-if="product.status == 1">提交审核</md-button>

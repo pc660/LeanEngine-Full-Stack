@@ -28,6 +28,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.clone = clone;
   return service;
 
+  function getIndexPage() {
+    return $http.post('/api/product/getIndexPage');
+  }
+
   // A sperate function to imporve performance.
   function updateCategory(productId, category) {
     return $http.post('/api/product/updateCategory', {productId: productId, category: category});
@@ -67,7 +71,6 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
 
   // User a const value maybe.
   function getInternalUsers() {
-    $log.log("get internal users");
     return $http.post('/api/user/get', {query: {level : [0, 3]}});
   }
 
@@ -141,7 +144,6 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
         }
       }
     }
-    $log.log(product.priceDate);
     if (product.priceDate.length > 0) {
       return true;
     }
@@ -153,6 +155,9 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
     if (!product.stopDay) {
       product.stopDay = 0;
     }
+
+    // TODO(chaop): figure this out.
+    product.stopDay = 0;
     date.setDate(date.getDate() + product.stopDay);
     for (var year in product.price) {
       for (var month in product.price[year]) {
@@ -285,4 +290,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   function clone(productId) {
     return $http.post('/api/product/clone', {productId: productId});
   }
+
+  function getProductCategory() {
+    var cluster = {};
+    var query1 = {"category": "促销"};
+  }
+
 };

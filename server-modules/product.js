@@ -12,6 +12,34 @@ const userApi = require('./user');
 const tal = require('template-tal');
 const multiChoiceConfig = require('./config/multiChoiceConfig');
 
+function updateProductValidateMap(product) {
+  // Check if validationMap exists.
+  var maxDate = product.get("maxDate");
+  //var validationMap = new AV.Object("ProductValidationMap");
+  var query = new AV.Query('ProductValidationMap');
+  query.equalTo("date", maxDate.toString());
+  query.find().then(function(result) {
+    tool.l(result);
+    if (result.length == 0) {
+      var validationMap = new AV.Object("ProductValidationMap");
+      validationMap.set("date", maxDate.toString());
+      validationMap.set("product", [product.id]);
+      validationMap.save().then(function(test) {
+        tool.l("success");
+        tool.l(test);
+      }, function(error) {
+        tool.l(error);
+      });
+    } else {
+      var validationMap = result[0];
+      validationMap.add("product", [product.id]);
+      validationMap.save();
+    }
+  }, function(error) {
+    tool.l(error);
+  })
+}
+
 function setProduct(productAV, product) {
   productAV.set('productName', product.productName);
   productAV.set('fullName', product.fullName);
@@ -30,7 +58,6 @@ function setProduct(productAV, product) {
     productAV.set('platformcontact', platformcontactAV);
   }
 
-  tool.l("======:" + product.price);
   var price = product.price;
   setDefaultPriceMap(price);
   var minMaxDate = getMinMaxDate(price);
@@ -125,6 +152,28 @@ function constructSelfPaidContent(productPaidList) {
   return content;
 }
 
+productApi.updateIndex = (req, res) => {
+  tool.l('product.updateIndex');
+  var log = AV.Object.new("AccessLog");
+  log.set("operation", "product.updateIndex");
+  log.set("data", {"product": req.body.productId, "indexPage": req.body.indexPage});
+  log.set("user", req.user);
+  log.save();
+
+  var user = req.user;
+  if (!user) {
+    tool.e("user is undefined when product.updateCategory");
+    res.send(404);
+    return;
+  }
+
+  var productAV =  AV.Object.createWithoutData('Product', req.body.productId);
+  productAV.set("indexPage", req.body.indexPage);
+  productAV.save().then(function() {
+    res.send();
+  });
+};
+
 productApi.updateCategory = (req, res) => {
   tool.l('product.updateCategory');
   var log = AV.Object.new("AccessLog");
@@ -135,7 +184,7 @@ productApi.updateCategory = (req, res) => {
 
   var user = req.user;
   if (!user) {
-    tool.e("user is undefined when product.add");
+    tool.e("user is undefined when product.updateCategory");
     res.send(404);
     return;
   }
@@ -181,6 +230,7 @@ productApi.add = (req, res) => {
       var params = productApi.constructItinerayParams(product);
       params.id = productResult.id;
 
+      updateProductValidateMap(productResult);
       generateItinerary(params, productResult);
   }, function(error) {
     tool.l(error);
@@ -426,16 +476,19 @@ productApi.search = (req, res) => {
         var endDate = tool.parseDate(params.endDate);
         query.lessThanOrEqualTo("minDate", endDate);
         break;
+      case "indexPage":
+        query.equalTo("indexPage", params.indexPage);
+        break;
     }
   }
 
-  query.include("responsible", "provider");
+  query.include("responsible", "provider", "price");
   var queries = [query.find(), query.count()];
-
   // TODO: add start date.
   // TODO: add days.
   Promise.all(queries).then(function (results) {
     var products = results[0];
+    var price = products[0].get("price");
     // Also need to retrieve user information.
     var responsible = products.map(function (product) {
       return product.get("responsible");
@@ -443,6 +496,8 @@ productApi.search = (req, res) => {
     var providers = products.map(function (product) {
       return product.get("provider");
     });
+
+    // Figure out why sending array is impossible.
     res.send({products: products, responsible: responsible, providers: providers, count: results[1]});
     return;
   }, function (error) {

@@ -54,6 +54,7 @@ router.post('/product/delete', product.delete);
 router.post('/product/getSelfPaid', product.getSelfPaid);
 router.post('/product/updateCategory', product.updateCategory);
 router.post('/product/clone', product.clone);
+router.post('/product/updateIndex', product.updateIndex);
 
 router.post('/product/getAll', product.getAll);
 router.post('/product/get', product.get);

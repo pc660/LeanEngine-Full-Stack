@@ -122,7 +122,6 @@ var multiChoiceConfig = {
       {name: "长滩岛", value: "长滩岛"},
       {name: "斐济", value: "斐济"},
       {name: "关岛", value: "关岛"},
-      {name: "普吉岛", value: "普吉岛"},
     ],
     "欧洲": [
       {name: "法国", value: "法国"},
@@ -326,7 +325,6 @@ var multiChoiceConfig = {
       {name: "江苏", value: "江苏"},
       {name: "江西", value: "江西"},
       {name: "安徽", value: "安徽"},
-      {name: "上海", value: "上海"},
     ],
     "古镇水乡": [
       {name: "乌镇", value: "乌镇"},

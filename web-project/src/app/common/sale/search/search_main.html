@@ -1,0 +1,108 @@
+<div class="search">
+  <div class="above-nav">
+    <div class="left icon">
+      上海和和旅行线路搜索
+    </div>
+    <div class="right search-box">
+      <input class="input-box" placeholder="请输入关键词, 线路编号">
+      <md-button class="md-primary md-raised">搜索</md-button>
+    </div>
+  </div>
+  <nav class="navbar navbar-inverse" role="navigation">
+    <ul class="nav navbar-nav">
+      <li><a ng-click="indexPage = true;">首页</a></li>
+      <li ng-repeat="item in items">
+        <a ng-click="select(item);">
+          {{ item }}
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div ng-if="indexPage">
+    <div class="cluster" ng-repeat="cluster in clusters">
+      <div class="cluster-title"><h1>{{ cluster.title }}</h1></div>
+      <hr>
+      <product product="product" ng-repeat="product in cluster.products">
+      </product>
+    </div>
+  </div>
+
+  <table ng-if="!indexPage" class="search-option">
+    <tr>
+      <td>出发日期</td>
+      <td>
+        <span ng-class="{'selected-tag': !showDate}" ng-click="showDate = false" class="unlimited">不限</span>
+        <span ng-class="{'selected-tag': showDate}" ng-click="showDate = true" class="unlimited">选择出发日期</span>
+        <div ng-show="showDate" class="date-wrapper" layout="row">
+          <input
+            ng-model="startDate"
+            type="text"
+            data-date-type="string"
+            data-model-date-format="mediumDate"
+            bs-datepicker
+            data-date-format="mediumDate"
+            data-autoclose="true">
+          <div class="separator"> - </div>
+          <input
+            ng-model="endDate"
+            type="text"
+            data-date-type="string"
+            data-model-date-format="mediumDate"
+            bs-datepicker
+            data-date-format="mediumDate"
+            data-autoclose="true">
+        </div>
+      </td>
+    </tr>
+    <tr class="selectable" ng-repeat="option in options[key]">
+      <td>{{ option.title }}</td>
+      <td>
+        <selectable-tag tags="option.data" ng-model="selectedTags[option.title]" unlimited="true"></selectable-tag>
+      </td>
+    </tr>
+  </table>
+
+  <div ng-activity-indicator class="activity-indicator"></div>
+  <div ng-if="!indexPage" class="cluster">
+    <div class="cluster-title"><h1>促销特价</h1></div>
+    <hr>
+    <div>
+      <product product="product" ng-repeat="product in saleProducts">
+
+      </product>
+    </div>
+  </div>
+  <div ng-if="!indexPage" class="cluster">
+    <div class="cluster-title"><h1>最新产品</h1></div>
+    <hr>
+    <div>
+      <table class=product-table>
+        <tr>
+          <th>线路编号</th>
+          <th>行程名称</th>
+          <th>行程天数</th>
+          <th>最近班期</th>
+          <th>建议售价</th>
+          <th>操作</th>
+        </tr>
+        <tr ng-repeat="product in products">
+          <td>{{ product.productId }}</td>
+          <td>{{ product.fullName }}</td>
+          <td>{{ product.duration }}天{{ product.hotelDuration }}晚</td>
+          <td>{{ product.priceDate[0] }}</td>
+          <td>￥{{ product.latestAdultCompanySalePrice }}</td>
+          <td>
+            <a target="_blank"
+               ui-sref="sale.show-product({productId: '{{product.objectId}}' })"
+               ui-sref-opts="{ absolute: true }">预定</a>
+          </td>
+        </tr>
+      </table>
+      <div class="products">
+        <div>共找到 {{ totalProducts }} 个结果</div>
+        <ul uib-pagination total-items="totalProducts" items-per-page="20" ng-model="currentPage" ng-change="pageChanged()"></ul>
+      </div>
+    </div>
+  </div>
+</div>

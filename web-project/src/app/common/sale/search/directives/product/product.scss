@@ -1,0 +1,42 @@
+.product-directive {
+  padding-top: 5px;
+  padding-left: 10px;
+  .left {
+    .product-title {
+      color: #06c;
+      font-size: 20px;
+    }
+    display: inline-block;
+    width: 75%;
+    .metadata {
+      padding-top: 5px;
+      span {
+        padding-right: 15px;
+        .date {
+          font-weight: bold;
+          color: #f90;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+  .right {
+    position: relative;
+    top: -30px;
+    left: 30px;
+    display: inline-block;
+    width: 20%;
+    .pricebox {
+      font-size: 13px;
+      .large {
+        color: #f60;
+        font-weight: 500;
+        font-size: 16px;
+      }
+    }
+  }
+
+  hr {
+    margin: 0;
+  }
+}

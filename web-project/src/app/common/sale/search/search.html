@@ -36,38 +36,33 @@
   <tr class="selectable">
     <td>出发城市</td>
     <td>
-      <span class="unlimited" ng-class="{'selected-tag': index['出发城市'] == -1}" ng-click="pick('出发城市', -1)">不限</span>
-      <span class="unlimited" ng-class="{'selected-tag': $index==index['出发城市']}" ng-click="pick('出发城市', $index)" ng-repeat="start in tags['出发城市']">{{ start }}</span>
+      <selectable-tag tags="tags['出发城市']" ng-model="selectedTags['出发城市']" unlimited="true"></selectable-tag>
     </td>
   </tr>
   <tr>
     <td>行程天数</td>
     <td class="selectable">
       <div class="stop-day">
-        <span class="unlimited" ng-class="{'selected-tag': index['行程天数'] == -1}" ng-click="pick('行程天数', -1)">不限</span>
-        <span class="unlimited" ng-class="{'selected-tag': $index==index['行程天数']}" ng-click="pick('行程天数', $index)" ng-repeat="day in tags['行程天数']">{{ day }}天</span>
+        <selectable-tag tags="tags['出发城市']" ng-model="selectedTags['行程天数']" unlimited="true"></selectable-tag>
       </div>
     </td>
   </tr>
   <tr class="selectable">
     <td>酒店星级</td>
     <td>
-      <span class="unlimited" ng-class="{'selected-tag': index['酒店标准'] == -1}" ng-click="pick('酒店标准', -1)">不限</span>
-      <span class="unlimited" ng-class="{'selected-tag': $index==index['酒店标准']}" ng-click="pick('酒店标准', $index)" ng-repeat="hotel in tags['酒店标准']">{{ hotel }}</span>
+      <selectable-tag tags="tags['出发城市']" ng-model="selectedTags['酒店标准']" unlimited="true"></selectable-tag>
     </td>
   </tr>
   <tr  class="selectable">
     <td>出行方式</td>
     <td>
-      <span class="unlimited" ng-class="{'selected-tag': index['交通方式'] == -1}" ng-click="pick('交通方式', -1)">不限</span>
-      <span class="unlimited" ng-class="{'selected-tag': $index==index['交通方式']}" ng-click="pick('交通方式', $index)" ng-repeat="transport in tags['交通方式']">{{ transport }}</span>
+      <selectable-tag tags="tags['出发城市']" ng-model="selectedTags['交通方式']" unlimited="true"></selectable-tag>
     </td>
   </tr>
   <tr  class="selectable">
     <td>类型</td>
     <td>
-      <span class="unlimited" ng-class="{'selected-tag': index['类型'] == -1}" ng-click="pick('类型', -1)">不限</span>
-      <span class="unlimited" ng-class="{'selected-tag': $index==index['类型']}" ng-click="pick('类型', $index)" ng-repeat="type in tags['类型']">{{ type }}</span>
+      <selectable-tag tags="tags['出发城市']" ng-model="selectedTags['类型']" unlimited="true"></selectable-tag>
     </td>
   </tr>
   <tr  class="selectable">
@@ -99,61 +94,6 @@
 
 <div class="products">
   <div ng-activity-indicator class="activity-indicator"></div>
-  <div class="product" ng-repeat="product in products">
-    <div class="left">
-      <a class="product-title"
-         target="_blank"
-         ui-sref="sale.show-product({productId: '{{product.objectId}}' })"
-         ui-sref-opts="{ absolute: true }">
-         <span ng-repeat="prefix in product.prefixArray track by $index">
-           <span>[</span>
-           <span>{{ prefix }}</span>
-           <span>]</span>
-         </span>
-        <span>{{product.fullName}}</span>
-      </a>
-      <div class="metadata">
-        <span>出发地: {{ product.startCity }}</span>
-        <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span>
-        <span>最近班期：
-          <em ng-repeat="date in product.priceDate" class="date">{{ date }}</em>
-        </span>
-      </div>
-      <div class="metadata">
-        <span>线路编号：{{ product.productId }}</span>
-      </div>
-    </div>
-    <div class="right">
-      <div class="pricebox">
-        <span>
-          门市价
-          <em><span class="large">￥{{ product.latestAdultCompanySalePrice }}</span></em>
-        </span>
-      </div>
-      <div>
-        <a href="{{ product.fileUrl }}">
-         <md-button class="md-raised md-primary">打印行程单</md-button>
-        </a>
-        <a ng-show="!product.show" ng-click="product.show = true">查询报价</a>
-        <a ng-show="product.show" ng-click="product.show = false">隐藏报价</a>
-      </div>
-    </div>
-    <div ng-show="product.show">
-      <table>
-        <tr>
-          <th>出发日期</th>
-          <th>市场价</th>
-          <th>余位</th>
-        </tr>
-        <tr ng-repeat="price in product.priceArray">
-          <td>{{ price.startDate }}</td>
-          <td>{{ price.adultCompanySalePrice }}</td>
-          <td>{{ price.restPeopleNumber }}</td>
-        </tr>
-      </table>
-    </div>
-    <hr>
-  </div>
   <div>共找到 {{ totalProducts }} 个结果</div>
   <ul uib-pagination total-items="totalProducts" items-per-page="20" ng-model="currentPage" ng-change="pageChanged()"></ul>
 </div>

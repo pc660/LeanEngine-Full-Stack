@@ -1,0 +1,81 @@
+.search {
+  padding: 10px;
+
+  .search-option {
+    tr {
+      td {
+        min-width: 100px;
+        padding: 10px;
+        .keyword {
+          input {
+            width: 300px;
+            height: 30px;
+          }
+        }
+        .stop-day :last-child::after{
+          content: "以上";
+        }
+        .date-wrapper {
+          input {
+            max-width: 120px;
+            height: 30px;
+            line-height: 30px;
+            float: left;
+            //padding: 0 0 0 0;
+          }
+          .separator {
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+          td {
+            padding: 0 0 0 0;
+          }
+        }
+        .selected-tag {
+          background-color: #f90;
+          color: white;
+        }
+      }
+    }
+  }
+}
+.above-nav {
+
+  display: -webkit-flex;
+  display: flex;
+  .left {
+    width: 150px;
+    font-size: 20px;
+    padding-top: 20px;
+  }
+
+  .right {
+    width: 70%;
+    display: flex;
+  }
+  .search-box {
+    padding: 20px;
+    .input-box {
+      width: 70%;
+    }
+  }
+}
+
+.product-table {
+  tbody {
+    tr {
+      th {
+        min-width: 120px;
+      }
+      td {
+        min-width: 120px;
+      }
+    }
+  }
+}
+
+.cluster {
+  .cluster-title {
+    margin-top: 20px;
+  }
+}

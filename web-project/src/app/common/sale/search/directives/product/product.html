@@ -1,0 +1,55 @@
+<div class="product-directive">
+  <div class="left">
+    <a class="product-title"
+       target="_blank"
+       ui-sref="sale.show-product({productId: '{{product.objectId}}' })"
+       ui-sref-opts="{ absolute: true }">
+         <span ng-repeat="prefix in product.prefixArray track by $index">
+           <span>[</span>
+           <span>{{ prefix }}</span>
+           <span>]</span>
+         </span>
+      <span>{{product.fullName}}</span>
+    </a>
+    <div class="metadata">
+      <span>出发地: {{ product.startCity }}</span>
+      <span>行程天数：{{ product.duration }}天{{ product.hotelDuration }}晚</span>
+        <span>最近班期：
+          <em ng-repeat="date in product.priceDate | limitTo:5" class="date">{{ date }}</em>
+        </span>
+    </div>
+    <div class="metadata">
+      <span>线路编号：{{ product.productId }}</span>
+    </div>
+  </div>
+  <div class="right">
+    <div class="pricebox">
+        <span>
+          门市价
+          <em><span class="large">￥{{ product.latestAdultCompanySalePrice }}</span></em>
+        </span>
+    </div>
+    <div>
+      <a href="{{ product.fileUrl }}">
+        <md-button class="md-raised md-primary">打印行程单</md-button>
+      </a>
+      <a ng-show="!product.show" ng-click="product.show = true">查询报价</a>
+      <a ng-show="product.show" ng-click="product.show = false">隐藏报价</a>
+    </div>
+  </div>
+  <div ng-show="product.show">
+    <table>
+      <tr>
+        <th>出发日期</th>
+        <th>市场价</th>
+        <th>余位</th>
+      </tr>
+      <tr ng-repeat="price in product.priceArray">
+        <td>{{ price.startDate }}</td>
+        <td>{{ price.adultCompanySalePrice }}</td>
+        <td>{{ price.restPeopleNumber }}</td>
+      </tr>
+    </table>
+  </div>
+  <hr>
+</div>

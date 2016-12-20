@@ -46,6 +46,12 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
     })
     .state('sale.search-product', {
       url: '/search',
+      templateUrl: 'app/common/sale/search/search_main.html',
+      controller: 'searchMainCtrl',
+      authenticate: [lcConfig.userLevel.SALE],
+    })
+    .state('sale.search-product-test', {
+      url: '/search_test',
       templateUrl: 'app/common/sale/search/search.html',
       controller: 'searchCtrl',
       authenticate: [lcConfig.userLevel.SALE],

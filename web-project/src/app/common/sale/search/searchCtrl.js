@@ -25,6 +25,15 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, $uibModal, $act
     "行程天数": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   };
 
+  $scope.$watch("selectedTags", function(value) {
+    // Remove all '不限' in selectedTags.
+    for (var key in $scope.selectedTags) {
+      if ($scope.selectedTags[key] == '不限') {
+        delete $scope.selectedTags[key];
+      }
+    }
+  }, true);
+
   $scope.showItinerary = (id) => {
     $state.go('sale.show-itinerary', {productId: id});
   };

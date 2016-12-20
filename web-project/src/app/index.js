@@ -33,6 +33,7 @@ import textFieldDirect from './common/directives/textField/textFieldDirect';
 import counterDirect from './common/directives/counter/counterDirect';
 import templateDirect from './common/directives/template/templateDirect';
 import inputFormDirect from './common/directives/inputForm/inputFormDirect';
+import selectableTagDirect from './common/directives/selectable-tag/selectableTagDirect';
 
 import address from './common/provider/directives/address/addressDirect';
 import providerMenu from './common/provider/directives/menu/menuDirect';
@@ -42,6 +43,8 @@ import password from './common/provider/directives/password/passwordDirect';
 // product directive
 import providerSideBar from './common/product/directives/providerSideBar/providerSideBarDirect';
 import productTextfield from './common/product/directives/textField/textFieldDirect';
+
+import productDirect from './common/sale/search/directives/product/productDirect';
 
 // controller
 import homeCtrl from './auth/home/homeCtrl';
@@ -65,6 +68,8 @@ import showCustomerCtrl from './common/sale/customer/showCustomerCtrl';
 import providerSearchCtrl from './common/product/directives/providerSideBar/search/advanceProviderSearchCtrl.js';
 
 import showProductSaleCtrl from './common/sale/search/showProductCtrl.js';
+import searchMainCtrl from './common/sale/search/searchMainCtrl.js';
+
 import reserveFormCtrl from './common/sale/search/directives/reserve/reserveFormCtrl.js';
 import addOrderCtrl from './common/sale/order/addOrderCtrl.js';
 import showOrderCtrl from './common/sale/order/showOrderCtrl.js';
@@ -133,6 +138,8 @@ angular.module('webProject',
   // product directive 初始化
   .directive('providerSideBar', providerSideBar)
   .directive('productTextfield', productTextfield)
+  .directive('selectableTag', selectableTagDirect)
+  .directive('product', productDirect)
 
   // controller 初始化
   .controller('homeCtrl', homeCtrl)
@@ -160,6 +167,7 @@ angular.module('webProject',
   .controller('showOrderDetailCtrl', showOrderDetailCtrl)
   .controller('formCtrl', formCtrl)
   .controller('saleAccountCtrl', saleAccountCtrl)
+  .controller('searchMainCtrl', searchMainCtrl)
 
   .controller('applyRevokeCtrl', applyRevokeCtrl)
 

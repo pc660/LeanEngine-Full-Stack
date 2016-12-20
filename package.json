@@ -7,7 +7,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "ueditor": "latest",
+    "node-schedule": "latest",
     "html-pdf": "latest",
     "swig": "latest",
     "connect-multiparty": "latest",
