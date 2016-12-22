@@ -9,7 +9,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
     $scope.key = item;
     $scope.selectedTags = {};
     $scope.selectedTags["大区"] = $scope.key;
-    $scope.search();
+    $scope.search(true);
   }
   $scope.selectedTags = {};
 
@@ -161,6 +161,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
       }
     }
 
+    $log.log($scope.currentPage);
     if ($scope.currentPage) {
       query.index = $scope.currentPage;
     }
@@ -186,6 +187,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
     }
 
     $activityIndicator.startAnimating();
+    $log.log(query);
     query.category = "普通";
     productFac.searchProduct(query).then(function(results) {
       $activityIndicator.stopAnimating();
@@ -238,6 +240,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
   };
 
   $scope.pageChanged = () => {
+    $log.log($scope.currentPage);
     $scope.search(false /* query change */);
   };
 

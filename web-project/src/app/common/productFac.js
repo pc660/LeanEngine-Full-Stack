@@ -25,6 +25,7 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   service.deleteProduct = deleteProduct;
   service.getSelfPaidList = getSelfPaidList;
   service.updateCategory = updateCategory;
+  service.updateIndex = updateIndex;
   service.clone = clone;
   return service;
 
@@ -35,6 +36,10 @@ export default ($log, $rootScope, $http, $state, lcConfig, $window, md5, Upload,
   // A sperate function to imporve performance.
   function updateCategory(productId, category) {
     return $http.post('/api/product/updateCategory', {productId: productId, category: category});
+  }
+
+  function updateIndex(productId, indexPage) {
+    return $http.post('/api/product/updateIndex', {productId: productId, indexPage: indexPage});
   }
 
   function uploadProduct(product) {

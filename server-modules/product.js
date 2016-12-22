@@ -478,10 +478,12 @@ productApi.search = (req, res) => {
         break;
       case "indexPage":
         query.equalTo("indexPage", params.indexPage);
+        query.limit(1000);
         break;
     }
   }
 
+  query.addDescending("createdAt");
   query.include("responsible", "provider", "price");
   var queries = [query.find(), query.count()];
   // TODO: add start date.
