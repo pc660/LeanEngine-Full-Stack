@@ -94,6 +94,9 @@ function setProduct(productAV, product) {
   productAV.set("reserveInfo", product.reserveInfo);
   productAV.set("restriction", product.restriction);
   productAV.set("reminder", product.reminder);
+  productAV.set("youlunCompany", product.youlunCompany);
+  productAV.set("youlunRoute", product.youlunRoute);
+  productAV.set("youlunName", product.youlunName);
 
   if (product.contact) {
     var contact = AV.Object.createWithoutData('Contact', product.contact.objectId);

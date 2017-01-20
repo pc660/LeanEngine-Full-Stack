@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36d602e2-4574-40ef-8ee6-5cc17e2c110f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/account/account.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/account/account.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/add.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/auth.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/auth.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/menuConfig.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/menuConfig.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" afterPath="$PROJECT_DIR$/web-project/src/app/common/account/myAccountCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server-modules/product.js" afterPath="$PROJECT_DIR$/server-modules/product.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-project/src/app/config/route.js" afterPath="$PROJECT_DIR$/web-project/src/app/config/route.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="LeanEngine-Full-Stack.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,11 +25,11 @@
     <splitter split-orientation="vertical" split-proportion="0.5514512">
       <split-first>
         <leaf>
-          <file leaf-file-name="search_main.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/web-project/src/app/common/sale/search/search_main.html">
+          <file leaf-file-name="product.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/server-modules/product.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.0">
-                  <caret line="25" column="14" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="14" />
+                <state vertical-scroll-proportion="0.38961038">
+                  <caret line="98" column="48" selection-start-line="98" selection-start-column="48" selection-end-line="98" selection-end-column="48" />
                   <folding />
                 </state>
               </provider>
@@ -83,11 +75,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="account.html" pinned="false" current-in-tab="true">
+          <file leaf-file-name="account.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7814371">
-                  <caret line="98" column="20" selection-start-line="98" selection-start-column="20" selection-end-line="98" selection-end-column="20" />
+                <state vertical-scroll-proportion="-5.117647">
+                  <caret line="98" column="8" selection-start-line="98" selection-start-column="8" selection-end-line="98" selection-end-column="8" />
                   <folding>
                     <element signature="n#style#0;n#th#2;n#tr#0;n#table#1;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
                   </folding>
@@ -139,11 +131,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="product.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="product.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/server-modules/product.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="1.1568627">
-                  <caret line="485" column="61" selection-start-line="485" selection-start-column="61" selection-end-line="485" selection-end-column="61" />
+                <state vertical-scroll-proportion="-1.574074">
+                  <caret line="98" column="50" selection-start-line="98" selection-start-column="50" selection-end-line="98" selection-end-column="50" />
                   <folding />
                 </state>
               </provider>
@@ -163,7 +155,7 @@
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0">
-                  <caret line="29" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+                  <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
                   <folding />
                 </state>
               </provider>
@@ -189,11 +181,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="add.html" pinned="false" current-in-tab="false">
+          <file leaf-file-name="add.html" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-11.529411">
-                  <caret line="258" column="59" selection-start-line="258" selection-start-column="59" selection-end-line="258" selection-end-column="59" />
+                <state vertical-scroll-proportion="0.7403101">
+                  <caret line="252" column="57" selection-start-line="252" selection-start-column="47" selection-end-line="252" selection-end-column="57" />
                   <folding />
                 </state>
               </provider>
@@ -1166,26 +1158,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/auth/home/home.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.0">
           <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.529411">
-          <caret line="258" column="59" selection-start-line="258" selection-start-column="59" selection-end-line="258" selection-end-column="59" />
           <folding />
         </state>
       </provider>
@@ -1232,8 +1208,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web-project/src/app/common/account/account.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7814371">
-          <caret line="98" column="20" selection-start-line="98" selection-start-column="20" selection-end-line="98" selection-end-column="20" />
+        <state vertical-scroll-proportion="-5.117647">
+          <caret line="98" column="8" selection-start-line="98" selection-start-column="8" selection-end-line="98" selection-end-column="8" />
           <folding>
             <element signature="n#style#0;n#th#2;n#tr#0;n#table#1;n#md-content#0;n#section#0;n#md-tab#1;n#md-tabs#0;n#md-content#0;n#div#0;n#!!top" expanded="true" />
           </folding>
@@ -1248,10 +1224,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/addProductCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="17" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web-project/src/app/common/product/add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7403101">
+          <caret line="252" column="57" selection-start-line="252" selection-start-column="47" selection-end-line="252" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server-modules/product.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1568627">
-          <caret line="485" column="61" selection-start-line="485" selection-start-column="61" selection-end-line="485" selection-end-column="61" />
+        <state vertical-scroll-proportion="0.38961038">
+          <caret line="98" column="48" selection-start-line="98" selection-start-column="48" selection-end-line="98" selection-end-column="48" />
           <folding />
         </state>
       </provider>
