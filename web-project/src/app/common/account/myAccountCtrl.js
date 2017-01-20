@@ -6,6 +6,17 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
   $scope.query = {};
   $scope.categoryList = menuConfig.data["线路分类"];
   $scope.editProfile = false;
+  providerFac.getProvider({index: 0}).then(function(results) {
+    $log.log(results);
+    $scope.providerList = results.providers.map(function(provider) {
+      return provider.companyname;
+    });
+    $scope.providerMap = {};
+    results.providers.forEach(function(provider) {
+      $scope.providerMap[provider.companyname] = provider.objectId;
+    })
+    $log.log($scope.providerList);
+  })
 
   $scope.edit = () => {
     $scope.editProfile = true;
@@ -32,15 +43,6 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
 
   });
 
-  providerFac.getMyProvider().then(function(result) {
-    $scope.fetchedProvider = true;
-    // There should be only one provider.
-    $scope.provider = result.provider;
-    $scope.contactList = result.contacts;
-  }, function (error) {
-    $scope.fetchedProvider = true;
-  });
-
   $scope.$watch("showProvider", function(value) {
     if ($scope.provider) {
       $scope.$broadcast("addressUpdate", {address: $scope.provider.address});
@@ -58,15 +60,23 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
   $scope.search = () => {
     $scope.isLoading = true;
     $scope.query.index = $scope.currentPage;
+    if ($scope.provider) {
+      $scope.query.provider = $scope.providerMap[$scope.provider];
+    }
+
+    if ($scope.productId) {
+      $scope.query.productId = $scope.productId;
+    }
+    $log.log($scope.query);
     productFac.searchProduct($scope.query).then(function(results) {
-      $log.log(results);
+      $log.log(results)
       $scope.isLoading = false;
       $scope.products = results.products;
       $scope.totalProducts = results.count;
       $scope.products.forEach(function(product, i) {
         product.responsible = results.responsible[i];
+        product.provider = results.providers[i];
         productFac.getLatestTrip(product);
-        $log.log(product);
         product.updateCategory = false;
       })
     }, function(error) {

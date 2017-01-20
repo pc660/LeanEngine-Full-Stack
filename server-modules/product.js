@@ -397,7 +397,6 @@ productApi.get = (req, res) => {
 };
 
 productApi.search = (req, res) => {
-  tool.l('product.search');
   var log = AV.Object.new("AccessLog");
   log.set("operation", "product.search");
   log.set("data", {"query": req.body.query});
@@ -480,6 +479,12 @@ productApi.search = (req, res) => {
         query.equalTo("indexPage", params.indexPage);
         query.limit(1000);
         break;
+      case "provider":
+        query.equalTo("provider", params.provider);
+        break;
+      case "productId":
+        query.equalTo("productId", parseInt(params.productId));
+        break;
     }
   }
 
@@ -490,6 +495,10 @@ productApi.search = (req, res) => {
   // TODO: add days.
   Promise.all(queries).then(function (results) {
     var products = results[0];
+    if (products.length == 0) {
+      res.send({products: [], responsible: [], providers: [], count: 0});
+      return;
+    }
     var price = products[0].get("price");
     // Also need to retrieve user information.
     var responsible = products.map(function (product) {
@@ -504,6 +513,8 @@ productApi.search = (req, res) => {
     return;
   }, function (error) {
     tool.l(error);
+    res.send(404);
+    return;
   });
 };
 

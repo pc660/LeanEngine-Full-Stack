@@ -19,6 +19,12 @@ const authenticate = (authFac, $location, $rootScope, $log, lcConfig, $state, $w
       return;
     }
     $log.log("authenticate success");
+
+    if (toState.redirectTo) {
+      event.preventDefault();
+      $log.log("doing this");
+      $state.go(toState.redirectTo, toParams, {location: 'replace'});
+    }
   });
 
 

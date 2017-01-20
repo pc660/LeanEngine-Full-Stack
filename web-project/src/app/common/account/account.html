@@ -83,10 +83,25 @@
             </div>
           </md-sidenav>
           <md-content flex layout-padding>
+            <table class="search-option">
+              <tr class="selectable">
+                <td>供应商</td>
+                <td ng-if="providerList">
+                  <selectable-tag tags="providerList" ng-model="$parent.provider" unlimited="true"></selectable-tag>
+                </td>
+              </tr>
+              <tr class="selectable">
+                <td>产品编号</td>
+                <td>
+                  <input ng-model="productId">
+                </td>
+              </tr>
+            </table>
             <table cellspacing="0" cellpadding="0" class="account-product">
               <tr>
                 <th style="width: 100px;">产品编号</th>
                 <th style="width: 150px;">产品名称</th>
+                <th style="width: 150px;">供应商</th>
                 <th style="width: 100px;">最近出发班期</th>
                 <th style="width: 100px;">负责人</th>
                 <th style="width: 50px;">详情</th>
@@ -97,6 +112,7 @@
               <tr ng-repeat="product in products">
                 <td style="width: 100px;">{{ product.productId }}</td>
                 <td style="width: 150px;">{{ product.productName }}</td>
+                <td style="width: 150px;">{{ product.provider.companyname }}</td>
                 <td style="width: 100px;">
                   <p ng-repeat="date in product.priceDate" ng-show="$index<3">{{ date }}</p>
                 </td>

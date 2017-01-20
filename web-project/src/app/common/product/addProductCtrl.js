@@ -22,6 +22,9 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
   $scope.transports = menuConfig.data["交通方式"];
   $scope.types = menuConfig.data["类型"];
   $scope.areas = menuConfig.data["大区"];
+  $scope.youlunRoutes = menuConfig.data["邮轮航线"];
+  $scope.youlunCompanies = menuConfig.data["邮轮公司"];
+  $scope.youlunNames = menuConfig.data["邮轮名称"];
   $scope.startCities = menuConfig.data["出发城市"];
   $scope.priceItems = calendarConfig.data["团期报价"];
   $scope.cachedPrice = {};

@@ -220,7 +220,46 @@
                 <p ng-if="!isEditing">{{ product.area }}</p>
               </td>
             </tr>
-            <tr ng-if="subareas || product.subarea">
+            <tr ng-if="product.area == '邮轮'">
+              <td>邮轮公司</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.youlunCompany">
+                    <md-option ng-value="youlunCompany" ng-repeat="youlunCompany in youlunCompanies">
+                      {{youlunCompany}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.youlunCompany }}</p>
+              </td>
+            </tr>
+            <tr ng-if="product.area == '邮轮'">
+              <td>邮轮航线</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.youlunRoute">
+                    <md-option ng-value="youlunRoute" ng-repeat="youlunRoute in youlunRoutes">
+                      {{youlunRoute}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.youlunRoute }}</p>
+              </td>
+            </tr>
+            <tr ng-if="product.area == '邮轮'">
+              <td>邮轮名称(若没有,请勿选择)</td>
+              <td>
+                <md-input-container ng-if="isEditing">
+                  <md-select ng-model="product.youlunName">
+                    <md-option ng-value="youlunName" ng-repeat="youlunName in youlunNames">
+                      {{youlunName}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <p ng-if="!isEditing">{{ product.youlunName }}</p>
+              </td>
+            </tr>
+            <tr ng-if="(subareas || product.subarea) && product.area != '邮轮'">
               <td>分区</td>
               <td>
                 <md-input-container ng-if="isEditing">
@@ -233,7 +272,7 @@
                 <p ng-if="!isEditing">{{ product.subarea }}</p>
               </td>
             </tr>
-            <tr>
+            <tr ng-if="product.area != '邮轮'">
               <td>小区(可不选或多选)</td>
               <td>
                 <multi-choice is-editing="isEditing" dynamic-type='product.subarea' ng-model="product.detailArea"></multi-choice>

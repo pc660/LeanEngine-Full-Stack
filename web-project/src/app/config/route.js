@@ -37,6 +37,7 @@ export default ($stateProvider, lcConfig, $urlRouterProvider, $locationProvider)
       templateUrl: 'app/common/sale/index.html',
       controller: 'saleCtrl',
       authenticate: [lcConfig.userLevel.SALE],
+      redirectTo: 'sale.search-product',
     })
     .state('sale.account', {
       url: '/account',
