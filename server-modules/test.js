@@ -43,8 +43,28 @@ function updateDate(date) {
 }
 
 testApi.clear = (req, res) => {
-    //var query = new AV.Query('Product');
-    //query.limit(1000);
+    var query = new AV.Query('Product');
+    query.limit(1000);
+    query.find().then(function(products) {
+        tool.l(products.length);
+        products.forEach(function(product) {
+            var price = product.get("price");
+            var currentDate = new Date();
+            for (var year in price) {
+                for (var month in price[year]) {
+                    for (var day in price[year][month]) {
+                        var date = new Date(year, month, day);
+                        if (currentDate > date) {
+                            delete price[year][month][day];
+                        }
+                    }
+                }
+            }
+            tool.l(price);
+            product.set("price", price);
+            product.save();
+        });
+    })
     //var maxDate = product.get("maxDate");
     //var validationMap = new AV.Object("ProductValidationMap");
     /*var date = new Date(2016, 5, 1);

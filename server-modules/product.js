@@ -485,6 +485,15 @@ productApi.search = (req, res) => {
       case "provider":
         query.equalTo("provider", params.provider);
         break;
+      case "youlunCompany":
+        query.equalTo("youlunCompany", params.youlunCompany);
+        break;
+      case "youlunName":
+        query.equalTo("youlunName", params.youlunName);
+        break;
+      case "youlunRoute":
+        query.equalTo("youlunRoute", params.youlunRoute);
+        break;
       case "productId":
         query.equalTo("productId", parseInt(params.productId));
         break;

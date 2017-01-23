@@ -33,16 +33,9 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
     "分区": [],
     "供应商": [],
     "行程天数": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    "邮轮公司": ["歌诗达邮轮", "皇家加勒比邮轮", "天海邮轮", "美国公主邮轮", "MSC（地中海）邮轮", "精致邮轮",
-      "丽星邮轮", "荷美邮轮", "银海邮轮", "冠达邮轮", "长江黄金系列邮轮", "迪士尼邮轮", "海达路德邮轮", "渤海邮轮",
-      "世纪游轮", "大美三峡游轮", "长海游轮", "精钻会邮轮", "PAV邮轮", "大洋邮轮", "丽晶七海邮轮", "嘉年华邮轮",
-      "G Adventures", "阿玛河轮", "阿瓦隆邮轮", "维京邮轮公司", "星梦邮轮", "GrandCircleCruiseLine",
-      "埃及尼罗河游轮", "可鲁西莫德", "寰宇精品内河游轮", "保罗高更邮轮", "水晶邮轮", "夸克邮轮", "伯曼邮轮", "美国维多利亚系列游轮",
-      "世邦邮轮", "诺唯真邮轮", "三沙南海梦之旅邮轮有限公司"],
-    "邮轮航线": ["日韩", "国内", "南极", "地中海", "阿拉斯加", "加勒比海", "爱琴海", "东南亚", "欧洲", "澳新", "中东非", "北美",
-      "环球", "港澳台", "北欧", "百慕大", "夏威夷", "南美", "巴拿马运河", "北极", "大溪地", "其他", "巴哈马", "欧美", "大西洋",
-      "非洲", "加拿大", "美国加拿大", "跨大西洋", "美洲", "南美南极", "南太平洋", "亚马逊河", "亚洲", "远东", "太平洋", "亚马逊",
-      "河轮", "波罗的海", "日韩两国短线"],
+    "邮轮公司": menuConfig.data["邮轮公司"],
+    "邮轮航线": menuConfig.data["邮轮航线"],
+    "邮轮名称": menuConfig.data["邮轮名称"],
   };
 
   // Initilze parameters
@@ -52,6 +45,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
     {title: "行程天数", data: $scope.tags["行程天数"]},
     {title: "邮轮公司", data: $scope.tags["邮轮公司"]},
     {title: "邮轮航线", data: $scope.tags["邮轮航线"]},
+    {title: "邮轮名称", data: $scope.tags["邮轮名称"]},
   ];
 
   $scope.options["出境游"] = [
@@ -245,7 +239,7 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
   };
 
   // Get index page
-  var query = {indexPage: true};
+  var query = {indexPage: true, status: 3};
   $activityIndicator.startAnimating();
   productFac.searchProduct(query).then(function(results) {
     $activityIndicator.stopAnimating();
@@ -291,6 +285,12 @@ export default ($sce, $scope, $state, $log, $mdSidenav, $window, multiChoiceConf
         return "subarea";
       case "出发城市":
         return "start";
+      case "邮轮公司":
+        return "youlunCompany";
+      case "邮轮航线":
+        return "youlunRoute";
+      case "邮轮名称":
+        return "youlunName";
       default:
         return "";
     }

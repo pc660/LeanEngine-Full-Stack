@@ -15,7 +15,7 @@
       <span>
         <label ng-if="product.start.city != '市辖区'">{{ product.start.city }}出发</label>
         <label ng-if="product.start.city == '市辖区'">{{ product.start.province }}出发</label>
-        线路编号:{{ product.objectId }}
+        线路编号:{{ product.productId }}
       </span>
     </div>
   </div>
@@ -65,6 +65,12 @@
           </strong>
           <span>{{ product.platformcontact.cellphone }}</span>
         </label>
+        <label class="detail-key">
+          <strong>
+            供应商:
+          </strong>
+          <span>{{ product.provider.companyname }}</span>
+        </label>
       </div>
     </div>
     <div class="detail-reserve">
@@ -109,6 +115,11 @@
 </section>
 <section class="product-information">
   <md-tabs md-dynamic-height  md-border-bottom>
+    <md-tab label="线路特色">
+      <div class="visa-info">
+        <textarea class="msd-elastic" ng-disabled="true" ng-model="product.description"></textarea>
+      </div>
+    </md-tab>
     <md-tab label="行程信息">
       <div ng-repeat="itinerary in product.itinerary" class="itinerary">
         <div class="dayitem">
@@ -116,19 +127,19 @@
           <span class="s">{{ itinerary.title }}</span>
         </div>
         <div class="cyitem">
+          <p class="s3">
+            <strong>参考航班/火车班次</strong>
+            {{ itinerary.flight }}
+          </p>
           <p class="s1">
-            <strong>餐饮</strong>
-            <p>早 <span>{{ itinerary.food.morning }}</span> </p>
-            <p>中 <span>{{ itinerary.food.noon }}</span></p>
-            <p>晚 <span>{{ itinerary.food.evening }}</span></p>
+            <strong style="display: inline-block;">餐饮</strong>
+            <p style="display: inline-block;">早: <span>{{ itinerary.food.morning }}</span></p>
+            <p style="display: inline-block;">中: <span>{{ itinerary.food.noon }}</span></p>
+            <p style="display: inline-block;">晚: <span>{{ itinerary.food.evening }}</span></p>
           </p>
           <p class="s2">
             <strong>住宿</strong>
             {{ itinerary.hotelDetail }}或同级{{ itinerary.hotel }}
-          </p>
-          <p class="s3">
-            <strong>参考航班/火车班次</strong>
-            {{ itinerary.flight }}
           </p>
         </div>
         <!--TODO: figure out why template directive not work inside ng-repeat-->

@@ -47,6 +47,19 @@ app.listen(PORT, function () {
             var maxDate = result.get("maxDate");
             if (maxDate.toString() == date.toString()) {
               productAV.set("category", "过期");
+              var price = productAV.get("price");
+              var currentDate = new Date();
+              for (var year in price) {
+                for (var month in price[year]) {
+                  for (var day in price[year][month]) {
+                    var date = new Date(year, month, day);
+                    if (currentDate > date) {
+                      delete price[year][month][day];
+                    }
+                  }
+                }
+              }
+              productAV.set("price", price);
               productAV.save();
             }
           })
@@ -54,5 +67,4 @@ app.listen(PORT, function () {
       }
     })
   });
-
 });
