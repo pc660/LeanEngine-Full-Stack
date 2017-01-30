@@ -2,7 +2,7 @@ export default ($rootScope, $state, $window) => {
   'ngInject';
   return {
     restrict: 'E',
-    templateUrl: 'app/common/provider/directives/password/password.html',
+    templateUrl: 'app/provider/directives/password/password.html',
     replace: true,
     require: "ngModel",
     scope: {

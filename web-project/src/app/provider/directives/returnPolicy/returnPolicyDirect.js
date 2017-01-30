@@ -2,7 +2,7 @@ export default ($log, $rootScope, $state, $window) => {
   'ngInject';
   return {
     restrict: 'E',
-    templateUrl: 'app/common/provider/directives/returnPolicy/returnPolicy.html',
+    templateUrl: 'app/provider/directives/returnPolicy/returnPolicy.html',
     replace: true,
     scope: {
       returnPolicy: '=ngModel',

@@ -2,7 +2,7 @@ export default ($log, $rootScope, $state, $window, cityData) => {
   'ngInject';
   return {
     restrict: 'E',
-    templateUrl: 'app/common/provider/directives/address/address.html',
+    templateUrl: 'app/provider/directives/address/address.html',
     replace: true,
     scope: {
       showCounty: "=?",

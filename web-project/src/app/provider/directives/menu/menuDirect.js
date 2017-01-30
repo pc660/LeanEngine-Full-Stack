@@ -2,7 +2,7 @@ export default ($log, $rootScope, $state, $window) => {
   'ngInject';
   return {
     restrict: 'A',
-    templateUrl: 'app/common/provider/directives/menu/menu.html',
+    templateUrl: 'app/provider/directives/menu/menu.html',
     replace: false,
     scope: {
       type: "="
@@ -35,7 +35,7 @@ export default ($log, $rootScope, $state, $window) => {
         ];
       }
       scope.onValueChange = () => {
-        $log.log(scope.selectValue); 
+        $log.log(scope.selectValue);
       };
     }
   };

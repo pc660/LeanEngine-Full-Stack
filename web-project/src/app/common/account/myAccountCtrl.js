@@ -179,10 +179,8 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
     $scope.products = [];
     $scope.showProvider = true;
     $scope.showContactList = false;
-    $log.log($scope.provider);
     $scope.currentProvider = $scope.provider;
     $scope.testing1 = angular.copy($scope.provider.destination);
-    $log.log($scope.testing1);
     $scope.testing2 = angular.copy($scope.provider.start);
     $scope.provider.fileUrl = $sce.trustAsResourceUrl($scope.provider.licenseFile.url);
   };
@@ -222,11 +220,6 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
     });
   }
 
-  // TODO.
-  $scope.remind = (index) => {
-
-  };
-
   $scope.addMyProvider = () => {
     $log.log($scope.provider);
     $state.go("home.add-provider", {"provider": $scope.provider});
@@ -247,10 +240,6 @@ export default ($rootScope, $mdDialog, authFac, $log,$sce,  $state, $scope, $uib
     orderFac.getRevoke().then(function() {
 
     })
-  };
-
-  $scope.showMyOrder = () => {
-
   };
 
   $scope.deleteProduct = (index) => {

@@ -69,7 +69,14 @@
           <strong>
             供应商:
           </strong>
-          <span>{{ product.provider.companyname }}</span>
+          <span ng-if="product.provider.nickname">{{ product.provider.nickname }}</span>
+          <span ng-if="!product.provider.nickname">{{ product.provider.companyname }}</span>
+        </label>
+        <label class="detail-key">
+          <strong>
+            供应商联系人:
+          </strong>
+          <span>{{product.contact.contactname}}: {{product.contact.cellphone}}</span>
         </label>
       </div>
     </div>

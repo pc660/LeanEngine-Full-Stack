@@ -2,11 +2,11 @@ export default ($http, $compile, $q, $rootScope, $mdSidenav, $state, $window, pr
   'ngInject';
   var cityURL, delay, templateURL;
    delay = $q.defer();
-   cityURL = 'app/common/product/directives/product-address/city.min.js';
+   cityURL = 'app/product/directives/product-address/city.min.js';
    $http.get(cityURL).success(function(data) {
      return delay.resolve(data);
-   }); 
-  templateURL = 'app/common/product/directives/product-address/address.html';
+   });
+  templateURL = 'app/product/directives/product-address/address.html';
   return {
     restrict: 'E',
     replace: true,
@@ -16,7 +16,7 @@ export default ($http, $compile, $q, $rootScope, $mdSidenav, $state, $window, pr
         c: '=',
         d: '=',
         ngModel: '='
-    }, 
+    },
     link: function(scope, element, attr) {
       var popup;
         popup = {
@@ -148,7 +148,7 @@ export default ($http, $compile, $q, $rootScope, $mdSidenav, $state, $window, pr
             }
             return popup.resize();
           });
-        }); 
+        });
     }
   };
 }

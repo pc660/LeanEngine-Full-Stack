@@ -35,49 +35,49 @@ import templateDirect from './common/directives/template/templateDirect';
 import inputFormDirect from './common/directives/inputForm/inputFormDirect';
 import selectableTagDirect from './common/directives/selectable-tag/selectableTagDirect';
 
-import address from './common/provider/directives/address/addressDirect';
-import providerMenu from './common/provider/directives/menu/menuDirect';
-import returnPolicy from './common/provider/directives/returnPolicy/returnPolicyDirect';
-import password from './common/provider/directives/password/passwordDirect';
+import address from './provider/directives/address/addressDirect';
+import providerMenu from './provider/directives/menu/menuDirect';
+import returnPolicy from './provider/directives/returnPolicy/returnPolicyDirect';
+import password from './provider/directives/password/passwordDirect';
 
 // product directive
-import providerSideBar from './common/product/directives/providerSideBar/providerSideBarDirect';
-import productTextfield from './common/product/directives/textField/textFieldDirect';
+import providerSideBar from './product/directives/providerSideBar/providerSideBarDirect';
+import productTextfield from './product/directives/textField/textFieldDirect';
 
-import productDirect from './common/sale/search/directives/product/productDirect';
+import productDirect from './sale/search/directives/product/productDirect';
 
 // controller
 import homeCtrl from './auth/home/homeCtrl';
-import addProviderCtrl from './common/provider/addProviderCtrl';
-import showProviderCtrl from './common/provider/showProviderCtrl';
-import showProviderDetailCtrl from './common/provider/showProviderDetailCtrl';
+import addProviderCtrl from './provider/addProviderCtrl';
+import showProviderCtrl from './provider/showProviderCtrl';
+import showProviderDetailCtrl from './provider/showProviderDetailCtrl';
 import myAccountCtrl from './common/account/myAccountCtrl';
 
-import addProductCtrl from './common/product/addProductCtrl';
-import modalCtrl from './common/product/directives/providerSideBar/contact/modalCtrl.js';
-import showProductCtrl from './common/product/showProductCtrl.js';
-import showProductDetailCtrl from './common/product/showProductDetailCtrl.js';
-import addItineraryCtrl from './common/product/directives/itinerary/addCtrl.js';
+import addProductCtrl from './product/addProductCtrl';
+import modalCtrl from './product/directives/providerSideBar/contact/modalCtrl.js';
+import showProductCtrl from './product/showProductCtrl.js';
+import showProductDetailCtrl from './product/showProductDetailCtrl.js';
+import addItineraryCtrl from './product/directives/itinerary/addCtrl.js';
 import loginCtrl from './auth/home/loginCtrl';
-import saleCtrl from './common/sale/saleCtrl';
-import searchCtrl from './common/sale/search/searchCtrl';
-import filterCtrl from './common/sale/search/directives/filter/filterCtrl';
-import showItineraryCtrl from './common/product/showItineraryCtrl';
-import signinCtrl from './common/sale/search/directives/signin/signinCtrl';
-import showCustomerCtrl from './common/sale/customer/showCustomerCtrl';
-import providerSearchCtrl from './common/product/directives/providerSideBar/search/advanceProviderSearchCtrl.js';
+import saleCtrl from './sale/saleCtrl';
+import searchCtrl from './sale/search/searchCtrl';
+import filterCtrl from './sale/search/directives/filter/filterCtrl';
+import showItineraryCtrl from './product/showItineraryCtrl';
+import signinCtrl from './sale/search/directives/signin/signinCtrl';
+import showCustomerCtrl from './sale/customer/showCustomerCtrl';
+import providerSearchCtrl from './product/directives/providerSideBar/search/advanceProviderSearchCtrl.js';
 
-import showProductSaleCtrl from './common/sale/search/showProductCtrl.js';
-import searchMainCtrl from './common/sale/search/searchMainCtrl.js';
+import showProductSaleCtrl from './sale/search/showProductCtrl.js';
+import searchMainCtrl from './sale/search/searchMainCtrl.js';
 
-import reserveFormCtrl from './common/sale/search/directives/reserve/reserveFormCtrl.js';
-import addOrderCtrl from './common/sale/order/addOrderCtrl.js';
-import showOrderCtrl from './common/sale/order/showOrderCtrl.js';
-import showOrderDetailCtrl from './common/sale/order/showOrderDetailCtrl.js';
-import saleAccountCtrl from './common/sale/account/accountCtrl.js';
+import reserveFormCtrl from './sale/search/directives/reserve/reserveFormCtrl.js';
+import addOrderCtrl from './sale/order/addOrderCtrl.js';
+import showOrderCtrl from './sale/order/showOrderCtrl.js';
+import showOrderDetailCtrl from './sale/order/showOrderDetailCtrl.js';
+import saleAccountCtrl from './sale/account/accountCtrl.js';
 
 import formCtrl from './common/directives/form/formCtrl.js';
-import applyRevokeCtrl from './common/sale/order/applyRevokeCtrl.js';
+import applyRevokeCtrl from './sale/order/applyRevokeCtrl.js';
 
 import showEmployeeCtrl from './common/employee/showEmployeeCtrl.js';
 

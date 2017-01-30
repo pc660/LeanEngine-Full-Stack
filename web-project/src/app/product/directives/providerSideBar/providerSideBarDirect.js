@@ -2,7 +2,7 @@ export default ($log, authFac, menuConfig, userFac, $rootScope, $mdSidenav, $sta
   'ngInject';
   return {
     restrict: 'E',
-    templateUrl: 'app/common/product/directives/providerSideBar/providerSideBar.html',
+    templateUrl: 'app/product/directives/providerSideBar/providerSideBar.html',
     replace: true,
     link: function(scope, element, attr) {
       scope.areas = angular.copy(menuConfig.data["大区"]);
@@ -82,7 +82,7 @@ export default ($log, authFac, menuConfig, userFac, $rootScope, $mdSidenav, $sta
 
         var modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: 'app/common/product/directives/providerSideBar/contact/myModalContent.html',
+          templateUrl: 'app/product/directives/providerSideBar/contact/myModalContent.html',
           controller: 'modalCtrl',
           resolve: {
             provider: function () {

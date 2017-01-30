@@ -7,6 +7,7 @@ export default ($scope, $state, $log, $stateParams, $uibModal, productFac, $sce)
   productFac.getProductDetail($stateParams.productId)
     .then(function(result) {
       $scope.product = result.product;
+      $scope.product.contact = result.contact;
       $scope.product.provider = result.provider;
       if ($scope.product.itineraryFile) {
         $scope.product.fileUrl = $sce.trustAsResourceUrl($scope.product.itineraryFile.url);

@@ -8,28 +8,7 @@
 export default (authFac, $log, lcConfig,  $state, $scope, $window, commonSer, helloSer, productFac) => {
   'ngInject';
   // Need to get current user level.
-  $log.log(authFac.getUserLevel());
   $scope.level = authFac.getUserLevel();
-  //username, password, level, email, contactname, cellphone
-  /*
-  if (authFac.getUserLevel() === lcConfig.userLevel.ADMIN) {
-    $scope.admin = true;
-  } else {
-    $scope.admin = false;
-  }
-
-  if (authFac.getUserLevel() === lcConfig.userLevel.ORGANIZER) {
-    $scope.organizer = true;
-  } else {
-    $scope.organizer = false;
-  }
-
-  if (authFac.getUserLevel() === lcConfig.userLevel.PROVIDER) {
-    $scope.isProvider = true;
-  } else {
-    $scope.isProvider = false;
-  }*/
-
   $scope.logout = () => {
     authFac.logout().then(function() {
       $state.go("login");
