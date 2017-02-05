@@ -67,7 +67,7 @@ export default ($rootScope, $log, $http, $state, lcConfig, $window, md5, Upload)
   * */
   function uploadProviderFiles(file, filename) {
     return Upload.upload({
-      url: '/api/provider/uploadfile',
+      url: '/api/file/upload',
       data: {file: file, filename: filename},
     });
   }

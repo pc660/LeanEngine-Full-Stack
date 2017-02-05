@@ -124,7 +124,8 @@
   <md-tabs md-dynamic-height  md-border-bottom>
     <md-tab label="线路特色">
       <div class="visa-info">
-        <textarea class="msd-elastic" ng-disabled="true" ng-model="product.description"></textarea>
+        <textarea class="msd-elastic" ng-if="product.description" ng-disabled="true" ng-model="product.description"></textarea>
+        <img src="{{ product.descImage.url }}"></img>
       </div>
     </md-tab>
     <md-tab label="行程信息">
@@ -214,7 +215,10 @@
     <md-tab label="预订须知">
       <div class="tab-item">
         <div class="visa-info">
-          <textarea class="msd-elastic" ng-disabled="true" ng-model="product.reserveInfo"></textarea>
+          <div class="visa-info">
+            <textarea class="msd-elastic" ng-if="product.description" ng-disabled="true" ng-model="product.reserveInfo"></textarea>
+            <img src="{{ product.reserveImage.url }}"></img>
+          </div>
         </div>
       </div>
       <div class="tab-item">

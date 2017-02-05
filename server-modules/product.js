@@ -233,6 +233,30 @@ productApi.add = (req, res) => {
       var params = productApi.constructItinerayParams(product);
       params.id = productResult.id;
 
+      // Set product image.
+      // TODO: refactor this to a common function.
+      if (product.reserveImage.name) {
+        var query = new AV.Query(AV.Object.extend('_File'));
+        query.equalTo("name", product.reserveImage.name);
+        query.first().then(function(result) {
+          if (result !== undefined) {
+            var file = AV.File.createWithoutData(result.getObjectId());
+            productResult.set("reserveImage", file);
+            productResult.save();
+          }
+        });
+      }
+      if (product.descImage.name) {
+        var query = new AV.Query(AV.Object.extend('_File'));
+        query.equalTo("name", product.descImage.name);
+        query.first().then(function(result) {
+          if (result !== undefined) {
+            var file = AV.File.createWithoutData(result.getObjectId());
+            productResult.set("descImage", file);
+            productResult.save();
+          }
+        });
+      }
       updateProductValidateMap(productResult);
       generateItinerary(params, productResult);
   }, function(error) {

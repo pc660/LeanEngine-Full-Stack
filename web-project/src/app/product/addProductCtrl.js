@@ -1,4 +1,4 @@
-export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonSer, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig, calendarConfig) => {
+export default ($log, authFac, fileFac, SweetAlert, $state, $scope, $stateParams, commonSer, providerFac, $mdSidenav, $window, dispatcherConfig, $uibModal, lcConfig, itineraryFac, productFac, userFac, menuConfig, calendarConfig) => {
   'ngInject';
   // TODO: Currently, sidebar does not support dynamic md-component-id,
   // maybe create a cl for this bug.
@@ -6,6 +6,8 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
   $scope.firstUpdates = false;
   $scope.product = {};
   $scope.product.price = {};
+  $scope.product.reserveImage = {};
+  $scope.product.descImage = {};
   $scope.toggleLeft = buildToggler('provider-side-bar');
   $scope.pickedProviders = [];
   $scope.price = 0;
@@ -42,6 +44,8 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
     // Update product.
     $scope.isExisting = true;
     productFac.getProductDetail($stateParams.productId).then(function(result) {
+      $log.log("getting product!!!");
+      $log.log(result);
       $scope.firstUpdates = true;
       $scope.product = result.product;
       $scope.product.duration = $scope.product.itinerary.length;
@@ -260,9 +264,20 @@ export default ($log, authFac, SweetAlert, $state, $scope, $stateParams, commonS
         SweetAlert.swal("保存成功", "请继续操作", "success");
         return;
       });
-  }
+  };
 
   $scope.$watch("product.area", function(value) {
     $scope.subareas = menuConfig.data[value];
   });
+
+  $scope.upload = (file, imagepath) => {
+    if (!file) {
+      return;
+    }
+    imagepath.name = fileFac.hash(file.name);
+    providerFac.uploadProviderFiles(file, imagepath.name).then(function() {
+      $log.log("upload success");
+      return;
+    })
+  };
 };

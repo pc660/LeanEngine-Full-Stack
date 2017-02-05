@@ -21,6 +21,7 @@ const customer = require('./customer');
 const order = require('./order');
 const user = require('./user');
 const test = require('./test');
+const file = require('./file');
 
 // 一个 API 路由下的 hello 接口，访问 /api/hello
 const tool = require('./tool');
@@ -81,6 +82,8 @@ router.post('/user/getContactList',  user.getContactList);
 router.post('/user/editContactList',  user.editContactList);
 router.post('/user/deleteContactList',  user.deleteContactList);
 router.post('/user/update', user.update);
+
+router.post('/file/upload', multipartyMiddleware, file.upload);
 
 router.get('/test/clear', test.clear);
 

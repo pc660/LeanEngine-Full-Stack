@@ -2,6 +2,9 @@
   "name": "ztg",
   "version": "1.0.0",
   "dependencies": {
+    "angular-ueditor": "latest",
+    "ueditor": "latest",
+    "angular-simditor": "latest",
     "angular-advanced-searchbox": "latest",
     "ngActivityIndicator": "latest",
     "angular-sweetalert": "latest",

@@ -335,8 +335,16 @@
         </md-tab>
         <md-tab class="tab-button" label="其他信息">
           <div class="extra-item" layout="column">
-            <label>线路特色</label>
-            <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.description"></textarea>
+            <div class="extra-title">
+              <label>线路特色</label>
+              <button ng-if="isEditing && !product.descImage.name" class="md-raised md-primary" ng-model="product.descThumb" ngf-pattern="'image/*'"
+                      ngf-accept="'image/*'"
+                      ngf-select="upload($file, product.descImage)">上传图片</button>
+              <button ng-click="product.descImage = {}; product.descThumb = null;" ng-if="isEditing && product.descImage">删除图片</button>
+            </div>
+            <textarea ng-if="!product.descImage" ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.description"></textarea>
+            <img ng-if="isEditing && product.descImage" ngf-thumbnail="product.descImage.url || product.descThumb" class="thumb">
+            <a ng-if="!isEditing && product.descImage.url"  href="{{ product.descImage.url }}"> 点击查看图片</a>
           </div>
           <div class="extra-item" layout="column">
             <label>费用包含</label>
@@ -347,8 +355,17 @@
             <textarea ng-disabled="!isEditing" class="msd-elastic: \n\n;" ng-model="product.priceExclude"></textarea>
           </div>
           <div class="extra-item" layout="column">
-            <label>预定须知</label>
-            <textarea class="msd-elastic: \n\n;" ng-model="product.reserveInfo"></textarea>
+            <div class="extra-title">
+              <label>预定须知</label>
+              <button class="md-raised md-primary" ng-model="product.reserveThumb" ngf-pattern="'image/*'"
+                      ng-if="isEditing && !product.reserveImage.name"
+                      ngf-accept="'image/*'"
+                      ngf-select="upload($file, product.reserveImage)">上传图片</button>
+              <button ng-click="product.reserveThumb = null; product.reserveImage = {};" ng-if="product.reserveImage && isEditing">删除图片</button>
+            </div>
+            <textarea ng-if="!product.reserveImage" class="msd-elastic: \n\n;" ng-model="product.reserveInfo"></textarea>
+            <img ng-if="isEditing && product.reserveImage" ngf-thumbnail="product.reserveImage.url || product.reserveThumb" class="thumb">
+            <a ng-if="!isEditing && product.reserveImage.url"  href="{{ product.reserveImage.url }}"> 点击查看图片</a>
           </div>
           <div class="extra-item" layout="column">
             <label>收客限制</label>
